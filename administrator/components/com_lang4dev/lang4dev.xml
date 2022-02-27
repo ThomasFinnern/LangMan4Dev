@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<extension type="component" method="upgrade">
+	<name>COM_LANG4DEV</name>
+	<creationDate>26.02.2022</creationDate>
+	<author>Thomas Finnern</author>
+	<authorEmail>lang4dev@tomfinnern.de</authorEmail>
+	<authorUrl>https://github.com/ThomasFinnern</authorUrl>
+	<copyright>Thomas Finnern</copyright>
+	<license>GNU General Public License version 2 or later;</license>
+	<version>0.0.0.1</version>
+	<description>COM_LANG4DEV_XML_DESCRIPTION</description>
+	<namespace path="src">Finnern\Component\Lang4dev</namespace>
+	<scriptfile>script.php</scriptfile>
+	<install> <!-- Runs on install -->
+		<sql>
+			<file driver="mysql" charset="utf8">sql/install.mysql.utf8.sql</file>
+		</sql>
+	</install>
+	<uninstall> <!-- Runs on uninstall -->
+		<sql>
+			<file driver="mysql" charset="utf8">sql/uninstall.mysql.utf8.sql</file>
+		</sql>
+	</uninstall>
+	<update>  <!-- Runs on update -->
+		<schemas>
+			<schemapath type="mysql">sql/updates/mysql</schemapath>
+		</schemas>
+	</update>
+	<!-- Frond-end files -->
+	<files folder="components/com_lang4dev">
+		<folder>language</folder>
+		<folder>src</folder>
+		<folder>tmpl</folder>
+	</files>
+    <media folder="media/com_lang4dev" destination="com_lang4dev">
+		<folder>images</folder>
+    </media>
+	<!-- Back-end files -->
+	<administration>
+		<menu img="class:comment">
+			COM_LANG4DEV
+			<params>
+				<dashboard>lang4dev</dashboard>
+			</params>
+		</menu>
+		<submenu>
+			<menu link="option=com_lang4dev">
+				COM_LANG4DEV
+				<params>
+					<menu-quicktask-title>COM_LANG4DEV_PROJECTS</menu-quicktask-title>
+					<menu-quicktask>index.php?option=com_lang4dev&amp;view=projects&amp;layout=edit</menu-quicktask>
+				</params>
+			</menu>
+			<menu link="option=com_lang4dev">COM_LANG4DEV</menu>
+		</submenu>
+		<files folder="administrator/components/com_lang4dev">
+			<filename>access.xml</filename>
+			<filename>changelog.xml</filename>
+			<filename>config.xml</filename>
+			<filename>lang4dev.xml</filename>
+			<folder>language</folder>
+			<folder>services</folder>
+			<folder>sql</folder>
+			<folder>src</folder>
+			<folder>tmpl</folder>
+		</files>
+	</administration>
+	<changelogurl>https://raw.githubusercontent.com/ThomasFinnern/J_LangMan4ExtDev/main/administrator/components/com_lang4dev/changelog.xml</changelogurl>
+	<updateservers>
+		<server type="extension" name="Foo Updates">https://raw.githubusercontent.com/ThomasFinnern/J_LangMan4ExtDevProject/main/UpdateServer/Lang4dev_component_update.xml</server>
+	</updateservers>
+	<dlid prefix="dlid=" suffix="" />
+</extension>
