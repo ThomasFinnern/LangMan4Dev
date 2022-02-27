@@ -38,8 +38,11 @@
 				<dashboard>lang4dev</dashboard>
 			</params>
 		</menu>
+		
 		<submenu>
-			<menu link="option=com_lang4dev">
+			<menu view="lang4dev"
+				img="class:language"
+				link="option=com_lang4dev">
 				COM_LANG4DEV
 				<!--params>
 					<menu-quicktask-title>COM_LANG4DEV_PROJECTS</menu-quicktask-title>
@@ -48,9 +51,9 @@
 			</menu>
 			<menu view="COM_LANG4DEV_MENU_CONFIG"
 			      img="class:config"
-			      link="option=com_config&amp;view=component&amp;component=com_lang4dev">COM_RSGALLERY2_MENU_CONFIG
+			      link="option=com_config&amp;view=component&amp;component=com_lang4dev">COM_LANG4DEV_MENU_CONFIG
 			</menu>
-			<menu link="option=com_lang4dev">COM_LANG4DEV</menu>
+			<!--menu link="option=com_lang4dev">COM_LANG4DEV</menu-->
 			
 		</submenu>
 		<files folder="administrator/components/com_lang4dev">
