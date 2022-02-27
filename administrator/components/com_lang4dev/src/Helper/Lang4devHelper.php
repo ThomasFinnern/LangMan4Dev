@@ -18,6 +18,6 @@ use Joomla\CMS\Helper\ContentHelper;
  *
  * @since  __BUMP_VERSION__
  */
-class FooHelper extends ContentHelper
+class Lang4DevHelper extends ContentHelper
 {
 }

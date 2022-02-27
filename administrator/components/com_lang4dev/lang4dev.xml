@@ -10,8 +10,12 @@
 	<version>0.0.0.1</version>
 	<description>COM_LANG4DEV_XML_DESCRIPTION</description>
 	<namespace path="src">Finnern\Component\Lang4dev</namespace>
+	
+	<!-- Script to run on installation -->
 	<scriptfile>script.php</scriptfile>
-	<install> <!-- Runs on install -->
+	
+	<!-- sql files --><!-- Runs on install -->
+	<install> 
 		<sql>
 			<file driver="mysql" charset="utf8">sql/install.mysql.utf8.sql</file>
 		</sql>
@@ -26,19 +30,10 @@
 			<schemapath type="mysql">sql/updates/mysql</schemapath>
 		</schemas>
 	</update>
-	<!-- Frond-end files -->
-	<files folder="components/com_lang4dev">
-		<folder>language</folder>
-		<folder>src</folder>
-		<folder>tmpl</folder>
-	</files>
-    <media folder="media/com_lang4dev" destination="com_lang4dev">
-		<folder>images</folder>
-    </media>
+	
 	<!-- Back-end files -->
 	<administration>
-		<menu img="class:comment">
-			COM_LANG4DEV
+		<menu view="lang4dev">COM_LANG4DEV
 			<params>
 				<dashboard>lang4dev</dashboard>
 			</params>
@@ -46,12 +41,17 @@
 		<submenu>
 			<menu link="option=com_lang4dev">
 				COM_LANG4DEV
-				<params>
+				<!--params>
 					<menu-quicktask-title>COM_LANG4DEV_PROJECTS</menu-quicktask-title>
 					<menu-quicktask>index.php?option=com_lang4dev&amp;view=projects&amp;layout=edit</menu-quicktask>
-				</params>
+				</params-->
+			</menu>
+			<menu view="COM_LANG4DEV_MENU_CONFIG"
+			      img="class:config"
+			      link="option=com_config&amp;view=component&amp;component=com_lang4dev">COM_RSGALLERY2_MENU_CONFIG
 			</menu>
 			<menu link="option=com_lang4dev">COM_LANG4DEV</menu>
+			
 		</submenu>
 		<files folder="administrator/components/com_lang4dev">
 			<filename>access.xml</filename>
@@ -65,9 +65,15 @@
 			<folder>tmpl</folder>
 		</files>
 	</administration>
+	
+    <media folder="media/com_lang4dev" destination="com_lang4dev">
+		<folder>images</folder>
+    </media>
+	
 	<changelogurl>https://raw.githubusercontent.com/ThomasFinnern/J_LangMan4ExtDev/main/administrator/components/com_lang4dev/changelog.xml</changelogurl>
+	
 	<updateservers>
-		<server type="extension" name="Foo Updates">https://raw.githubusercontent.com/ThomasFinnern/J_LangMan4ExtDevProject/main/UpdateServer/Lang4dev_component_update.xml</server>
+		<server type="extension" name="Lang4Dev Updates">https://raw.githubusercontent.com/ThomasFinnern/J_LangMan4ExtDevProject/main/UpdateServer/Lang4dev_component_update.xml</server>
 	</updateservers>
 	<dlid prefix="dlid=" suffix="" />
 </extension>

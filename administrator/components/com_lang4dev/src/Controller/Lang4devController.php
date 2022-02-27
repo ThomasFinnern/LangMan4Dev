@@ -103,7 +103,7 @@ class Lang4devController extends AdminController
 	 *
 	 * @since   __BUMP_VERSION__
 	 */
-	public function getModel($name = 'Foo', $prefix = 'Administrator', $config = ['ignore_request' => true])
+	public function getModel($name = 'Lang4dev', $prefix = 'Administrator', $config = ['ignore_request' => true])
 	{
 		return parent::getModel($name, $prefix, $config);
 	}

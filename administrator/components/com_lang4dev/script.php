@@ -1,7 +1,7 @@
 <?php
 /**
  * @package     Joomla.Administrator
- * @subpackage  com_foos
+ * @subpackage  com_lang4dev
  *
  * @copyright   Copyright (C) 2005 - 2020 Open Source Matters, Inc. All rights reserved.
  * @license     GNU General Public License version 2 or later; see LICENSE.txt
@@ -88,7 +88,7 @@ class Com_Lang4devInstallerScript extends InstallerScript
 	{
 		echo Text::_('COM_LANG4DEV_INSTALLERSCRIPT_UPDATE');
 
-		$this->addDashboardMenu('foo', 'foo');
+		$this->addDashboardMenu('lang4dev', 'lang4dev');
 
 		return true;
 	}

@@ -130,17 +130,18 @@ class HtmlView extends BaseHtmlView
 	{
 		$this->sidebar = \JHtmlSidebar::render();
 
+		/*
 		$canDo = ContentHelper::getActions('com_lang4dev', 'category', $this->state->get('filter.category_id'));
 		$user  = Factory::getUser();
 
 		// Get the toolbar object instance
 		$toolbar = Toolbar::getInstance('toolbar');
 
-		ToolbarHelper::title(Text::_('COM_LANG4DEV_MANAGER_LANG4DEV'), 'address foo');
+		//ToolbarHelper::title(Text::_('COM_LANG4DEV_MANAGER_LANG4DEV'), 'address foo');
 
-		if ($canDo->get('core.create') || count($user->getAuthorisedCategories('com_lang4dev', 'core.create')) > 0) {
-			$toolbar->addNew('foo.add');
-		}
+//		if ($canDo->get('core.create') || count($user->getAuthorisedCategories('com_lang4dev', 'core.create')) > 0) {
+//			$toolbar->addNew('foo.add');
+//		}
 
 		if ($canDo->get('core.edit.state')) {
 			$dropdown = $toolbar->dropdownButton('status-group')
@@ -195,5 +196,6 @@ class HtmlView extends BaseHtmlView
 		}
 		ToolbarHelper::divider();
 		ToolbarHelper::help('', false, 'http://example.org');
+		/**/
 	}
 }
