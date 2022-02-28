@@ -31,9 +31,9 @@ use Joomla\CMS\Component\Router\RouterServiceTrait;
  *
  * @since  __BUMP_VERSION__
  */
-class Lang4devComponent extends MVCComponent implements BootableExtensionInterface, CategoryServiceInterface, AssociationServiceInterface, RouterServiceInterface
+class Lang4devComponent extends MVCComponent implements BootableExtensionInterface, AssociationServiceInterface, RouterServiceInterface
 {
-	use CategoryServiceTrait;
+	//use CategoryServiceTrait;
 	use AssociationServiceTrait;
 	use HTMLRegistryAwareTrait;
 	use RouterServiceTrait;
