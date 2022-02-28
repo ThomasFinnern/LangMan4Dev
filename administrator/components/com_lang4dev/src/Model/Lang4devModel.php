@@ -35,7 +35,7 @@ class Lang4devModel extends ListModel
 	 */
 	public function __construct($config = [])
 	{
-
+		/**
 		if (empty($config['filter_fields'])) {
 			$config['filter_fields'] = [
 				'id', 'a.id',
@@ -57,6 +57,7 @@ class Lang4devModel extends ListModel
 				$config['filter_fields'][] = 'association';
 			}
 		}
+		/**/
 
 		parent::__construct($config);
 	}
@@ -74,6 +75,7 @@ class Lang4devModel extends ListModel
 		$db = $this->getDbo();
 		$query = $db->getQuery(true);
 
+		/**
 		// Select the required fields from the table.
 		$query->select(
 			$db->quoteName(
@@ -242,6 +244,7 @@ class Lang4devModel extends ListModel
 		}
 
 		$query->order($db->escape($orderCol . ' ' . $orderDirn));
+		/**/
 
 		return $query;
 	}
@@ -260,6 +263,7 @@ class Lang4devModel extends ListModel
 	 */
 	protected function populateState($ordering = 'a.name', $direction = 'asc')
 	{
+		/**
 		$app = Factory::getApplication();
 		$forcedLanguage = $app->input->get('forcedLanguage', '', 'cmd');
 
@@ -280,5 +284,6 @@ class Lang4devModel extends ListModel
 		if (!empty($forcedLanguage)) {
 			$this->setState('filter.language', $forcedLanguage);
 		}
+		/**/
 	}
 }

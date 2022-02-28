@@ -72,6 +72,7 @@ class HtmlView extends BaseHtmlView
 	 */
 	public function display($tpl = null): void
 	{
+		/**
 		$this->items = $this->get('Items');
 
 		$this->pagination = $this->get('Pagination');
@@ -115,7 +116,7 @@ class HtmlView extends BaseHtmlView
 				$this->filterForm->setFieldAttribute('category_id', 'language', '*,' . $forcedLanguage, 'filter');
 			}
 		}
-
+		/**/
 		parent::display($tpl);
 	}
 

@@ -50,7 +50,7 @@ class Com_Lang4devInstallerScript extends InstallerScript
 	 */
 	public function install($parent): bool
 	{
-		echo Text::_('COM_LANG$DEV_INSTALLERSCRIPT_INSTALL');
+		echo Text::_('COM_LANG4DEV_INSTALLERSCRIPT_INSTALL');
 
 
 		$this->addDashboardMenu('lang4dev', 'lang4dev');

@@ -19,11 +19,12 @@ use Joomla\CMS\HTML\Registry;
 use Joomla\CMS\MVC\Factory\MVCFactoryInterface;
 use Joomla\DI\Container;
 use Joomla\DI\ServiceProviderInterface;
-use finnern\Component\Lang4dev\Administrator\Extension\Lang4devComponent;
-use finnern\Component\Lang4dev\Administrator\Helper\AssociationsHelper;
 use Joomla\CMS\Association\AssociationExtensionInterface;
 use Joomla\CMS\Component\Router\RouterFactoryInterface;
 use Joomla\CMS\Extension\Service\Provider\RouterFactory;
+
+use Finnern\Component\Lang4dev\Administrator\Extension\Lang4devComponent;
+use Finnern\Component\Lang4dev\Administrator\Helper\AssociationsHelper;
 
 /**
  * The Lang4dev service provider.
@@ -44,12 +45,12 @@ return new class implements ServiceProviderInterface
 	 */
 	public function register(Container $container)
 	{
-		$container->set(AssociationExtensionInterface::class, new AssociationsHelper);
+//		$container->set(AssociationExtensionInterface::class, new AssociationsHelper);
 
-//		$container->registerServiceProvider(new CategoryFactory('\\finnern\\Component\\Lang4dev'));
-		$container->registerServiceProvider(new MVCFactory('\\finnern\\Component\\Lang4dev'));
-		$container->registerServiceProvider(new ComponentDispatcherFactory('\\finnern\\Component\\Lang4dev'));
-//		$container->registerServiceProvider(new RouterFactory('\\finnern\\Component\\Lang4dev'));
+//		$container->registerServiceProvider(new CategoryFactory('\\Finnern\\Component\\Lang4dev'));
+		$container->registerServiceProvider(new MVCFactory('\\Finnern\\Component\\Lang4dev'));
+		$container->registerServiceProvider(new ComponentDispatcherFactory('\\Finnern\\Component\\Lang4dev'));
+//		$container->registerServiceProvider(new RouterFactory('\\Finnern\\Component\\Lang4dev'));
 
 		$container->set(
 			ComponentInterface::class,
