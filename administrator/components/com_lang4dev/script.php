@@ -52,9 +52,6 @@ class Com_Lang4devInstallerScript extends InstallerScript
 	{
 		echo Text::_('COM_LANG4DEV_INSTALLERSCRIPT_INSTALL');
 
-
-		$this->addDashboardMenu('lang4dev', 'lang4dev');
-
 		return true;
 	}
 

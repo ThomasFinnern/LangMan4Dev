@@ -13,57 +13,23 @@
 	
 	<!-- Script to run on installation -->
 	<scriptfile>script.php</scriptfile>
-	
-	<!-- sql files --><!-- Runs on install -->
-	<install> 
-		<sql>
-			<file driver="mysql" charset="utf8">sql/install.mysql.utf8.sql</file>
-		</sql>
-	</install>
-	<uninstall> <!-- Runs on uninstall -->
-		<sql>
-			<file driver="mysql" charset="utf8">sql/uninstall.mysql.utf8.sql</file>
-		</sql>
-	</uninstall>
-	<update>  <!-- Runs on update -->
-		<schemas>
-			<schemapath type="mysql">sql/updates/mysql</schemapath>
-		</schemas>
-	</update>
-	
+		
 	<!-- Back-end files -->
 	<administration>
-		<menu view="lang4dev">COM_LANG4DEV
-			<params>
-				<dashboard>lang4dev</dashboard>
-			</params>
-		</menu>
+		<menu view="lang4dev">COM_LANG4DEV</menu>
 		
 		<submenu>
-			<menu view="lang4dev"
-				img="class:language"
-				link="option=com_lang4dev">
-				COM_LANG4DEV
-				<!--params>
-					<menu-quicktask-title>COM_LANG4DEV_PROJECTS</menu-quicktask-title>
-					<menu-quicktask>index.php?option=com_lang4dev&amp;view=projects&amp;layout=edit</menu-quicktask>
-				</params-->
-			</menu>
-			<menu view="COM_LANG4DEV_MENU_CONFIG"
+			<menu link="option=com_lang4dev">COM_LANG4DEV</menu>
+			<!--menu view="COM_LANG4DEV_MENU_CONFIG"
 			      img="class:config"
 			      link="option=com_config&amp;view=component&amp;component=com_lang4dev">COM_LANG4DEV_MENU_CONFIG
-			</menu>
-			<!--menu link="option=com_lang4dev">COM_LANG4DEV</menu-->
-			
+			</menu-->			
 		</submenu>
+
 		<files folder="administrator/components/com_lang4dev">
-			<filename>access.xml</filename>
-			<filename>changelog.xml</filename>
-			<filename>config.xml</filename>
 			<filename>lang4dev.xml</filename>
 			<folder>language</folder>
 			<folder>services</folder>
-			<folder>sql</folder>
 			<folder>src</folder>
 			<folder>tmpl</folder>
 		</files>
@@ -78,5 +44,6 @@
 	<updateservers>
 		<server type="extension" name="Lang4Dev Updates">https://raw.githubusercontent.com/ThomasFinnern/J_LangMan4ExtDevProject/main/UpdateServer/Lang4dev_component_update.xml</server>
 	</updateservers>
+	
 	<dlid prefix="dlid=" suffix="" />
 </extension>
