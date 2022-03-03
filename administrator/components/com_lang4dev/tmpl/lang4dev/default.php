@@ -18,22 +18,26 @@ use Joomla\CMS\Layout\LayoutHelper;
 use Joomla\CMS\Session\Session;
 
 $button = new stdClass();
-$button->link = Route::_('index.php?option=com_lang4dev2&task=test.dummySearch');
+$button->link = Route::_('index.php?option=com_lang4dev2&task=PrjItems.Search4PrjItems');
 $button->classButton = 'dummyTask';
 $button->textTitle = 'test search';
 $button->textInfo = 'first search for own lnguage com_...';
 
 $imageClass='image';
-
+// 				<span class="<?php echo $imageClass; ? > " style="font-size:30px;"></span>
 function DisplayButton($button)
 {
+    global $imageClass;
+    $imageClass='fas fa-list';
+    $imageClass='fas fa-image';
+
 	// <button type="button" class="btn btn-primary">Primary</button>
 	?>
-	<div class="rsg2-icon-button-container">;
+	<div class="rsg2-icon-button-container">
 		<button type="button" class="btn btn-warning">
 		<a href="<?php echo $button->link; ?>" class="<?php echo $button->classButton; ?>">
 			<figure class="rsg2-icon">
-				<span class="<?php echo $imageClass; ?> icoMoon" style="font-size:30px;"></span>
+                <i class="<?php echo $imageClass; ?>" style="font-size:30px;"></i>
 				<figcaption class="rsg2-text">
 	                <div class="maint-title"><strong><?php echo $button->textTitle; ?></strong></div>
 	                <div class="maint-text"><?php echo $button->textInfo; ?></div>
