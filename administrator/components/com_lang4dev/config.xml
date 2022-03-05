@@ -1,0 +1,180 @@
+<?xml version="1.0" encoding="utf-8"?>
+<config>
+	<!-- ... Tab General ................................. -->
+
+	<fieldset
+		name="rsgallery2"
+		label="COM_RSGALLERY2_CONFIG_TAB_GENERAL"
+		description="COM_RSGALLERY2_CONFIG_TAB_GENERAL_DESC"
+	>
+		<!-- needed when more entries are general ...
+				field name="intro_text"
+                type="editor"
+                label="COM_RSGALLERY2_INTRODUCTION_TEXT"
+	            description="COM_RSGALLERY2_INTRODUCTION_DESC"
+				filter="JComponentHelper::filterText"
+				buttons="false"
+		/-->
+		
+		<field
+				name="ToDo_list_general"
+				type="list"
+				default="0"
+				label="!!! ToDo !!!: In config - general"
+				description="Developers ToDo list may still contain elements when RSG2 is ready to ship :-("
+				class="text text-danger"
+				showon="isDevelop:1"
+		>
+			<option value="0">* add _NOTE_ part to lang of note elements</option>
+			<option value="1">* use display instead of show for const and menu ...</option>
+			<option value="2">* </option>
+			<option value="3">* </option>
+			<option value="4">* </option>
+		</field>
+
+
+
+		<field
+				type="spacer"
+				name="spacer_admin"
+				hr="true"
+		/>
+
+	</fieldset>
+
+	<!-- ... Tab Upload ................................. -->
+
+	<fieldset
+			name="upload"
+			label="COM_RSGALLERY2_CONFIG_TAB_UPLOAD"
+			description="COM_RSGALLERY2_CONFIG_TAB_UPLOAD_DESC"
+	>
+		<!--field
+				type="spacer"
+				name="spacer_upload_01"
+				hr="true"
+		/-->
+
+		<field
+				name="ToDo_list_upload"
+				type="list"
+				default="0"
+				label="!!! ToDo !!!: In config - upload"
+				description="Developers ToDo list may still contain elements when RSG2 is ready to ship :-("
+				class="text text-danger"
+				showon="isDevelop:1"
+		>
+			<option value="0">* </option>
+			<option value="1">* </option>
+			<option value="2">* </option>
+			<option value="3">* </option>
+			<option value="4">* </option>
+		</field>
+
+
+		<!-- ... block upload images ... -->
+
+		<field name="note_images_upload"
+			   type="note"
+			   class="alert alert-primary"
+			   close="true"
+			   label="COM_RSGALLERY2_CFG_IMAGE_MANIPULATION"
+			   description="COM_RSGALLERY2_CFG_IMAGE_MANIPULATION"
+		/>
+
+		<field
+				name="image_size"
+				type="text"
+				default="800,600,400"
+				label="COM_RSGALLERY2_DISPLAY_PICTURE_SIZE"
+				description="COM_RSGALLERY2_DISPLAY_PICTURE_SIZE_DESC"
+				class="">
+		</field>
+	</fieldset>
+
+	<!-- ... Tab Debug ................................. -->
+
+	<fieldset
+			name="debug"
+			label="COM_RSGALLERY2_CONFIG_TAB_DEBUG"
+			description="COM_RSGALLERY2_CONFIG_TAB_DEBUG_DESC"
+	>
+		<field type="spacer" name="test_inner_02" hr="true" />
+		<!-- ... block  ... -->
+
+		<field
+				id="isDebugBackend"
+				name="isDebugBackend"
+				type="radio"
+				default="0"
+				label="COM_RSGALLERY2_DEBUG_BACKEND"
+				description="COM_RSGALLERY2_DEBUG_BACKEND_DESC"
+				layout="joomla.form.field.radio.switcher"
+				filter="integer"
+				validate="options"
+			>
+			<option value="0">JNO</option>
+			<option value="1">JYES</option>
+		</field>
+		<field
+				id="isDebugSite"
+				name="isDebugSite"
+				type="radio"
+				default="0"
+				label="COM_RSGALLERY2_DEBUG_SITE"
+				description="COM_RSGALLERY2_DEBUG_SITE_DESC"
+				layout="joomla.form.field.radio.switcher"
+				filter="integer"
+				validate="options"
+		>
+			<option value="0">JNO</option>
+			<option value="1">JYES</option>
+		</field>
+		<field
+				id="isDevelop"
+				name="isDevelop"
+				type="radio"
+				default="0"
+				label="COM_RSGALLERY2_DEVELOP"
+				description="COM_RSGALLERY2_DEVELOP_DESC"
+				layout="joomla.form.field.radio.switcher"
+				filter="integer"
+				validate="options"
+		>
+			<option value="0">JNO</option>
+			<option value="1">JYES</option>
+		</field>
+
+	</fieldset>
+	
+	
+	<!-- ... Tab Permissions ................................. -->
+
+	<fieldset
+		name="permissions"
+		label="JCONFIG_PERMISSIONS_LABEL"
+		description="JCONFIG_PERMISSIONS_DESC"
+		>
+
+		<!-- ... block  ... -->
+
+		<!-- field name="note31" type="note" class="alert alert-dark" close="true" label="LOREMIPSUM" description="02_LOREMIPSUM_DESC" /-->
+
+		<field
+			name="rules"
+			type="rules"
+			label="JCONFIG_PERMISSIONS_LABEL"
+			validate="rules"
+			filter="rules"
+			component="com_rsgallery2"
+			section="component"
+		/>
+
+	</fieldset>
+
+	<!-- ... Temp  ................................. -->
+
+
+	<!-- ... End Temp .............................. -->
+
+</config>

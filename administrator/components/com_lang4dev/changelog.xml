@@ -1,0 +1,14 @@
+<changelogs>
+	<changelog>
+		<element>com_lang4dev</element>
+		<type>component</type>
+		<version>0.0.1.4</version>
+		<date>2022-03-04</date>
+		<addition>
+			<item>Creation of first sources</item>
+		</addition>
+		<note>
+			<item>A long wayto go</item>
+		</note>
+	</changelog>
+</changelogs>
