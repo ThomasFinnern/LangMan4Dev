@@ -3,9 +3,9 @@
 	<!-- ... Tab General ................................. -->
 
 	<fieldset
-		name="rsgallery2"
-		label="COM_RSGALLERY2_CONFIG_TAB_GENERAL"
-		description="COM_RSGALLERY2_CONFIG_TAB_GENERAL_DESC"
+		name="lang4dev"
+		label="COM_LANG4DEV_FIELD_CONFIG_INDIVIDUAL_FOO_DISPLAY"
+		description="COM_LANG4DEV_FIELD_CONFIG_INDIVIDUAL_FOO_DESC"
 	>
 		<!-- needed when more entries are general ...
 				field name="intro_text"
@@ -39,6 +39,27 @@
 				name="spacer_admin"
 				hr="true"
 		/>
+
+		<field
+			name="show_foo_name_label"
+			type="list"
+			label="COM_LANG4DEV_FIELD_FOO_SHOW_CATEGORY_LABEL"
+			default="1"
+			>
+			<option value="0">JNO</option>
+			<option value="1">JYES</option>
+		</field>
+
+		<field
+			name="show_name"
+			type="radio"
+			label="COM_LANG4DEV_FIELD_PARAMS_NAME_LABEL"
+			default="1"
+			layout="joomla.form.field.radio.switcher"
+			>
+			<option value="0">JHIDE</option>
+			<option value="1">JSHOW</option>
+		</field>
 
 	</fieldset>
 

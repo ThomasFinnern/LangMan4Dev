@@ -19,15 +19,25 @@
 		<menu view="lang4dev">COM_LANG4DEV</menu>
 		
 		<submenu>
+			<menu view="COM_LANG4DEV_MENU_CONTROL_PANEL"
+			      img="class:home"
+			      link="option=com_lang4dev">COM_LANG4DEV_MENU_CONTROL_PANEL
+			</menu>
 			<menu link="option=com_lang4dev">COM_LANG4DEV</menu>
-			<!--menu view="COM_LANG4DEV_MENU_CONFIG"
+			<menu view="COM_LANG4DEV_MENU_CONFIG"
 			      img="class:config"
 			      link="option=com_config&amp;view=component&amp;component=com_lang4dev">COM_LANG4DEV_MENU_CONFIG
-			</menu-->			
+			</menu>
+			<menu view="COM_LANG4DEV_MENU_MAINTENANCE"
+			      img="class:equalizer"
+			      link="option=com_lang4dev&amp;view=maintenance">COM_LANG4DEV_MENU_MAINTENANCE
+			</menu>
 		</submenu>
 
 		<files folder="administrator/components/com_lang4dev">
 			<filename>lang4dev.xml</filename>
+			<filename>changelog.xml</filename>
+			<filename>config.xml</filename>
 			<folder>language</folder>
 			<folder>services</folder>
 			<folder>src</folder>
