@@ -74,6 +74,15 @@ function DisplayButton($button)
 
 	    <?php DisplayButton($button); ?>
 
+		<?php
+		$test = $this->extensionVersion;
+		echo '<h4>' . $test . '<h4>';
+		    $title = Text::_('COM_LANG4DEV_ABOUT') . ' ' . $this->extensionVersion;
+			echo '<h4>' . $title . '<h4>';
+		?>
+
+
+
 	    <input type="hidden" name="task" value="" />
 	    <?php echo HTMLHelper::_('form.token'); ?>
 

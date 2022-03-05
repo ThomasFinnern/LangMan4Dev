@@ -19,6 +19,9 @@ use Joomla\CMS\Toolbar\ToolbarHelper;
 use Joomla\CMS\Factory;
 use Joomla\CMS\MVC\View\GenericDataException;
 
+use Finnern\Component\Lang4dev\Administrator\Helper\lang4devVersion;
+
+
 /**
  * View class for a list of lang4dev.
  *
@@ -60,6 +63,8 @@ class HtmlView extends BaseHtmlView
 	 * @var  array
 	 */
 	public $activeFilters;
+	
+	protected $extensionVersion;
 
 	/**
 	 * Method to display the view.
@@ -72,6 +77,12 @@ class HtmlView extends BaseHtmlView
 	 */
 	public function display($tpl = null): void
 	{
+		$oVersion = new lang4devVersion();
+		// $this->extensionVersion = $oVersion->getShortVersion(); // getLongVersion, getVersion
+		$this->extensionVersion = $oVersion->getVersion(); // getLongVersion, getVersion
+		
+		
+		
 		/**
 		$this->items = $this->get('Items');
 
