@@ -3,7 +3,7 @@
  * @package     Joomla.Administrator
  * @subpackage  com_lang4dev
  *
- * @copyright   Copyright (C) 2005 - 2020 Open Source Matters, Inc. All rights reserved.
+ * @copyright   Copyright (C) 2022 - 2022
  * @license     GNU General Public License version 2 or later; see LICENSE.txt
  */
 
@@ -11,13 +11,14 @@ namespace Finnern\Component\Lang4dev\Administrator\View\Lang4dev;
 
 \defined('_JEXEC') or die;
 
+use Joomla\CMS\Component\ComponentHelper;
 use Joomla\CMS\Helper\ContentHelper;
+use Joomla\CMS\Factory;
 use Joomla\CMS\Language\Text;
 use Joomla\CMS\MVC\View\HtmlView as BaseHtmlView;
+use Joomla\CMS\MVC\View\GenericDataException;
 use Joomla\CMS\Toolbar\Toolbar;
 use Joomla\CMS\Toolbar\ToolbarHelper;
-use Joomla\CMS\Factory;
-use Joomla\CMS\MVC\View\GenericDataException;
 
 use Finnern\Component\Lang4dev\Administrator\Helper\lang4devVersion;
 
@@ -82,6 +83,9 @@ class HtmlView extends BaseHtmlView
 		$this->extensionVersion = $oVersion->getVersion(); // getLongVersion, getVersion
 		
 		
+		$l4dConfig = ComponentHelper::getComponent('com_Lang4dev')->getParams();
+		$this->isDevelop = $l4dConfig->get('isDevelop');
+
 		
 		/**
 		$this->items = $this->get('Items');
@@ -128,87 +132,44 @@ class HtmlView extends BaseHtmlView
 			}
 		}
 		/**/
-		
+
+        $this->addToolbar();
+
 		parent::display($tpl);
 	}
 
-	/**
-	 * Add the page title and toolbar.
-	 *
-	 * @return  void
-	 *
-	 * @since   __BUMP_VERSION__
-	 */
-	protected function addToolbar()
-	{
-		$this->sidebar = \JHtmlSidebar::render();
+    /**
+     * Add the page title and toolbar.
+     *
+     * @return  void
+     *
+     * @since __BUMP_VERSION__
+     */
+    protected function addToolbar()
+    {
+        // Get the toolbar object instance
+        $toolbar = Toolbar::getInstance('toolbar');
 
-		/*
-		$canDo = ContentHelper::getActions('com_lang4dev', 'category', $this->state->get('filter.category_id'));
-		$user  = Factory::getUser();
+        // on develop show open tasks if existing
+        if (!empty ($this->isDevelop))
+        {
+            echo '<span style="color:red">'
+                . '* <br>'
+                . '* <br>'
+//				. '* <br>'
+//				. '* <br>'
+//				. '* <br>'
+                . '</span><br><br>';
+        }
 
-		// Get the toolbar object instance
-		$toolbar = Toolbar::getInstance('toolbar');
+        // Set the title
+        ToolBarHelper::title(Text::_('COM_RSGALLERY2_SUBMENU_CONTROL_PANEL'), 'home-2');
 
-		//ToolbarHelper::title(Text::_('COM_LANG4DEV_MANAGER_LANG4DEV'), 'address foo');
+        // Options button.
+        if (Factory::getApplication()->getIdentity()->authorise('core.admin', 'com_rsgallery2'))
+        {
+            $toolbar->preferences('com_rsgallery2');
+        }
+    }
 
-//		if ($canDo->get('core.create') || count($user->getAuthorisedCategories('com_lang4dev', 'core.create')) > 0) {
-//			$toolbar->addNew('foo.add');
-//		}
-
-		if ($canDo->get('core.edit.state')) {
-			$dropdown = $toolbar->dropdownButton('status-group')
-				->text('JTOOLBAR_CHANGE_STATUS')
-				->toggleSplit(false)
-				->icon('fa fa-ellipsis-h')
-				->buttonClass('btn btn-action')
-				->listCheck(true);
-			$childBar = $dropdown->getChildToolbar();
-			$childBar->publish('lang4dev.publish')->listCheck(true);
-			$childBar->unpublish('lang4dev.unpublish')->listCheck(true);
-
-			$childBar->standardButton('featured')
-				->text('JFEATURE')
-				->task('lang4dev.featured')
-				->listCheck(true);
-			$childBar->standardButton('unfeatured')
-				->text('JUNFEATURE')
-				->task('lang4dev.unfeatured')
-				->listCheck(true);
-
-			$childBar->archive('lang4dev.archive')->listCheck(true);
-
-			if ($user->authorise('core.admin')) {
-				$childBar->checkin('lang4dev.checkin')->listCheck(true);
-			}
-
-			if ($this->state->get('filter.published') != -2) {
-				$childBar->trash('lang4dev.trash')->listCheck(true);
-			}
-
-			if ($this->state->get('filter.published') == -2 && $canDo->get('core.delete')) {
-				$childBar->delete('lang4dev.delete')
-					->text('JTOOLBAR_EMPTY_TRASH')
-					->message('JGLOBAL_CONFIRM_DELETE')
-					->listCheck(true);
-			}
-
-			// Add a batch button
-			if ($user->authorise('core.create', 'com_lang4dev')
-				&& $user->authorise('core.edit', 'com_lang4dev')
-				&& $user->authorise('core.edit.state', 'com_lang4dev')) {
-				$childBar->popupButton('batch')
-					->text('JTOOLBAR_BATCH')
-					->selector('collapseModal')
-					->listCheck(true);
-			}
-		}
-
-		if ($user->authorise('core.admin', 'com_lang4dev') || $user->authorise('core.options', 'com_lang4dev')) {
-			$toolbar->preferences('com_lang4dev');
-		}
-		ToolbarHelper::divider();
-		ToolbarHelper::help('', false, 'http://example.org');
-		/**/
-	}
 }

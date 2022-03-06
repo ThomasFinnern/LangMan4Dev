@@ -24,14 +24,30 @@
 			      link="option=com_lang4dev">COM_LANG4DEV_MENU_CONTROL_PANEL
 			</menu>
 			<menu link="option=com_lang4dev">COM_LANG4DEV</menu>
+			<menu view="COM_LANG4DEV_MENU_PROJECTS"
+			      img="class:home"
+			      link="option=com_lang4dev&amp;view=projects&amp;">COM_LANG4DEV_MENU_PROJECTS
+			</menu>
+			<menu view="COM_LANG4DEV_MENU_PRJ_TEXTS"
+			      img="class:itme"
+			      link="option=com_lang4dev&amp;view=prj_texts&amp;">COM_LANG4DEV_PRJ_TEXTS
+			</menu>
+			<menu view="COM_LANG4DEV_MENU_TRANSLATE"
+			      img="class:language"
+			      link="option=com_lang4dev&amp;view=translate&amp;">COM_LANG4DEV_MENU_TRANSLATE
+			</menu>
+			<menu view="COM_LANG4DEV_MENU_TRANSLATIONS"
+			      img="class:language"
+			      link="option=com_lang4dev&amp;view=translations&amp;">COM_LANG4DEV_MENU_TRANSLATIONS
+			</menu>
 			<menu view="COM_LANG4DEV_MENU_CONFIG"
 			      img="class:config"
 			      link="option=com_config&amp;view=component&amp;component=com_lang4dev">COM_LANG4DEV_MENU_CONFIG
 			</menu>
-			<menu view="COM_LANG4DEV_MENU_MAINTENANCE"
+			<!--menu view="COM_LANG4DEV_MENU_MAINTENANCE"
 			      img="class:equalizer"
 			      link="option=com_lang4dev&amp;view=maintenance">COM_LANG4DEV_MENU_MAINTENANCE
-			</menu>
+			</menu-->
 		</submenu>
 
 		<files folder="administrator/components/com_lang4dev">
