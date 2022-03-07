@@ -59,7 +59,7 @@ $cmdButtons[] = new cmdButton(
 
 // project texts
 $cmdButtons[] = new cmdButton(
-    Route::_('index.php?option=com_lang4dev&view=prj_texts'),
+    Route::_('index.php?option=com_lang4dev&view=prjtexts'),
     Text::_('COM_LANG4DEV_PRJ_TEXTS'),
     Text::_('COM_LANG4DEV_PRJ_TEXTS_DESC') . '                        ',
     array('icon-forward', 'icon-list'),

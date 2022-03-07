@@ -7,10 +7,11 @@
  * @license     GNU General Public License version 2 or later; see LICENSE.txt
  */
 
-namespace Finnern\Component\Lang4dev\Administrator\View\Lang4dev;
+namespace Finnern\Component\Lang4dev\Administrator\View\Translations;
 
 \defined('_JEXEC') or die;
 
+use Joomla\CMS\Component\ComponentHelper;
 use Joomla\CMS\Helper\ContentHelper;
 use Joomla\CMS\Factory;
 use Joomla\CMS\HTML\HTMLHelper;
@@ -47,7 +48,7 @@ class HtmlView extends BaseHtmlView
 		//echo '$Layout: ' . $Layout . '<br>';
 
 		$l4dConfig = ComponentHelper::getComponent('com_Lang4dev')->getParams();
-		$this->isDevelop = $$l4dConfig->get('isDevelop');
+		$this->isDevelop = $l4dConfig->get('isDevelop');
 
 
 		//---  --------------------------------------------------------------

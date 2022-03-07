@@ -7,7 +7,7 @@
  * @license     GNU General Public License version 2 or later; see LICENSE.txt
  */
 
-namespace Finnern\Component\Lang4dev\Administrator\View\Lang4dev;
+namespace Finnern\Component\Lang4dev\Administrator\View\PrjTexts;
 
 \defined('_JEXEC') or die;
 
@@ -112,7 +112,7 @@ class HtmlView extends BaseHtmlView
 				break;
 			/**/
 			default:
-				ToolBarHelper::cancel('config.cancel', 'JTOOLBAR_CLOSE');
+				ToolBarHelper::cancel('lang4dev.cancel', 'JTOOLBAR_CLOSE');
 				break;
 		}
 

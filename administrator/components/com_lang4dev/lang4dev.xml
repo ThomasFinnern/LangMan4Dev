@@ -30,7 +30,7 @@
 			</menu>
 			<menu view="COM_LANG4DEV_MENU_PRJ_TEXTS"
 			      img="class:itme"
-			      link="option=com_lang4dev&amp;view=prj_texts&amp;">COM_LANG4DEV_PRJ_TEXTS
+			      link="option=com_lang4dev&amp;view=prjtexts&amp;">COM_LANG4DEV_PRJ_TEXTS
 			</menu>
 			<menu view="COM_LANG4DEV_MENU_TRANSLATE"
 			      img="class:language"
