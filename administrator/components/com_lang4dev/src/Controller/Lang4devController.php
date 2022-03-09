@@ -69,7 +69,7 @@ class Lang4devController extends AdminController // FormController
 	{
 		Session::checkToken() or die(Text::_('JINVALID_TOKEN'));
 
-		$link = 'index.php?option=com_rsgallery2';
+		$link = 'index.php?option=com_lang4dev';
 		$this->setRedirect($link);
 
 		return true;
