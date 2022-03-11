@@ -12,6 +12,7 @@ namespace Finnern\Component\Lang4dev\Administrator\View\PrjTexts;
 \defined('_JEXEC') or die;
 
 use Joomla\CMS\Component\ComponentHelper;
+use Joomla\CMS\Filesystem\Path;
 use Joomla\CMS\Helper\ContentHelper;
 use Joomla\CMS\Factory;
 use Joomla\CMS\HTML\HTMLHelper;
@@ -22,7 +23,7 @@ use Joomla\CMS\Router\Route;
 use Joomla\CMS\Toolbar\Toolbar;
 use Joomla\CMS\Toolbar\ToolbarHelper;
 
-//use Finnern\Component\Lang4dev\Administrator\Helper\Lang4devHelper;
+use Finnern\Component\Lang4dev\Administrator\Helper\searchLangItems;
 
 /**
  * View class for a list of lang4dev.
@@ -49,6 +50,15 @@ class HtmlView extends BaseHtmlView
 
 		$l4dConfig = ComponentHelper::getComponent('com_Lang4dev')->getParams();
 		$this->isDevelop = $l4dConfig->get('isDevelop');
+
+
+		// ToDo: take search paths from somewhere else
+		//$file = Path::clean(JPATH_ADMINISTRATOR . '/components/' . $component . '/helpers/' . $eName . '.php');
+		$searchPaths = array (JPATH_ADMINISTRATOR . '/components/com_lang4dev');
+		$searchPaths = array (JPATH_ADMINISTRATOR . '/components/com_lang4dev/tmpl/');
+		$oLangItems = new searchLangItems ($searchPaths);
+		$this->prjLangItems = $oLangItems->findAllTranslationIds();
+
 
 
 		//---  --------------------------------------------------------------

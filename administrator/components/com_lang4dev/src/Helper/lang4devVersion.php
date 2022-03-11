@@ -4,7 +4,7 @@
  *
  * @version       
  * @package       Lang4dev
- * @copyright (C) 2003-2022 Lang4dev Team
+ * @copyright (C) 2022-2022 Lang4dev Team
  * @license       
  */
 

@@ -9,8 +9,13 @@ use Joomla\CMS\Router\Route;
 
     <?php
     echo 'default.php: ' . realpath(dirname(__FILE__));
+    echo '<br><br><hr>';
+	echo '<h3>names</h3><br>';
+    //$names = $this->prjLangItems->getItemNames ();
+    echo $this->prjLangItems->_toTextNames('\n');
+    echo $this->prjLangItems->_toTextNames('<br>');
     ?>
-
+	<hr>
 
 
 
