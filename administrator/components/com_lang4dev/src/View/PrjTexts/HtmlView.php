@@ -55,7 +55,8 @@ class HtmlView extends BaseHtmlView
 		// ToDo: take search paths from somewhere else
 		//$file = Path::clean(JPATH_ADMINISTRATOR . '/components/' . $component . '/helpers/' . $eName . '.php');
 		$searchPaths = array (JPATH_ADMINISTRATOR . '/components/com_lang4dev');
-		$searchPaths = array (JPATH_ADMINISTRATOR . '/components/com_lang4dev/tmpl/');
+		$searchPaths = array (JPATH_ADMINISTRATOR . '/components/com_lang4dev/tmpl');
+		$searchPaths = array (JPATH_ADMINISTRATOR . '/components/com_lang4dev/src/test');
 		$oLangItems = new searchLangItems ($searchPaths);
 		$this->prjLangItems = $oLangItems->findAllTranslationIds();
 

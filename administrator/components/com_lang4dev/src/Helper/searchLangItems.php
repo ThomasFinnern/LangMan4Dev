@@ -37,8 +37,10 @@ class searchLangItems
 	/**
 	 * @since __BUMP_VERSION__
 	 */
-	public function __construct($searchPaths = array(), $componentPrefix = 'com_lang4dev')
+	public function __construct($searchPaths = array(), $componentPrefix = 'COM_LANG4DEV_')
 	{
+		// ToDO: check for uppercase and trailing '_'
+
 		$this->langItems       = new langItems();
 		$this->componentPrefix = $componentPrefix;
 
@@ -291,7 +293,7 @@ class searchLangItems
 
 					// handle rest of string
 					$isInComment = false;
-					$bareLine = $this->removeCommentPHP($bareLine);
+					$bareLine = $this->removeCommentPHP($bareLine, $isInComment);
 				}
 			}
 
@@ -322,15 +324,22 @@ class searchLangItems
 			// test find all words then iterate through array
 			// internet
 			$searchRegex = "'~\w+(?:-\w+)*~'";
-			preg_match_all($searchRegex,$line, $matches);
+			preg_match_all($searchRegex, $line, $matches);
 
+// https://stackoverflow.com/questions/4722007/php-preg-match-to-find-whole-words
 
 			// Python solution
-			$searchRegex = "\\b" + $this->componentPrefix + "\\w+";
+			// py$searchRegex = "\\b" + $this->componentPrefix + "\\w+";
+			$searchRegex = "\b" . $this->componentPrefix . "\w+";
+			$searchRegex = '/\b(\w+' . $this->componentPrefix . "\w+)\b/";
+			$searchRegex = '/' . $this->componentPrefix . "\w+/";
 
 			// test find all words then iterate through array
 			preg_match_all($searchRegex, $line, $matches);
-
+			foreach ($matches as $matchGroup) {
+				$postSlug = $matchGroup[0];
+				$postSlug = $postSlug;
+			}
 
 		}
 		catch (\RuntimeException $e)
@@ -368,7 +377,7 @@ class searchLangItems
 
 				//--- find items --------------
 
-				if (len($bareLine) > 0)
+				if (strlen($bareLine) > 0)
 				{
 
 					$items = $this->searchLangIdsInLineXML($bareLine);
