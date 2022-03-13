@@ -55,7 +55,7 @@ class searchLangItems
 	{
 		// ToDo: log $componentPrefix, $searchPaths
 
-		$langItems = new langItems();
+		$this->langItems = new langItems();
 
 		try
 		{
@@ -106,7 +106,7 @@ class searchLangItems
 			$app->enqueueMessage($OutTxt, 'error');
 		}
 
-		return $langItems; // ? a lot to return ?
+		return $this->langItems; // ? a lot to return ?
 	}
 
 	public function searchLangIdsInPath($searchPath)
@@ -159,7 +159,7 @@ class searchLangItems
 			// php, xml
 			//$regEx = '\.xml$|\.html$';
 			$regEx = '\.php|\.xml$';
-			$files = Folder::files($folder, $regE);
+			$files = Folder::files($folder, $regEx);
 		}
 		catch (\RuntimeException $e)
 		{
@@ -214,6 +214,7 @@ class searchLangItems
 					}
 				}
 
+				$lineIdx = $lineIdx + 1;
 			}
 		}
 		catch (\RuntimeException $e)
@@ -322,23 +323,39 @@ class searchLangItems
 		try
 		{
 			// test find all words then iterate through array
-			// internet
-			$searchRegex = "'~\w+(?:-\w+)*~'";
-			preg_match_all($searchRegex, $line, $matches);
-
 // https://stackoverflow.com/questions/4722007/php-preg-match-to-find-whole-words
 
 			// Python solution
 			// py$searchRegex = "\\b" + $this->componentPrefix + "\\w+";
-			$searchRegex = "\b" . $this->componentPrefix . "\w+";
-			$searchRegex = '/\b(\w+' . $this->componentPrefix . "\w+)\b/";
+			// Finds multiple words per line
 			$searchRegex = '/' . $this->componentPrefix . "\w+/";
 
 			// test find all words then iterate through array
 			preg_match_all($searchRegex, $line, $matches);
+
+
+			$idx = 0;
 			foreach ($matches as $matchGroup) {
-				$postSlug = $matchGroup[0];
-				$postSlug = $postSlug;
+				if ( ! empty($matchGroup[0]))
+				{
+					// all in first group
+					$findings = $matchGroup[0];
+					$name     = $findings;
+
+					// foreach ($findings as $name) {
+					if (!empty($name))
+					{
+						$colIdx = strpos($line, $name, $idx);
+
+						$item = new langItem ($name, '', '', -1, $colIdx);
+
+						// ? same twice ?
+						$items [] = $item;
+
+						// search behind last find
+						$idx = $idx + strlen($name);
+					}
+				}
 			}
 
 		}

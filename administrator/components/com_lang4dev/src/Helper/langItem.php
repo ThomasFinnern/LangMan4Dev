@@ -27,7 +27,7 @@ class langItem
     public $file = '';
     public $path = '';
 	public $lineIdx = -1;
-	public $index = -1;
+	public $colIdx = -1;
 
 
 	/**
@@ -37,14 +37,15 @@ class langItem
 	function __construct(
 		$name = '',
 		$file = '',
-		$line,
-		$index)
+		$path = '',
+		$lineIdx = -1,
+		$colIdx =-1)
 	{
 		$this->name = $name;
 		$this->file = $file;
 		$this->path = $path;
-		$this->line = $line;
-		$this->index = $index;
+		$this->lineIdx = $lineIdx;
+		$this->colIdx = $colIdx;
 	}
 
 }

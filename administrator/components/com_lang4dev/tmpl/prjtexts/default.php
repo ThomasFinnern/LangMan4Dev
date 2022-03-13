@@ -12,11 +12,30 @@ use Joomla\CMS\Router\Route;
     echo '<br><br><hr>';
 	echo '<h3>names</h3><br>';
     //$names = $this->prjLangItems->getItemNames ();
-    echo $this->prjLangItems->_toTextNames('\n');
-    echo $this->prjLangItems->_toTextNames('<br>');
+    //echo $this->prjLangItems->_toTextNames('\n');
+    //echo $this->prjLangItems->_toTextNames('<br>');
     ?>
 	<hr>
-
+	<table>
+		<tr>
+			<th>COM_LANG4DEV_NAME</th>
+			<th>COM_LANG4DEV_LINE</th>
+			<th>COM_LANG4DEV_COLUMN</th>
+			<th>COM_LANG4DEV_FILE</th>
+			<th>COM_LANG4DEV_PATH</th>
+		</tr>
+		<?php foreach ($this->prjLangItems->items as $i => $langItem) : ?>
+			<?php foreach ($langItem as $item) : ?>
+			<tr>
+				<td><?php echo $item->name; ?></td>
+				<td><?php echo $item->lineIdx; ?></td>
+				<td><?php echo $item->colIdx; ?></td>
+				<td><?php echo $item->file; ?></td>
+				<td><?php echo $item->path; ?></td>
+			</tr>
+			<?php endforeach; ?>
+		<?php endforeach; ?>
+	</table>
 
 
 

@@ -24,7 +24,7 @@ use Joomla\CMS\Factory;
 class langItems
 {
 
-	protected $items = [];
+	public $items = [];
  
 	/**
 
@@ -41,12 +41,12 @@ class langItems
 	public function addItem ($item)
 	{
 		$name = $item->name;
-		$this->items[$name][] = $name;
+		$this->items[$name][] = $item;
 	}
 
-	public function getItem ($name, )
+	public function getItem ($name, $idx)
 	{
-		return $this->items[$name];
+		return $this->items[$name][$idx];
 	}
 
 	public function getItems ($name)
