@@ -1,6 +1,6 @@
 <?php
 /**
- * This class handles the location of one language item found
+ * Translation items collected from code file
  *
  * @version       
  * @package       Lang4dev
@@ -16,12 +16,14 @@ use Joomla\CMS\Factory;
 \defined('_JEXEC') or die;
 
 /**
- * keeps one location of one language item
- *    name, file, line, index
+ * Keeps one location of one language item
+ * with file name, location by line and column index
  *
  * @package Lang4dev
+ *
+ * @since __BUMP_VERSION__
  */
-class langItem
+class langLocation
 {
 	public $name = '';
     public $file = '';

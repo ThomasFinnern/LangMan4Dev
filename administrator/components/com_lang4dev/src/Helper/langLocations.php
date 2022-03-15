@@ -1,7 +1,6 @@
 <?php
 /**
- * This class handles version management for Lang4dev
- *
+ * List of translation items collected from code files 
  * @version       
  * @package       Lang4dev
  * @copyright (C) 2022-2022 Lang4dev Team
@@ -16,20 +15,29 @@ use Joomla\CMS\Factory;
 \defined('_JEXEC') or die;
 
 /**
- * keeps one location of one language item information about the
- * The files uses is limitet as *.ini are not useful
+
+ * @since __BUMP_VERSION__
+ */
+
+/**
+ * Keeps a list of 'langLocation's
+ *
+ * As items may appear twice they are organized within
+ * an associative array by name of item linking to
+ * an array of the single item
+ *
+ * So there is a list of all appearances of each item
+ * with file name, location, line and column index
  *
  * @package Lang4dev
+
+ * @since __BUMP_VERSION__
  */
-class langItems
+class langLocations
 {
 
 	public $items = [];
  
-	/**
-
-	 * @since __BUMP_VERSION__
-	 */
 	public function __construct($items = [])
 	{
 		if ( !empty ($items))

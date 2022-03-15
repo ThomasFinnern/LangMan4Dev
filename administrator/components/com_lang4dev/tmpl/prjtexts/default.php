@@ -11,9 +11,9 @@ use Joomla\CMS\Router\Route;
     echo 'default.php: ' . realpath(dirname(__FILE__));
     echo '<br><br><hr>';
 	echo '<h3>names</h3><br>';
-    //$names = $this->prjLangItems->getItemNames ();
-    //echo $this->prjLangItems->_toTextNames('\n');
-    //echo $this->prjLangItems->_toTextNames('<br>');
+    //$names = $this->prjLangLocations->getItemNames ();
+    //echo $this->prjLangLocations->_toTextNames('\n');
+    //echo $this->prjLangLocations->_toTextNames('<br>');
     ?>
 	<hr>
 	<table>
@@ -24,8 +24,8 @@ use Joomla\CMS\Router\Route;
 			<th>COM_LANG4DEV_FILE</th>
 			<th>COM_LANG4DEV_PATH</th>
 		</tr>
-		<?php foreach ($this->prjLangItems->items as $i => $langItem) : ?>
-			<?php foreach ($langItem as $item) : ?>
+		<?php foreach ($this->prjLangLocations->items as $i => $langLocation) : ?>
+			<?php foreach ($langLocation as $item) : ?>
 			<tr>
 				<td><?php echo $item->name; ?></td>
 				<td><?php echo $item->lineIdx; ?></td>

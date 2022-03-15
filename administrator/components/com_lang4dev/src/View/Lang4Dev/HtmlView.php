@@ -154,7 +154,7 @@ class HtmlView extends BaseHtmlView
         if (!empty ($this->isDevelop))
         {
             echo '<span style="color:red">'
-                . '* <br>'
+                . '* Check J4x for exception handling try ...  catch ??? <br>'
                 . '* <br>'
 //				. '* <br>'
 //				. '* <br>'

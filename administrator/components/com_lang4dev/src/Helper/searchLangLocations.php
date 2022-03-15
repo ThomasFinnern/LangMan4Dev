@@ -10,12 +10,11 @@
 
 namespace Finnern\Component\Lang4dev\Administrator\Helper;
 
-use JFolder;
 use Joomla\CMS\Factory;
-
-use Finnern\Component\Lang4dev\Administrator\Helper\langItems;
-use Finnern\Component\Lang4dev\Administrator\Helper\langItem;
 use Joomla\CMS\Filesystem\Folder;
+
+use Finnern\Component\Lang4dev\Administrator\Helper\langLocations;
+use Finnern\Component\Lang4dev\Administrator\Helper\langLocation;
 
 // no direct access
 \defined('_JEXEC') or die;
@@ -26,12 +25,12 @@ use Joomla\CMS\Filesystem\Folder;
  *
  * @package Lang4dev
  */
-class searchLangItems
+class searchLangLocations
 {
 	public $fileTypes = 'php, xml';
 	public $componentPrefix = '';
 	public $searchPaths = array();
-	public $langItems;
+	public $langLocations;
 	protected $name = 'Lang4dev';
 
 	/**
@@ -41,7 +40,7 @@ class searchLangItems
 	{
 		// ToDO: check for uppercase and trailing '_'
 
-		$this->langItems       = new langItems();
+		$this->langLocations       = new langLocations();
 		$this->componentPrefix = $componentPrefix;
 
 		// if ( !empty ($searchPaths)) ... ???
@@ -55,7 +54,7 @@ class searchLangItems
 	{
 		// ToDo: log $componentPrefix, $searchPaths
 
-		$this->langItems = new langItems();
+		$this->langLocations = new langLocations();
 
 		try
 		{
@@ -85,13 +84,6 @@ class searchLangItems
 				}
 				else
 				{
-					//--- path does not exist -------------------------------
-
-					$OutTxt = 'Error: findAllTranslationIds: Path  does not exist "' . $searchPath . '"<br>';
-
-					$app = Factory::getApplication();
-					$app->enqueueMessage($OutTxt, 'warning');
-
 				}
 			}
 
@@ -106,7 +98,7 @@ class searchLangItems
 			$app->enqueueMessage($OutTxt, 'error');
 		}
 
-		return $this->langItems; // ? a lot to return ?
+		return $this->langLocations; // ? a lot to return ?
 	}
 
 	public function searchLangIdsInPath($searchPath)
@@ -190,6 +182,7 @@ class searchLangItems
 			$lines = file($filePath);
 
 			// content found
+			// ToDo: 		foreach ($lines as $lineIdx => $line)
 			foreach ($lines as $line)
 			{
 				//--- remove comments --------------
@@ -210,7 +203,7 @@ class searchLangItems
 						$item->path    = $path;
 						$item->lineIdx = $lineIdx;
 
-						$this->langItems->addItem($item);
+						$this->langLocations->addItem($item);
 					}
 				}
 
@@ -347,7 +340,7 @@ class searchLangItems
 					{
 						$colIdx = strpos($line, $name, $idx);
 
-						$item = new langItem ($name, '', '', -1, $colIdx);
+						$item = new langLocation ($name, '', '', -1, $colIdx);
 
 						// ? same twice ?
 						$items [] = $item;
@@ -406,7 +399,7 @@ class searchLangItems
 						$item->path    = $path;
 						$item->lineIdx = $lineIdx;
 
-						$this->langItems . addItem($item);
+						$this->langLocations . addItem($item);
 					}
 				}
 

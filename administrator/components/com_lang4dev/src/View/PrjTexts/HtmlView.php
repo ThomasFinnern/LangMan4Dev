@@ -23,7 +23,7 @@ use Joomla\CMS\Router\Route;
 use Joomla\CMS\Toolbar\Toolbar;
 use Joomla\CMS\Toolbar\ToolbarHelper;
 
-use Finnern\Component\Lang4dev\Administrator\Helper\searchLangItems;
+use Finnern\Component\Lang4dev\Administrator\Helper\searchLangLocations;
 
 /**
  * View class for a list of lang4dev.
@@ -57,8 +57,8 @@ class HtmlView extends BaseHtmlView
 		$searchPaths = array (JPATH_ADMINISTRATOR . '/components/com_lang4dev');
 		$searchPaths = array (JPATH_ADMINISTRATOR . '/components/com_lang4dev/tmpl');
 		$searchPaths = array (JPATH_ADMINISTRATOR . '/components/com_lang4dev/src/test');
-		$oLangItems = new searchLangItems ($searchPaths);
-		$this->prjLangItems = $oLangItems->findAllTranslationIds();
+		$oLangLocations = new searchLangLocations ($searchPaths);
+		$this->prjLangLocations = $oLangLocations->findAllTranslationIds();
 
 
 
