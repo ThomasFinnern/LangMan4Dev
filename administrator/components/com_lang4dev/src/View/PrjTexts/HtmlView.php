@@ -12,6 +12,7 @@ namespace Finnern\Component\Lang4dev\Administrator\View\PrjTexts;
 \defined('_JEXEC') or die;
 
 use Joomla\CMS\Component\ComponentHelper;
+use Joomla\CMS\Filesystem\File;
 use Joomla\CMS\Filesystem\Path;
 use Joomla\CMS\Helper\ContentHelper;
 use Joomla\CMS\Factory;
@@ -24,6 +25,7 @@ use Joomla\CMS\Toolbar\Toolbar;
 use Joomla\CMS\Toolbar\ToolbarHelper;
 
 use Finnern\Component\Lang4dev\Administrator\Helper\searchLangLocations;
+use Finnern\Component\Lang4dev\Administrator\Helper\langFile;
 
 /**
  * View class for a list of lang4dev.
@@ -32,7 +34,8 @@ use Finnern\Component\Lang4dev\Administrator\Helper\searchLangLocations;
  */
 class HtmlView extends BaseHtmlView
 {
-	//protected $configVars;
+	protected $isDevelop;
+	protected $prjLangLocations;
 
 	/**
 	 * Method to display the view.
@@ -51,6 +54,7 @@ class HtmlView extends BaseHtmlView
 		$l4dConfig = ComponentHelper::getComponent('com_Lang4dev')->getParams();
 		$this->isDevelop = $l4dConfig->get('isDevelop');
 
+		//--- search paths ------------------------------------
 
 		// ToDo: take search paths from somewhere else
 		//$file = Path::clean(JPATH_ADMINISTRATOR . '/components/' . $component . '/helpers/' . $eName . '.php');
@@ -60,7 +64,19 @@ class HtmlView extends BaseHtmlView
 		$oLangLocations = new searchLangLocations ($searchPaths);
 		$this->prjLangLocations = $oLangLocations->findAllTranslationIds();
 
+		//--- langFiles ToDo: use other ... ------------------------------------
 
+		// dummy file:
+		$filePath = JPATH_ADMINISTRATOR . '/components/' . 'com_lang4dev/language/en-GB/com_lang4dev.sys.tmp';
+		$srcPath = File::stripExt($filePath) . '.ini';
+		File::copy($srcPath, $filePath);
+
+//		$filePath = JPATH_ADMINISTRATOR . '/components/' . 'com_lang4dev/language/en-GB/com_lang4dev.tmp';
+//		File::copy(File::stripExt($filePath) . '.ini', $filePath);
+
+		$testLangFile = new langFile($filePath);
+		$testLangFile->translationsToFile();
+		$this->testLangFile = $testLangFile;
 
 		//---  --------------------------------------------------------------
 		/**

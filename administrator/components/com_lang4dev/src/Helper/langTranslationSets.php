@@ -20,7 +20,7 @@ use Joomla\CMS\Factory;
  * Keeps one location of one language item
  * with file name, location by line and column index
  *
- * Different data view on single tranlation item as by language files
+ * Different data view on single translation item as by language files
  * @package Lang4dev
  *
  * @since __BUMP_VERSION__

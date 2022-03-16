@@ -10,10 +10,15 @@ use Joomla\CMS\Router\Route;
     <?php
     echo 'default.php: ' . realpath(dirname(__FILE__));
     echo '<br><br><hr>';
-	echo '<h3>names</h3><br>';
+	//echo '<h3>names</h3><br>';
     //$names = $this->prjLangLocations->getItemNames ();
     //echo $this->prjLangLocations->_toTextNames('\n');
     //echo $this->prjLangLocations->_toTextNames('<br>');
+    ?>
+	<hr>
+	<h3>Temp Translation lines </h3><br>
+	<?php
+		echo nl2br($this->testLangFile->collectedTranslationLines());
     ?>
 	<hr>
 	<table>

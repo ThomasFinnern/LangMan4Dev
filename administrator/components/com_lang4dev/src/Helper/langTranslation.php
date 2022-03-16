@@ -27,8 +27,8 @@ use Joomla\CMS\Factory;
 class langTranslation
 {
 	public $name = '';
-    public $translation = '';
-    public $commentBefore = [];
+    public $translationText = '';
+    public $commentsBefore = [];
     public $commentBehind = '';
     public $lineIdx = -1;
 
@@ -39,14 +39,14 @@ class langTranslation
 	 */
 	function __construct(
 		$name = '',
-		$translation = '',
-		$commentBefore = [],
+		$translationText = '',
+		$commentsBefore = [],
 		$commentBehind = '',
 		$lineIdx = -1)
 	{
 		$this->name = $name;
-		$this->translation = $translation;
-		$this->commentBefore = $commentBefore;
+		$this->translationText = $translationText;
+		$this->commentsBefore = $commentsBefore;
 		$this->commentBehind = $commentBehind;
 		$this->lineIdx = $lineIdx;
 	}
