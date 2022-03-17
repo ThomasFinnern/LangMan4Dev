@@ -18,7 +18,17 @@ use Joomla\CMS\Router\Route;
 	<hr>
 	<h3>Temp Translation lines </h3><br>
 	<?php
-		echo nl2br($this->testLangFile->collectedTranslationLines());
+		$linesArray = $this->testLangFile->translationLinesArray();
+		$fileLines = implode("<br>", $linesArray);
+
+		echo $fileLines;
+    ?>
+	<hr>
+	<h3>Missing Translation IDs</h3><br>
+	<?php
+		$newItemLines = implode("<br>", $this->transIds_new);
+
+		echo $newItemLines;
     ?>
 	<hr>
 	<table>

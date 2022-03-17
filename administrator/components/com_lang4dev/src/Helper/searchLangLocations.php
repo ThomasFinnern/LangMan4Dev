@@ -29,7 +29,7 @@ class searchLangLocations
 {
 	public $fileTypes = 'php, xml';
 	public $componentPrefix = '';
-	public $searchPaths = array();
+	public $searchPaths = [];
 	public $langLocations;
 	protected $name = 'Lang4dev';
 

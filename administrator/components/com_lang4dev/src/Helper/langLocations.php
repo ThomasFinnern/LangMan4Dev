@@ -87,6 +87,23 @@ class langLocations
 		return $names;
 	}
 
+	public function getMissingTransIds ($transIds_file){
+
+		$missing = [];
+
+		$transIds_search = $this->getItemNames ();
+
+		foreach ($transIds_search as $transId)
+		{
+			if (empty ($transIds_file[$transId])) {
+
+				$missing [] = $transId;
+			}
+		}
+
+		return $missing;
+	}
+
 	public function _toText ()
 	{
 		$text = '';

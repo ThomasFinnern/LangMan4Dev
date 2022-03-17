@@ -58,8 +58,8 @@ class HtmlView extends BaseHtmlView
 
 		// ToDo: take search paths from somewhere else
 		//$file = Path::clean(JPATH_ADMINISTRATOR . '/components/' . $component . '/helpers/' . $eName . '.php');
-		$searchPaths = array (JPATH_ADMINISTRATOR . '/components/com_lang4dev');
-		$searchPaths = array (JPATH_ADMINISTRATOR . '/components/com_lang4dev/tmpl');
+		//$searchPaths = array (JPATH_ADMINISTRATOR . '/components/com_lang4dev');
+		//$searchPaths = array (JPATH_ADMINISTRATOR . '/components/com_lang4dev/tmpl');
 		$searchPaths = array (JPATH_ADMINISTRATOR . '/components/com_lang4dev/src/test');
 		$oLangLocations = new searchLangLocations ($searchPaths);
 		$this->prjLangLocations = $oLangLocations->findAllTranslationIds();
@@ -67,7 +67,9 @@ class HtmlView extends BaseHtmlView
 		//--- langFiles ToDo: use other ... ------------------------------------
 
 		// dummy file:
+		//$filePath = JPATH_ADMINISTRATOR . '/components/' . 'com_lang4dev/language/en-GB/com_lang4dev.sys.tmp';
 		$filePath = JPATH_ADMINISTRATOR . '/components/' . 'com_lang4dev/language/en-GB/com_lang4dev.sys.tmp';
+		//$filePath = JPATH_ADMINISTRATOR . '//components/com_lang4dev/src/test/' . 'com_lang4dev.01.tmp';
 		$srcPath = File::stripExt($filePath) . '.ini';
 		File::copy($srcPath, $filePath);
 
@@ -78,7 +80,13 @@ class HtmlView extends BaseHtmlView
 		$testLangFile->translationsToFile();
 		$this->testLangFile = $testLangFile;
 
-		//---  --------------------------------------------------------------
+		//--- not translated --------------------------------------------------------------
+
+		$transIds_new = $this->prjLangLocations->getMissingTransIds($testLangFile->getItemNames());
+
+		$this->transIds_new = $transIds_new;
+
+
 		/**
 		HTMLHelper::_('sidebar.setAction', 'index.php?option=com_Lang4dev&view=config&layout=RawView');
 		/**

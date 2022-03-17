@@ -36,7 +36,7 @@ class langLocation
 
 	 * @since __BUMP_VERSION__
 	 */
-	function __construct(
+	public function __construct(
 		$name = '',
 		$file = '',
 		$path = '',
