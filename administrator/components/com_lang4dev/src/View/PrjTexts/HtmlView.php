@@ -24,8 +24,9 @@ use Joomla\CMS\Router\Route;
 use Joomla\CMS\Toolbar\Toolbar;
 use Joomla\CMS\Toolbar\ToolbarHelper;
 
-use Finnern\Component\Lang4dev\Administrator\Helper\searchLangLocations;
 use Finnern\Component\Lang4dev\Administrator\Helper\langFile;
+use Finnern\Component\Lang4dev\Administrator\Helper\langFileNamesSet;
+use Finnern\Component\Lang4dev\Administrator\Helper\searchLangLocations;
 
 /**
  * View class for a list of lang4dev.
@@ -86,6 +87,16 @@ class HtmlView extends BaseHtmlView
 
 		$this->transIds_new = $transIds_new;
 
+
+		//--- test lang names set . --------------------------------------------------------------
+
+		$langFileNamesSet = new langFileNamesSet();
+
+		//$langFileNamesSet->detectBasePath('d:\\Entwickl\\2022\\_gitHub\\LangMan4Dev_Project\\TestData\\lang_by_pre');
+		$langFileNamesSet->detectBasePath('d:\\Entwickl\\2022\\_gitHub\\LangMan4Dev_Project\\TestData\\lang_by_folder');
+		$langFileNamesSet->collectLangFiles();
+
+		$this->langFileNamesSetText = $langFileNamesSet->__toText ();
 
 		/**
 		HTMLHelper::_('sidebar.setAction', 'index.php?option=com_Lang4dev&view=config&layout=RawView');

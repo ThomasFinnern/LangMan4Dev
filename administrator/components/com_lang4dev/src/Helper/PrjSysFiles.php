@@ -74,7 +74,7 @@ class PrjSysFiles extends langFileNamesSet
         $this->detectInstallFile();
 
         $this->detectBasePath();
-        $this->searchSysLangFiles();
+        $this->searchLangFiles();
 
     }
 
@@ -96,8 +96,8 @@ class PrjSysFiles extends langFileNamesSet
                 return;
             }
 
-            if ()
-            ;
+//            if ()
+//            ;
 
 
 
@@ -119,14 +119,5 @@ class PrjSysFiles extends langFileNamesSet
         $this->installFile = $installFile;
     }
 
-    public function searchSysLangfiles () {
-
-
-
-
-
-
-
-    }
 
 } // class

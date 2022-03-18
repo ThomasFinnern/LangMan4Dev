@@ -31,6 +31,13 @@ use Joomla\CMS\Router\Route;
 		echo $newItemLines;
     ?>
 	<hr>
+	<h3>Lang names set</h3><br>
+	<?php
+		$newItemLines = implode("<br>", $this->langFileNamesSetText);
+
+		echo $newItemLines;
+    ?>
+	<hr>
 	<table>
 		<tr>
 			<th>COM_LANG4DEV_NAME</th>
