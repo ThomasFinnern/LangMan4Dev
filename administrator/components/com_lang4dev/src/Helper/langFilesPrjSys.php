@@ -1,7 +1,7 @@
 <?php
 /**
- * This class contains translations file
- *
+ * Base files of a extension
+ *      Path to extension.xml, script.php and *.sys.ini files
  *
  * @version
  * @package       Lang4dev
@@ -28,7 +28,7 @@ use Finnern\Component\Lang4dev\Administrator\Helper\langFiles;
  *
  * @package Lang4dev
  */
-class langFilesPrj
+class langFilesPrjSys
 {
 	public $fileTypes = 'php, xml';
 

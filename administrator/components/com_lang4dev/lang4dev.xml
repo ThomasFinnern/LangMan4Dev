@@ -51,9 +51,10 @@
 		</submenu>
 
 		<files folder="administrator/components/com_lang4dev">
-			<filename>lang4dev.xml</filename>
 			<filename>changelog.xml</filename>
 			<filename>config.xml</filename>
+			<filename>install_langman4dev.php</filename>
+			<filename>lang4dev.xml</filename>
 			<folder>language</folder>
 			<folder>services</folder>
 			<folder>src</folder>
