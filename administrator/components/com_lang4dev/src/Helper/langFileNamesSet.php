@@ -23,13 +23,12 @@ use Joomla\CMS\Filesystem\Folder;
 /**
  *
  *
- * The files uses is limitet as *.ini are not useful
  *
  * @package Lang4dev
  */
 class langFileNamesSet
 {
-    public $basePath = '';
+    public $langBasePath = '';
     public $baseName = '';
     public $langIds = [];
     public $langFiles = [];
@@ -39,10 +38,23 @@ class langFileNamesSet
     protected $isLangIdPre2Name = false; // ToDo: is this needed ?
 
     public function __construct($basePath = '') {
-        $this->basePath = $basePath;
+        $this->langBasePath = $basePath;
     }
 
-    public function detectBasePath ($basePath = '', $isSysFiles = false) {
+    public function clear () {
+
+        $this->langBasePath = '';
+        $this->baseName = '';
+        $this->langIds = [];
+        $this->langFiles = [];
+
+        $this->isSysFiles = false;
+        $this->isLangInFolders = false; // lang file are divided in folders instead of containing the name i front
+        $this->isLangIdPre2Name = false; // ToDo: is this needed ?
+
+    }
+
+    public function detectLangBasePath ($basePath = '', $isSysFiles = false) {
 
     	if ($basePath == '') {
 
@@ -112,7 +124,7 @@ class langFileNamesSet
 	            if (str_ends_with($fileName, $end))
 	            {
 		            $isPathFound    = true;
-		            $this->basePath = $searchPath;
+		            $this->langBasePath = $searchPath;
 
 		            //--- flags --------------------------------
 
@@ -135,7 +147,7 @@ class langFileNamesSet
                 if (str_starts_with($folderName, $langId)) {
 
                     $isPathFound = true;
-                    $this->basePath = $searchPath;
+                    $this->langBasePath = $searchPath;
 
                     //--- flags --------------------------------
 
@@ -184,7 +196,7 @@ class langFileNamesSet
 
         if ($this->isLangIdPre2Name) {
 
-            $langFiles = Folder::files ($this->basePath, $regex);
+            $langFiles = Folder::files ($this->langBasePath, $regex);
 
             // all files in dir
             foreach ($langFiles as $langFile) {
@@ -208,12 +220,12 @@ class langFileNamesSet
 	        //--- lang ID as folder name --------------------------------
 
 	        // all folders
-	        foreach (Folder::folders($this->basePath) as $folderName)
+	        foreach (Folder::folders($this->langBasePath) as $folderName)
 	        {
 		        $langId = $folderName;
 		        $this->langIds []          = $langId;
 
-		        $subFolder = $this->basePath . DIRECTORY_SEPARATOR . $folderName;
+		        $subFolder = $this->langBasePath . DIRECTORY_SEPARATOR . $folderName;
 
 		        // set base name once
 		        if ($isBaseNameSet == false)
@@ -242,22 +254,12 @@ class langFileNamesSet
 
     	$lines = [];
 
-//	    public $basePath = '';
-	    $lines [] = '$basePath = "' . $this->basePath . '"';
-
-//	    public $baseName = '';
+	    $lines [] = '$basePath = "' . $this->langBasePath . '"';
 	    $lines [] = '$baseName = "' . $this->baseName . '"';
-
-//	    public $isSysFiles = '';
 	    $lines [] = '$isSysFiles = "' . ($this->isSysFiles  ? 'true' : 'false') . '"';
-
-//	    public $isLangInFolders = '';
 	    $lines [] = '$isLangInFolders = "' . ($this->isLangInFolders  ? 'true' : 'false') . '"';
-
-//	    public $isLangIdPre2Name = '';
 	    $lines [] = '$isLangIdPre2Name = "' . ($this->isLangIdPre2Name  ? 'true' : 'false') . '"';
 
-//	    public $langIds = [];
 	    $lines [] = '--- $langIds ------------------------';
 	    $langIdsLine = '';
 	    foreach ($this->langIds as $langId) {
@@ -265,31 +267,10 @@ class langFileNamesSet
 	    }
 	    $lines [] = $langIdsLine;
 
-//	    public $langFiles = [];
 	    $lines [] = '--- $langFiles ------------------------';
 	    foreach ($this->langFiles as $langFile) {
 		    $lines [] = $langFile;
 	    }
-
-
-	    /**
-	    $lines [] = '$ = "' . $this-> . '"';
-
-//	    public $langFiles = [];
-
-//
-
-//	    protected $isSysFiles = false;
-
-//	    protected $isLangInFolders = false; // lang file are divided in folders instead of containing the name i front
-
-//	    protected $isLangIdPre2Name = false; // ToDo: is this needed ?
-
-
-		/**/
-
-
-
 
 	    return $lines;
     }

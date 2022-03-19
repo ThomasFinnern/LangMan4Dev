@@ -26,6 +26,7 @@ use Joomla\CMS\Toolbar\ToolbarHelper;
 
 use Finnern\Component\Lang4dev\Administrator\Helper\langFile;
 use Finnern\Component\Lang4dev\Administrator\Helper\langFileNamesSet;
+use Finnern\Component\Lang4dev\Administrator\Helper\prjSysFiles;
 use Finnern\Component\Lang4dev\Administrator\Helper\searchLangLocations;
 
 /**
@@ -88,19 +89,30 @@ class HtmlView extends BaseHtmlView
 		$this->transIds_new = $transIds_new;
 
 
+        /**
 		//--- test lang names set . --------------------------------------------------------------
 
 		$langFileNamesSet = new langFileNamesSet();
 
 		//$langFileNamesSet->detectBasePath('d:\\Entwickl\\2022\\_gitHub\\LangMan4Dev_Project\\TestData\\lang_by_pre');
 		//$langFileNamesSet->detectBasePath('d:\\Entwickl\\2022\\_gitHub\\LangMan4Dev_Project\\TestData\\lang_by_folder');
-		$langFileNamesSet->detectBasePath('d:\\Entwickl\\2022\\_gitHub\\LangMan4Dev_Project\\TestData\\lang_by_pre', true);
+		$langFileNamesSet->detectLangBasePath('d:\\Entwickl\\2022\\_gitHub\\LangMan4Dev_Project\\TestData\\lang_by_pre', true);
 		//$langFileNamesSet->detectBasePath('d:\\Entwickl\\2022\\_gitHub\\LangMan4Dev_Project\\TestData\\lang_by_folder', true);
 		$langFileNamesSet->collectLangFiles();
 
 		$this->langFileNamesSetText = $langFileNamesSet->__toText ();
+        /**/
 
-		/**
+        $langFileNamesSet = new prjSysFiles('Lang4Dev', 'd:\\Entwickl\\2022\\_gitHub\\LangMan4Dev');
+        $langFileNamesSet = new prjSysFiles('Lang4Dev', 'd:\\Entwickl\\2022\\_gitHub\\LangMan4Dev\\\administrator\\components\\com_lang4dev\\');
+//         $langFileNamesSet = new prjSysFiles('Lang4Dev',
+//             'd:\\Entwickl\\2022\\_gitHub\\LangMan4Dev',
+//             'd:\\Entwickl\\2022\\_gitHub\\LangMan4Dev\\\administrator\\components\\com_lang4dev\\');
+        $langFileNamesSet->findFiles ();
+        $this->langFileNamesSetText = $langFileNamesSet->__toText ();
+
+
+        /**
 		HTMLHelper::_('sidebar.setAction', 'index.php?option=com_Lang4dev&view=config&layout=RawView');
 		/**
 		$Layout = Factory::getApplication()->input->get('layout');

@@ -18,17 +18,17 @@ use Joomla\CMS\Router\Route;
 	<hr>
 	<h3>Temp Translation lines </h3><br>
 	<?php
-		$linesArray = $this->testLangFile->translationLinesArray();
-		$fileLines = implode("<br>", $linesArray);
-
-		echo $fileLines;
+//		$linesArray = $this->testLangFile->translationLinesArray();
+//		$fileLines = implode("<br>", $linesArray);
+//
+//		echo $fileLines;
     ?>
 	<hr>
 	<h3>Missing Translation IDs</h3><br>
 	<?php
-		$newItemLines = implode("<br>", $this->transIds_new);
-
-		echo $newItemLines;
+//		$newItemLines = implode("<br>", $this->transIds_new);
+//
+//		echo $newItemLines;
     ?>
 	<hr>
 	<h3>Lang names set</h3><br>
@@ -47,15 +47,15 @@ use Joomla\CMS\Router\Route;
 			<th>COM_LANG4DEV_PATH</th>
 		</tr>
 		<?php foreach ($this->prjLangLocations->items as $i => $langLocation) : ?>
-			<?php foreach ($langLocation as $item) : ?>
-			<tr>
-				<td><?php echo $item->name; ?></td>
-				<td><?php echo $item->lineIdx; ?></td>
-				<td><?php echo $item->colIdx; ?></td>
-				<td><?php echo $item->file; ?></td>
-				<td><?php echo $item->path; ?></td>
-			</tr>
-			<?php endforeach; ?>
+<!--			--><?php //foreach ($langLocation as $item) : ?>
+<!--			<tr>-->
+<!--				<td>--><?php //echo $item->name; ?><!--</td>-->
+<!--				<td>--><?php //echo $item->lineIdx; ?><!--</td>-->
+<!--				<td>--><?php //echo $item->colIdx; ?><!--</td>-->
+<!--				<td>--><?php //echo $item->file; ?><!--</td>-->
+<!--				<td>--><?php //echo $item->path; ?><!--</td>-->
+<!--			</tr>-->
+<!--			--><?php //endforeach; ?>
 		<?php endforeach; ?>
 	</table>
 
