@@ -129,9 +129,10 @@ class langFileNamesSet
             #--- All sub folders in folder -------------------------------------
 
             foreach (Folder::folders($searchPath) as $folderName) {
+
                 $subFolder = $searchPath . DIRECTORY_SEPARATOR . $folderName;
 
-                if (str_starts_with($subFolder, $langId)) {
+                if (str_starts_with($folderName, $langId)) {
 
                     $isPathFound = true;
                     $this->basePath = $searchPath;
@@ -144,6 +145,10 @@ class langFileNamesSet
                 } else
                 {
                     $isPathFound = $this->searchDir4LangID($subFolder);
+
+                    if($isPathFound) {
+                    	break;
+                    }
                 }
             }
         }
@@ -151,19 +156,13 @@ class langFileNamesSet
         return $isPathFound;
     }
 
+    // ToDo: detectBasePath does not need to know about isSysFiles, do it here ? or tell by construct
     public function collectLangFiles () {
 
         $isFound = false;
 
-        if ($this->isSysFiles == false) {
-
-            $isFound = $this->searchLangFiles ();
-
-        } else {
-            $this->isSysFiles = true;
-
-            $isFound = $this->searchLangFiles ();
-        }
+        // try ?
+        $isFound = $this->searchLangFiles ();
 
         return $isFound;
     }
@@ -174,9 +173,11 @@ class langFileNamesSet
 	    $this->langIds = [];
 	    $baseName = '';
 
-	    $regex = '\.ini$';
 	    if ($this->isSysFiles == true) {
 		    $regex = '\.sys\.ini$';
+	    } else {
+	    	// ToDO: regex with check for not .sys. before search string
+		    $regex = '(?<!\.sys)\.ini$';
 	    }
 
         //--- lang ID in front ----------------------------------------
@@ -210,19 +211,25 @@ class langFileNamesSet
 	        foreach (Folder::folders($this->basePath) as $folderName)
 	        {
 		        $langId = $folderName;
-
 		        $this->langIds []          = $langId;
+
+		        $subFolder = $this->basePath . DIRECTORY_SEPARATOR . $folderName;
 
 		        // set base name once
 		        if ($isBaseNameSet == false)
 		        {
-			        $baseName = Folder::files ($this->basePath, $regex);
+			        $fileNames = Folder::files ($subFolder, $regex);
 
-			        $this->baseName = $baseName;
-			        $isBaseNameSet  = true;
+			        if (count ($fileNames) > 0)
+			        {
+				        $baseName = $fileNames[0];
+				        $this->baseName = $baseName;
+
+				        $isBaseNameSet  = true;
+			        }
 		        }
 
-		        $langFile = $this->basePath . '/' . $langId . '/' . $baseName;
+		        $langFile = $subFolder . DIRECTORY_SEPARATOR . $baseName;
 
 		        $this->langFiles [$langId] = $langFile;
 	        }

@@ -93,7 +93,9 @@ class HtmlView extends BaseHtmlView
 		$langFileNamesSet = new langFileNamesSet();
 
 		//$langFileNamesSet->detectBasePath('d:\\Entwickl\\2022\\_gitHub\\LangMan4Dev_Project\\TestData\\lang_by_pre');
-		$langFileNamesSet->detectBasePath('d:\\Entwickl\\2022\\_gitHub\\LangMan4Dev_Project\\TestData\\lang_by_folder');
+		//$langFileNamesSet->detectBasePath('d:\\Entwickl\\2022\\_gitHub\\LangMan4Dev_Project\\TestData\\lang_by_folder');
+		$langFileNamesSet->detectBasePath('d:\\Entwickl\\2022\\_gitHub\\LangMan4Dev_Project\\TestData\\lang_by_pre', true);
+		//$langFileNamesSet->detectBasePath('d:\\Entwickl\\2022\\_gitHub\\LangMan4Dev_Project\\TestData\\lang_by_folder', true);
 		$langFileNamesSet->collectLangFiles();
 
 		$this->langFileNamesSetText = $langFileNamesSet->__toText ();
