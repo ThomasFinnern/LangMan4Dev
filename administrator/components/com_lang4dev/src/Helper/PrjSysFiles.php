@@ -33,6 +33,8 @@ class prjSysFiles extends langFileNamesSet
 	public $prjXmlFilePath = '';
 	public $installFile = '';
 
+    protected $langFiles = []; // $langId -> translations
+    protected $langLocations = [];
 
     /**
      * @since __BUMP_VERSION__
@@ -297,23 +299,42 @@ class prjSysFiles extends langFileNamesSet
         return $installFileName;
     }
 
+    // read content of language file
     public function retrieveLangFileTranslations ($langId='en-GB', $isReadOriginal=false) {
 
-        ;
 
+        // if not chached or $isReadOriginal
 
+        if (empty($langFiles [$langId]) || $isReadOriginal) {
 
+            $langFileName =  $this->langFileNames [$langId];
 
+            // $langFile = new langFile ($langFileName);
+            $langFile = new langFile ();
+            $langFile->assignFileContent($langFileName, $langId);
+
+            $langFiles [$langId] = $langFile;
+        }
+
+        // if (empty($langFiles [$langId]) 0=> return empty ? ...
+
+        return $langFiles [$langId];
     }
 
     public function searchLangLocations ($isScanOriginal=false) {
 
-        ;
+
+
+        // scan project XML
+
+
+        // scan install file
 
 
 
 
 
+        return;
     }
 
 

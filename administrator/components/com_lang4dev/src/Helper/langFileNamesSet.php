@@ -31,7 +31,7 @@ class langFileNamesSet
     public $langBasePath = '';
     public $baseName = '';
     public $langIds = [];
-    public $langFiles = [];
+    public $langFileNames = [];
 
     protected $isSysFiles = false;
     protected $isLangInFolders = false; // lang file are divided in folders instead of containing the name i front
@@ -46,7 +46,7 @@ class langFileNamesSet
         $this->langBasePath = '';
         $this->baseName = '';
         $this->langIds = [];
-        $this->langFiles = [];
+        $this->langFileNames = [];
 
         $this->isSysFiles = false;
         $this->isLangInFolders = false; // lang file are divided in folders instead of containing the name i front
@@ -204,7 +204,7 @@ class langFileNamesSet
 	            [$langId, $baseName] = explode('.', $langFile, 2);
 
 	            $this->langIds [] = $langId;
-	            $this->langFiles [$langId] = $langFile;
+	            $this->langFileNames [$langId] = $langFile;
 
 	            // set base name once
 	            if($isBaseNameSet == false)
@@ -243,7 +243,7 @@ class langFileNamesSet
 
 		        $langFile = $subFolder . DIRECTORY_SEPARATOR . $baseName;
 
-		        $this->langFiles [$langId] = $langFile;
+		        $this->langFileNames [$langId] = $langFile;
 	        }
         }
 
@@ -268,7 +268,7 @@ class langFileNamesSet
 	    $lines [] = $langIdsLine;
 
 	    $lines [] = '--- $langFiles ------------------------';
-	    foreach ($this->langFiles as $langFile) {
+	    foreach ($this->langFileNames as $langFile) {
 		    $lines [] = $langFile;
 	    }
 
