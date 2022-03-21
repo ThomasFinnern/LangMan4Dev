@@ -38,6 +38,13 @@ use Joomla\CMS\Router\Route;
 		echo $newItemLines;
     ?>
 	<hr>
+	<h3>Missing Lang Ids SYS</h3><br>
+	<?php
+		$newItemLines = implode("<br>", $this->transIdsMissing);
+
+		echo $newItemLines;
+    ?>
+	<hr>
 	<table>
 		<tr>
 			<th>COM_LANG4DEV_NAME</th>

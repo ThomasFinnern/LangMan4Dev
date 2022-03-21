@@ -92,24 +92,32 @@ class HtmlView extends BaseHtmlView
         /**
 		//--- test lang names set . --------------------------------------------------------------
 
-		$langFileNamesSet = new langFileNamesSet();
+		$prjSysFiles = new prjSysFiles();
 
-		//$langFileNamesSet->detectBasePath('d:\\Entwickl\\2022\\_gitHub\\LangMan4Dev_Project\\TestData\\lang_by_pre');
-		//$langFileNamesSet->detectBasePath('d:\\Entwickl\\2022\\_gitHub\\LangMan4Dev_Project\\TestData\\lang_by_folder');
-		$langFileNamesSet->detectLangBasePath('d:\\Entwickl\\2022\\_gitHub\\LangMan4Dev_Project\\TestData\\lang_by_pre', true);
-		//$langFileNamesSet->detectBasePath('d:\\Entwickl\\2022\\_gitHub\\LangMan4Dev_Project\\TestData\\lang_by_folder', true);
-		$langFileNamesSet->collectLangFiles();
+		//$prjSysFiles->detectBasePath('d:\\Entwickl\\2022\\_gitHub\\LangMan4Dev_Project\\TestData\\lang_by_pre');
+		//$prjSysFiles->detectBasePath('d:\\Entwickl\\2022\\_gitHub\\LangMan4Dev_Project\\TestData\\lang_by_folder');
+		$prjSysFiles->detectLangBasePath('d:\\Entwickl\\2022\\_gitHub\\LangMan4Dev_Project\\TestData\\lang_by_pre', true);
+		//$prjSysFiles->detectBasePath('d:\\Entwickl\\2022\\_gitHub\\LangMan4Dev_Project\\TestData\\lang_by_folder', true);
+		$prjSysFiles->collectLangFiles();
 
-		$this->langFileNamesSetText = $langFileNamesSet->__toText ();
+		$this->langFileNamesSetText = $prjSysFiles->__toText ();
         /**/
 
-        $langFileNamesSet = new prjSysFiles('Lang4Dev', 'd:\\Entwickl\\2022\\_gitHub\\LangMan4Dev');
-        $langFileNamesSet = new prjSysFiles('Lang4Dev', 'd:\\Entwickl\\2022\\_gitHub\\LangMan4Dev\\\administrator\\components\\com_lang4dev\\');
-//         $langFileNamesSet = new prjSysFiles('Lang4Dev',
+        $prjSysFiles = new prjSysFiles('Lang4Dev', 'd:\\Entwickl\\2022\\_gitHub\\LangMan4Dev');
+        $prjSysFiles = new prjSysFiles('Lang4Dev', 'd:\\Entwickl\\2022\\_gitHub\\LangMan4Dev\\\administrator\\components\\com_lang4dev\\');
+//         $prjSysFiles = new prjSysFiles('Lang4Dev',
 //             'd:\\Entwickl\\2022\\_gitHub\\LangMan4Dev',
 //             'd:\\Entwickl\\2022\\_gitHub\\LangMan4Dev\\\administrator\\components\\com_lang4dev\\');
-        $langFileNamesSet->findFiles ();
-        $this->langFileNamesSetText = $langFileNamesSet->__toText ();
+        $prjSysFiles->findFiles ();
+        $this->langFileNamesSetText = $prjSysFiles->__toText ();
+
+        $LangFileTranslations  = $prjSysFiles->retrieveLangFileTranslations();
+		$LangFileTransTransIds = $LangFileTranslations->getItemNames();
+
+		$LangLocations  = $prjSysFiles->searchLangLocations();
+		$LangLocationTransIds = $LangLocations->getItemNames();
+		$transIdsMissing = array_diff($LangLocationTransIds, $LangFileTransTransIds);
+		$this->transIdsMissing = $transIdsMissing;
 
 
         /**

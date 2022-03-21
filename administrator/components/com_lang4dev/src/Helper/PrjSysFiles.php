@@ -12,6 +12,7 @@
 namespace Finnern\Component\Lang4dev\Administrator\Helper;
 
 use Joomla\CMS\Factory;
+use Joomla\CMS\Filesystem\File;
 use Joomla\CMS\Filesystem\Folder;
 
 use Finnern\Component\Lang4dev\Administrator\Helper\langFileNamesSet;
@@ -305,7 +306,7 @@ class prjSysFiles extends langFileNamesSet
 
         // if not chached or $isReadOriginal
 
-        if (empty($langFiles [$langId]) || $isReadOriginal) {
+        if (empty($this->langFiles [$langId]) || $isReadOriginal) {
 
             $langFileName =  $this->langFileNames [$langId];
 
@@ -313,28 +314,37 @@ class prjSysFiles extends langFileNamesSet
             $langFile = new langFile ();
             $langFile->assignFileContent($langFileName, $langId);
 
-            $langFiles [$langId] = $langFile;
+            $this->langFiles [$langId] = $langFile;
         }
 
         // if (empty($langFiles [$langId]) 0=> return empty ? ...
 
-        return $langFiles [$langId];
+        return $this->langFiles [$langId];
     }
 
     public function searchLangLocations ($isScanOriginal=false) {
 
 
+	    if (empty($this->langLocations) || $isScanOriginal) {
 
-        // scan project XML
+		    $langFile = new langFile ();
 
+		    $oSearchLangLocations = new searchLangLocations ();
 
-        // scan install file
+		    // scan project XML
+		    $prjXmlItems = $oSearchLangLocations->searchLangIdsInFileXml(
+			    dirname($this->prjXmlFilePath), baseName($this->prjXmlFilePath));
+		    
+	        // scan install file
+			$installItems = $oSearchLangLocations->searchLangIdsInFilePHP(
+				dirname($this->installFile), baseName($this->installFile));
 
+		    $this->langLocations = array_merge ($installItems, $prjXmlItems);
+	    }
 
+	    // if (empty($langFiles [$langId]) 0=> return empty ? ...
 
-
-
-        return;
+	    return $this->langLocations;
     }
 
 
