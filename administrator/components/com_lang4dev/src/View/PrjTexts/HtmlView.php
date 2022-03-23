@@ -114,9 +114,8 @@ class HtmlView extends BaseHtmlView
         $LangFileTranslations  = $prjSysFiles->retrieveLangFileTranslations();
 		$LangFileTransTransIds = $LangFileTranslations->getItemNames();
 
-		$LangLocations  = $prjSysFiles->searchLangLocations();
-		$LangLocationTransIds = $LangLocations->getItemNames();
-		$transIdsMissing = array_diff($LangLocationTransIds, $LangFileTransTransIds);
+		$prjTransIds = $prjSysFiles->searchLangLocations();
+		$transIdsMissing = array_diff($prjTransIds, $LangFileTransTransIds);
 		$this->transIdsMissing = $transIdsMissing;
 
 

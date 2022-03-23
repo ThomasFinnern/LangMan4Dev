@@ -333,13 +333,13 @@ class prjSysFiles extends langFileNamesSet
 
 		    // scan project XML
 		    $prjXmlItems = $oSearchLangLocations->searchLangIdsInFileXml(
-			    dirname($this->prjXmlFilePath), baseName($this->prjXmlFilePath));
-		    
+			    baseName($this->prjXmlFilePath), dirname($this->prjXmlFilePath));
+
 	        // scan install file
 			$installItems = $oSearchLangLocations->searchLangIdsInFilePHP(
-				dirname($this->installFile), baseName($this->installFile));
+				baseName($this->installFile), dirname($this->installFile));
 
-		    $this->langLocations = array_merge ($installItems, $prjXmlItems);
+		    $this->langLocations = array_merge ($installItems->items, $prjXmlItems->items);
 	    }
 
 	    // if (empty($langFiles [$langId]) 0=> return empty ? ...
