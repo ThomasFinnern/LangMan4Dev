@@ -369,6 +369,66 @@ class langFile
 		return $isSaved;
 	}
 
+	/**
+	 * seperateByTransIds
+	 *
+	 * Joke: sort like Cinderella put the good ones in the pot, the bad ones in the crop
+	 *
+	 * Each input name is sorted into one of three types
+	 *  * missing in file
+	 *  * same
+	 *  * not used
+	 *
+	 * @param $TransIds
+	 *
+	 *
+	 * @since version
+	 */
+	public function separateByTransIds ($TransIds) {
+
+		$missing = [];
+		$same    = [];
+		$notUsed = [];
+
+		try {
+
+			//--- missing and same ------------------------------------
+
+			foreach ($TransIds as $TransId) {
+
+				// ID is missing
+				if (empty ($this->translations[$TransId])) {
+					$missing[] = $TransId;
+				} else {
+					// ID is same
+					$same[] = $TransId;
+				}
+			}
+
+			//--- missing and same ------------------------------------
+
+			foreach ($this->getItemNames () as $TransId)
+			{
+				// ID is not used
+				if ( ! in_array ($TransId, $same)) {
+					$notUsed[] = $TransId;
+				}
+			}
+
+		}
+		catch (\RuntimeException $e)
+		{
+			$OutTxt = 'Error executing ' . __CLASS__ .  '::' . __FUNCTION__  . ': "' . '<br>';
+			$OutTxt .= 'Error: "' . $e->getMessage() . '"' . '<br>';
+
+			$app = Factory::getApplication();
+			$app->enqueueMessage($OutTxt, 'error');
+		}
+
+		return [$missing, $same, $notUsed];
+	}
+
+
 	// ToDo: Set var in interface for double entries -> call function ? if (! doClean) ... ?
 	public function translationLinesArray($isWriteEmptyTranslations = false)
 	{

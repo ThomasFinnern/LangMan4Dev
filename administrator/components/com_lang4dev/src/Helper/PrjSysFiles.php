@@ -52,7 +52,8 @@ class prjSysFiles extends langFileNamesSet
 
         $this->installFile = $installFile;
 
-        if ($isFindFiles) {
+
+	    if ($isFindFiles) {
             $this->findFiles ();
         }
 
@@ -324,33 +325,52 @@ class prjSysFiles extends langFileNamesSet
 
     public function searchLangLocations ($isScanOriginal=false) {
 
-
 	    if (empty($this->langLocations) || $isScanOriginal) {
-
-		    $langFile = new langFile ();
 
 		    $oSearchLangLocations = new searchLangLocations ();
 
 		    // scan project XML
-		    $prjXmlItems = $oSearchLangLocations->searchLangIdsInFileXml(
+		    $oSearchLangLocations->searchLangIdsInFileXml(
 			    baseName($this->prjXmlFilePath), dirname($this->prjXmlFilePath));
 
-	        // scan install file
-			$installItems = $oSearchLangLocations->searchLangIdsInFilePHP(
+		    // scan install file
+		    $oSearchLangLocations->searchLangIdsInFilePHP(
 				baseName($this->installFile), dirname($this->installFile));
 
-		    $this->langLocations = array_merge ($installItems->items, $prjXmlItems->items);
+		    $this->langLocations = $oSearchLangLocations->langLocations->items;
 	    }
-
-	    // if (empty($langFiles [$langId]) 0=> return empty ? ...
 
 	    return $this->langLocations;
     }
 
+	public function getPrjTransIdNames ()
+	{
+		$names = [];
+
+		try {
+
+			foreach ($this->langLocations as $name => $val) {
+
+				$names [] = $name;
+			}
+
+		}
+		catch (\RuntimeException $e)
+		{
+			$OutTxt = 'Error executing findAllTranslationIds: "' . '<br>';
+			$OutTxt .= 'Error: "' . $e->getMessage() . '"' . '<br>';
+
+			$app = Factory::getApplication();
+			$app->enqueueMessage($OutTxt, 'error');
+		}
+
+		return $names;
+	}
 
 
 
-    public function __toText ()
+
+	public function __toText ()
     {
 
         $lines = [];

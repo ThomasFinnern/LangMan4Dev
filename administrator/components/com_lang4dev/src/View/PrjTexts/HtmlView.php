@@ -103,7 +103,7 @@ class HtmlView extends BaseHtmlView
 		$this->langFileNamesSetText = $prjSysFiles->__toText ();
         /**/
 
-        $prjSysFiles = new prjSysFiles('Lang4Dev', 'd:\\Entwickl\\2022\\_gitHub\\LangMan4Dev');
+//        $prjSysFiles = new prjSysFiles('Lang4Dev', 'd:\\Entwickl\\2022\\_gitHub\\LangMan4Dev');
         $prjSysFiles = new prjSysFiles('Lang4Dev', 'd:\\Entwickl\\2022\\_gitHub\\LangMan4Dev\\\administrator\\components\\com_lang4dev\\');
 //         $prjSysFiles = new prjSysFiles('Lang4Dev',
 //             'd:\\Entwickl\\2022\\_gitHub\\LangMan4Dev',
@@ -111,13 +111,20 @@ class HtmlView extends BaseHtmlView
         $prjSysFiles->findFiles ();
         $this->langFileNamesSetText = $prjSysFiles->__toText ();
 
-        $LangFileTranslations  = $prjSysFiles->retrieveLangFileTranslations();
-		$LangFileTransTransIds = $LangFileTranslations->getItemNames();
+		// toDO: use selected main lang of user 'de-DE'
+		$prjLangFile =$prjSysFiles->retrieveLangFileTranslations();
 
-		$prjTransIds = $prjSysFiles->searchLangLocations();
-		$transIdsMissing = array_diff($prjTransIds, $LangFileTransTransIds);
-		$this->transIdsMissing = $transIdsMissing;
+		// collect used project transIds
+		$prjSysFiles->searchLangLocations();
+		$prjTransIdNames = $prjSysFiles->getPrjTransIdNames();
 
+		[$missing, $same, $notUsed] =
+			$prjLangFile->separateByTransIds($prjTransIdNames);
+
+		$this->sysLangIds = [];
+		$this->sysLangIds['missing'] = $missing;
+		$this->sysLangIds['same'] = $same;
+		$this->sysLangIds['notUsed'] = $notUsed;
 
         /**
 		HTMLHelper::_('sidebar.setAction', 'index.php?option=com_Lang4dev&view=config&layout=RawView');

@@ -71,7 +71,6 @@ class langLocations
 			foreach ($this->items as $name => $val) {
 
 				$names [] = $name;
-
 			}
 
 		}

@@ -16,7 +16,6 @@ use Joomla\CMS\Filesystem\Folder;
 use Finnern\Component\Lang4dev\Administrator\Helper\langLocations;
 use Finnern\Component\Lang4dev\Administrator\Helper\langLocation;
 
-
 // no direct access
 \defined('_JEXEC') or die;
 
@@ -171,7 +170,6 @@ class searchLangLocations
 
 	public function searchLangIdsInFilePHP($fileName, $path)
 	{
-		$this->langLocations = new langLocations();
 		$isInComment = false;
 
 		try
@@ -221,7 +219,7 @@ class searchLangLocations
 			$app->enqueueMessage($OutTxt, 'error');
 		}
 
-		return $this->langLocations;
+		// return $this->langLocations;
 	}
 
 	public function removeCommentPHP($line, &$isInComment)
@@ -370,7 +368,6 @@ class searchLangLocations
 
 	public function searchLangIdsInFileXML($fileName, $path)
 	{
-		$this->langLocations = new langLocations();
 		$isInComment = false;
 
 		try
@@ -420,7 +417,7 @@ class searchLangLocations
 			$app->enqueueMessage($OutTxt, 'error');
 		}
 
-		return $this->langLocations;
+//		return $this->langLocations;
 	}
 
 	public function removeCommentXML($line, &$isInComment)

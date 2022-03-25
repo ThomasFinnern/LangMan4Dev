@@ -15,6 +15,26 @@ use Joomla\CMS\Router\Route;
     //echo $this->prjLangLocations->_toTextNames('\n');
     //echo $this->prjLangLocations->_toTextNames('<br>');
     ?>
+	<h3>Missing Lang Ids SYS</h3><br>
+	<?php
+	$newItemLines = implode("<br>", $this->sysLangIds['missing']);
+
+	echo $newItemLines;
+	?>
+	<hr>
+	<h3>Same Lang Ids SYS</h3><br>
+	<?php
+	$newItemLines = implode("<br>", $this->sysLangIds['same']);
+
+	echo $newItemLines;
+	?>
+	<hr>
+	<h3>Not Used Lang Ids SYS</h3><br>
+	<?php
+	$newItemLines = implode("<br>", $this->sysLangIds['notUsed']);
+
+	echo $newItemLines;
+	?>
 	<hr>
 	<h3>Temp Translation lines </h3><br>
 	<?php
@@ -34,13 +54,6 @@ use Joomla\CMS\Router\Route;
 	<h3>Lang names set</h3><br>
 	<?php
 		$newItemLines = implode("<br>", $this->langFileNamesSetText);
-
-		echo $newItemLines;
-    ?>
-	<hr>
-	<h3>Missing Lang Ids SYS</h3><br>
-	<?php
-		$newItemLines = implode("<br>", $this->transIdsMissing);
 
 		echo $newItemLines;
     ?>
