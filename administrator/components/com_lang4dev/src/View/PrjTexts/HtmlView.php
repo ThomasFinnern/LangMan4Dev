@@ -58,43 +58,43 @@ class HtmlView extends BaseHtmlView
 
 		//--- search paths ------------------------------------
 
-		// ToDo: take search paths from somewhere else
-		//$file = Path::clean(JPATH_ADMINISTRATOR . '/components/' . $component . '/helpers/' . $eName . '.php');
-		//$searchPaths = array (JPATH_ADMINISTRATOR . '/components/com_lang4dev');
-		//$searchPaths = array (JPATH_ADMINISTRATOR . '/components/com_lang4dev/tmpl');
-		$searchPaths = array (JPATH_ADMINISTRATOR . '/components/com_lang4dev/src/test');
-		$oLangLocations = new searchLangLocations ($searchPaths);
-		$this->prjLangLocations = $oLangLocations->findAllTranslationIds();
+//		// ToDo: take search paths from somewhere else
+//		//$file = Path::clean(JPATH_ADMINISTRATOR . '/components/' . $component . '/helpers/' . $eName . '.php');
+//		//$searchPaths = array (JPATH_ADMINISTRATOR . '/components/com_lang4dev');
+//		//$searchPaths = array (JPATH_ADMINISTRATOR . '/components/com_lang4dev/tmpl');
+//		$searchPaths = array (JPATH_ADMINISTRATOR . '/components/com_lang4dev/src/test');
+//		$oLangLocations = new searchLangLocations ($searchPaths);
+//		$this->prjLangLocations = $oLangLocations->findAllTranslationIds();
 
 		//--- langFiles ToDo: use other ... ------------------------------------
 
-		// dummy file:
-		//$filePath = JPATH_ADMINISTRATOR . '/components/' . 'com_lang4dev/language/en-GB/com_lang4dev.sys.tmp';
-		$filePath = JPATH_ADMINISTRATOR . '/components/' . 'com_lang4dev/language/en-GB/com_lang4dev.sys.tmp';
-		//$filePath = JPATH_ADMINISTRATOR . '//components/com_lang4dev/src/test/' . 'com_lang4dev.01.tmp';
-		$srcPath = File::stripExt($filePath) . '.ini';
-		File::copy($srcPath, $filePath);
-
-//		$filePath = JPATH_ADMINISTRATOR . '/components/' . 'com_lang4dev/language/en-GB/com_lang4dev.tmp';
-//		File::copy(File::stripExt($filePath) . '.ini', $filePath);
-
-		$testLangFile = new langFile($filePath);
-		$testLangFile->translationsToFile();
-		$this->testLangFile = $testLangFile;
+//		// dummy file:
+//		//$filePath = JPATH_ADMINISTRATOR . '/components/' . 'com_lang4dev/language/en-GB/com_lang4dev.sys.tmp';
+//		$filePath = JPATH_ADMINISTRATOR . '/components/' . 'com_lang4dev/language/en-GB/com_lang4dev.sys.tmp';
+//		//$filePath = JPATH_ADMINISTRATOR . '//components/com_lang4dev/src/test/' . 'com_lang4dev.01.tmp';
+//		$srcPath = File::stripExt($filePath) . '.ini';
+//		File::copy($srcPath, $filePath);
+//
+////		$filePath = JPATH_ADMINISTRATOR . '/components/' . 'com_lang4dev/language/en-GB/com_lang4dev.tmp';
+////		File::copy(File::stripExt($filePath) . '.ini', $filePath);
+//
+//		$testLangFile = new langFile($filePath);
+//		$testLangFile->translationsToFile();
+//		$this->testLangFile = $testLangFile;
 
 		//--- not translated --------------------------------------------------------------
 
-		$transIds_new = $this->prjLangLocations->getMissingTransIds($testLangFile->getItemNames());
-
-		$this->transIds_new = $transIds_new;
-
+//		$transIds_new = $this->prjLangLocations->getMissingTransIds($testLangFile->getItemNames());
+//
+//		$this->transIds_new = $transIds_new;
+//
 
         /**
 		//--- test lang names set . --------------------------------------------------------------
 
 		$prjSysFiles = new prjSysFiles();
 
-		//$prjSysFiles->detectBasePath('d:\\Entwickl\\2022\\_gitHub\\LangMan4Dev_Project\\TestData\\lang_by_pre');
+		//$prjSysFiles->detectBasePath('d:\\Entwickl\\2022\\_gitHub\7\LangMan4Dev_Project\\TestData\\lang_by_pre');
 		//$prjSysFiles->detectBasePath('d:\\Entwickl\\2022\\_gitHub\\LangMan4Dev_Project\\TestData\\lang_by_folder');
 		$prjSysFiles->detectLangBasePath('d:\\Entwickl\\2022\\_gitHub\\LangMan4Dev_Project\\TestData\\lang_by_pre', true);
 		//$prjSysFiles->detectBasePath('d:\\Entwickl\\2022\\_gitHub\\LangMan4Dev_Project\\TestData\\lang_by_folder', true);
@@ -104,10 +104,13 @@ class HtmlView extends BaseHtmlView
         /**/
 
 //        $prjSysFiles = new prjSysFiles('Lang4Dev', 'd:\\Entwickl\\2022\\_gitHub\\LangMan4Dev');
-        $prjSysFiles = new prjSysFiles('Lang4Dev', 'd:\\Entwickl\\2022\\_gitHub\\LangMan4Dev\\\administrator\\components\\com_lang4dev\\');
+//        $prjSysFiles = new prjSysFiles('Lang4Dev', 'd:\\Entwickl\\2022\\_gitHub\\LangMan4Dev\\\administrator\\components\\com_lang4dev\\');
 //         $prjSysFiles = new prjSysFiles('Lang4Dev',
 //             'd:\\Entwickl\\2022\\_gitHub\\LangMan4Dev',
 //             'd:\\Entwickl\\2022\\_gitHub\\LangMan4Dev\\\administrator\\components\\com_lang4dev\\');
+
+		$prjSysFiles = new prjSysFiles('Lang4Dev', JPATH_ADMINISTRATOR . '/components/com_lang4dev');
+
         $prjSysFiles->findFiles ();
         $this->langFileNamesSetText = $prjSysFiles->__toText ();
 
@@ -125,6 +128,8 @@ class HtmlView extends BaseHtmlView
 		$this->sysLangIds['missing'] = $missing;
 		$this->sysLangIds['same'] = $same;
 		$this->sysLangIds['notUsed'] = $notUsed;
+
+		$this->prjSysFiles = $prjSysFiles;
 
         /**
 		HTMLHelper::_('sidebar.setAction', 'index.php?option=com_Lang4dev&view=config&layout=RawView');

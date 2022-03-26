@@ -153,6 +153,7 @@ class langFile
                         $translationPart, $match);
                     if (!empty ($match)) {
                         $nextItem->translationText = substr($match[0], 1, -1);
+	                    $nextItem->lineIdx = $lineIdx+1;
                     }
 
                     //--- comment behind -----------------------------------------

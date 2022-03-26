@@ -185,6 +185,8 @@ class searchLangLocations
 			// ToDo: 		foreach ($lines as $lineIdx => $line)
 			foreach ($lines as $line)
 			{
+				$lineIdx = $lineIdx + 1;
+
 				//--- remove comments --------------
 
 				$bareLine = $this->removeCommentPHP($line, $isInComment);
@@ -207,7 +209,6 @@ class searchLangLocations
 					}
 				}
 
-				$lineIdx = $lineIdx + 1;
 			}
 		}
 		catch (\RuntimeException $e)
@@ -311,12 +312,11 @@ class searchLangLocations
 	public function searchLangIdsInLinePHP($line)
 	{
 		$items = [];
-
 		$matches = [];
 
 		try
 		{
-			// test find all words then iterate through array
+			// find all words then iterate through array
 // https://stackoverflow.com/questions/4722007/php-preg-match-to-find-whole-words
 
 			// Python solution
@@ -325,30 +325,25 @@ class searchLangLocations
 			$searchRegex = '/' . $this->componentPrefix . "\w+/";
 
 			// test find all words then iterate through array
-			preg_match_all($searchRegex, $line, $matches);
+			preg_match_all($searchRegex, $line, $matchGroups);
 
+			if (!empty($matchGroups))
+				// if (count ($matchGroups) > 0)
+			{
+				$idx = 0;
 
-			$idx = 0;
-			foreach ($matches as $matchGroup) {
-				if ( ! empty($matchGroup[0]))
+				// all items found in line
+				foreach ($matchGroups[0] as $name)
 				{
-					// all in first group
-					$findings = $matchGroup[0];
-					$name     = $findings;
+					$colIdx = strpos($line, $name, $idx);
 
-					// foreach ($findings as $name) {
-					if (!empty($name))
-					{
-						$colIdx = strpos($line, $name, $idx);
+					$item = new langLocation ($name, '', '', -1, $colIdx);
 
-						$item = new langLocation ($name, '', '', -1, $colIdx);
+					// ? same twice ?
+					$items [] = $item;
 
-						// ? same twice ?
-						$items [] = $item;
-
-						// search behind last find
-						$idx = $idx + strlen($name);
-					}
+					// search behind last find
+					$idx = $idx + strlen($name);
 				}
 			}
 
@@ -356,7 +351,7 @@ class searchLangLocations
 		catch (\RuntimeException $e)
 		{
 			$OutTxt = '';
-			$OutTxt .= 'Error executing findAllTranslationIds: "' . '<br>';
+			$OutTxt .= 'Error executing searchLangIdsInLinePHP: "' . '<br>';
 			$OutTxt .= 'Error: "' . $e->getMessage() . '"' . '<br>';
 
 			$app = Factory::getApplication();
@@ -422,6 +417,8 @@ class searchLangLocations
 
 	public function removeCommentXML($line, &$isInComment)
 	{
+		$bareLine = $line;
+
 		try
 		{
 
@@ -437,25 +434,57 @@ class searchLangLocations
 			$app->enqueueMessage($OutTxt, 'error');
 		}
 
+		return $bareLine;
 	}
 
 	public function searchLangIdsInLineXML($line)
 	{
+		$items = [];
+		$matches = [];
+
 		try
 		{
+			// find all words then iterate through array
 
+			// Python solution
+			// py$searchRegex = "\\b" + $this->componentPrefix + "\\w+";
+			// Finds multiple words per line
+			$searchRegex = '/' . $this->componentPrefix . "\w+/";
 
+			// test find all words then iterate through array
+			preg_match_all($searchRegex, $line, $matchGroups);
+
+			if (!empty($matchGroups))
+			// if (count ($matchGroups) > 0)
+			{
+				$idx = 0;
+
+				// all items found in line
+				foreach ($matchGroups[0] as $name)
+				{
+					$colIdx = strpos($line, $name, $idx);
+
+					$item = new langLocation ($name, '', '', -1, $colIdx);
+
+					// ? same twice ?
+					$items [] = $item;
+
+					// search behind last find
+					$idx = $idx + strlen($name);
+				}
+			}
 		}
 		catch (\RuntimeException $e)
 		{
 			$OutTxt = '';
-			$OutTxt .= 'Error executing findAllTranslationIds: "' . '<br>';
+			$OutTxt .= 'Error executing searchLangIdsInLineXML: "' . '<br>';
 			$OutTxt .= 'Error: "' . $e->getMessage() . '"' . '<br>';
 
 			$app = Factory::getApplication();
 			$app->enqueueMessage($OutTxt, 'error');
 		}
 
+		return $items;
 	}
 
 	public function folderInDir($folder)

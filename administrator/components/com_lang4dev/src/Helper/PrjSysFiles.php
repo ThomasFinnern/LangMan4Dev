@@ -32,10 +32,11 @@ class prjSysFiles extends langFileNamesSet
     public $prjName = '';
 	public $prjRootPath = '';
 	public $prjXmlFilePath = '';
+	public $prjXmlPathFilename = '';
 	public $installFile = '';
 
     protected $langFiles = []; // $langId -> translations
-    protected $langLocations = [];
+    public $langLocations = [];
 
     /**
      * @since __BUMP_VERSION__
@@ -170,6 +171,7 @@ class prjSysFiles extends langFileNamesSet
             if (is_file ($prjXmlPathFilename)) {
 
                 $this->prjXmlFilePath = $searchPath;
+	            $this->prjXmlPathFilename = $prjXmlPathFilename;
                 $isFileFound = true;
             }
             else {
@@ -221,7 +223,7 @@ class prjSysFiles extends langFileNamesSet
             {
                 //--- extract from project xml file --------------------------
 
-                $prjXmlPathFilename = $this->prjXmlPathFilename();
+                $prjXmlPathFilename = $this->prjXmlPathFilename;
                 $fileName = $this->extractInstallFileName ($prjXmlPathFilename);
 
                 $installFile = $this->prjXmlFilePath . DIRECTORY_SEPARATOR . $fileName;
@@ -253,7 +255,7 @@ class prjSysFiles extends langFileNamesSet
 
 
     // Expects it parallel to project xml file
-    public function extractInstallFileName ($prjXmlPathFileName)
+    public function extractInstallFileName ($prjXmlPathFilename)
     {
         $installFileName = '';
 
@@ -261,7 +263,7 @@ class prjSysFiles extends langFileNamesSet
 
             // content of file
             $context = stream_context_create(array('http' => array('header' => 'Accept: application/xml')));
-            $xml = file_get_contents($prjXmlPathFileName, false, $context);
+            $xml = file_get_contents($prjXmlPathFilename, false, $context);
 
             // Data is valid
             if ($xml) {
@@ -331,7 +333,7 @@ class prjSysFiles extends langFileNamesSet
 
 		    // scan project XML
 		    $oSearchLangLocations->searchLangIdsInFileXml(
-			    baseName($this->prjXmlFilePath), dirname($this->prjXmlFilePath));
+			    baseName($this->prjXmlPathFilename), dirname($this->prjXmlPathFilename));
 
 		    // scan install file
 		    $oSearchLangLocations->searchLangIdsInFilePHP(
