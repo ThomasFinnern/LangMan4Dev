@@ -272,7 +272,6 @@ class searchLangLocations
 
 				} // No comment indicator
 
-
 			} else {
 				//--- Inside a '/*' comment
 
@@ -377,6 +376,8 @@ class searchLangLocations
 			// content found
 			foreach ($lines as $line)
 			{
+				$lineIdx = $lineIdx + 1;
+
 				//--- remove comments --------------
 
 				$bareLine = $this->removeCommentXML($line, $isInComment);
@@ -399,7 +400,6 @@ class searchLangLocations
 					}
 				}
 
-				$lineIdx = $lineIdx + 1;
 			}
 		}
 		catch (\RuntimeException $e)
@@ -422,6 +422,41 @@ class searchLangLocations
 		try
 		{
 
+			// No inside a '<--' comment
+			if ( ! $isInComment)
+			{
+				//--- check for comments ---------------------------------------
+
+				$commStart = '<!--';
+				$commStartIdx = strpos ($line, $commStart);
+
+				// comment exists, keep start of string
+				if ($commStartIdx != false)
+				{
+					$bareLine = strstr($line, $commStart, true);
+					$isInComment = true;
+
+				} // No comment indicator
+
+			} else {
+				//--- Inside a '/*' comment
+
+				$bareLine = '';
+
+				$commEnd = '-->';
+				$commEndIdx = strpos ($line, $commEnd);
+
+				// end found ?
+				if ($commEndIdx != false)
+				{
+					// Keep end of string
+					$bareLine = strstr($line, $commEnd);
+
+					// handle rest of string
+					$isInComment = false;
+					$bareLine = $this->removeCommentPHP($bareLine, $isInComment);
+				}
+			}
 
 		}
 		catch (\RuntimeException $e)

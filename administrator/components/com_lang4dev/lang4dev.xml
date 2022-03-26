@@ -48,6 +48,12 @@
 			      img="class:equalizer"
 			      link="option=com_lang4dev&amp;view=maintenance">COM_LANG4DEV_MENU_MAINTENANCE
 			</menu-->
+			<!--menu view="COM_LANG4DEV_MENU_MAINTENANCE_1A" test comment 1
+			      img="class:equalizer"
+			      link="option=com_lang4dev&amp;view=maintenance">COM_LANG4DEV_MENU_MAINTENANCE_1B
+			</menu-->
+			<!--menu view="COM_LANG4DEV_MENU_MAINTENANCE2" test comment 2 -->
+
 		</submenu>
 
 		<files folder="administrator/components/com_lang4dev">
