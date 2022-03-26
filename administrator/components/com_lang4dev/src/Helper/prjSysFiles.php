@@ -35,7 +35,7 @@ class prjSysFiles extends langFileNamesSet
 	public $prjXmlPathFilename = '';
 	public $installFile = '';
 
-    protected $langFiles = []; // $langId -> translations
+    protected $langFiles = []; // $langId -> translation file(s)
     public $langLocations = [];
 
     /**
