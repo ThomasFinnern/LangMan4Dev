@@ -303,7 +303,7 @@ class prjSysFiles extends langFileNamesSet
         return $installFileName;
     }
 
-    // read content of language file
+    // read content of language file  ==> get translation in langFiles
     public function retrieveLangFileTranslations ($langId='en-GB', $isReadOriginal=false) {
 
 
@@ -329,7 +329,7 @@ class prjSysFiles extends langFileNamesSet
 
 	    if (empty($this->langLocations) || $isScanOriginal) {
 
-		    $oSearchLangLocations = new searchLangLocations ();
+		    $oSearchLangLocations = new langLocationsSearch ();
 
 		    // scan project XML
 		    $oSearchLangLocations->searchLangIdsInFileXml(

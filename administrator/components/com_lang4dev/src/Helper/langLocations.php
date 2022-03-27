@@ -86,6 +86,9 @@ class langLocations
 		return $names;
 	}
 
+	/*
+	 * should be called by names list => similar is in langFiles
+	 *
 	public function getMissingTransIds ($transIds_file){
 
 		$missing = [];
@@ -102,6 +105,7 @@ class langLocations
 
 		return $missing;
 	}
+	/**/
 
 	public function _toText ()
 	{

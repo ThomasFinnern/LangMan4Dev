@@ -25,7 +25,7 @@ use Finnern\Component\Lang4dev\Administrator\Helper\langLocation;
  *
  * @package Lang4dev
  */
-class searchLangLocations
+class langLocationsSearch
 {
 	public $fileTypes = 'php, xml';
 	public $componentPrefix = '';
