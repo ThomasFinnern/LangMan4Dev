@@ -16,7 +16,7 @@ use Joomla\CMS\Factory;
 use Joomla\CMS\Filesystem\File;
 use Joomla\CMS\Filesystem\Folder;
 
-use Finnern\Component\Lang4dev\Administrator\Helper\langTranslation;
+use Finnern\Component\Lang4dev\Administrator\Helper\translation;
 use RuntimeException;
 use function defined;
 
@@ -37,7 +37,6 @@ class langFile
 {
     public $langId = 'en-GB'; // 'en-GB'  // lang ID
 	public $langPathFileName = 'd:/xampp/htdocs/joomla4x/administrator/components/com_lang4dev/language/en-GB/com_lang4dev.ini';
-    public $isSystType = false;  // lang file type (normal/sys)
 
 	public $translations = [];  // All translations
 	public $translationDoubles = []; // Line to item
@@ -112,7 +111,7 @@ class langFile
             $lines = file($filePath);
 
             // all lines
-            foreach ($lines as $lineIdx => $line) {
+            foreach ($lines as $lineNr => $line) {
                 $line = trim($line);
 
                 // Inside header
@@ -143,7 +142,7 @@ class langFile
 
                     [$pName, $pTranslation] = explode('=', $line, 2);
 
-                    $nextItem->name = $transId = trim($pName);
+                    $nextItem->id = $transId = trim($pName);
 
                     $translationPart = trim($pTranslation);
 
@@ -153,7 +152,7 @@ class langFile
                         $translationPart, $match);
                     if (!empty ($match)) {
                         $nextItem->translationText = substr($match[0], 1, -1);
-	                    $nextItem->lineIdx = $lineIdx+1;
+	                    $nextItem->lineNr = $lineNr+1;
                     }
 
                     //--- comment behind -----------------------------------------
@@ -181,11 +180,11 @@ class langFile
 
                         // Same same ?
                         if ($this->translations[$transId]->translationText == $nextItem->translationText) {
-                            $logText = "Existing element found in Line " . $lineIdx . ": " . $transId
+                            $logText = "Existing element found in Line " . $lineNr . ": " . $transId
                                 . " = " . $this->translations[$transId];
                         } else {
                             // Different text
-                            $logText = "Existing mismatching element found in Line " . $lineIdx . ":\r\n"
+                            $logText = "Existing mismatching element found in Line " . $lineNr . ":\r\n"
                                 . "1st: " . $transId . " = " . $this->translations[$transId]->translationText
                                 . "2nd: " . $transId . " = " . $nextItem->translationText;
                         }
@@ -194,7 +193,7 @@ class langFile
                         $app->enqueueMessage($logText, 'warning');
 
                         // save double by line number
-                        $this->translationDoubles [$lineIdx] = $nextItem;
+                        $this->translationDoubles [$lineNr] = $nextItem;
 
                         # init next item
                         $nextItem = new langTranslation();
@@ -205,7 +204,7 @@ class langFile
 
             //--- trailing lines -----------------------------
 
-            if ($nextItem->lineIdx == -1 && count($nextItem->commentsBefore) > 0) {
+            if ($nextItem->lineNr == -1 && count($nextItem->commentsBefore) > 0) {
 
                 $this->trailer = $nextItem->commentsBefore;
             }
@@ -273,12 +272,12 @@ class langFile
 	 * @param   bool  $doClean
 	 * @param   null  $commentsBefore
 	 * @param   null  $commentBehind
-	 * @param   int   $lineIdx
+	 * @param   int   $lineNr
 	 *
 	 *
 	 * @since version
 	 */
-	public function setTranslationText($transId, $translationText, $doClean=true, $commentsBefore=null, $commentBehind=null, $lineIdx=-1)
+	public function setTranslationText($transId, $translationText, $doClean=true, $commentsBefore=null, $commentBehind=null, $lineNr=-1)
 	{
 		// ToDo: try catch
 
@@ -305,7 +304,7 @@ class langFile
 
 			if (!empty ($commentsBefore))
 			{
-				$translation->lineIdx = $lineIdx;
+				$translation->lineNr = $lineNr;
 			}
 
 
