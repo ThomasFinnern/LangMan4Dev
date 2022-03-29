@@ -14,11 +14,34 @@ use Joomla\CMS\Filesystem\Folder;
 
 class langSubProject
 {
+	public $prjId = "";
+	public $prjRootPath = '';
+	public $prjType = "";
+
+	public $prjXmlFilePath = '';
+
+	public $prjXmlFile = "";
+	public $prjScriptFile = "";
+
+	protected $langFiles = []; // $langId -> translation file(s)
+	protected $langLocations = [];
+
+
+
     public function __construct($prjName='', $prjRootPath = '',
                                 $prjType= '', // ToDo: enum from sub ?
-                                $prjXmlFilePath = '', $isFindFiles=false,
+                                $prjXmlFilePath = '',
                                 $installFile='script.xml')
     {
+
+	    $this->prjId = $prjId;
+	    $this->prjRootPath = $prjRootPath;
+	    $this->prjType = $prjType;
+
+	    $this->prjXmlFilePath = $prjXmlFilePath;
+
+	    $this->prjXmlFile = $prjXmlFile;
+	    $this->prjScriptFile = $prjScriptFile;
 
     }
 
@@ -29,6 +52,7 @@ class langSubProject
         try {
             //--- Assign from function call variables ------------------------------------
 
+	        // use sysFilesContent
            // new ...;
 
             $isFilesFound = true;
