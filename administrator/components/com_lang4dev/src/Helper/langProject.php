@@ -16,80 +16,77 @@ use Finnern\Component\Lang4dev\Administrator\Helper\langSubProject;
 
 class langProject
 {
-    public $prjName = '';
-    public $prjRootPath = '';
-    public $prjXmlFilePath = '';
-//    public $installFile = '';
-	public $isSysFiles = false;
-
-	public $type='';
+	public $prjName = '';
+	public $prjRootPath = '';
 
 	public $subProjects = [];
 
-    /**
-     * @since __BUMP_VERSION__
-     */
-    public function __construct($prjName = '', $prjRootPath = '', $prjXmlFilePath = '',
-	    $isSysFiles = false, $isFindFiles = false, $installFile = 'script.xml')
-    {
-	    $this->prjName = $prjName;
-	    $this->prjRootPath = $prjRootPath;
-	    $this->prjXmlFilePath = $prjXmlFilePath;
-	    $this->isSysFiles = $isSysFiles;
+	/**
+	 * @since __BUMP_VERSION__
+	 */
+	public function __construct($prjName = '', $prjRootPath = '')
+	{
+		$this->prjName     = $prjName;
+		$this->prjRootPath = $prjRootPath;
 
-        $this->installFile = $installFile;
+	}
 
-        if ($isFindFiles) {
-            $this->findFiles();
-        }
-
-        // $this->clear(); 
-    }
-
-    public function clear()
-    {
-
-        parent::clear();
-        $this->isSysFiles = false;
-
-        $this->prjRootPath = '';
-        $this->prjFile = '';
-        $this->installFile = '';
-        $this->langSysFiles = [];
-
-    }
-
-    public function addSubProject($prjName = '', $prjRootPath = '',
-                                  $prjType = '', // ToDo: enum from sub ?
-                                  $prjXmlFilePath = '',
-								  $isSysFiles = false,
-								  $isFindFiles = false,
-                                  $installFile = 'script.xml')
-    {
+	public function addSubProject($prjId = '',
+		$prjType = '', // ToDo: enum from sub ?
+		$prjRootPath = '',
+		$prjXmlFilePath = '')
+	{
 		$subPrj = new langSubProject (
-			$prjName,
+			$prjId,
 			$prjType,
-			$prjXmlFilePath,
-			$installFile
+			$prjRootPath,
+			$prjXmlFilePath
 		);
 
-
-
+		$this->subProjects [] = $subPrj;
 
 		return $subPrj;
-    }
+	}
 
+	public function findFiles()
+	{
+		$isFilesFound = false;
 
-    public function prjXmlPathFilename()
-    {
-        return $this->prjXmlFilePath . DIRECTORY_SEPARATOR . $this->prjName . '.xml';
-    }
+		try
+		{
 
-    public function findFiles($prjRootPath = '', $prjName = '', $prjXmlFilePath = '')
-    {
+			foreach ($this->subProjects as $subProject)
+			{
 
+				$subProject->findFiles(
+					/**
+					$subProject->prjId,
+					$subProject->prjType,
+					$subProject->prjRootPath,
+					$subProject->prjXmlFilePath
+					/**/
+				);
 
-    }
+			}
+		}
+		catch (\RuntimeException $e)
+		{
+			$OutTxt = '';
+			$OutTxt .= 'Error executing findFiles: "' . '<br>';
+			$OutTxt .= 'Error: "' . $e->getMessage() . '"' . '<br>';
+
+			$app = Factory::getApplication();
+			$app->enqueueMessage($OutTxt, 'error');
+		}
+
+		return $isFilesFound;
+	}
+
+	public function prjXmlPathFilename()
+	{
+		return $this->prjXmlFilePath . DIRECTORY_SEPARATOR . $this->prjName . '.xml';
+	}
+
 
 } // class
 

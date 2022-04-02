@@ -28,6 +28,8 @@ use Finnern\Component\Lang4dev\Administrator\Helper\langFile;
 use Finnern\Component\Lang4dev\Administrator\Helper\langProject;
 //use Finnern\Component\Lang4dev\Administrator\Helper\langFileNamesSet;
 //use Finnern\Component\Lang4dev\Administrator\Helper\langLocationsSearch;
+use Finnern\Component\Lang4dev\Administrator\Helper\langSubProject;
+
 
 /**
  * View class for a list of lang4dev.
@@ -60,17 +62,33 @@ class HtmlView extends BaseHtmlView
 
 		$prjLang4dev = new langProject ();
 
-		$subPrj = $prjLang4dev->addSubProject('Lang4Dev', JPATH_ADMINISTRATOR . '/components/com_lang4dev');
-		$subPrj->findFiles();
+		$subPrj = $prjLang4dev->addSubProject('com_lang4dev',
+			langSubProject::PRJ_TYPE_COMP_SYS,
+			JPATH_ADMINISTRATOR . '/components/com_lang4dev'
+		);
 
-		//--- lang4dev --------------------------------
+		$prjLang4dev->findFiles();
+
+		//--- RSGallery2 --------------------------------
 
 		$prjRsgallery2 = new langProject ();
 
-		$subPrj = $prjLang4dev->addSubProject('RSGallery2', JPATH_ADMINISTRATOR . '/components/com_lang4dev');
-		$subPrj->findFiles();
+		$subPrj = $prjLang4dev->addSubProject('com_rsgallery2',
+			langSubProject::PRJ_TYPE_COMP_SYS,
+			JPATH_ADMINISTRATOR . '/components/com_rsgallery2',
+		);
 
+		$subPrj = $prjLang4dev->addSubProject('RSGallery2',
+			langSubProject::PRJ_TYPE_COMP_BACK,
+			JPATH_ADMINISTRATOR. '/components/com_rsgallery2'
+		);
 
+		$subPrj = $prjLang4dev->addSubProject('RSGallery2',
+			langSubProject::PRJ_TYPE_COMP_SITE,
+			JPATH_SITE . '/components/com_rsgallery2'
+		);
+
+		$prjRsgallery2->findFiles();
 
 //		//--- old --------------------------------
 //
