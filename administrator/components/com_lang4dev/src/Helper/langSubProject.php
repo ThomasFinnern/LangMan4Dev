@@ -14,12 +14,14 @@ use Joomla\CMS\Filesystem\Folder;
 
 use Finnern\Component\Lang4dev\Administrator\Helper\sysFilesContent;
 
-class langSubProject
+class langSubProject extends langFileNamesSet
 {
 	public $prjId = "";
 	public $prjType = "";
 	public $prjRootPath = '';
 	public $prjXmlFilePath = '';
+	public $installFile = '';
+    public $isSysFiles = false;
 
 	public $prjXmlFile = "";
 	public $prjScriptFile = "";
@@ -54,11 +56,18 @@ class langSubProject
 
     }
 
-    public function findFiles () {
+    public function findSysFiles () {
 
         $isFilesFound = false;
 
         try {
+
+            //--- pre check type
+
+            if ($this->prjType == langSubProject::PRJ_TYPE_COMP_SYS) {
+                $this->isSysFiles = true;
+            }
+
             //--- Assign from function call variables ------------------------------------
 
 	        $finder = new sysFilesContent();
@@ -71,21 +80,26 @@ class langSubProject
 	        // use sysFilesContent
             // new ...;
 
-            $isFilesFound = $finder ->findFiles();
-                        
-            if($isFilesFound) {
+            $isFilesFound = $finder ->findSysFiles();
 
-	            $this->prjRootPath    = $finder->prjRootPath   ;
+            // take results
+            if($isFilesFound) {
+                // Path and name
 	            $this->prjXmlFilePath = $finder->prjXmlFilePath;
-	            $this->prjId          = $finder->prjId         ;
+	            $this->installFile    = $finder->installFile         ;
             }
 
+            //---   ------------------------------------
+
+            //$this->detectLangBasePath($this->prjRootPath);
+            $this->detectLangBasePath($this->prjXmlFilePath, $this->isSysFiles);
+            $this->searchLangFiles();
 
         }
         catch (\RuntimeException $e)
         {
             $OutTxt = '';
-            $OutTxt .= 'Error executing detectInstallFile: "' . '<br>';
+            $OutTxt .= 'Error executing findSysFiles: "' . '<br>';
             $OutTxt .= 'Error: "' . $e->getMessage() . '"' . '<br>';
 
             $app = Factory::getApplication();
@@ -94,6 +108,28 @@ class langSubProject
 
 
         return $isFilesFound;
+    }
+
+    // read content of language file  ==> get translation in langFiles
+    public function retrieveLangFileTranslations ($langId='en-GB', $isReadOriginal=false) {
+
+
+        // if not chached or $isReadOriginal
+
+        if (empty($this->langFiles [$langId]) || $isReadOriginal) {
+
+            $langFileName =  $this->langFileNames [$langId];
+
+            // $langFile = new langFile ($langFileName);
+            $langFile = new langFile ();
+            $langFile->assignFileContent($langFileName, $langId);
+
+            $this->langFiles [$langId] = $langFile;
+        }
+
+        // if (empty($langFiles [$langId]) 0=> return empty ? ...
+
+        return $this->langFiles [$langId];
     }
 
 

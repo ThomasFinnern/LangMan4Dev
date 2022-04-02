@@ -67,7 +67,9 @@ class HtmlView extends BaseHtmlView
 			JPATH_ADMINISTRATOR . '/components/com_lang4dev'
 		);
 
-		$prjLang4dev->findFiles();
+		$prjLang4dev->findSysFiles();
+
+        $this->prjFiles = $prjLang4dev->subProjects[0];
 
 		//--- RSGallery2 --------------------------------
 
@@ -88,7 +90,7 @@ class HtmlView extends BaseHtmlView
 			JPATH_SITE . '/components/com_rsgallery2'
 		);
 
-		$prjRsgallery2->findFiles();
+		$prjRsgallery2->findSysFiles();
 
 //		//--- old --------------------------------
 //

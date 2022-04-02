@@ -22,8 +22,8 @@ class sysFilesContent
 	public $prjXmlFilePath;
 	public $installFile;
 
-	public function findFiles ($prjId='', $prjType=langSubProject::PRJ_TYPE_NONE,
-		$prjRootPath = '', $prjXmlFilePath = '') {
+	public function findSysFiles ($prjId='', $prjType=langSubProject::PRJ_TYPE_NONE,
+                                  $prjRootPath = '', $prjXmlFilePath = '') {
 
         $isFilesFound = false;
 
@@ -56,10 +56,13 @@ class sysFilesContent
 
             if ($isSearchXml)
             {
+
+                $projectFileName = $this->projectFileName ();
+
 	            // By expected path first
 	            if (strlen($this->prjXmlFilePath) > 5)
 	            {
-		            $isFileFound = $this->searchXmlProjectFile($this->prjXmlFilePath);
+		            $isFileFound = $this->searchXmlProjectFile($projectFileName, $this->prjXmlFilePath);
 	            }
 	            // Not found, find from root
 	            if (!$isFileFound)
@@ -96,12 +99,12 @@ class sysFilesContent
 		        }
 	        }
 
-            //---   ------------------------------------
-
-            //$this->detectLangBasePath($this->prjRootPath);
-            $this->detectLangBasePath($this->prjXmlFilePath, $this->isSysFiles);
-            $this->searchLangFiles();
-
+//            //---   ------------------------------------
+//
+//            //$this->detectLangBasePath($this->prjRootPath);
+//            $this->detectLangBasePath($this->prjXmlFilePath, $this->isSysFiles);
+//            $this->searchLangFiles();
+//
             $isFilesFound = true;
         }
         catch (\RuntimeException $e)
@@ -118,14 +121,14 @@ class sysFilesContent
         return $isFilesFound;
     }
 
-    public function searchXmlProjectFile ($searchPath) {
+    public function searchXmlProjectFile ($projectFileName, $searchPath) {
 
         $isFileFound = false;
 
         if ($searchPath)
         {
 	        // expected path and file name
-	        $prjXmlPathFilename = $searchPath . DIRECTORY_SEPARATOR . $this->prjId . '.xml';
+	        $prjXmlPathFilename = $searchPath . DIRECTORY_SEPARATOR . $projectFileName;
 
 	        try
 	        {
@@ -148,7 +151,7 @@ class sysFilesContent
 
 				        $subFolder = $searchPath . DIRECTORY_SEPARATOR . $folderName;
 
-				        $isPathFound = $this->searchXmlProjectFile($subFolder);
+				        $isPathFound = $this->searchXmlProjectFile($projectFileName, $subFolder);
 
 				        if ($isPathFound)
 				        {
@@ -470,6 +473,21 @@ class sysFilesContent
 
 		return [$isSearchXml, $isSearchInstall];
 	}
+
+    private function projectFileName()
+    {
+        $projectFileName = $this->prjId;
+
+        if (   $this->prjType == langSubProject::PRJ_TYPE_COMP_SYS
+            || $this->prjType == langSubProject::PRJ_TYPE_COMP_BACK) {
+        {
+            $projectFileName = 'com_' . $this->prjId;
+        }
+
+        $projectFileName = $projectFileName . '.xml';
+
+        return $projectFileName;
+    }
 
 } // class
 

@@ -48,7 +48,7 @@ class langProject
 		return $subPrj;
 	}
 
-	public function findFiles()
+	public function findSysFiles()
 	{
 		$isFilesFound = false;
 
