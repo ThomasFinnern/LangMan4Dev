@@ -13,8 +13,8 @@ namespace Finnern\Component\Lang4dev\Administrator\Helper;
 use Joomla\CMS\Factory;
 use Joomla\CMS\Filesystem\Folder;
 
-use Finnern\Component\Lang4dev\Administrator\Helper\langLocations;
-use Finnern\Component\Lang4dev\Administrator\Helper\langLocation;
+use Finnern\Component\Lang4dev\Administrator\Helper\transIdLocation;
+use Finnern\Component\Lang4dev\Administrator\Helper\transIdLocations;
 
 // no direct access
 \defined('_JEXEC') or die;
@@ -25,12 +25,12 @@ use Finnern\Component\Lang4dev\Administrator\Helper\langLocation;
  *
  * @package Lang4dev
  */
-class searchLangLocations
+class searchTransIdLocations
 {
 	public $fileTypes = 'php, xml';
 	public $componentPrefix = '';
 	public $searchPaths = [];
-	public $langLocations;
+	public $transIdLocations;
 	protected $name = 'Lang4dev';
 
 	/**
@@ -40,7 +40,7 @@ class searchLangLocations
 	{
 		// ToDO: check for uppercase and trailing '_'
 
-		$this->langLocations       = new langLocations();
+		$this->transIdLocations       = new transIdLocations();
 		$this->componentPrefix = $componentPrefix;
 
 		// if ( !empty ($searchPaths)) ... ???
@@ -54,7 +54,7 @@ class searchLangLocations
 	{
 		// ToDo: log $componentPrefix, $searchPaths
 
-		$this->langLocations = new langLocations();
+		$this->transIdLocations = new transIdLocations();
 
 		try
 		{
@@ -98,7 +98,7 @@ class searchLangLocations
 			$app->enqueueMessage($OutTxt, 'error');
 		}
 
-		return $this->langLocations; // ? a lot to return ?
+		return $this->transIdLocations; // ? a lot to return ?
 	}
 
 	public function searchLangIdsInPath($searchPath)
@@ -114,11 +114,11 @@ class searchLangLocations
 				$ext = pathinfo($filePath, PATHINFO_EXTENSION);
 				if ($ext == 'php')
 				{
-					$this->searchLangIdsInFilePHP($fileName, $searchPath);
+					$this->searchTransIdsInFilePHP($fileName, $searchPath);
 				}
 				if ($ext == 'xml')
 				{
-					$this->searchLangIdsInFileXML($fileName, $searchPath);
+					$this->searchTransIdsInFileXML($fileName, $searchPath);
 				}
 			}
 
@@ -168,13 +168,13 @@ class searchLangLocations
 
 	// Multiple items in one line
 
-	public function searchLangIdsInFilePHP($fileName, $path)
+	public function searchTransIdsInFilePHP($fileName, $path)
 	{
 		$isInComment = false;
 
 		try
 		{
-			$lineIdx = 0;
+			$lineNr = 0;
 
 			// Read all lines
 			$filePath = $path . DIRECTORY_SEPARATOR . $fileName;
@@ -182,9 +182,11 @@ class searchLangLocations
 			$lines = file($filePath);
 
 			// content found
-			// ToDo: 		foreach ($lines as $lineIdx => $line)
+			// ToDo: 		foreach ($lines as $lineNr => $line)
 			foreach ($lines as $line)
 			{
+				$lineNr = $lineNr + 1;
+
 				//--- remove comments --------------
 
 				$bareLine = $this->removeCommentPHP($line, $isInComment);
@@ -201,13 +203,12 @@ class searchLangLocations
 					{
 						$item->file    = $fileName;
 						$item->path    = $path;
-						$item->lineIdx = $lineIdx;
+						$item->lineNr = $lineNr;
 
-						$this->langLocations->addItem($item);
+						$this->transIdLocations->addItem($item);
 					}
 				}
 
-				$lineIdx = $lineIdx + 1;
 			}
 		}
 		catch (\RuntimeException $e)
@@ -219,6 +220,7 @@ class searchLangLocations
 			$app->enqueueMessage($OutTxt, 'error');
 		}
 
+		// return $this->transIdLocations;
 	}
 
 	public function removeCommentPHP($line, &$isInComment)
@@ -270,7 +272,6 @@ class searchLangLocations
 
 				} // No comment indicator
 
-
 			} else {
 				//--- Inside a '/*' comment
 
@@ -310,12 +311,11 @@ class searchLangLocations
 	public function searchLangIdsInLinePHP($line)
 	{
 		$items = [];
-
 		$matches = [];
 
 		try
 		{
-			// test find all words then iterate through array
+			// find all words then iterate through array
 // https://stackoverflow.com/questions/4722007/php-preg-match-to-find-whole-words
 
 			// Python solution
@@ -324,30 +324,25 @@ class searchLangLocations
 			$searchRegex = '/' . $this->componentPrefix . "\w+/";
 
 			// test find all words then iterate through array
-			preg_match_all($searchRegex, $line, $matches);
+			preg_match_all($searchRegex, $line, $matchGroups);
 
+			if (!empty($matchGroups))
+				// if (count ($matchGroups) > 0)
+			{
+				$idx = 0;
 
-			$idx = 0;
-			foreach ($matches as $matchGroup) {
-				if ( ! empty($matchGroup[0]))
+				// all items found in line
+				foreach ($matchGroups[0] as $name)
 				{
-					// all in first group
-					$findings = $matchGroup[0];
-					$name     = $findings;
+					$colIdx = strpos($line, $name, $idx);
 
-					// foreach ($findings as $name) {
-					if (!empty($name))
-					{
-						$colIdx = strpos($line, $name, $idx);
+					$item = new transIdLocation ($name, '', '', -1, $colIdx);
 
-						$item = new langLocation ($name, '', '', -1, $colIdx);
+					// ? same twice ?
+					$items [] = $item;
 
-						// ? same twice ?
-						$items [] = $item;
-
-						// search behind last find
-						$idx = $idx + strlen($name);
-					}
+					// search behind last find
+					$idx = $idx + strlen($name);
 				}
 			}
 
@@ -355,7 +350,7 @@ class searchLangLocations
 		catch (\RuntimeException $e)
 		{
 			$OutTxt = '';
-			$OutTxt .= 'Error executing findAllTranslationIds: "' . '<br>';
+			$OutTxt .= 'Error executing searchLangIdsInLinePHP: "' . '<br>';
 			$OutTxt .= 'Error: "' . $e->getMessage() . '"' . '<br>';
 
 			$app = Factory::getApplication();
@@ -365,13 +360,13 @@ class searchLangLocations
 		return $items;
 	}
 
-	public function searchLangIdsInFileXML($fileName, $path)
+	public function searchTransIdsInFileXML($fileName, $path)
 	{
-		$items = [];
+		$isInComment = false;
 
 		try
 		{
-			$lineIdx = 0;
+			$lineNr = 0;
 
 			// Read all lines
 			$filePath = $path . DIRECTORY_SEPARATOR . $fileName;
@@ -381,6 +376,8 @@ class searchLangLocations
 			// content found
 			foreach ($lines as $line)
 			{
+				$lineNr = $lineNr + 1;
+
 				//--- remove comments --------------
 
 				$bareLine = $this->removeCommentXML($line, $isInComment);
@@ -397,9 +394,9 @@ class searchLangLocations
 					{
 						$item->file    = $fileName;
 						$item->path    = $path;
-						$item->lineIdx = $lineIdx;
+						$item->lineNr = $lineNr;
 
-						$this->langLocations . addItem($item);
+						$this->transIdLocations->addItem($item);
 					}
 				}
 
@@ -415,14 +412,51 @@ class searchLangLocations
 			$app->enqueueMessage($OutTxt, 'error');
 		}
 
-		return $items;
+//		return $this->transIdLocations;
 	}
 
 	public function removeCommentXML($line, &$isInComment)
 	{
+		$bareLine = $line;
+
 		try
 		{
 
+			// No inside a '<--' comment
+			if ( ! $isInComment)
+			{
+				//--- check for comments ---------------------------------------
+
+				$commStart = '<!--';
+				$commStartIdx = strpos ($line, $commStart);
+
+				// comment exists, keep start of string
+				if ($commStartIdx != false)
+				{
+					$bareLine = strstr($line, $commStart, true);
+					$isInComment = true;
+
+				} // No comment indicator
+
+			} else {
+				//--- Inside a '/*' comment
+
+				$bareLine = '';
+
+				$commEnd = '-->';
+				$commEndIdx = strpos ($line, $commEnd);
+
+				// end found ?
+				if ($commEndIdx != false)
+				{
+					// Keep end of string
+					$bareLine = strstr($line, $commEnd);
+
+					// handle rest of string
+					$isInComment = false;
+					$bareLine = $this->removeCommentPHP($bareLine, $isInComment);
+				}
+			}
 
 		}
 		catch (\RuntimeException $e)
@@ -435,25 +469,57 @@ class searchLangLocations
 			$app->enqueueMessage($OutTxt, 'error');
 		}
 
+		return $bareLine;
 	}
 
 	public function searchLangIdsInLineXML($line)
 	{
+		$items = [];
+		$matches = [];
+
 		try
 		{
+			// find all words then iterate through array
 
+			// Python solution
+			// py$searchRegex = "\\b" + $this->componentPrefix + "\\w+";
+			// Finds multiple words per line
+			$searchRegex = '/' . $this->componentPrefix . "\w+/";
 
+			// test find all words then iterate through array
+			preg_match_all($searchRegex, $line, $matchGroups);
+
+			if (!empty($matchGroups))
+			// if (count ($matchGroups) > 0)
+			{
+				$idx = 0;
+
+				// all items found in line
+				foreach ($matchGroups[0] as $name)
+				{
+					$colIdx = strpos($line, $name, $idx);
+
+					$item = new transIdLocation ($name, '', '', -1, $colIdx);
+
+					// ? same twice ?
+					$items [] = $item;
+
+					// search behind last find
+					$idx = $idx + strlen($name);
+				}
+			}
 		}
 		catch (\RuntimeException $e)
 		{
 			$OutTxt = '';
-			$OutTxt .= 'Error executing findAllTranslationIds: "' . '<br>';
+			$OutTxt .= 'Error executing searchLangIdsInLineXML: "' . '<br>';
 			$OutTxt .= 'Error: "' . $e->getMessage() . '"' . '<br>';
 
 			$app = Factory::getApplication();
 			$app->enqueueMessage($OutTxt, 'error');
 		}
 
+		return $items;
 	}
 
 	public function folderInDir($folder)

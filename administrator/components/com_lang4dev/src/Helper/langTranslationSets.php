@@ -40,7 +40,7 @@ class langTranslationSet
 	 */
 	function __construct(
 		$name = '',
-		$lineIdx = -1,
+		$lineNr = -1,
 		$colIdx =-1)
 	{
 		$this->name = $name;

@@ -13,6 +13,7 @@ use Joomla\CMS\Filesystem\File;
 use Joomla\CMS\Filesystem\Folder;
 
 use Finnern\Component\Lang4dev\Administrator\Helper\sysFilesContent;
+use Finnern\Component\Lang4dev\Administrator\Helper\searchTransIdLocations;
 
 class langSubProject extends langFileNamesSet
 {
@@ -21,14 +22,17 @@ class langSubProject extends langFileNamesSet
 	public $prjRootPath = '';
 	public $prjXmlFilePath = '';
 
-	public $installFilePath = '';
-    public $isSysFiles = false;
-
 	public $prjXmlPathFilename;
 	public $installPathFilename;
 
-	protected $langFiles = []; // $langId -> translation file(s)
-	protected $langLocations = [];
+    public $isSysFiles = false;
+
+    protected $langFiles = []; // $langId -> translation file(s)
+	protected $transIdLocations = [];
+    protected $transIdsClassified;
+
+
+    // ToDo: MainLangId
 
 	/*   */
 	const PRJ_TYPE_NONE = 0;
@@ -57,7 +61,7 @@ class langSubProject extends langFileNamesSet
 
     }
 
-    public function findSysFiles () {
+    public function findPrjFiles () {
 
         $isFilesFound = false;
 
@@ -76,16 +80,20 @@ class langSubProject extends langFileNamesSet
 	        $finder->prjId          = $this->prjId;
 	        $finder->prjType        = $this->prjType;
 	        $finder->prjRootPath    = $this->prjRootPath;
-	        $finder->prjXmlFilePath = $this->prjXmlFilePath;
 
 	        // use sysFilesContent
             // new ...;
 
-            $isFilesFound = $finder->findSysFiles();
+            $isFilesFound = $finder->findPrjFiles();
 
             // take results
             if($isFilesFound) {
                 // Path and name
+                if ($this->isSysFiles) {
+                    $this->prjXmlFilePath = $finder->prjXmlFilePath;
+                } else {
+                    $this->prjXmlFilePath = $this->prjRootPath;
+                }
 	            $this->prjXmlPathFilename  = $finder->prjXmlPathFilename;
 	            $this->installPathFilename = $finder->installPathFilename;
             }
@@ -100,7 +108,7 @@ class langSubProject extends langFileNamesSet
         catch (\RuntimeException $e)
         {
             $OutTxt = '';
-            $OutTxt .= 'Error executing findSysFiles: "' . '<br>';
+            $OutTxt .= 'Error executing findPrjFiles: "' . '<br>';
             $OutTxt .= 'Error: "' . $e->getMessage() . '"' . '<br>';
 
             $app = Factory::getApplication();
@@ -112,26 +120,122 @@ class langSubProject extends langFileNamesSet
     }
 
     // read content of language file  ==> get translation in langFiles
-    public function retrieveLangFileTranslations ($langId='en-GB', $isReadOriginal=false) {
+    public function getLangFile ($langId='en-GB', $isReadOriginal=false)
+    {
 
-
-        // if not chached or $isReadOriginal
-
+        // if not cached or $isReadOriginal
         if (empty($this->langFiles [$langId]) || $isReadOriginal) {
 
-            $langFileName =  $this->langFileNames [$langId];
-
-            // $langFile = new langFile ($langFileName);
-            $langFile = new langFile ();
-            $langFile->assignFileContent($langFileName, $langId);
-
-            $this->langFiles [$langId] = $langFile;
+            return $this->readLangFile ($langId='en-GB', $isReadOriginal=false);
         }
+
+        return $this->langFiles [$langId];
+    }
+
+
+    // read content of language file  ==> get translation in langFiles
+    public function readLangFile ($langId='en-GB') {
+
+
+        $langFileName =  $this->langFileNames [$langId];
+
+        // $langFile = new langFile ($langFileName);
+        $langFile = new langFile ();
+        $langFile->readFileContent($langFileName, $langId);
+
+        $this->langFiles [$langId] = $langFile;
 
         // if (empty($langFiles [$langId]) 0=> return empty ? ...
 
         return $this->langFiles [$langId];
     }
+
+    public function scanCode4TransIdsLocations () {
+
+            $searchTransIdLocations = new searchTransIdLocations ();
+
+            // scan project XML
+            $searchTransIdLocations->searchTransIdsInFileXML(
+                baseName($this->prjXmlPathFilename), dirname($this->prjXmlPathFilename));
+
+            // scan install file
+            $searchTransIdLocations->searchTransIdsInFilePHP(
+                baseName($this->installPathFilename), dirname($this->installPathFilename));
+
+            $this->transIdLocations = $searchTransIdLocations->transIdLocations->items;
+
+        return $this->transIdLocations;
+    }
+
+    public function getPrjTransIdNames ()
+    {
+        $names = [];
+
+        try {
+
+            foreach ($this->transIdLocations as $name => $val) {
+
+                $names [] = $name;
+            }
+
+        }
+        catch (\RuntimeException $e)
+        {
+            $OutTxt = 'Error executing findAllTranslationIds: "' . '<br>';
+            $OutTxt .= 'Error: "' . $e->getMessage() . '"' . '<br>';
+
+            $app = Factory::getApplication();
+            $app->enqueueMessage($OutTxt, 'error');
+        }
+
+        return $names;
+    }
+
+    public function getTransIdLocations ($isScanOriginal=false)
+    {
+        // if not cached or $isReadOriginal
+        if (empty($this->transIdLocations) || $isScanOriginal) {
+
+            return $this->scanCode4TransIdsLocations ();
+        }
+
+        return $this->transIdLocations;
+    }
+
+    public function classifyTransIds (){
+
+        $codeTransIds = $this->getPrjTransIdNames();
+
+        // ToDo: MainLangId
+        $this->MainLangId = 'en-GB';
+        $langId = $this->MainLangId;
+
+        $langFile = $this->langFiles [$langId];
+		[$missing, $same, $notUsed] = $langFile->separateByTransIds($codeTransIds);
+
+
+
+        $transIdsClassified = [];
+		$transIdsClassified['missing'] = $missing;
+		$transIdsClassified['same'] = $same;
+		$transIdsClassified['notUsed'] = $notUsed;
+
+        $this->transIdsClassified = $transIdsClassified;
+
+        return $this->transIdsClassified;
+    }
+
+    public function getTransIdsClassified ($isClassifyTransIds=false){
+
+        if (empty($this->transIdsClassified) || $isClassifyTransIds) {
+
+            return $this->classifyTransIds ();
+        }
+
+        return $this->transIdsClassified;
+    }
+
+
 
 
 } // class

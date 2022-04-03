@@ -27,11 +27,11 @@ defined('_JEXEC') or die;
  */
 class langTranslation
 {
-	public $name = ''; // ToDo: rename to transId
+	public $transId = '';
 	public $translationText = '';
 	public $commentsBefore = [];
 	public $commentBehind = '';
-	public $lineIdx = -1;
+	public $lineNr = -1;
 
 	/**
 	 * @since __BUMP_VERSION__
@@ -41,13 +41,13 @@ class langTranslation
 		$translationText = '',
 		$commentsBefore = [],
 		$commentBehind = '',
-		$lineIdx = -1)
+		$lineNr = -1)
 	{
 		$this->name            = $name;
 		$this->translationText = $translationText;
 		$this->commentsBefore  = $commentsBefore;
 		$this->commentBehind   = $commentBehind;
-		$this->lineIdx         = $lineIdx;
+		$this->lineNr         = $lineNr;
 	}
 
 	/**
@@ -57,16 +57,16 @@ class langTranslation
 	 */
 	public function clean()
 	{
-		$this->init($this->lineIdx);
+		$this->init($this->lineNr);
 	}
 
-	public function init($lineIdx = -1)
+	public function init($lineNr = -1)
 	{
 		$this->name            = '';
 		$this->translationText = '';
 		$this->commentsBefore  = [];
 		$this->commentBehind   = '';
-		$this->lineIdx         = $lineIdx;
+		$this->lineNr         = $lineNr;
 	}
 
 }

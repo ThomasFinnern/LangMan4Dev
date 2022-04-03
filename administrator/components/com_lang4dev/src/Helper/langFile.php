@@ -55,7 +55,7 @@ class langFile
 		# load file if exists
 		if (strlen($langPathFileName))
 		{
-			$this->assignFileContent($langPathFileName);
+			$this->readFileContent($langPathFileName);
 		}
 	}
 
@@ -70,7 +70,7 @@ class langFile
 		$this->isSystType          = false;  # lang file type (normal/sys)
 	}
 
-	public function assignFileContent($filePath = '', $langId = 'en-GB')
+	public function readFileContent($filePath = '', $langId = 'en-GB')
     {
         $isAssigned = false;
 
@@ -91,7 +91,7 @@ class langFile
 
                 //--- path does not exist -------------------------------
 
-                $OutTxt = 'Warning: langFile.assignFileContent: File does not exist "' . $filePath . '"<br>';
+                $OutTxt = 'Warning: langFile.readFileContent: File does not exist "' . $filePath . '"<br>';
 
                 $app = Factory::getApplication();
                 $app->enqueueMessage($OutTxt, 'warning');
@@ -142,7 +142,7 @@ class langFile
 
                     [$pName, $pTranslation] = explode('=', $line, 2);
 
-                    $nextItem->id = $transId = trim($pName);
+                    $nextItem->transId = $transId = trim($pName);
 
                     $translationPart = trim($pTranslation);
 
@@ -535,7 +535,7 @@ class langFile
 			// ToDo: cache it for second use, reset cache after assign /read
 			foreach ($this->translationDoubles as $lineId => $translation)
 			{
-				$names [] = $translation->name;
+				$names [] = $translation->transId;
 			}
 
 		}

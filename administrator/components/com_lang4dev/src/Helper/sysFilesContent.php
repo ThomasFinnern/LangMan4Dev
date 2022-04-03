@@ -24,7 +24,7 @@ class sysFilesContent
 	public $prjXmlPathFilename;
 	public $installPathFilename;
 
-	public function findSysFiles ($prjId='', $prjType=langSubProject::PRJ_TYPE_NONE,
+	public function findPrjFiles ($prjId='', $prjType=langSubProject::PRJ_TYPE_NONE,
                                   $prjRootPath = '', $prjXmlFilePath = '') {
 
         $isFilesFound = false;

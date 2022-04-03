@@ -27,7 +27,7 @@ use Joomla\CMS\Toolbar\ToolbarHelper;
 use Finnern\Component\Lang4dev\Administrator\Helper\langFile;
 use Finnern\Component\Lang4dev\Administrator\Helper\langProject;
 //use Finnern\Component\Lang4dev\Administrator\Helper\langFileNamesSet;
-//use Finnern\Component\Lang4dev\Administrator\Helper\langLocationsSearch;
+//use Finnern\Component\Lang4dev\Administrator\Helper\transIdLocationsSearch;
 use Finnern\Component\Lang4dev\Administrator\Helper\langSubProject;
 
 
@@ -67,12 +67,14 @@ class HtmlView extends BaseHtmlView
 			JPATH_ADMINISTRATOR . '/components/com_lang4dev'
 		);
 
-		$prjLang4dev->findSysFiles();
-
+		$prjLang4dev->findPrjFiles();
+        $prjLang4dev->readSubsLangFile();
+        $prjLang4dev->scanCode4TransIds();
+        
         $this->prjFiles = $prjLang4dev->subProjects[0];
 
 		//--- RSGallery2 --------------------------------
-
+        /**
 		$prjRsgallery2 = new langProject ();
 
 		$subPrj = $prjLang4dev->addSubProject('rsgallery2',
@@ -90,31 +92,8 @@ class HtmlView extends BaseHtmlView
 			JPATH_SITE . '/components/com_rsgallery2'
 		);
 
-		$prjRsgallery2->findSysFiles();
-
-//		//--- old --------------------------------
-//
-//		$prjSysFiles = new prjSysFiles('Lang4Dev', JPATH_ADMINISTRATOR . '/components/com_lang4dev');
-//
-//        $prjSysFiles->findFiles ();
-//        $this->langFileNamesSetText = $prjSysFiles->__toText ();
-//
-//		// toDO: use selected main lang of user 'de-DE'
-//		$prjLangFile =$prjSysFiles->retrieveLangFileTranslations();
-//
-//		// collect used project transIds
-//		$prjSysFiles->searchLangLocations();
-//		$prjTransIdNames = $prjSysFiles->getPrjTransIdNames();
-//
-//		[$missing, $same, $notUsed] =
-//			$prjLangFile->separateByTransIds($prjTransIdNames);
-//
-//		$this->sysLangIds = [];
-//		$this->sysLangIds['missing'] = $missing;
-//		$this->sysLangIds['same'] = $same;
-//		$this->sysLangIds['notUsed'] = $notUsed;
-//
-//		$this->prjSysFiles = $prjSysFiles;
+		$prjRsgallery2->findPrjFiles();
+        /**/
 
         /**
 		HTMLHelper::_('sidebar.setAction', 'index.php?option=com_Lang4dev&view=config&layout=RawView');

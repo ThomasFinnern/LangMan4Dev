@@ -5,56 +5,52 @@ use Joomla\CMS\HTML\HTMLHelper;
 use Joomla\CMS\Language\Text;
 use Joomla\CMS\Router\Route;
 
+$prjFiles  = $this->prjFiles;
+
+$langFile     = $this->prjFiles->getLangFile('en-GB');
+$translations = $langFile->translations;
+$transIdLocations = $prjFiles->getTransIdLocations();
+$transIdsClassified = $prjFiles->getTransIdsClassified();
+
 ?>
 <form action="<?php echo Route::_('index.php?option=com_lang4dev&view=prjtexts'); ?>" method="post" name="adminForm" id="item-form" class="form-validate">
 
-    <?php
-    echo 'default.php: ' . realpath(dirname(__FILE__));
-    echo '<br><br><hr>';
-	//echo '<h3>names</h3><br>';
-    //$names = $this->prjLangLocations->getItemNames ();
-    //echo $this->prjLangLocations->_toTextNames('\n');
-    //echo $this->prjLangLocations->_toTextNames('<br>');
-    ?>
-	<h3>Missing Lang Ids SYS</h3><br>
-	<?php
-	$newItemLines = implode("<br>", $this->sysLangIds['missing']);
 
-	echo $newItemLines;
-	?>
-	<hr>
-	<h3>Same Lang Ids SYS</h3><br>
-	<?php
-	$newItemLines = implode("<br>", $this->sysLangIds['same']);
+    <div class="row g-4">
+        <div class="col">
+            <h3>Missing Translation IDs</h3><br>
+            <?php
+            $newItemLines = implode("<br>", $transIdsClassified['missing']);
+            echo $newItemLines;
+            ?>
+        </div>
+<!--        <div class="col">-->
+<!--            <h3>Same Lang Ids</h3><br>-->
+<!--            --><?php
+//            $newItemLines = implode("<br>", $transIdsClassified['same']);
+//            echo $newItemLines;
+//            ?>
+<!--        </div>-->
+        <div class="col">
+            <h3>Not Used Lang Ids</h3><br>
+            <?php
+            $newItemLines = implode("<br>", $transIdsClassified['notUsed']);
+            echo $newItemLines;
+            ?>
+        </div>
+<!--        <div class="col">-->
+<!--            <h3>Double Translation Ids</h3><br>-->
+<!--            --><?php
+////            $newItemLines = implode("<br>", $transIdsClassified['same']);
+////            echo $newItemLines;
+//            ?>
+<!--        </div>-->
+    </div>
 
-	echo $newItemLines;
-	?>
-	<hr>
-	<h3>Not Used Lang Ids SYS</h3><br>
-	<?php
-	$newItemLines = implode("<br>", $this->sysLangIds['notUsed']);
-
-	echo $newItemLines;
-	?>
-	<hr>
-	<h3>Temp Translation lines </h3><br>
-	<?php
-//		$linesArray = $this->testLangFile->translationLinesArray();
-//		$fileLines = implode("<br>", $linesArray);
-//
-//		echo $fileLines;
-    ?>
-	<hr>
-	<h3>Missing Translation IDs</h3><br>
-	<?php
-//		$newItemLines = implode("<br>", $this->transIds_new);
-//
-//		echo $newItemLines;
-    ?>
 	<hr>
 	<h3>COM_LANG4DEV_TRANSLATIONS</h3><br>
 	<?php
-		$newItemLines = implode("<br>", $this->langFileNamesSetText);
+		$newItemLines = implode("<br>", $prjFiles->__toText());
 
 		echo $newItemLines;
     ?>
@@ -69,16 +65,12 @@ use Joomla\CMS\Router\Route;
 			<th><?php echo Text::_('COM_LANG4DEV_COMMENT_BEHIND') ?></th>
 		</tr>
 		<?php
-		// remove : $langLocation may have index as name -> [multiple locations]
-		$prjSysFiles  = $this->prjSysFiles;
-		$langFile     = $this->prjSysFiles->retrieveLangFileTranslations('en-GB');
-		$translations = $this->prjSysFiles->retrieveLangFileTranslations('en-GB')->translations;
-		$this->prjSysFiles->retrieveLangFileTranslations('en-GB')->translations
+		// remove : $transIdLocation may have index as name -> [multiple locations]
 		?>
-		<?php foreach ($this->prjSysFiles->retrieveLangFileTranslations('en-GB')->translations as $i => $item) : ?>
+		<?php foreach ($translations as $i => $item) : ?>
 			<tr>
-				<td><?php echo $item->lineIdx; ?></td>
-				<td><?php echo $item->name; ?></td>
+				<td><?php echo $item->lineNr; ?></td>
+				<td><?php echo $item->transId; ?></td>
 				<td><?php echo $item->translationText; ?></td>
 				<td><?php echo implode("<br>", $item->commentsBefore); ?></td>
 				<td><?php echo $item->commentBehind; ?></td>
@@ -99,20 +91,19 @@ use Joomla\CMS\Router\Route;
 			<th><?php echo Text::_('COM_LANG4DEV_FILE_PATH') ?></th>
 		</tr>
 		<?php
-		// remove : $langLocation may have index as name -> [multiple locations]
-		$prjSysFiles = $this->prjSysFiles;
-		$langLocations = $this->prjSysFiles->langLocations;
+		// remove : $transIdLocation may have index as name -> [multiple locations]
+		//$prjSysFiles = $this->prjFiles;
 
 		?>
 		<?php
 		$idx = 1;
-		foreach ($this->prjSysFiles->langLocations as $langLocation) : ?>
-			<?php foreach ($langLocation as $item) : ?>
+		foreach ($transIdLocations as $transIdLocation) : ?>
+			<?php foreach ($transIdLocation as $item) : ?>
 				<tr>
 					<td><?php echo $idx; ?></td>
 
 					<td><?php echo $item->name; ?></td>
-					<td><?php echo $item->lineIdx; ?></td>
+					<td><?php echo $item->lineNr; ?></td>
 					<td><?php echo $item->colIdx; ?></td>
 					<td><?php echo $item->file; ?></td>
 					<td><?php echo $item->path; ?></td>

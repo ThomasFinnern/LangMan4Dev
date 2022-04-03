@@ -21,7 +21,10 @@ class langProject
 
 	public $subProjects = [];
 
-	/**
+    public $isSysFileFound = false;
+
+
+    /**
 	 * @since __BUMP_VERSION__
 	 */
 	public function __construct($prjName = '', $prjRootPath = '')
@@ -48,7 +51,7 @@ class langProject
 		return $subPrj;
 	}
 
-	public function findSysFiles()
+	public function findPrjFiles()
 	{
 		$isFilesFound = false;
 
@@ -58,14 +61,19 @@ class langProject
 			foreach ($this->subProjects as $subProject)
 			{
 
-				$subProject->findSysFiles(
-					/**
-					$subProject->prjId,
-					$subProject->prjType,
-					$subProject->prjRootPath,
-					$subProject->prjXmlFilePath
-					/**/
-				);
+				$subProject->findPrjFiles();
+
+
+                /**
+                if ($subProject->isSysFiles) {
+
+                    $this->isSysFileFound = true;
+
+                    $this->prjRootPath  = $subProject->prjRootPath;
+                    $this->prjXmlPathFilename  = $subProject->prjXmlPathFilename;
+                    $this->installPathFilename = $subProject->installPathFilename;
+                }
+                /**/
 
 			}
 		}
@@ -82,10 +90,90 @@ class langProject
 		return $isFilesFound;
 	}
 
-	public function prjXmlPathFilename()
-	{
-		return $this->prjXmlFilePath . '/' . $this->prjName . '.xml';
-	}
+    // one file each sub (used mostly for eng_GB)
+    public function readSubsLangFile($langId='en-GB', $isReadOriginal=false)
+    {
+        $isFilesRead = false;
+
+        try
+        {
+
+            foreach ($this->subProjects as $subProject)
+            {
+                $subProject->readLangFile($langId, $isReadOriginal);
+            }
+
+        }
+        catch (\RuntimeException $e)
+        {
+            $OutTxt = '';
+            $OutTxt .= 'Error executing readSubsLangFile: "' . '<br>';
+            $OutTxt .= 'Error: "' . $e->getMessage() . '"' . '<br>';
+
+            $app = Factory::getApplication();
+            $app->enqueueMessage($OutTxt, 'error');
+        }
+
+        return $isFilesRead;
+    }
+
+    // one file each sub (used mostly for eng_GB)
+    public function readAllLangFiles($isReadOriginal=false)
+    {
+        $isFilesRead = false;
+
+        try
+        {
+            // all sub projects
+            foreach ($this->subProjects as $subProject)
+            {
+                // all existing
+                foreach ($this->subProjects->langIds as $langId) {
+
+                    $subProject->readLangFile($langId, $isReadOriginal);
+                }
+            }
+
+        }
+        catch (\RuntimeException $e)
+        {
+            $OutTxt = '';
+            $OutTxt .= 'Error executing readSubsLangFile: "' . '<br>';
+            $OutTxt .= 'Error: "' . $e->getMessage() . '"' . '<br>';
+
+            $app = Factory::getApplication();
+            $app->enqueueMessage($OutTxt, 'error');
+        }
+
+        return $isFilesRead;
+    }
+
+    public function scanCode4TransIds()
+    {
+        $isFilesFound = false;
+
+        try
+        {
+
+            foreach ($this->subProjects as $subProject)
+            {
+
+                $subProject->scanCode4TransIdsLocations();
+
+            }
+        }
+        catch (\RuntimeException $e)
+        {
+            $OutTxt = '';
+            $OutTxt .= 'Error executing findFiles: "' . '<br>';
+            $OutTxt .= 'Error: "' . $e->getMessage() . '"' . '<br>';
+
+            $app = Factory::getApplication();
+            $app->enqueueMessage($OutTxt, 'error');
+        }
+
+        return $isFilesFound;
+    }
 
 
 } // class

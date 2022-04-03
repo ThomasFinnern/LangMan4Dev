@@ -36,7 +36,7 @@ class prjSysFiles extends langFileNamesSet
 	public $installFile = '';
 
     protected $langFiles = []; // $langId -> translation file(s)
-    public $langLocations = [];
+    public $transIdLocations = [];
 
     /**
      * @since __BUMP_VERSION__
@@ -315,7 +315,7 @@ class prjSysFiles extends langFileNamesSet
 
             // $langFile = new langFile ($langFileName);
             $langFile = new langFile ();
-            $langFile->assignFileContent($langFileName, $langId);
+            $langFile->readFileContent($langFileName, $langId);
 
             $this->langFiles [$langId] = $langFile;
         }
@@ -327,9 +327,9 @@ class prjSysFiles extends langFileNamesSet
 
     public function searchLangLocations ($isScanOriginal=false) {
 
-	    if (empty($this->langLocations) || $isScanOriginal) {
+	    if (empty($this->transIdLocations) || $isScanOriginal) {
 
-		    $oSearchLangLocations = new langLocationsSearch ();
+		    $oSearchLangLocations = new transIdLocationsSearch ();
 
 		    // scan project XML
 		    $oSearchLangLocations->searchLangIdsInFileXml(
@@ -339,10 +339,10 @@ class prjSysFiles extends langFileNamesSet
 		    $oSearchLangLocations->searchLangIdsInFilePHP(
 				baseName($this->installFile), dirname($this->installFile));
 
-		    $this->langLocations = $oSearchLangLocations->langLocations->items;
+		    $this->transIdLocations = $oSearchLangLocations->transIdLocations->items;
 	    }
 
-	    return $this->langLocations;
+	    return $this->transIdLocations;
     }
 
 	public function getPrjTransIdNames ()
@@ -351,7 +351,7 @@ class prjSysFiles extends langFileNamesSet
 
 		try {
 
-			foreach ($this->langLocations as $name => $val) {
+			foreach ($this->transIdLocations as $name => $val) {
 
 				$names [] = $name;
 			}

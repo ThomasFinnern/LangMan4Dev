@@ -13,8 +13,8 @@ namespace Finnern\Component\Lang4dev\Administrator\Helper;
 use Joomla\CMS\Factory;
 use Joomla\CMS\Filesystem\Folder;
 
-use Finnern\Component\Lang4dev\Administrator\Helper\langLocations;
-use Finnern\Component\Lang4dev\Administrator\Helper\langLocation;
+use Finnern\Component\Lang4dev\Administrator\Helper\transIdLocation;
+use Finnern\Component\Lang4dev\Administrator\Helper\transIdLocations;
 
 // no direct access
 \defined('_JEXEC') or die;
@@ -30,7 +30,7 @@ class langLocationsSearch
 	public $fileTypes = 'php, xml';
 	public $componentPrefix = '';
 	public $searchPaths = [];
-	public $langLocations;
+	public $transIdLocations;
 	protected $name = 'Lang4dev';
 
 	/**
@@ -40,7 +40,7 @@ class langLocationsSearch
 	{
 		// ToDO: check for uppercase and trailing '_'
 
-		$this->langLocations       = new langLocations();
+		$this->transIdLocations       = new transIdLocations();
 		$this->componentPrefix = $componentPrefix;
 
 		// if ( !empty ($searchPaths)) ... ???
@@ -54,7 +54,7 @@ class langLocationsSearch
 	{
 		// ToDo: log $componentPrefix, $searchPaths
 
-		$this->langLocations = new langLocations();
+		$this->transIdLocations = new transIdLocations();
 
 		try
 		{
@@ -98,7 +98,7 @@ class langLocationsSearch
 			$app->enqueueMessage($OutTxt, 'error');
 		}
 
-		return $this->langLocations; // ? a lot to return ?
+		return $this->transIdLocations; // ? a lot to return ?
 	}
 
 	public function searchLangIdsInPath($searchPath)
@@ -174,7 +174,7 @@ class langLocationsSearch
 
 		try
 		{
-			$lineIdx = 0;
+			$lineNr = 0;
 
 			// Read all lines
 			$filePath = $path . DIRECTORY_SEPARATOR . $fileName;
@@ -182,10 +182,10 @@ class langLocationsSearch
 			$lines = file($filePath);
 
 			// content found
-			// ToDo: 		foreach ($lines as $lineIdx => $line)
+			// ToDo: 		foreach ($lines as $lineNr => $line)
 			foreach ($lines as $line)
 			{
-				$lineIdx = $lineIdx + 1;
+				$lineNr = $lineNr + 1;
 
 				//--- remove comments --------------
 
@@ -203,9 +203,9 @@ class langLocationsSearch
 					{
 						$item->file    = $fileName;
 						$item->path    = $path;
-						$item->lineIdx = $lineIdx;
+						$item->lineNr = $lineNr;
 
-						$this->langLocations->addItem($item);
+						$this->transIdLocations->addItem($item);
 					}
 				}
 
@@ -220,7 +220,7 @@ class langLocationsSearch
 			$app->enqueueMessage($OutTxt, 'error');
 		}
 
-		// return $this->langLocations;
+		// return $this->transIdLocations;
 	}
 
 	public function removeCommentPHP($line, &$isInComment)
@@ -336,7 +336,7 @@ class langLocationsSearch
 				{
 					$colIdx = strpos($line, $name, $idx);
 
-					$item = new langLocation ($name, '', '', -1, $colIdx);
+					$item = new transIdLocation ($name, '', '', -1, $colIdx);
 
 					// ? same twice ?
 					$items [] = $item;
@@ -366,7 +366,7 @@ class langLocationsSearch
 
 		try
 		{
-			$lineIdx = 0;
+			$lineNr = 0;
 
 			// Read all lines
 			$filePath = $path . DIRECTORY_SEPARATOR . $fileName;
@@ -376,7 +376,7 @@ class langLocationsSearch
 			// content found
 			foreach ($lines as $line)
 			{
-				$lineIdx = $lineIdx + 1;
+				$lineNr = $lineNr + 1;
 
 				//--- remove comments --------------
 
@@ -394,9 +394,9 @@ class langLocationsSearch
 					{
 						$item->file    = $fileName;
 						$item->path    = $path;
-						$item->lineIdx = $lineIdx;
+						$item->lineNr = $lineNr;
 
-						$this->langLocations->addItem($item);
+						$this->transIdLocations->addItem($item);
 					}
 				}
 
@@ -412,7 +412,7 @@ class langLocationsSearch
 			$app->enqueueMessage($OutTxt, 'error');
 		}
 
-//		return $this->langLocations;
+//		return $this->transIdLocations;
 	}
 
 	public function removeCommentXML($line, &$isInComment)
@@ -499,7 +499,7 @@ class langLocationsSearch
 				{
 					$colIdx = strpos($line, $name, $idx);
 
-					$item = new langLocation ($name, '', '', -1, $colIdx);
+					$item = new transIdLocation ($name, '', '', -1, $colIdx);
 
 					// ? same twice ?
 					$items [] = $item;
