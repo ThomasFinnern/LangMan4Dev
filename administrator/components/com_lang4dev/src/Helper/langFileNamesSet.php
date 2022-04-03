@@ -58,7 +58,7 @@ class langFileNamesSet
 
     	if ($basePath == '') {
 
-		    $basePath = $this->$basePath;
+		    $basePath = $this->basePath;
 	    } else {
 
 		    $this->$basePath = $basePath;
@@ -232,7 +232,7 @@ class langFileNamesSet
 		        {
 			        $fileNames = Folder::files ($subFolder, $regex);
 
-			        if (count ($fileNames) > 0)
+			        if ($fileNames != false)
 			        {
 				        $baseName = $fileNames[0];
 				        $this->baseName = $baseName;

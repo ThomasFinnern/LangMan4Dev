@@ -20,11 +20,12 @@ class langSubProject extends langFileNamesSet
 	public $prjType = "";
 	public $prjRootPath = '';
 	public $prjXmlFilePath = '';
-	public $installFile = '';
+
+	public $installFilePath = '';
     public $isSysFiles = false;
 
-	public $prjXmlFile = "";
-	public $prjScriptFile = "";
+	public $prjXmlPathFilename;
+	public $installPathFilename;
 
 	protected $langFiles = []; // $langId -> translation file(s)
 	protected $langLocations = [];
@@ -80,13 +81,13 @@ class langSubProject extends langFileNamesSet
 	        // use sysFilesContent
             // new ...;
 
-            $isFilesFound = $finder ->findSysFiles();
+            $isFilesFound = $finder->findSysFiles();
 
             // take results
             if($isFilesFound) {
                 // Path and name
-	            $this->prjXmlFilePath = $finder->prjXmlFilePath;
-	            $this->installFile    = $finder->installFile         ;
+	            $this->prjXmlPathFilename  = $finder->prjXmlPathFilename;
+	            $this->installPathFilename = $finder->installPathFilename;
             }
 
             //---   ------------------------------------

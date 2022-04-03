@@ -20,7 +20,9 @@ class sysFilesContent
 	public $prjType;
 	public $prjRootPath;
 	public $prjXmlFilePath;
-	public $installFile;
+
+	public $prjXmlPathFilename;
+	public $installPathFilename;
 
 	public function findSysFiles ($prjId='', $prjType=langSubProject::PRJ_TYPE_NONE,
                                   $prjRootPath = '', $prjXmlFilePath = '') {
@@ -67,7 +69,7 @@ class sysFilesContent
 	            // Not found, find from root
 	            if (!$isFileFound)
 	            {
-		            $isFileFound = $this->searchXmlProjectFile($this->prjRootPath);
+		            $isFileFound = $this->searchXmlProjectFile($projectFileName, $this->prjRootPath);
 	            }
 
 	            if (!$isFileFound)
@@ -128,7 +130,7 @@ class sysFilesContent
         if ($searchPath)
         {
 	        // expected path and file name
-	        $prjXmlPathFilename = $searchPath . DIRECTORY_SEPARATOR . $projectFileName;
+	        $prjXmlPathFilename = $searchPath . '/' . $projectFileName;
 
 	        try
 	        {
@@ -140,7 +142,9 @@ class sysFilesContent
 		        {
 
 			        $this->prjXmlFilePath = $searchPath;
+			        $this->prjXmlPathFilename = $prjXmlPathFilename;
 			        $isFileFound          = true;
+
 		        }
 		        else
 		        {
@@ -149,7 +153,7 @@ class sysFilesContent
 			        foreach (Folder::folders($searchPath) as $folderName)
 			        {
 
-				        $subFolder = $searchPath . DIRECTORY_SEPARATOR . $folderName;
+				        $subFolder = $searchPath . '/' . $folderName;
 
 				        $isPathFound = $this->searchXmlProjectFile($projectFileName, $subFolder);
 
@@ -186,7 +190,7 @@ class sysFilesContent
 
             //--- fast guess script name --------------------------------
 
-            $installFile = $this->prjXmlFilePath . DIRECTORY_SEPARATOR . 'script.php';
+            $installFile = $this->prjXmlFilePath . '/' . 'script.php';
 
             if (is_file ($installFile)) {
                 $isFileFound = true;
@@ -195,20 +199,26 @@ class sysFilesContent
             {
                 //--- extract from project xml file --------------------------
 
-                $prjXmlPathFilename = $this->prjXmlPathFilename();
-                $fileName = $this->extractInstallFileName ($prjXmlPathFilename);
+                $prjXmlPathFilename = $this->prjXmlPathFilename;
+                // Not found
+	            if ( ! is_file ($prjXmlPathFilename))
+	            {
+		            $prjXmlPathFilename = $this->projectFileName();
+	            }
 
-                $installFile = $this->prjXmlFilePath . DIRECTORY_SEPARATOR . $fileName;
+	            if (is_file ($prjXmlPathFilename))
+	            {
 
-                // d:\Entwickl\2022\_github\LangMan4Dev\administrator\components\com_lang4dev\install_langman4dev.php
-                if (is_file ($installFile)) {
-                    $isFileFound = true;
-                }
-            }
+		            $fileName = $this->extractInstallFileName($prjXmlPathFilename);
 
-            if ($isFileFound) {
+		            $installFile = $this->prjXmlFilePath . '/' . $fileName;
 
-                $this->installFile = $installFile;
+		            if (is_file($installFile))
+		            {
+			            $isFileFound = true;
+			            $this->installPathFilename = $installFile;
+		            }
+	            }
             }
 
         }
@@ -354,7 +364,7 @@ class sysFilesContent
 
 			foreach (Folder::folders($searchPath) as $folderName) {
 
-				$subFolder = $searchPath . DIRECTORY_SEPARATOR . $folderName;
+				$subFolder = $searchPath . '/' . $folderName;
 
 				if (str_starts_with($folderName, $langId)) {
 
@@ -426,7 +436,7 @@ class sysFilesContent
 				$langId = $folderName;
 				$this->langIds []          = $langId;
 
-				$subFolder = $this->langBasePath . DIRECTORY_SEPARATOR . $folderName;
+				$subFolder = $this->langBasePath . '/' . $folderName;
 
 				// set base name once
 				if ($isBaseNameSet == false)
@@ -443,7 +453,7 @@ class sysFilesContent
 					}
 				}
 
-				$langFile = $subFolder . DIRECTORY_SEPARATOR . $baseName;
+				$langFile = $subFolder . '/' . $baseName;
 
 				$this->langFileNames [$langId] = $langFile;
 			}
@@ -479,9 +489,10 @@ class sysFilesContent
         $projectFileName = $this->prjId;
 
         if (   $this->prjType == langSubProject::PRJ_TYPE_COMP_SYS
-            || $this->prjType == langSubProject::PRJ_TYPE_COMP_BACK) {
+            || $this->prjType == langSubProject::PRJ_TYPE_COMP_BACK)
         {
-            $projectFileName = 'com_' . $this->prjId;
+            // $projectFileName = 'com_' . $this->prjId;
+            $projectFileName = substr($this->prjId, 4);
         }
 
         $projectFileName = $projectFileName . '.xml';

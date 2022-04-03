@@ -75,17 +75,17 @@ class HtmlView extends BaseHtmlView
 
 		$prjRsgallery2 = new langProject ();
 
-		$subPrj = $prjLang4dev->addSubProject('com_rsgallery2',
+		$subPrj = $prjLang4dev->addSubProject('rsgallery2',
 			langSubProject::PRJ_TYPE_COMP_SYS,
 			JPATH_ADMINISTRATOR . '/components/com_rsgallery2',
 		);
 
-		$subPrj = $prjLang4dev->addSubProject('RSGallery2',
+		$subPrj = $prjLang4dev->addSubProject('rsgallery2',
 			langSubProject::PRJ_TYPE_COMP_BACK,
 			JPATH_ADMINISTRATOR. '/components/com_rsgallery2'
 		);
 
-		$subPrj = $prjLang4dev->addSubProject('RSGallery2',
+		$subPrj = $prjLang4dev->addSubProject('rsgallery2',
 			langSubProject::PRJ_TYPE_COMP_SITE,
 			JPATH_SITE . '/components/com_rsgallery2'
 		);

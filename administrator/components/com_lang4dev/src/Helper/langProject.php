@@ -58,7 +58,7 @@ class langProject
 			foreach ($this->subProjects as $subProject)
 			{
 
-				$subProject->findFiles(
+				$subProject->findSysFiles(
 					/**
 					$subProject->prjId,
 					$subProject->prjType,
@@ -84,7 +84,7 @@ class langProject
 
 	public function prjXmlPathFilename()
 	{
-		return $this->prjXmlFilePath . DIRECTORY_SEPARATOR . $this->prjName . '.xml';
+		return $this->prjXmlFilePath . '/' . $this->prjName . '.xml';
 	}
 
 
