@@ -39,7 +39,7 @@ use Finnern\Component\Lang4dev\Administrator\Helper\langSubProject;
 class HtmlView extends BaseHtmlView
 {
 	protected $isDevelop;
-//	protected $prjLangLocations;
+	protected $project;
 
 	/**
 	 * Method to display the view.
@@ -63,7 +63,12 @@ class HtmlView extends BaseHtmlView
 		$prjLang4dev = new langProject ();
 
 		$subPrj = $prjLang4dev->addSubProject('com_lang4dev',
-			langSubProject::PRJ_TYPE_COMP_SYS,
+			langSubProject::PRJ_TYPE_COMP_BACK_SYS,
+			JPATH_ADMINISTRATOR . '/components/com_lang4dev'
+		);
+
+		$subPrj = $prjLang4dev->addSubProject('com_lang4dev',
+			langSubProject::PRJ_TYPE_COMP_BACK,
 			JPATH_ADMINISTRATOR . '/components/com_lang4dev'
 		);
 
@@ -73,12 +78,15 @@ class HtmlView extends BaseHtmlView
         
         $this->prjFiles = $prjLang4dev->subProjects[0];
 
+        $this->project = $prjLang4dev;
+
+
 		//--- RSGallery2 --------------------------------
         /**
 		$prjRsgallery2 = new langProject ();
 
 		$subPrj = $prjLang4dev->addSubProject('rsgallery2',
-			langSubProject::PRJ_TYPE_COMP_SYS,
+			langSubProject::PRJ_TYPE_COMP_BACK_SYS,
 			JPATH_ADMINISTRATOR . '/components/com_rsgallery2',
 		);
 

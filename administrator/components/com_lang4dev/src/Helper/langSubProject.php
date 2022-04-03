@@ -36,7 +36,7 @@ class langSubProject extends langFileNamesSet
 
 	/*   */
 	const PRJ_TYPE_NONE = 0;
-	const PRJ_TYPE_COMP_SYS = 1;
+	const PRJ_TYPE_COMP_BACK_SYS = 1;
 	const PRJ_TYPE_COMP_BACK = 2;
 	const PRJ_TYPE_COMP_SITE = 3;
 	const PRJ_TYPE_MODEL = 4;
@@ -69,7 +69,7 @@ class langSubProject extends langFileNamesSet
 
             //--- pre check type
 
-            if ($this->prjType == langSubProject::PRJ_TYPE_COMP_SYS) {
+            if ($this->prjType == langSubProject::PRJ_TYPE_COMP_BACK_SYS) {
                 $this->isSysFiles = true;
             }
 

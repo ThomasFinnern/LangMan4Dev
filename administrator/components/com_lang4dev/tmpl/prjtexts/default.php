@@ -5,6 +5,61 @@ use Joomla\CMS\HTML\HTMLHelper;
 use Joomla\CMS\Language\Text;
 use Joomla\CMS\Router\Route;
 
+
+
+function renderSubProject ($subProject) {
+
+//	$langFile = $subProjects->getLangFile('en-GB');
+
+//	$translations = $langFile->translations;
+//	$transIdLocations = $subProjects->getTransIdLocations();
+	$transIdsClassified = $subProject->getTransIdsClassified();
+?>
+	<hr>
+    <div class="row g-4">
+        <div class="col">
+            <h3>Missing Translation IDs</h3><br>
+            <?php
+            $newItemLines = implode("<br>", $transIdsClassified['missing']);
+            echo $newItemLines;
+            ?>
+        </div>
+        <div class="col">
+            <h3>Same Lang Ids</h3><br>
+            <?php
+            $newItemLines = implode("<br>", $transIdsClassified['same']);
+            echo $newItemLines;
+            ?>
+        </div>
+        <div class="col">
+            <h3>Not Used Lang Ids</h3><br>
+            <?php
+            $newItemLines = implode("<br>", $transIdsClassified['notUsed']);
+            echo $newItemLines;
+            ?>
+        </div>
+<!--        <div class="col">-->
+<!--            <h3>Double Translation Ids</h3><br>-->
+<!--            --><?php
+////            $newItemLines = implode("<br>", $transIdsClassified['double']);
+////            echo $newItemLines;
+//            ?>
+<!--        </div>-->
+    </div>
+
+<?PHP
+
+}
+
+
+
+
+
+
+
+
+
+
 $prjFiles  = $this->prjFiles;
 
 $langFile     = $this->prjFiles->getLangFile('en-GB');
@@ -16,36 +71,19 @@ $transIdsClassified = $prjFiles->getTransIdsClassified();
 <form action="<?php echo Route::_('index.php?option=com_lang4dev&view=prjtexts'); ?>" method="post" name="adminForm" id="item-form" class="form-validate">
 
 
-    <div class="row g-4">
-        <div class="col">
-            <h3>Missing Translation IDs</h3><br>
-            <?php
-            $newItemLines = implode("<br>", $transIdsClassified['missing']);
-            echo $newItemLines;
-            ?>
-        </div>
-<!--        <div class="col">-->
-<!--            <h3>Same Lang Ids</h3><br>-->
-<!--            --><?php
-//            $newItemLines = implode("<br>", $transIdsClassified['same']);
-//            echo $newItemLines;
-//            ?>
-<!--        </div>-->
-        <div class="col">
-            <h3>Not Used Lang Ids</h3><br>
-            <?php
-            $newItemLines = implode("<br>", $transIdsClassified['notUsed']);
-            echo $newItemLines;
-            ?>
-        </div>
-<!--        <div class="col">-->
-<!--            <h3>Double Translation Ids</h3><br>-->
-<!--            --><?php
-////            $newItemLines = implode("<br>", $transIdsClassified['same']);
-////            echo $newItemLines;
-//            ?>
-<!--        </div>-->
-    </div>
+	<?php
+	$idx = 1;
+
+	$subProjects = $this->project->subProjects;
+
+	foreach ($subProjects as $subProject) {
+
+		renderSubProject ($subProject);
+
+	}
+
+	?>
+
 
 	<hr>
 	<h3>COM_LANG4DEV_TRANSLATIONS</h3><br>

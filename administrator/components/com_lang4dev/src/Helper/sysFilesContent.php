@@ -467,14 +467,14 @@ class sysFilesContent
 		$isSearchXml = false;
 		$isSearchInstall = false;
 
-		if (   $prjType == langSubProject::PRJ_TYPE_COMP_SYS
+		if (   $prjType == langSubProject::PRJ_TYPE_COMP_BACK_SYS
 			|| $prjType == langSubProject::PRJ_TYPE_MODEL
 			|| $prjType == langSubProject::PRJ_TYPE_PLUGIN
 			) {
 			$isSearchXml = true;
 		}
 
-		if (   $prjType == langSubProject::PRJ_TYPE_COMP_SYS
+		if (   $prjType == langSubProject::PRJ_TYPE_COMP_BACK_SYS
 			|| $prjType == langSubProject::PRJ_TYPE_MODEL
 			|| $prjType == langSubProject::PRJ_TYPE_PLUGIN
 			) {
@@ -488,7 +488,7 @@ class sysFilesContent
     {
         $projectFileName = $this->prjId;
 
-        if (   $this->prjType == langSubProject::PRJ_TYPE_COMP_SYS
+        if (   $this->prjType == langSubProject::PRJ_TYPE_COMP_BACK_SYS
             || $this->prjType == langSubProject::PRJ_TYPE_COMP_BACK)
         {
             // $projectFileName = 'com_' . $this->prjId;
