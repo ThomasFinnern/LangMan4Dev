@@ -6,58 +6,72 @@ use Joomla\CMS\Language\Text;
 use Joomla\CMS\Router\Route;
 
 
+function renderSubProjectMissing ($missing)
+{
+	if (count ($missing) > 0)
+	{
 
-function renderSubProject ($subProject) {
 
-//	$langFile = $subProjects->getLangFile('en-GB');
 
-//	$translations = $langFile->translations;
-//	$transIdLocations = $subProjects->getTransIdLocations();
-	$transIdsClassified = $subProject->getTransIdsClassified();
+	}
+}
+
+function renderSubProjectStatistic ($missing, $same, $notUsed, $doubles) {
+
 ?>
 	<hr>
     <div class="row g-4">
         <div class="col">
-            <h3>Missing Translation IDs</h3><br>
+	        <h3>Missing Translation IDs <?php echo ' (' . count ($missing) . ')'; ?></h3><br>
             <?php
-            $newItemLines = implode("<br>", $transIdsClassified['missing']);
-            echo $newItemLines;
+            if (count ($missing) > 0)
+            {
+	            $newItemLines = implode("<br>", $missing);
+	            echo $newItemLines;
+            } else {
+            	echo '<strong>%</strong>';
+            }
             ?>
         </div>
         <div class="col">
-            <h3>Same Lang Ids</h3><br>
+            <h3>Same Lang Ids<?php echo ' (' . count ($same) . ')'; ?></h3><br>
             <?php
-            $newItemLines = implode("<br>", $transIdsClassified['same']);
-            echo $newItemLines;
+            if (count ($same) > 0)
+            {
+//	            // ToDo: hide with button
+//	            $newItemLines = implode("<br>", $same);
+//	            echo $newItemLines;
+            } else {
+	            echo '<strong>???</strong>';
+            }
             ?>
         </div>
         <div class="col">
-            <h3>Not Used Lang Ids</h3><br>
+            <h3>Not Used Lang Ids<?php echo ' (' . count ($notUsed) . ')'; ?></h3><br>
             <?php
-            $newItemLines = implode("<br>", $transIdsClassified['notUsed']);
-            echo $newItemLines;
+            if (count ($notUsed) > 0)
+            {
+	            $newItemLines = implode("<br>", $notUsed);
+	            echo $newItemLines;
+            } else {
+	            echo '<strong>%</strong>';
+            }
             ?>
         </div>
+		<?php if (! empty ($doubles)): ?>
 <!--        <div class="col">-->
-<!--            <h3>Double Translation Ids</h3><br>-->
+<!--            <h3>Double Translation Ids<?php echo ' (' . count ($missing) . ')'; ?></h3><br>-->
 <!--            --><?php
 ////            $newItemLines = implode("<br>", $transIdsClassified['double']);
 ////            echo $newItemLines;
 //            ?>
 <!--        </div>-->
+		<?php endif; ?>
     </div>
 
 <?PHP
 
 }
-
-
-
-
-
-
-
-
 
 
 $prjFiles  = $this->prjFiles;
@@ -78,7 +92,17 @@ $transIdsClassified = $prjFiles->getTransIdsClassified();
 
 	foreach ($subProjects as $subProject) {
 
-		renderSubProject ($subProject);
+		$transIdsClassified = $subProject->getTransIdsClassified();
+
+		// ToDo: interface parameters
+		$missing = $transIdsClassified['missing'];
+		$same    = $transIdsClassified['same'];
+		$notUsed = $transIdsClassified['notUsed'];
+		$doubles  = $transIdsClassified['doubles'];
+
+		// ToDo: Use constants ?
+		renderSubProjectStatistic ($missing, $same, $notUsed, $doubles);
+		renderSubProjectMissing ($missing);
 
 	}
 

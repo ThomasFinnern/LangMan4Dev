@@ -213,12 +213,12 @@ class langSubProject extends langFileNamesSet
         $langFile = $this->langFiles [$langId];
 		[$missing, $same, $notUsed] = $langFile->separateByTransIds($codeTransIds);
 
-
-
         $transIdsClassified = [];
 		$transIdsClassified['missing'] = $missing;
 		$transIdsClassified['same'] = $same;
 		$transIdsClassified['notUsed'] = $notUsed;
+
+	    $transIdsClassified['doubles'] = $this->collectDoubles();
 
         $this->transIdsClassified = $transIdsClassified;
 
@@ -235,8 +235,17 @@ class langSubProject extends langFileNamesSet
         return $this->transIdsClassified;
     }
 
+	private function collectDoubles()
+	{
+		$doubles = [];
 
+		$langId = $this->MainLangId;
 
+		$langFile = $this->langFiles [$langId];
+		$doubles = $langFile->collectDoubles();
+
+		return $doubles;
+	}
 
 } // class
 

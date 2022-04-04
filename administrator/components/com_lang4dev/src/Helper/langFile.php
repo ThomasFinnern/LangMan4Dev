@@ -604,6 +604,30 @@ class langFile
     }
 
 
+	public function collectDoubles()
+	{
+		$doubles = [];
+
+		$doublesNames = $this->getDoubleItemNames();
+
+
+		foreach ($doublesNames as $transId) {
+
+			// ? not needed ? $doubles [$transId] = [];
+			$doubles [$transId][] = $this->translations [$transId];
+
+			foreach ($this->translationDoubles as $lineId => $translation)
+			{
+				if ($translation->transId == $transId)
+				{
+					$doubles [$transId][] = $translation;
+				}
+			}
+		}
+
+		return $doubles;
+	}
+
 
 
 } // class
