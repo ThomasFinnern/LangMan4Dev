@@ -31,6 +31,11 @@ class searchTransIdLocations
 	public $componentPrefix = '';
 	public $searchPaths = [];
 	public $transIdLocations;
+
+	public $isSysFiles = false;
+	public $prjXmlPathFilename = "";
+	public $installPathFilename = "";
+
 	protected $name = 'Lang4dev';
 
 	/**

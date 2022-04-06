@@ -22,8 +22,8 @@ class langSubProject extends langFileNamesSet
 	public $prjRootPath = '';
 	public $prjXmlFilePath = '';
 
-	public $prjXmlPathFilename;
-	public $installPathFilename;
+	public $prjXmlPathFilename = "";
+	public $installPathFilename = "";
 
     public $isSysFiles = false;
 
@@ -150,17 +150,22 @@ class langSubProject extends langFileNamesSet
         return $this->langFiles [$langId];
     }
 
-    public function scanCode4TransIdsLocations () {
+    public function scanCode4TransIdsLocations ($isSysFileFound=false) {
 
-            $searchTransIdLocations = new searchTransIdLocations ();
+		$searchTransIdLocations = new searchTransIdLocations ();
 
-            // scan project XML
-            $searchTransIdLocations->searchTransIdsInFileXML(
-                baseName($this->prjXmlPathFilename), dirname($this->prjXmlPathFilename));
+	    $searchTransIdLocations->isSysFiles = $this->isSysFiles;
+	    $searchTransIdLocations->prjXmlPathFilename = $this->prjXmlPathFilename;
+        $searchTransIdLocations->installPathFilename = $this->installPathFilename;
 
-            // scan install file
-            $searchTransIdLocations->searchTransIdsInFilePHP(
-                baseName($this->installPathFilename), dirname($this->installPathFilename));
+
+	    // scan project XML
+        $searchTransIdLocations->searchTransIdsInFileXML(
+            baseName($this->prjXmlPathFilename), dirname($this->prjXmlPathFilename));
+
+        // scan install file
+        $searchTransIdLocations->searchTransIdsInFilePHP(
+            baseName($this->installPathFilename), dirname($this->installPathFilename));
 
             $this->transIdLocations = $searchTransIdLocations->transIdLocations->items;
 
@@ -196,7 +201,7 @@ class langSubProject extends langFileNamesSet
         // if not cached or $isReadOriginal
         if (empty($this->transIdLocations) || $isScanOriginal) {
 
-            return $this->scanCode4TransIdsLocations ();
+            return $this->scanCode4TransIdsLocations ($this->isSysFiles);
         }
 
         return $this->transIdLocations;
