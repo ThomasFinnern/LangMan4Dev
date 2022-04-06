@@ -115,15 +115,28 @@ class searchTransIdLocations
 			foreach ($this->filesInDir($searchPath) as $fileName)
 			{
 				$filePath = $searchPath . DIRECTORY_SEPARATOR . $fileName;
-
 				$ext = pathinfo($filePath, PATHINFO_EXTENSION);
-				if ($ext == 'php')
+
+                //--- prevent project sys files -----------------------------------
+
+                if ($ext == 'php' && $filePath == $this->installPathFilename)
+                {
+                    continue;
+                }
+                if ($ext == 'xml' && $filePath == $this->prjXmlPathFilename)
+                {
+                    continue;
+                }
+
+                //--- scan content of valid  files -----------------------------------
+
+                if ($ext == 'php')
 				{
-					$this->searchTransIdsInFilePHP($fileName, $searchPath);
+					$this->searchTransIdsIn_PHP_file($fileName, $searchPath);
 				}
 				if ($ext == 'xml')
 				{
-					$this->searchTransIdsInFileXML($fileName, $searchPath);
+					$this->searchTransIdsIn_XML_file($fileName, $searchPath);
 				}
 			}
 
@@ -139,7 +152,7 @@ class searchTransIdLocations
 		catch (\RuntimeException $e)
 		{
 			$OutTxt = '';
-			$OutTxt .= 'Error executing findAllTranslationIds: "' . '<br>';
+			$OutTxt .= 'Error executing searchLangIdsInPath: "' . '<br>';
 			$OutTxt .= 'Error: "' . $e->getMessage() . '"' . '<br>';
 
 			$app = Factory::getApplication();
@@ -161,7 +174,7 @@ class searchTransIdLocations
 		catch (\RuntimeException $e)
 		{
 			$OutTxt = '';
-			$OutTxt .= 'Error executing findAllTranslationIds: "' . '<br>';
+			$OutTxt .= 'Error executing filesInDir: "' . '<br>';
 			$OutTxt .= 'Error: "' . $e->getMessaxge() . '"' . '<br>';
 
 			$app = Factory::getApplication();
@@ -173,7 +186,7 @@ class searchTransIdLocations
 
 	// Multiple items in one line
 
-	public function searchTransIdsInFilePHP($fileName, $path)
+	public function searchTransIdsIn_PHP_file($fileName, $path)
 	{
 		$isInComment = false;
 
@@ -218,7 +231,7 @@ class searchTransIdLocations
 		}
 		catch (\RuntimeException $e)
 		{
-			$OutTxt = 'Error executing findAllTranslationIds: "' . '<br>';
+			$OutTxt = 'Error executing searchTransIdsIn_PHP_file: "' . '<br>';
 			$OutTxt .= 'Error: "' . $e->getMessage() . '"' . '<br>';
 
 			$app = Factory::getApplication();
@@ -301,7 +314,7 @@ class searchTransIdLocations
 		catch (\RuntimeException $e)
 		{
 			$OutTxt = '';
-			$OutTxt .= 'Error executing findAllTranslationIds: "' . '<br>';
+			$OutTxt .= 'Error executing removeCommentPHP: "' . '<br>';
 			$OutTxt .= 'Error: "' . $e->getMessage() . '"' . '<br>';
 
 			$app = Factory::getApplication();
@@ -365,7 +378,7 @@ class searchTransIdLocations
 		return $items;
 	}
 
-	public function searchTransIdsInFileXML($fileName, $path)
+	public function searchTransIdsIn_XML_file($fileName, $path)
 	{
 		$isInComment = false;
 
@@ -410,7 +423,7 @@ class searchTransIdLocations
 		catch (\RuntimeException $e)
 		{
 			$OutTxt = '';
-			$OutTxt .= 'Error executing findAllTranslationIds: "' . '<br>';
+			$OutTxt .= 'Error executing searchTransIdsIn_XML_file: "' . '<br>';
 			$OutTxt .= 'Error: "' . $e->getMessage() . '"' . '<br>';
 
 			$app = Factory::getApplication();
@@ -467,7 +480,7 @@ class searchTransIdLocations
 		catch (\RuntimeException $e)
 		{
 			$OutTxt = '';
-			$OutTxt .= 'Error executing findAllTranslationIds: "' . '<br>';
+			$OutTxt .= 'Error executing removeCommentXML: "' . '<br>';
 			$OutTxt .= 'Error: "' . $e->getMessage() . '"' . '<br>';
 
 			$app = Factory::getApplication();
@@ -541,7 +554,7 @@ class searchTransIdLocations
 		catch (\RuntimeException $e)
 		{
 			$OutTxt = '';
-			$OutTxt .= 'Error executing findAllTranslationIds: "' . '<br>';
+			$OutTxt .= 'Error executing folderInDir: "' . '<br>';
 			$OutTxt .= 'Error: "' . $e->getMessage() . '"' . '<br>';
 
 			$app = Factory::getApplication();

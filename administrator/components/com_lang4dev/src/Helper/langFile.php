@@ -516,7 +516,7 @@ class langFile
 		}
 		catch (\RuntimeException $e)
 		{
-			$OutTxt = 'Error executing findAllTranslationIds: "' . '<br>';
+			$OutTxt = 'Error executing getItemNames: "' . '<br>';
 			$OutTxt .= 'Error: "' . $e->getMessage() . '"' . '<br>';
 
 			$app = Factory::getApplication();
@@ -541,7 +541,7 @@ class langFile
 		}
 		catch (\RuntimeException $e)
 		{
-			$OutTxt = 'Error executing findAllTranslationIds: "' . '<br>';
+			$OutTxt = 'Error executing getDoubleItemNames: "' . '<br>';
 			$OutTxt .= 'Error: "' . $e->getMessage() . '"' . '<br>';
 
 			$app = Factory::getApplication();

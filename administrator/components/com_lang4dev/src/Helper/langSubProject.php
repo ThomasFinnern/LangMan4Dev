@@ -24,6 +24,7 @@ class langSubProject extends langFileNamesSet
 
 	public $prjXmlPathFilename = "";
 	public $installPathFilename = "";
+    public $componentPrefix = "";
 
     public $isSysFiles = false;
 
@@ -150,7 +151,7 @@ class langSubProject extends langFileNamesSet
         return $this->langFiles [$langId];
     }
 
-    public function scanCode4TransIdsLocations ($isSysFileFound=false) {
+    public function scanCode4TransIdsLocations ($isSysFiles=false) {
 
 		$searchTransIdLocations = new searchTransIdLocations ();
 
@@ -158,16 +159,36 @@ class langSubProject extends langFileNamesSet
 	    $searchTransIdLocations->prjXmlPathFilename = $this->prjXmlPathFilename;
         $searchTransIdLocations->installPathFilename = $this->installPathFilename;
 
+        $searchTransIdLocations->componentPrefix = $this->componentPrefix;
+        // sys file selected
+        if ($isSysFiles || $this->isSysFiles) {
 
-	    // scan project XML
-        $searchTransIdLocations->searchTransIdsInFileXML(
-            baseName($this->prjXmlPathFilename), dirname($this->prjXmlPathFilename));
+            //--- scan project files  ------------------------------------
 
-        // scan install file
-        $searchTransIdLocations->searchTransIdsInFilePHP(
-            baseName($this->installPathFilename), dirname($this->installPathFilename));
+            // scan project XML
+            $searchTransIdLocations->searchTransIdsIn_XML_file(
+                baseName($this->prjXmlPathFilename), dirname($this->prjXmlPathFilename));
 
-            $this->transIdLocations = $searchTransIdLocations->transIdLocations->items;
+            // scan install file
+            $searchTransIdLocations->searchTransIdsIn_PHP_file(
+                baseName($this->installPathFilename), dirname($this->installPathFilename));
+        }
+        else {
+            //--- scan all not project files ------------------------------------
+
+            // start path
+            $searchPath = $this->prjXmlFilePath;
+            if (empty($searchPath)) {
+                $searchPath = $this->prjRootPath;
+            }
+            $searchTransIdLocations->searchPaths = array ($searchPath);
+
+            //--- do scan all not project files ------------------------------------
+
+            $searchTransIdLocations->findAllTranslationIds();
+        }
+
+        $this->transIdLocations = $searchTransIdLocations->transIdLocations->items;
 
         return $this->transIdLocations;
     }
@@ -186,7 +207,7 @@ class langSubProject extends langFileNamesSet
         }
         catch (\RuntimeException $e)
         {
-            $OutTxt = 'Error executing findAllTranslationIds: "' . '<br>';
+            $OutTxt = 'Error executing getPrjTransIdNames: "' . '<br>';
             $OutTxt .= 'Error: "' . $e->getMessage() . '"' . '<br>';
 
             $app = Factory::getApplication();

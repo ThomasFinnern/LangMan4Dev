@@ -58,15 +58,26 @@ class langFileNamesSet
 
     	if ($basePath == '') {
 
-		    $basePath = $this->basePath;
+		    $basePath = $this->langBasePath;
 	    } else {
 
 		    $this->$basePath = $basePath;
 	    }
 
+        if ($basePath == '' or $basePath == '/' or $basePath == '\\')
+        {
+            //--- path does not exist -------------------------------
+
+            $OutTxt = 'Warning: langFileNamesSet.detectBasePath: Base path invalid "' . $basePath . '"<br>';
+
+            $app = Factory::getApplication();
+            $app->enqueueMessage($OutTxt, 'warning');
+
+            return;
+        }
+
         if (!is_dir($basePath))
         {
-
             //--- path does not exist -------------------------------
 
             $OutTxt = 'Warning: langFileNamesSet.detectBasePath: Base path does not exist "' . $basePath . '"<br>';

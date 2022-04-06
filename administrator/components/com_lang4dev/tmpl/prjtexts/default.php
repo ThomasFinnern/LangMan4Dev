@@ -74,9 +74,8 @@ function renderSubProjectStatistic ($missing, $same, $notUsed, $doubles) {
 }
 
 
-$prjFiles  = $this->prjFiles;
-
-$langFile     = $this->prjFiles->getLangFile('en-GB');
+$prjFiles  = $this->prjFiles; // ToDo: remove
+$langFile     = $this->prjFiles->getLangFile('en-GB');  // ToDo: remove
 $translations = $langFile->translations;
 $transIdLocations = $prjFiles->getTransIdLocations();
 $transIdsClassified = $prjFiles->getTransIdsClassified();

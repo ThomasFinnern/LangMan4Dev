@@ -76,7 +76,7 @@ class transIdLocations
 		}
 		catch (\RuntimeException $e)
 		{
-			$OutTxt = 'Error executing findAllTranslationIds: "' . '<br>';
+			$OutTxt = 'Error executing getItemNames: "' . '<br>';
 			$OutTxt .= 'Error: "' . $e->getMessage() . '"' . '<br>';
 
 			$app = Factory::getApplication();
@@ -139,7 +139,7 @@ class transIdLocations
 		}
 		catch (\RuntimeException $e)
 		{
-			$OutTxt = 'Error executing findAllTranslationIds: "' . '<br>';
+			$OutTxt = 'Error executing _toTextNames: "' . '<br>';
 			$OutTxt .= 'Error: "' . $e->getMessage() . '"' . '<br>';
 
 			$app = Factory::getApplication();
