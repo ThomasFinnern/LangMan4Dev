@@ -10,10 +10,13 @@ function renderSubProjectMissing ($missing)
 {
 	if (count ($missing) > 0)
 	{
+		// yyyy
 
 
 
 	}
+
+
 }
 
 function renderSubProjectStatistic ($missing, $same, $notUsed, $doubles) {
@@ -38,9 +41,9 @@ function renderSubProjectStatistic ($missing, $same, $notUsed, $doubles) {
             <?php
             if (count ($same) > 0)
             {
-//	            // ToDo: hide with button
-//	            $newItemLines = implode("<br>", $same);
-//	            echo $newItemLines;
+	            // ToDo: hide with button
+	            $newItemLines = implode("<br>", $same);
+	            echo $newItemLines;
             } else {
 	            echo '<strong>???</strong>';
             }

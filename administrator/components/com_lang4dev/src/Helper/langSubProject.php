@@ -60,6 +60,10 @@ class langSubProject extends langFileNamesSet
 //	    $this->prjXmlFile = $prjXmlFile;
 //	    $this->prjScriptFile = $prjScriptFile;
 
+		if ($this->prjType == langSubProject::PRJ_TYPE_COMP_BACK_SYS)
+		{
+			$this->isSysFiles = true;
+		}
     }
 
     public function findPrjFiles () {
@@ -97,6 +101,7 @@ class langSubProject extends langFileNamesSet
                 }
 	            $this->prjXmlPathFilename  = $finder->prjXmlPathFilename;
 	            $this->installPathFilename = $finder->installPathFilename;
+	            $this->componentPrefix = $finder->componentPrefix;
             }
 
             //---   ------------------------------------

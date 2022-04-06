@@ -58,53 +58,53 @@ class HtmlView extends BaseHtmlView
 		$l4dConfig = ComponentHelper::getComponent('com_Lang4dev')->getParams();
 		$this->isDevelop = $l4dConfig->get('isDevelop');
 
-//		//--- lang4dev --------------------------------
-//
-//		$prjLang4dev = new langProject ();
-//
-//		$subPrj = $prjLang4dev->addSubProject('com_lang4dev',
-//			langSubProject::PRJ_TYPE_COMP_BACK_SYS,
-//			JPATH_ADMINISTRATOR . '/components/com_lang4dev'
-//		);
-//
-//		$subPrj = $prjLang4dev->addSubProject('com_lang4dev',
-//			langSubProject::PRJ_TYPE_COMP_BACK,
-//			JPATH_ADMINISTRATOR . '/components/com_lang4dev'
-//		);
-//
-//		$prjLang4dev->findPrjFiles();
-//        $prjLang4dev->readSubsLangFile();
-//        $prjLang4dev->scanCode4TransIds();
-//
-//        $this->project = $prjLang4dev;
-//        $this->prjFiles = $prjLang4dev->subProjects[0]; // ToDo: remove
+		//--- lang4dev --------------------------------
 
+		$prjLang4dev = new langProject ();
 
-		//--- RSGallery2 --------------------------------
-
-		$prjRsgallery2 = new langProject ();
-
-		$subPrj = $prjRsgallery2->addSubProject('com_rsgallery2',
+		$subPrj = $prjLang4dev->addSubProject('com_lang4dev',
 			langSubProject::PRJ_TYPE_COMP_BACK_SYS,
-			JPATH_ADMINISTRATOR . '/components/com_rsgallery2',
+			JPATH_ADMINISTRATOR . '/components/com_lang4dev'
 		);
 
-		$subPrj = $prjRsgallery2->addSubProject('com_rsgallery2',
+		$subPrj = $prjLang4dev->addSubProject('com_lang4dev',
 			langSubProject::PRJ_TYPE_COMP_BACK,
-			JPATH_ADMINISTRATOR. '/components/com_rsgallery2'
+			JPATH_ADMINISTRATOR . '/components/com_lang4dev'
 		);
 
-		$subPrj = $prjRsgallery2->addSubProject('com_rsgallery2',
-			langSubProject::PRJ_TYPE_COMP_SITE,
-			JPATH_SITE . '/components/com_rsgallery2'
-		);
+		$prjLang4dev->findPrjFiles();
+        $prjLang4dev->readSubsLangFile();
+        $prjLang4dev->scanCode4TransIds();
 
-		$prjRsgallery2->findPrjFiles();
-        $prjRsgallery2->readSubsLangFile();
-        $prjRsgallery2->scanCode4TransIds();
+        $this->project = $prjLang4dev;
+        $this->prjFiles = $prjLang4dev->subProjects[0]; // ToDo: remove
 
-        $this->project = $prjRsgallery2;
-        $this->prjFiles = $prjRsgallery2->subProjects[0]; // ToDo: remove
+
+//		//--- RSGallery2 --------------------------------
+//
+//		$prjRsgallery2 = new langProject ();
+//
+//		$subPrj = $prjRsgallery2->addSubProject('com_rsgallery2',
+//			langSubProject::PRJ_TYPE_COMP_BACK_SYS,
+//			JPATH_ADMINISTRATOR . '/components/com_rsgallery2',
+//		);
+//
+//		$subPrj = $prjRsgallery2->addSubProject('com_rsgallery2',
+//			langSubProject::PRJ_TYPE_COMP_BACK,
+//			JPATH_ADMINISTRATOR. '/components/com_rsgallery2'
+//		);
+//
+//		$subPrj = $prjRsgallery2->addSubProject('com_rsgallery2',
+//			langSubProject::PRJ_TYPE_COMP_SITE,
+//			JPATH_SITE . '/components/com_rsgallery2'
+//		);
+//
+//		$prjRsgallery2->findPrjFiles();
+//        $prjRsgallery2->readSubsLangFile();
+//        $prjRsgallery2->scanCode4TransIds();
+//
+//        $this->project = $prjRsgallery2;
+//        $this->prjFiles = $prjRsgallery2->subProjects[0]; // ToDo: remove
 
         /**
 		HTMLHelper::_('sidebar.setAction', 'index.php?option=com_Lang4dev&view=config&layout=RawView');

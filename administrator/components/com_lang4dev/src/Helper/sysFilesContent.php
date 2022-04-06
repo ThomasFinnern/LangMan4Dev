@@ -23,6 +23,7 @@ class sysFilesContent
 
 	public $prjXmlPathFilename;
 	public $installPathFilename;
+	public $componentPrefix;
 
 	public function findPrjFiles ($prjId='', $prjType=langSubProject::PRJ_TYPE_NONE,
                                   $prjRootPath = '', $prjXmlFilePath = '') {
@@ -209,7 +210,7 @@ class sysFilesContent
 	            if (is_file ($prjXmlPathFilename))
 	            {
 
-		            $fileName = $this->extractInstallFileName($prjXmlPathFilename);
+		            [$fileName, $componentPrefix] = $this->extractPrjVars($prjXmlPathFilename);
 
 		            $installFile = $this->prjXmlFilePath . '/' . $fileName;
 
@@ -218,6 +219,8 @@ class sysFilesContent
 			            $isFileFound = true;
 			            $this->installPathFilename = $installFile;
 		            }
+
+		            $this->componentPrefix = $componentPrefix;
 	            }
             }
 
@@ -237,9 +240,10 @@ class sysFilesContent
 
 
     // Expects it parallel to project xml file
-    public function extractInstallFileName ($prjXmlPathFileName)
+    public function extractPrjVars ($prjXmlPathFileName)
     {
         $installFileName = '';
+	    $componentPrefix = '';
 
         try {
 
@@ -268,6 +272,12 @@ class sysFilesContent
                         $installFileName = $prjArray ['scriptfile'];
 
                     }
+                    // standard : change log for each version are sub items
+                    if (array_key_exists('name', $prjArray)) {
+
+	                    $componentPrefix = $prjArray ['name'];
+
+                    }
                 }
             }
 
@@ -282,7 +292,7 @@ class sysFilesContent
             $app->enqueueMessage($OutTxt, 'error');
         }
 
-        return $installFileName;
+        return [$installFileName, $componentPrefix];
     }
 
 	public function detectLangBasePath ($basePath = '', $isSysFiles = false) {

@@ -22,6 +22,7 @@ class langProject
 	public $subProjects = [];
 
     public $isSysFileFound = false;
+	public $componentPrefix = "";
 
 
     /**
@@ -53,7 +54,7 @@ class langProject
 
 	public function findPrjFiles()
 	{
-		$isFilesFound = false;
+		//$isFilesFound = false;
 
 		try
 		{
@@ -61,8 +62,18 @@ class langProject
 			foreach ($this->subProjects as $subProject)
 			{
 
-				$subProject->findPrjFiles();
-
+				// On sys file receive componentPrefix
+				if($subProject->isSysFiles)
+				{
+					$subProject->findPrjFiles();
+					$this->componentPrefix = $subProject->componentPrefix;
+				}
+				else
+				{
+					// On not sys file assign componentPrefix
+					$subProject->componentPrefix = $this->componentPrefix;
+					$subProject->findPrjFiles();
+				}
 
                 /**
                 if ($subProject->isSysFiles) {
@@ -87,7 +98,7 @@ class langProject
 			$app->enqueueMessage($OutTxt, 'error');
 		}
 
-		return $isFilesFound;
+		return; // $isFilesFound;
 	}
 
     // one file each sub (used mostly for eng_GB)
