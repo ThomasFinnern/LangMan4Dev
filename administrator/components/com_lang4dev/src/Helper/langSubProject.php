@@ -78,36 +78,51 @@ class langSubProject extends langFileNamesSet
                 $this->isSysFiles = true;
             }
 
-            //--- Assign from function call variables ------------------------------------
+	        $hasSysFiles = ! ($this->prjType == langSubProject::PRJ_TYPE_COMP_BACK
+		        || $this->prjType == langSubProject::PRJ_TYPE_COMP_SITE);
 
-	        $finder = new sysFilesContent();
+	        // On sys file receive componentPrefix
+	        if($hasSysFiles)
+	        {
 
-	        $finder->prjId          = $this->prjId;
-	        $finder->prjType        = $this->prjType;
-	        $finder->prjRootPath    = $this->prjRootPath;
+		        //--- Assign from function call variables ------------------------------------
 
-	        // use sysFilesContent
-            // new ...;
+		        $finder = new sysFilesContent();
 
-            $isFilesFound = $finder->findPrjFiles();
+		        $finder->prjId       = $this->prjId;
+		        $finder->prjType     = $this->prjType;
+		        $finder->prjRootPath = $this->prjRootPath;
 
-            // take results
-            if($isFilesFound) {
-                // Path and name
-                if ($this->isSysFiles) {
-                    $this->prjXmlFilePath = $finder->prjXmlFilePath;
-                } else {
-                    $this->prjXmlFilePath = $this->prjRootPath;
-                }
-	            $this->prjXmlPathFilename  = $finder->prjXmlPathFilename;
-	            $this->installPathFilename = $finder->installPathFilename;
-	            $this->componentPrefix = $finder->componentPrefix;
-            }
+		        // use sysFilesContent
+		        // new ...;
 
-            //---   ------------------------------------
+		        $isFilesFound = $finder->findPrjFiles();
+
+		        // take results
+		        if ($isFilesFound)
+		        {
+			        // Path and name
+			        if ($this->isSysFiles)
+			        {
+				        $this->prjXmlFilePath = $finder->prjXmlFilePath;
+			        }
+			        else
+			        {
+				        $this->prjXmlFilePath = $this->prjRootPath;
+			        }
+			        $this->prjXmlPathFilename  = $finder->prjXmlPathFilename;
+			        $this->installPathFilename = $finder->installPathFilename;
+			        $this->componentPrefix     = $finder->componentPrefix;
+		        }
+
+		        $this->detectLangBasePath($this->prjXmlFilePath, $this->isSysFiles);
+	        }
+			else
+			{
+				$this->detectLangBasePath($this->prjRootPath, $this->isSysFiles);
+			}
 
             //$this->detectLangBasePath($this->prjRootPath);
-            $this->detectLangBasePath($this->prjXmlFilePath, $this->isSysFiles);
             $this->searchLangFiles();
 
         }
@@ -277,6 +292,41 @@ class langSubProject extends langFileNamesSet
 
 		return $doubles;
 	}
+
+	public function getPrjTypeText () {
+		$typename = '? type' ;
+
+		switch ($this->prjType){
+
+			case self::PRJ_TYPE_NONE:
+				$typename = 'type-none' ;
+				break;
+
+			case self::PRJ_TYPE_COMP_BACK_SYS:
+				$typename = 'type-backend-sys' ;
+				break;
+
+			case self::PRJ_TYPE_COMP_BACK:
+				$typename = 'type-backend' ;
+				break;
+
+			case self::PRJ_TYPE_COMP_SITE:
+				$typename = 'type-site' ;
+				break;
+
+			case self::PRJ_TYPE_MODEL:
+				$typename = 'type-model' ;
+				break;
+
+			case self::PRJ_TYPE_PLUGIN:
+				$typename = 'type-plugin' ;
+				break;
+
+		}
+
+		return $typename;
+	}
+
 
 } // class
 

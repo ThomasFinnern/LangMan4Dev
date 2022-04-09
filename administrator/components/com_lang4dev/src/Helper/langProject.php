@@ -62,17 +62,20 @@ class langProject
 			foreach ($this->subProjects as $subProject)
 			{
 
+				$hasSysFiles = ! ($subProject->prjType == langSubProject::PRJ_TYPE_COMP_BACK
+					|| $subProject->prjType == langSubProject::PRJ_TYPE_COMP_SITE);
+
 				// On sys file receive componentPrefix
-				if($subProject->isSysFiles)
-				{
 					$subProject->findPrjFiles();
+				if($hasSysFiles)
+				{
 					$this->componentPrefix = $subProject->componentPrefix;
 				}
 				else
 				{
-					// On not sys file assign componentPrefix
+					// On not sys file assign componentPrefix (ToDo: solve: may not exist yet)
 					$subProject->componentPrefix = $this->componentPrefix;
-					$subProject->findPrjFiles();
+					// $subProject->findPrjFiles();
 				}
 
                 /**

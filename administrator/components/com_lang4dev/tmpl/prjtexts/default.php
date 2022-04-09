@@ -10,10 +10,26 @@ function renderSubProjectMissing ($missing)
 {
 	if (count ($missing) > 0)
 	{
-		// yyyy
+		?>
+		<div class="card bg-light border">
+			<h3 class="card-header bg-white" >
+				<?php echo "Prepared Missing Ids"; ?>
+			</h3>
+			<div class="card-body">
+				<!-- h5 class="card-title"></h5-->
+				<p class="card-text">
+					<?php
 
+					foreach ($missing as $TransId)
+					{
+						echo $TransId . '=""<br>';
+					}
 
-
+					?>
+				</p>
+			</div>
+		</div>
+		<?php
 	}
 
 
@@ -22,11 +38,18 @@ function renderSubProjectMissing ($missing)
 function renderSubProjectStatistic ($missing, $same, $notUsed, $doubles) {
 
 ?>
-	<hr>
     <div class="row g-4">
         <div class="col">
-	        <h3>Missing Translation IDs <?php echo ' (' . count ($missing) . ')'; ?></h3><br>
-            <?php
+	        <div class="d-inline-flex position-relative">
+				<span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger border border-light">
+				    <?php echo count ($missing); ?>
+				    <span class="visually-hidden">Count missing</span>
+				</span>
+		        <h3>Missing Translation IDs&nbsp;&nbsp;&nbsp;</h3>
+	        </div>
+	        <br>
+
+	        <?php
             if (count ($missing) > 0)
             {
 	            $newItemLines = implode("<br>", $missing);
@@ -36,21 +59,48 @@ function renderSubProjectStatistic ($missing, $same, $notUsed, $doubles) {
             }
             ?>
         </div>
+
         <div class="col">
-            <h3>Same Lang Ids<?php echo ' (' . count ($same) . ')'; ?></h3><br>
+	        <div class="d-inline-flex position-relative">
+				<span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger border border-light">
+					<?php echo count ($same); ?>
+					<span class="visually-hidden">count same</span>
+				</span>
+                <h3>Same Lang Ids&nbsp;&nbsp;&nbsp;</h3>
+	        </div>
+	        <br>
+
             <?php
             if (count ($same) > 0)
             {
 	            // ToDo: hide with button
-	            $newItemLines = implode("<br>", $same);
-	            echo $newItemLines;
+				?>
+		        <a class="btn "  style="color: black; background-color: #ced4da;" data-bs-toggle="collapse" href="#collapseExample" role="button" aria-expanded="false" aria-controls="collapseExample">
+			        <?php echo Text::_('COM_LANG4DEV_SHOW_SAME'); ?>
+		        </a>
+	            <div class="collapse" id="collapseExample">
+		            <br>
+		            <?php
+		            $newItemLines = implode("<br>", $same);
+		            echo $newItemLines;
+		            ?>
+	            </div>
+	        <?php
             } else {
 	            echo '<strong>???</strong>';
             }
             ?>
         </div>
         <div class="col">
-            <h3>Not Used Lang Ids<?php echo ' (' . count ($notUsed) . ')'; ?></h3><br>
+	        <div class="d-inline-flex position-relative">
+				<span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger border border-light">
+					<?php echo count ($notUsed); ?>
+					<span class="visually-hidden">count same</span>
+				</span>
+		        <h3>Not Used Lang Ids&nbsp;&nbsp;&nbsp;</h3>
+	        </div>
+	        <br>
+
             <?php
             if (count ($notUsed) > 0)
             {
@@ -86,7 +136,6 @@ $transIdsClassified = $prjFiles->getTransIdsClassified();
 ?>
 <form action="<?php echo Route::_('index.php?option=com_lang4dev&view=prjtexts'); ?>" method="post" name="adminForm" id="item-form" class="form-validate">
 
-
 	<?php
 	$idx = 1;
 
@@ -94,17 +143,34 @@ $transIdsClassified = $prjFiles->getTransIdsClassified();
 
 	foreach ($subProjects as $subProject) {
 
-		$transIdsClassified = $subProject->getTransIdsClassified();
+		$title = $subProject->prjId . ': ' . $subProject->getPrjTypeText();
+// style="width: 18rem; bg-light .bg-transparent bg-secondary text-white
 
-		// ToDo: interface parameters
-		$missing = $transIdsClassified['missing'];
-		$same    = $transIdsClassified['same'];
-		$notUsed = $transIdsClassified['notUsed'];
-		$doubles  = $transIdsClassified['doubles'];
+		?>
+		<div class="card ">
+			<h2 class="card-header " style="background-color: #ced4da;">
+				<?php echo $title; ?>
+			</h2>
+			<div class="card-body">
+			    <!-- h5 class="card-title"></h5-->
+				<p class="card-text">
+				<?php
+				$transIdsClassified = $subProject->getTransIdsClassified();
 
-		// ToDo: Use constants ?
-		renderSubProjectStatistic ($missing, $same, $notUsed, $doubles);
-		renderSubProjectMissing ($missing);
+				// ToDo: interface parameters
+				$missing = $transIdsClassified['missing'];
+				$same    = $transIdsClassified['same'];
+				$notUsed = $transIdsClassified['notUsed'];
+				$doubles  = $transIdsClassified['doubles'];
+
+				// ToDo: Use constants ?
+				renderSubProjectStatistic ($missing, $same, $notUsed, $doubles);
+				renderSubProjectMissing ($missing);
+				?>
+				</p>
+			</div>
+		</div>
+		<?php
 
 	}
 
