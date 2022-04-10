@@ -310,7 +310,7 @@ class sysFilesContent
 
 			//--- path does not exist -------------------------------
 
-			$OutTxt = 'Warning: langFileNamesSet.detectBasePath: Base path does not exist "' . $basePath . '"<br>';
+			$OutTxt = 'Warning: sysFilesContent.detectBasePath: Base path does not exist "' . $basePath . '"<br>';
 
 			$app = Factory::getApplication();
 			$app->enqueueMessage($OutTxt, 'warning');
@@ -328,7 +328,7 @@ class sysFilesContent
 
 			//--- path does not exist -------------------------------
 
-			$OutTxt = 'Warning: langFileNamesSet.detectBasePath: Base path not found within  "' . $basePath . '"<br>';
+			$OutTxt = 'Warning: sysFilesContent.detectBasePath: Base path not found within  "' . $basePath . '"<br>';
 
 			$app = Factory::getApplication();
 			$app->enqueueMessage($OutTxt, 'warning');

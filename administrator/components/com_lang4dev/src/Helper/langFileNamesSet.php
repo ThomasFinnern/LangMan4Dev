@@ -98,7 +98,7 @@ class langFileNamesSet
 
             //--- path does not exist -------------------------------
 
-            $OutTxt = 'Warning: langFileNamesSet.detectBasePath: Base path not found within  "' . $basePath . '"<br>';
+            $OutTxt = 'Warning: langFileNamesSet.searchDir4LangID: Base path for lang names not found below  "' . $basePath . '"<br>';
 
             $app = Factory::getApplication();
             $app->enqueueMessage($OutTxt, 'warning');

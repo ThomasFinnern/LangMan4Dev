@@ -11,6 +11,7 @@ namespace Finnern\Component\Lang4dev\Administrator\View\PrjTexts;
 
 \defined('_JEXEC') or die;
 
+require_once(__DIR__ . '/../../Helper/selectProject.php');
 use Joomla\CMS\Component\ComponentHelper;
 use Joomla\CMS\Filesystem\File;
 use Joomla\CMS\Filesystem\Path;
@@ -25,11 +26,10 @@ use Joomla\CMS\Toolbar\Toolbar;
 use Joomla\CMS\Toolbar\ToolbarHelper;
 
 use Finnern\Component\Lang4dev\Administrator\Helper\langFile;
-use Finnern\Component\Lang4dev\Administrator\Helper\langProject;
 //use Finnern\Component\Lang4dev\Administrator\Helper\langFileNamesSet;
 //use Finnern\Component\Lang4dev\Administrator\Helper\transIdLocationsSearch;
 use Finnern\Component\Lang4dev\Administrator\Helper\langSubProject;
-
+use function Finnern\Component\Lang4dev\Administrator\Helper\selectProject;
 
 /**
  * View class for a list of lang4dev.
@@ -58,53 +58,17 @@ class HtmlView extends BaseHtmlView
 		$l4dConfig = ComponentHelper::getComponent('com_Lang4dev')->getParams();
 		$this->isDevelop = $l4dConfig->get('isDevelop');
 
-		//--- lang4dev --------------------------------
+		$project =
+		$this->project = selectProject('lang4dev');
+//		$this->project = selectProject('rsgallery');
+//		$this->project = selectProject('joomgallery');
+////		$this->project = selectProject('joomla4x');
 
-		$prjLang4dev = new langProject ();
-
-		$subPrj = $prjLang4dev->addSubProject('com_lang4dev',
-			langSubProject::PRJ_TYPE_COMP_BACK_SYS,
-			JPATH_ADMINISTRATOR . '/components/com_lang4dev'
-		);
-
-		$subPrj = $prjLang4dev->addSubProject('com_lang4dev',
-			langSubProject::PRJ_TYPE_COMP_BACK,
-			JPATH_ADMINISTRATOR . '/components/com_lang4dev'
-		);
-
-		$prjLang4dev->findPrjFiles();
-        $prjLang4dev->readSubsLangFile();
-        $prjLang4dev->scanCode4TransIds();
-
-        $this->project = $prjLang4dev;
-        $this->prjFiles = $prjLang4dev->subProjects[0]; // ToDo: remove
+		$project->findPrjFiles();
+		$project->readSubsLangFile();
+		$project->scanCode4TransIds();
 
 
-//		//--- RSGallery2 --------------------------------
-//
-//		$prjRsgallery2 = new langProject ();
-//
-//		$subPrj = $prjRsgallery2->addSubProject('com_rsgallery2',
-//			langSubProject::PRJ_TYPE_COMP_BACK_SYS,
-//			JPATH_ADMINISTRATOR . '/components/com_rsgallery2',
-//		);
-//
-//		$subPrj = $prjRsgallery2->addSubProject('com_rsgallery2',
-//			langSubProject::PRJ_TYPE_COMP_BACK,
-//			JPATH_ADMINISTRATOR. '/components/com_rsgallery2'
-//		);
-//
-//		$subPrj = $prjRsgallery2->addSubProject('com_rsgallery2',
-//			langSubProject::PRJ_TYPE_COMP_SITE,
-//			JPATH_SITE . '/components/com_rsgallery2'
-//		);
-//
-//		$prjRsgallery2->findPrjFiles();
-//        $prjRsgallery2->readSubsLangFile();
-//        $prjRsgallery2->scanCode4TransIds();
-//
-//        $this->project = $prjRsgallery2;
-//        $this->prjFiles = $prjRsgallery2->subProjects[0]; // ToDo: remove
 
         /**
 		HTMLHelper::_('sidebar.setAction', 'index.php?option=com_Lang4dev&view=config&layout=RawView');

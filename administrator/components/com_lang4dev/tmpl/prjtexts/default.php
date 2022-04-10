@@ -75,7 +75,7 @@ function renderSubProjectStatistic ($missing, $same, $notUsed, $doubles) {
             {
 	            // ToDo: hide with button
 				?>
-		        <a class="btn "  style="color: black; background-color: #ced4da;" data-bs-toggle="collapse" href="#collapseExample" role="button" aria-expanded="false" aria-controls="collapseExample">
+		        <a class="btn btn-sm"  style="color: black; background-color: #ced4da;" data-bs-toggle="collapse" href="#collapseExample" role="button" aria-expanded="false" aria-controls="collapseExample">
 			        <?php echo Text::_('COM_LANG4DEV_SHOW_SAME'); ?>
 		        </a>
 	            <div class="collapse" id="collapseExample">
@@ -126,9 +126,8 @@ function renderSubProjectStatistic ($missing, $same, $notUsed, $doubles) {
 
 }
 
-
-$prjFiles  = $this->prjFiles; // ToDo: remove
-$langFile     = $this->prjFiles->getLangFile('en-GB');  // ToDo: remove
+$prjFiles  = $this->project->subProjects[0];; // ToDo: remove
+$langFile     = $prjFiles->getLangFile('en-GB');  // ToDo: remove
 $translations = $langFile->translations;
 $transIdLocations = $prjFiles->getTransIdLocations();
 $transIdsClassified = $prjFiles->getTransIdsClassified();
