@@ -116,6 +116,9 @@ class HtmlView extends BaseHtmlView
 				break;
 		}
 
+		// Set the title
+		ToolBarHelper::title(Text::_('COM_LANG4DEV_SUBMENU_TRANSLATIONS'), 'book');
+
 		// Options button.
 		if (Factory::getApplication()->getIdentity()->authorise('core.admin', 'com_lang4dev'))
 		{

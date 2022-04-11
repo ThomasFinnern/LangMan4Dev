@@ -22,6 +22,7 @@ use Joomla\CMS\Session\Session;
 //HTMLHelper::_('script', 'com_rsgallery2/backend/maintenance.js', ['version' => 'auto', 'relative' => true]);
 
 Text::script('COM_RSGALLERY2_PLEASE_CHOOSE_A_GALLERY_FIRST', true);
+HTMLHelper::_('stylesheet', 'com_lang4dev/backend/controlPanel.css', array('version' => 'auto', 'relative' => true));
 
 
 // command buttons
@@ -95,20 +96,20 @@ function DisplayButton($button)
 	<div class="rsg2-icon-button-container" style="border: #0a53be;" >
 		<button type="button" class="btn ">
 
-		<a href="<?php echo $button->link; ?>" class="<?php echo $button->classButton; ?>">
-			<figure class="lang4dev-icon">
-                <?php
-                foreach ($button->classIcons as $Idx => $imageClass )
-                {
-                echo '            <span class="' . $imageClass . ' icoMoon icoMoon0' . $Idx . '" style="font-size:30px;"></span>'; // style="font-size:30px;"
-                }
-                ?>
-				<figcaption class="rsg2-text">
-	                <div class="maint-title"><strong><?php echo $button->textTitle; ?></strong></div>
-	                <div class="maint-text"><?php echo $button->textInfo; ?></div>
-	            </figcaption>
-		    </figure>
-		</a>
+			<a href="<?php echo $button->link; ?>" class="<?php echo $button->classButton; ?>">
+				<figure class="lang4dev-icon">
+	                <?php
+	                foreach ($button->classIcons as $Idx => $imageClass )
+	                {
+		                echo '            <span class="' . $imageClass . ' icoMoon icoMoon0' . $Idx . '" style="font-size:30px;"></span>'; // style="font-size:30px;"
+	                }
+	                ?>
+					<figcaption class="rsg2-text">
+		                <div class="maint-title"><strong><?php echo $button->textTitle; ?></strong></div>
+		                <div class="maint-text"><?php echo $button->textInfo; ?></div>
+		            </figcaption>
+			    </figure>
+			</a>
 
 		</button>
 	</div>
@@ -124,27 +125,34 @@ function DisplayControlButtons ($cmdButtons){
 
 }
 
+
+
 ?>
 
     <form action="<?php echo Route::_('index.php?option=com_lang4dev'); ?>"
           method="post" name="adminForm" id="adminForm" class="form-validate">
 
-        <div class="horizontal-bar" style="display: flex; align-items: flex-start;">
+        <div class="main-horizontal-bar" style="display: flex; flex-direction: row; justify-content: flex-start;">
             <?php
                 //--- Logo -----------------------------
                 DisplayLogo();
             ?>
 
-            <div class="" style="display: flex; flex-direction: column; align-content: space-between; ">
-                <h2><?php echo Text::_('COM_LANG4DEV_LANG4DEV') ;?></h2>
-                <strong><?php echo Text::_('COM_LANG4DEV_LANG4DEV_DESC') ;?></strong>
-
-                <div class="horizontal-buttons" style="display: flex; flex-direction: row; align-content: space-between; ">
-                    <?php
-                        //--- Control buttons ------------------
-                        DisplayControlButtons($cmdButtons);
-                    ?>
-                </div>
+			<div class="main-vertical-stack" style="display: flex; flex-direction: column; justify-content: space-between">
+				<div class="vertical-header" >
+					<br>
+					<br>
+					<h2><?php echo Text::_('COM_LANG4DEV_LANG4DEV') ;?></h2>
+					<strong><?php echo Text::_('COM_LANG4DEV_LANG4DEV_DESC') ;?></strong>
+				</div> 
+				<div class="horizontal-buttons" style="display: flex; flex-direction: row; align-content: space-around; ">
+					<?php
+						//--- Control buttons ------------------
+						DisplayControlButtons($cmdButtons);
+					?>
+				</div>
+				<div class="vertical-empty-part3">
+				</div>
             </div>
         </div>
         <hr>

@@ -163,7 +163,7 @@ class HtmlView extends BaseHtmlView
         }
 
         // Set the title
-        ToolBarHelper::title(Text::_('COM_RSGALLERY2_SUBMENU_CONTROL_PANEL'), 'home-2');
+        ToolBarHelper::title(Text::_('COM_LANG4DEV_SUBMENU_CONTROL_PANEL'), 'home-2');
 
         // Options button.
         if (Factory::getApplication()->getIdentity()->authorise('core.admin', 'com_rsgallery2'))
