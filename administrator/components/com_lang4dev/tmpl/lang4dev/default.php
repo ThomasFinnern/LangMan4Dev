@@ -140,18 +140,16 @@ function DisplayControlButtons ($cmdButtons){
 
 			<div class="main-vertical-stack" style="display: flex; flex-direction: column; justify-content: space-between">
 				<div class="vertical-header" >
-					<br>
-					<br>
 					<h2><?php echo Text::_('COM_LANG4DEV_LANG4DEV') ;?></h2>
 					<strong><?php echo Text::_('COM_LANG4DEV_LANG4DEV_DESC') ;?></strong>
 				</div> 
-				<div class="horizontal-buttons" style="display: flex; flex-direction: row; align-content: space-around; ">
+				<div class="horizontal-buttons" style="display: flex; flex-direction: row; align-content: space-between; ">
 					<?php
 						//--- Control buttons ------------------
 						DisplayControlButtons($cmdButtons);
 					?>
 				</div>
-				<div class="vertical-empty-part3">
+				<div class="vertical-empty-part3" style="min-height: 20px;">
 				</div>
             </div>
         </div>
