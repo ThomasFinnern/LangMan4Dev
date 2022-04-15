@@ -26,6 +26,9 @@ class langSubProject extends langFileNamesSet
 	public $installPathFilename = "";
     public $componentPrefix = "";
 
+    // !!! ToDo: text_prefix !!!
+    // public $text_prefix;
+
     public $isSysFiles = false;
 
     protected $langFiles = []; // $langId -> translation file(s)

@@ -23,6 +23,7 @@ use Joomla\CMS\Toolbar\Toolbar;
 use Joomla\CMS\Toolbar\ToolbarHelper;
 
 use Finnern\Component\Lang4dev\Administrator\Helper\Lang4devHelper;
+use Joomla\Component\Content\Administrator\Extension\ContentComponent;
 
 /**
  * View class for a list of lang4dev.
@@ -31,9 +32,47 @@ use Finnern\Component\Lang4dev\Administrator\Helper\Lang4devHelper;
  */
 class HtmlView extends BaseHtmlView
 {
-	//protected $configVars;
+    /**
+     * An array of items
+     *
+     * @var  array
+     */
+    protected $items;
 
-	/**
+    /**
+     * The model state
+     *
+     * @var  \JObject
+     */
+    protected $state;
+
+    /**
+     * The pagination object
+     *
+     * @var    Pagination
+     * @since __BUMP_VERSION__
+     */
+    protected $pagination;
+    /**
+     * Form object for search filters
+     *
+     * @var  \JForm
+     */
+    public $filterForm;
+
+    /**
+     * The active search filters
+     *
+     * @var  array
+     */
+    public $activeFilters;
+
+
+//    protected $isDebugBackend;
+    protected $isDevelop;
+
+
+    /**
 	 * Method to display the view.
 	 *
 	 * @param   string  $tpl  A template file to load. [optional]
@@ -50,6 +89,15 @@ class HtmlView extends BaseHtmlView
 		$l4dConfig = ComponentHelper::getComponent('com_Lang4dev')->getParams();
 		$this->isDevelop = $l4dConfig->get('isDevelop');
 
+        $this->items         = $this->get('Items');
+        $errors = $this->get('Errors');
+        $this->state         = $this->get('State');
+        $errors = $this->get('Errors');
+        $this->filterForm    = $this->get('FilterForm');
+        $errors = $this->get('Errors');
+        $this->pagination    = $this->get('Pagination');
+        $errors = $this->get('Errors');
+        $this->activeFilters = $this->get('ActiveFilters');
 
 		//---  --------------------------------------------------------------
 		/**
@@ -74,59 +122,113 @@ class HtmlView extends BaseHtmlView
 	 * @since __BUMP_VERSION__
 	 */
 	protected function addToolbar($Layout)
-	{
-		// Get the toolbar object instance
-		$toolbar = Toolbar::getInstance('toolbar');
+    {
+        //$canDo = \Joomla\Component\Content\Administrator\Helper\ContentHelper::getActions('com_content', 'category', $this->state->get('filter.category_id'));
+        $canDo = true;
+        $user = Factory::getUser();
 
-		// on develop show open tasks if existing
-		if (!empty ($this->isDevelop))
-		{
-			echo '<span style="color:red">'
-				. 'Tasks: <br>'
-				. '* <br>'
-				. '* <br>'
+        // Get the toolbar object instance
+        $toolbar = Toolbar::getInstance('toolbar');
+
+        // on develop show open tasks if existing
+        if (!empty ($this->isDevelop)) {
+            echo '<span style="color:red">'
+                . 'Tasks: <br>'
+                . '* <br>'
+                . '* <br>'
 //				. '* <br>'
 //				. '* <br>'
 //				. '* <br>'
 //				. '* <br>'
-				. '</span><br><br>';
-		}
+                . '</span><br><br>';
+        }
 
-		switch ($Layout)
-		{
-			/**
-			case 'RawView':
-				ToolBarHelper::title(Text::_('COM_Lang4dev_MAINTENANCE')
-					. ': ' . Text::_('COM_Lang4dev_CONFIGURATION_RAW_VIEW'), 'screwdriver');
-				ToolBarHelper::cancel('config.cancel_rawView', 'JTOOLBAR_CLOSE');
+        switch ($Layout) {
+            /**
+             * case 'RawView':
+             * ToolBarHelper::title(Text::_('COM_Lang4dev_MAINTENANCE')
+             * . ': ' . Text::_('COM_Lang4dev_CONFIGURATION_RAW_VIEW'), 'screwdriver');
+             * ToolBarHelper::cancel('config.cancel_rawView', 'JTOOLBAR_CLOSE');
+             *
+             *
+             * break;
+             *
+             * case 'RawEdit':
+             * ToolBarHelper::title(Text::_('COM_Lang4dev_MAINTENANCE')
+             * . ': ' . Text::_('COM_Lang4dev_CONFIGURATION_RAW_EDIT'), 'screwdriver');
+             * ToolBarHelper::apply('config.apply_rawEdit');
+             * ToolBarHelper::save('config.save_rawEdit');
+             * ToolBarHelper::cancel('config.cancel_rawEdit', 'JTOOLBAR_CLOSE');
+             * break;
+             * /**/
+            default:
+                // Set the title
+                ToolBarHelper::title(Text::_('COM_LANG4DEV_SUBMENU_PROJECTS_PANEL'), 'edit');
+
+                ToolBarHelper::addNew('project.add');
+
+                /**
+                if ($canDo->get('core.edit.state') || count($this->transitions)) {
+                    $dropdown = $toolbar->dropdownButton('status-group')
+                        ->text('JTOOLBAR_CHANGE_STATUS')
+                        ->toggleSplit(false)
+                        ->icon('fa fa-ellipsis-h')
+                        ->buttonClass('btn btn-action')
+                        ->listCheck(true);
+
+                    $childBar = $dropdown->getChildToolbar();
+
+                    if ($canDo->get('core.edit.state')) {
+                        $childBar->publish('images.publish')->listCheck(true);
+
+                        $childBar->unpublish('images.unpublish')->listCheck(true);
+
+                        $childBar->archive('images.archive')->listCheck(true);
+
+                        $childBar->checkin('images.checkin')->listCheck(true);
+
+                        $childBar->trash('images.trash')->listCheck(true);
+
+                        // $toolbar->standardButton('refresh')
+                        // 	->text('JTOOLBAR_REBUILD')
+                        // 	->task('image.rebuild');
+
+                    }
 
 
-				break;
+//                    if ($this->state->get('filter.published') == ContentComponent::CONDITION_TRASHED
+//                        && $canDo->get('core.delete'))
+                    if ($canDo->get('core.delete')) {
+                        $toolbar->delete('images.delete')
+                            ->text('JTOOLBAR_EMPTY_TRASH')
+                            ->message('JGLOBAL_CONFIRM_DELETE')
+                            ->listCheck(true);
+                    }
 
-			case 'RawEdit':
-				ToolBarHelper::title(Text::_('COM_Lang4dev_MAINTENANCE')
-					. ': ' . Text::_('COM_Lang4dev_CONFIGURATION_RAW_EDIT'), 'screwdriver');
-				ToolBarHelper::apply('config.apply_rawEdit');
-				ToolBarHelper::save('config.save_rawEdit');
-				ToolBarHelper::cancel('config.cancel_rawEdit', 'JTOOLBAR_CLOSE');
-				break;
-			/**/
-			default:
+                    ToolBarHelper::custom('imagesProperties.PropertiesView', 'next', 'next', 'COM_RSGALLERY2_ADD_IMAGE_PROPERTIES', true);
+                    // ToolBarHelper::editList('image.edit');
+
+
+                }
+                /**/
+
+                $toolbar->delete('projects.delete')
+                    ->text('JTOOLBAR_EMPTY_TRASH')
+                    ->message('JGLOBAL_CONFIRM_DELETE')
+                    ->listCheck(true);
+
+
                 ToolBarHelper::cancel('lang4dev.cancel', 'JTOOLBAR_CLOSE');
-				break;
-		}
 
-		// Set the title
-		ToolBarHelper::title(Text::_('COM_LANG4DEV_SUBMENU_PROJECTS_PANEL'), 'edit');
+                // Options button.
+                if (Factory::getApplication()->getIdentity()->authorise('core.admin', 'com_lang4dev')) {
+                    $toolbar->preferences('com_Lang4dev');
+                }
 
-		// Options button.
-		if (Factory::getApplication()->getIdentity()->authorise('core.admin', 'com_lang4dev'))
-		{
-			$toolbar->preferences('com_Lang4dev');
-		}
-	}
+            break;
+        }  // switch
 
-
+    }
 
 }
 
