@@ -1,11 +1,10 @@
 <?php
 /**
- * @package     RSGallery2
- * @subpackage  com_rsgallery2
- * @copyright   (C) 2016-2021 RSGallery2 Team
+ * @package     Lang4dev
+ * @subpackage  com_lang4dev
+ * @copyright (C) 2022-2022 Lang4dev Team
  * @license     http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @author      finnern
- * RSGallery is Free Software
  */
 
 namespace Finnern\Component\Lang4dev\Administrator\Controller;

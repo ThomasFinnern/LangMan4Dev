@@ -3,7 +3,7 @@
  * @package     Joomla.Administrator
  * @subpackage  com_lang4dev
  *
- * @copyright
+ * @copyright (C) 2022-2022 Lang4dev Team
  * @license     GNU General Public License version 2 or later; see LICENSE.txt
  */
 
@@ -661,66 +661,66 @@ class ProjectModel extends AdminModel
 			$isNew = false;
 		}
 
-		// Set the new parent id if parent id not matched OR while New/Save as Copy .
-		if ($table->parent_id != $data['parent_id'] || $data['id'] == 0)
-		{
-			$table->setLocation($data['parent_id'], 'last-child');
-		}
+//		// Set the new parent id if parent id not matched OR while New/Save as Copy .
+//		if ($table->parent_id != $data['parent_id'] || $data['id'] == 0)
+//		{
+//			$table->setLocation($data['parent_id'], 'last-child');
+//		}
+//
+//		// ToDo: use name instead of title ?
+//		// Alter the title for save as copy
+//		if ($input->get('task') == 'save2copy')
+//		{
+//			$origTable = clone $this->getTable();
+//			$origTable->load($input->getInt('id'));
+//
+//			if ($data['title'] == $origTable->title)
+//			{
+//				list($title, $alias) = $this->generateNewTitle($data['parent_id'], $data['alias'], $data['title']);
+//				$data['title'] = $title;
+//				$data['alias'] = $alias;
+//			}
+//			else
+//			{
+//				if ($data['alias'] == $origTable->alias)
+//				{
+//					$data['alias'] = '';
+//				}
+//			}
+//
+//			$data['published'] = 0;
+//		}
 
-		// ToDo: use name instead of title ?
-		// Alter the title for save as copy
-		if ($input->get('task') == 'save2copy')
-		{
-			$origTable = clone $this->getTable();
-			$origTable->load($input->getInt('id'));
-
-			if ($data['title'] == $origTable->title)
-			{
-				list($title, $alias) = $this->generateNewTitle($data['parent_id'], $data['alias'], $data['title']);
-				$data['title'] = $title;
-				$data['alias'] = $alias;
-			}
-			else
-			{
-				if ($data['alias'] == $origTable->alias)
-				{
-					$data['alias'] = '';
-				}
-			}
-
-			$data['published'] = 0;
-		}
-
-        // Automatic handling of alias for empty fields
-        if (in_array($input->get('task'), array('apply', 'save', 'save2new')) && (!isset($data['id']) || (int) $data['id'] == 0))
-        {
-            if ($data['alias'] == null)
-            {
-                if (Factory::getApplication()->get('unicodeslugs') == 1)
-                {
-                    $data['alias'] = \JFilterOutput::stringURLUnicodeSlug($data['title']);
-                }
-                else
-                {
-                    $data['alias'] = \JFilterOutput::stringURLSafe($data['title']);
-                }
-
-                $table = Table::getInstance('Content', 'JTable');
-
-                if ($table->load(array('alias' => $data['alias'], 'catid' => $data['catid'])))
-                {
-                    $msg = Text::_('COM_CONTENT_SAVE_WARNING');
-                }
-
-                list($title, $alias) = $this->generateNewTitle($data['catid'], $data['alias'], $data['title']);
-                $data['alias'] = $alias;
-
-                if (isset($msg))
-                {
-                    Factory::getApplication()->enqueueMessage($msg, 'warning');
-                }
-            }
-        }
+//        // Automatic handling of alias for empty fields
+//        if (in_array($input->get('task'), array('apply', 'save', 'save2new')) && (!isset($data['id']) || (int) $data['id'] == 0))
+//        {
+//            if ($data['alias'] == null)
+//            {
+//                if (Factory::getApplication()->get('unicodeslugs') == 1)
+//                {
+//                    $data['alias'] = \JFilterOutput::stringURLUnicodeSlug($data['title']);
+//                }
+//                else
+//                {
+//                    $data['alias'] = \JFilterOutput::stringURLSafe($data['title']);
+//                }
+//
+//                $table = Table::getInstance('Content', 'JTable');
+//
+//                if ($table->load(array('alias' => $data['alias'], 'catid' => $data['catid'])))
+//                {
+//                    $msg = Text::_('COM_CONTENT_SAVE_WARNING');
+//                }
+//
+//                list($title, $alias) = $this->generateNewTitle($data['catid'], $data['alias'], $data['title']);
+//                $data['alias'] = $alias;
+//
+//                if (isset($msg))
+//                {
+//                    Factory::getApplication()->enqueueMessage($msg, 'warning');
+//                }
+//            }
+//        }
 
 //        // Bind the data.
 //		if (!$table->bind($data))
@@ -895,653 +895,47 @@ class ProjectModel extends AdminModel
 
 	}
 
-	// expected name/alias  is unique
-	public function createProject ($galleryName, $parentId=1, $description='')
-    {
-        $isCreated = false;
+//	// expected name/alias  is unique
+//	public function createProject ($galleryName, $parentId=1, $description='')
+//    {
+//        $isCreated = false;
+//
+//        try {
+//
+//            $data = [];
+//
+//            $data ['name'] = $galleryName;
+//            $data ['alias'] = $galleryName;
+//            $data ['parent_id'] = $parentId;
+//            $data ['description'] = $description;
+//
+//            $data ['note'] = '';
+//
+//
+//            $isCreated = $this->save ($data);
+//            // $isCreated = true;
+//
+//
+//            // Check for errors.
+//            if (count($errors = $this->get('_errors')))
+//            {
+//                throw new GenericDataException(implode("\n", $errors), 500);
+//            }
+//
+//
+//
+//
+//        } catch (\RuntimeException $e) {
+//            Factory::getApplication()->enqueueMessage($e->getMessage(), 'error');
+//        }
+//
+//
+//
+//
+//        return $isCreated;
+//    }
+//
 
-        try {
 
-            $data = [];
-
-            $data ['name'] = $galleryName;
-            $data ['alias'] = $galleryName;
-            $data ['parent_id'] = $parentId;
-            $data ['description'] = $description;
-
-            $data ['note'] = '';
-
-
-            $isCreated = $this->save ($data);
-            // $isCreated = true;
-
-
-            // Check for errors.
-            if (count($errors = $this->get('_errors')))
-            {
-                throw new GenericDataException(implode("\n", $errors), 500);
-            }
-
-
-
-
-        } catch (\RuntimeException $e) {
-            Factory::getApplication()->enqueueMessage($e->getMessage(), 'error');
-        }
-
-
-
-
-        return $isCreated;
-    }
-
-
-
-
-
-	/**
-	 * Method to change the published state of one or more records.
-	 *
-	 * @param   array    &$pks   A list of the primary keys to change.
-	 * @param   integer  $value  The value of the published state.
-	 *
-	 * @return  boolean  True on success.
-	 *
-	 * @since __BUMP_VERSION__
-	 */
-	public function publish(&$pks, $value = 1)
-	{
-		if (parent::publish($pks, $value))
-		{
-			$extension = Factory::getApplication()->input->get('extension');
-
-			// Include the content plugins for the change of category state event.
-			PluginHelper::importPlugin('content');
-
-			// Trigger the onCategoryChangeState event.
-			Factory::getApplication()->triggerEvent('onCategoryChangeState', array($extension, $pks, $value));
-
-			return true;
-		}
-	}
-
-	/**
-	 * Method rebuild the entire nested set tree.
-	 *
-	 * @return  boolean  False on failure or error, true otherwise.
-	 *
-	 * @since __BUMP_VERSION__
-	 */
-	public function rebuild()
-	{
-		// Get an instance of the table object.
-		$table = $this->getTable();
-
-		if (!$table->rebuild())
-		{
-			$this->setError($table->getError());
-
-			return false;
-		}
-
-		// Clear the cache
-		$this->cleanCache();
-
-		return true;
-	}
-
-	/**
-	 * Method to save the reordered nested set tree.
-	 * First we save the new order values in the lft values of the changed ids.
-	 * Then we invoke the table rebuild to implement the new ordering.
-	 *
-	 * @param   array    $idArray    An array of primary key ids.
-	 * @param   integer  $lft_array  The lft value
-	 *
-	 * @return  boolean  False on failure or error, True otherwise
-	 *
-	 * @since __BUMP_VERSION__
-	 */
-	public function saveorder($idArray = null, $lft_array = null)
-	{
-		// Get an instance of the table object.
-		$table = $this->getTable();
-
-		if (!$table->saveorder($idArray, $lft_array))
-		{
-			$this->setError($table->getError());
-
-			return false;
-		}
-
-		// Clear the cache
-		$this->cleanCache();
-
-		return true;
-	}
-
-	/**
-	 * Batch flip category ordering.
-	 *
-	 * @param   integer  $value     The new category.
-	 * @param   array    $pks       An array of row IDs.
-	 * @param   array    $contexts  An array of item contexts.
-	 *
-	 * @return  mixed    An array of new IDs on success, boolean false on failure.
-	 *
-	 * @since __BUMP_VERSION__
-	 */
-	protected function batchFlipOrdering($value, $pks, $contexts)
-	{
-		$successful = array();
-
-        try {
-
-            $db = $this->getDbo();
-            $query = $db->getQuery(true);
-
-            /**
-             * For each category get the max ordering value
-             * Re-order with max - ordering
-             */
-            foreach ($pks as $id) {
-                $query->select('MAX(ordering)')
-                    ->from('#__content')
-                    ->where($db->quoteName('catid') . ' = ' . $db->quote($id));
-
-                $db->setQuery($query);
-
-                $max = (int)$db->loadresult();
-                $max++;
-
-                $query->clear();
-
-                $query->update('#__content')
-                    ->set($db->quoteName('ordering') . ' = ' . $max . ' - ' . $db->quoteName('ordering'))
-                    ->where($db->quoteName('catid') . ' = ' . $db->quote($id));
-
-                $db->setQuery($query);
-
-                if ($db->execute()) {
-                    $successful[] = $id;
-                }
-            }
-
-
-        }
-        catch (\RuntimeException $e)
-        {
-            Factory::getApplication()->enqueueMessage($e->getMessage(), 'error');
-        }
-
-        return empty($successful) ? false : $successful;
-	}
-
-	/**
-	 * Batch copy galleries to a new gallery.
-	 *
-	 * @param   integer  $value     The new category.
-	 * @param   array    $pks       An array of row IDs.
-	 * @param   array    $contexts  An array of item contexts.
-	 *
-	 * @return  mixed    An array of new IDs on success, boolean false on failure.
-	 *
-	 * @since __BUMP_VERSION__
-	 */
-	protected function batchCopy($value, $pks, $contexts)
-	{
-		$type = new UCMType;
-		$this->type = $type->getTypeByAlias($this->typeAlias);
-
-		// $value comes as {parent_id}.{extension}
-		$parts = explode('.', $value);
-		$parentId = (int) ArrayHelper::getValue($parts, 0, 1);
-
-		$db = $this->getDbo();
-		$extension = Factory::getApplication()->input->get('extension', '', 'word');
-		$newIds = array();
-
-		// Check that the parent exists
-		if ($parentId)
-		{
-			if (!$this->table->load($parentId))
-			{
-				if ($error = $this->table->getError())
-				{
-					// Fatal error
-					$this->setError($error);
-
-					return false;
-				}
-				else
-				{
-					// Non-fatal error
-					$this->setError(Text::_('JGLOBAL_BATCH_MOVE_PARENT_NOT_FOUND'));
-					$parentId = 0;
-				}
-			}
-
-			// Check that user has create permission for parent category
-			if ($parentId == $this->table->getRootId())
-			{
-				$canCreate = $this->user->authorise('core.create', $extension);
-			}
-			else
-			{
-				$canCreate = $this->user->authorise('core.create', $extension . '.category.' . $parentId);
-			}
-
-			if (!$canCreate)
-			{
-				// Error since user cannot create in parent category
-				$this->setError(Text::_('com_lang4dev_BATCH_CANNOT_CREATE'));
-
-				return false;
-			}
-		}
-
-		// If the parent is 0, set it to the ID of the root item in the tree
-		if (empty($parentId))
-		{
-			if (!$parentId = $this->table->getRootId())
-			{
-				$this->setError($this->table->getError());
-
-				return false;
-			}
-			// Make sure we can create in root
-			elseif (!$this->user->authorise('core.create', $extension))
-			{
-				$this->setError(Text::_('com_lang4dev_BATCH_CANNOT_CREATE'));
-
-				return false;
-			}
-		}
-
-		// We need to log the parent ID
-		$parents = array();
-
-		// Calculate the emergency stop count as a precaution against a runaway loop bug
-		$query = $db->getQuery(true)
-			->select('COUNT(id)')
-			->from($db->quoteName('#__rsg2_galleries'));
-		$db->setQuery($query);
-
-		try
-		{
-			$count = $db->loadResult();
-		}
-		catch (\RuntimeException $e)
-		{
-			$this->setError($e->getMessage());
-
-			return false;
-		}
-
-		// Parent exists so let's proceed
-		while (!empty($pks) && $count > 0)
-		{
-			// Pop the first id off the stack
-			$pk = array_shift($pks);
-
-			$this->table->reset();
-
-			// Check that the row actually exists
-			if (!$this->table->load($pk))
-			{
-				if ($error = $this->table->getError())
-				{
-					// Fatal error
-					$this->setError($error);
-
-					return false;
-				}
-				else
-				{
-					// Not fatal error
-					$this->setError(Text::sprintf('JGLOBAL_BATCH_MOVE_ROW_NOT_FOUND', $pk));
-					continue;
-				}
-			}
-
-			// Copy is a bit tricky, because we also need to copy the children
-			$query->clear()
-				->select('id')
-				->from($db->quoteName('#__rsg2_galleries'))
-				->where('lft > ' . (int) $this->table->lft)
-				->where('rgt < ' . (int) $this->table->rgt);
-			$db->setQuery($query);
-			$childIds = $db->loadColumn();
-
-			// Add child ID's to the array only if they aren't already there.
-			foreach ($childIds as $childId)
-			{
-				if (!in_array($childId, $pks))
-				{
-					$pks[] = $childId;
-				}
-			}
-
-			// Make a copy of the old ID and Parent ID
-			$oldId = $this->table->id;
-			$oldParentId = $this->table->parent_id;
-
-			// Reset the id because we are making a copy.
-			$this->table->id = 0;
-
-			// If we a copying children, the Old ID will turn up in the parents list
-			// otherwise it's a new top level item
-			$this->table->parent_id = $parents[$oldParentId] ?? $parentId;
-
-			// Set the new location in the tree for the node.
-			$this->table->setLocation($this->table->parent_id, 'last-child');
-
-			// @TODO: Deal with ordering?
-			// $this->table->ordering = 1;
-			$this->table->level = null;
-			$this->table->asset_id = null;
-			$this->table->lft = null;
-			$this->table->rgt = null;
-
-			//? title -> ? name
-			// Alter the title & alias
-			list($title, $alias) = $this->generateNewTitle($this->table->parent_id, $this->table->alias, $this->table->title);
-			$this->table->title  = $title;
-			$this->table->alias  = $alias;
-
-			// Unpublish because we are making a copy
-			$this->table->published = 0;
-
-			// Store the row.
-			if (!$this->table->store())
-			{
-				$this->setError($this->table->getError());
-
-				return false;
-			}
-
-			// Get the new item ID
-			$newId = $this->table->get('id');
-
-			// Add the new ID to the array
-			$newIds[$pk] = $newId;
-
-			// Now we log the old 'parent' to the new 'parent'
-			$parents[$oldId] = $this->table->id;
-			$count--;
-		}
-
-		// Rebuild the hierarchy.
-		if (!$this->table->rebuild())
-		{
-			$this->setError($this->table->getError());
-
-			return false;
-		}
-
-		// Rebuild the tree path.
-		if (!$this->table->rebuildPath($this->table->id))
-		{
-			$this->setError($this->table->getError());
-
-			return false;
-		}
-
-		return $newIds;
-	}
-
-	/**
-	 * Batch move galleries to a new gallery.
-	 *
-	 * @param   integer  $value     The new category ID.
-	 * @param   array    $pks       An array of row IDs.
-	 * @param   array    $contexts  An array of item contexts.
-	 *
-	 * @return  boolean  True on success.
-	 *
-	 * @since __BUMP_VERSION__
-	 */
-	protected function batchMove($value, $pks, $contexts)
-	{
-		$parentId = (int) $value;
-		$type = new UCMType;
-		$this->type = $type->getTypeByAlias($this->typeAlias);
-
-		$db = $this->getDbo();
-		$query = $db->getQuery(true);
-		$extension = Factory::getApplication()->input->get('extension', '', 'word');
-
-		// Check that the parent exists.
-		if ($parentId)
-		{
-			if (!$this->table->load($parentId))
-			{
-				if ($error = $this->table->getError())
-				{
-					// Fatal error.
-					$this->setError($error);
-
-					return false;
-				}
-				else
-				{
-					// Non-fatal error.
-					$this->setError(Text::_('JGLOBAL_BATCH_MOVE_PARENT_NOT_FOUND'));
-					$parentId = 0;
-				}
-			}
-
-			// Check that user has create permission for parent category.
-			if ($parentId == $this->table->getRootId())
-			{
-				$canCreate = $this->user->authorise('core.create', $extension);
-			}
-			else
-			{
-				$canCreate = $this->user->authorise('core.create', $extension . '.category.' . $parentId);
-			}
-
-			if (!$canCreate)
-			{
-				// Error since user cannot create in parent category
-				$this->setError(Text::_('com_lang4dev_BATCH_CANNOT_CREATE'));
-
-				return false;
-			}
-
-			// Check that user has edit permission for every category being moved
-			// Note that the entire batch operation fails if any category lacks edit permission
-			foreach ($pks as $pk)
-			{
-				if (!$this->user->authorise('core.edit', $extension . '.category.' . $pk))
-				{
-					// Error since user cannot edit this category
-					$this->setError(Text::_('com_lang4dev_BATCH_CANNOT_EDIT'));
-
-					return false;
-				}
-			}
-		}
-
-		// We are going to store all the children and just move the category
-		$children = array();
-
-		// Parent exists so let's proceed
-		foreach ($pks as $pk)
-		{
-			// Check that the row actually exists
-			if (!$this->table->load($pk))
-			{
-				if ($error = $this->table->getError())
-				{
-					// Fatal error
-					$this->setError($error);
-
-					return false;
-				}
-				else
-				{
-					// Not fatal error
-					$this->setError(Text::sprintf('JGLOBAL_BATCH_MOVE_ROW_NOT_FOUND', $pk));
-					continue;
-				}
-			}
-
-			// Set the new location in the tree for the node.
-			$this->table->setLocation($parentId, 'last-child');
-
-			// Check if we are moving to a different parent
-			if ($parentId != $this->table->parent_id)
-			{
-				// Add the child node ids to the children array.
-				$query->clear()
-					->select('id')
-					->from($db->quoteName('#__rsg2_galleries'))
-					->where($db->quoteName('lft') . ' BETWEEN ' . (int) $this->table->lft . ' AND ' . (int) $this->table->rgt);
-				$db->setQuery($query);
-
-				try
-				{
-					$children = array_merge($children, (array) $db->loadColumn());
-				}
-				catch (\RuntimeException $e)
-				{
-					$this->setError($e->getMessage());
-
-					return false;
-				}
-			}
-
-			// Store the row.
-			if (!$this->table->store())
-			{
-				$this->setError($this->table->getError());
-
-				return false;
-			}
-
-			// Rebuild the tree path.
-			if (!$this->table->rebuildPath())
-			{
-				$this->setError($this->table->getError());
-
-				return false;
-			}
-		}
-
-		// Process the child rows
-		if (!empty($children))
-		{
-			// Remove any duplicates and sanitize ids.
-			$children = array_unique($children);
-			$children = ArrayHelper::toInteger($children);
-		}
-
-		return true;
-	}
-
-	/**
-	 * Custom clean the cache of com_lang4dev and content modules
-	 *
-	 * @param   string   $group      Cache group name.
-	 * @param   integer  $client_id  Application client id.
-	 *
-	 * @return  void
-	 *
-	 * @since __BUMP_VERSION__
-	 *
-	protected function cleanCache($group = null, $client_id = 0)
-	{
-		$extension = Factory::getApplication()->input->get('extension');
-
-		switch ($extension)
-		{
-			case 'com_lang4dev':
-				parent::cleanCache('com_lang4dev');
-				parent::cleanCache('mod_articles_archive');
-				parent::cleanCache('mod_articles_categories');
-				parent::cleanCache('mod_articles_category');
-				parent::cleanCache('mod_articles_latest');
-				parent::cleanCache('mod_articles_news');
-				parent::cleanCache('mod_articles_popular');
-				break;
-			default:
-				parent::cleanCache($extension);
-				break;
-		}
-	}
-	/**/
-
-	/**
-	 * Method to change the title & alias.
-	 *
-	 * @param   integer  $parent_id  The id of the parent.
-	 * @param   string   $alias      The alias.
-	 * @param   string   $title      The title.
-	 *
-	 * @return  array    Contains the modified title and alias.
-	 *
-	 * @since __BUMP_VERSION__
-	 */
-	//? title -> ? name
-	protected function generateNewTitle($parent_id, $alias, $title)
-	{
-		// Alter the title & alias
-		$table = $this->getTable();
-
-		while ($table->load(array('alias' => $alias, 'parent_id' => $parent_id)))
-		{
-			$title = StringHelper::increment($title);
-			$alias = StringHelper::increment($alias, 'dash');
-		}
-
-		return array($title, $alias);
-	}
-
-	/**
-	 * Method to determine if a category association is available.
-	 *
-	 * @return  boolean True if a category association is available; false otherwise.
-	 *
-	public function getAssoc()
-	{
-		static $assoc = null;
-
-		if (!is_null($assoc))
-		{
-			return $assoc;
-		}
-
-		$extension = $this->getState('category.extension');
-
-		$assoc = Associations::isEnabled();
-		$extension = explode('.', $extension);
-		$component = array_shift($extension);
-		$cname = str_replace('com_', '', $component);
-
-		if (!$assoc || !$component || !$cname)
-		{
-			$assoc = false;
-
-			return $assoc;
-		}
-
-		$componentObject = $this->bootComponent($component);
-
-		if ($componentObject instanceof AssociationServiceInterface && $componentObject instanceof CategoryServiceInterface)
-		{
-			$assoc = true;
-
-			return $assoc;
-		}
-
-		$hname = $cname . 'HelperAssociation';
-		\JLoader::register($hname, JPATH_SITE . '/components/' . $component . '/helpers/association.php');
-
-		$assoc = class_exists($hname) && !empty($hname::$category_association);
-
-		return $assoc;
-	}
-	/**/
 
 }

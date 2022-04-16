@@ -3,7 +3,7 @@
  * @package     Joomla.Administrator
  * @subpackage  com_lang4dev
  *
- * @copyright   Copyright (C) 2022 - 2022
+ * @copyright (C) 2022-2022 Lang4dev Team
  * @license     GNU General Public License version 2 or later; see LICENSE.txt
  */
 

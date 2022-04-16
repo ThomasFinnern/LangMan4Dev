@@ -1,9 +1,8 @@
 <?php // no direct access
 /**
- * @package       RSGallery2
- * @copyright (C) 2022-2021 RSGallery2 Team
+ * @package       Lang4dev
+ * @copyright (C) 2022-2021 Lang4dev Team
  * @license       http://www.gnu.org/copyleft/gpl.html GNU/GPL
- * RSGallery is Free Software
  */
 
 \defined('_JEXEC') or die;
@@ -14,12 +13,12 @@ use Joomla\CMS\Router\Route;
 
 // HTMLHelper::_('bootstrap.framework');
 
-HTMLHelper::_('stylesheet', 'com_rsgallery2/backend/imagesProperties.css', array('version' => 'auto', 'relative' => true));
-HTMLHelper::_('script', 'com_rsgallery2/backend/imagesProperties.js', ['version' => 'auto', 'relative' => true]);
+HTMLHelper::_('stylesheet', 'com_lang4dev/backend/imagesProperties.css', array('version' => 'auto', 'relative' => true));
+HTMLHelper::_('script', 'com_lang4dev/backend/imagesProperties.js', ['version' => 'auto', 'relative' => true]);
 
 ?>
 
-<form action="<?php echo Route::_('index.php?option=com_rsgallery2&view=Maintenance&layout=Prepared'); ?>"
+<form action="<?php echo Route::_('index.php?option=com_lang4dev&view=Maintenance&layout=Prepared'); ?>"
       method="post" name="adminForm" id="adminForm" class="form-validate">
 	<div class="d-flex flex-row">
 		<?php if (!empty($this->sidebar)) : ?>
@@ -33,10 +32,10 @@ HTMLHelper::_('script', 'com_rsgallery2/backend/imagesProperties.js', ['version'
 
 				<?php echo HTMLHelper::_('bootstrap.startTabSet', 'myTab', array('active' => 'PreparedButNotReady')); ?>
 
-				<?php echo HTMLHelper::_('bootstrap.addTab', 'myTab', 'PreparedButNotReady', Text::_('COM_RSGALLERY2_MAINT_PREPARED_NOT_READY', true)); ?>
+				<?php echo HTMLHelper::_('bootstrap.addTab', 'myTab', 'PreparedButNotReady', Text::_('COM_LANG4DEV_MAINT_PREPARED_NOT_READY', true)); ?>
                 <p></p>
-                <legend><strong><?php echo Text::_('COM_RSGALLERY2_MAINT_PREPARED_NOT_READY_DESC'); ?></strong></legend>
-                <p><h3><?php echo Text::_('COM_RSGALLERY2_MANIFEST_INFO_VIEW'); ?></h3></p>
+                <legend><strong><?php echo Text::_('COM_LANG4DEV_MAINT_PREPARED_NOT_READY_DESC'); ?></strong></legend>
+                <p><h3><?php echo Text::_('COM_LANG4DEV_MANIFEST_INFO_VIEW'); ?></h3></p>
 
                 <?php
 
@@ -63,7 +62,7 @@ HTMLHelper::_('script', 'com_rsgallery2/backend/imagesProperties.js', ['version'
 
 				<?php echo HTMLHelper::_('bootstrap.endTabSet'); ?>
 
-				<!--input type="hidden" name="option" value="com_rsgallery2" />
+				<!--input type="hidden" name="option" value="com_lang4dev" />
 				<input type="hidden" name="rsgOption" value="maintenance" /-->
 
 				<input type="hidden" name="task" value="" />

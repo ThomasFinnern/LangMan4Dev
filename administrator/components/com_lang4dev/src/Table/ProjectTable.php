@@ -1,40 +1,32 @@
 <?php
 /**
  * @package     Joomla.Administrator
- * @subpackage  com_rsImage2
+ * @subpackage  com_lang4dev
  *
- * @copyright   (C) 2005 - 2021 RSGallery2 Team 
+ * @copyright (C) 2022-2022 Lang4dev Team
  * @license     GNU General Public License version 2 or later; see LICENSE.txt
  */
 
-namespace Rsgallery2\Component\Rsgallery2\Administrator\Table;
+namespace Finnern\Component\Lang4dev\Administrator\Table;
 
 \defined('_JEXEC') or die;
 
 use Joomla\CMS\Application\ApplicationHelper;
 use Joomla\CMS\Factory;
-use Joomla\CMS\Language\Associations;
+use Joomla\CMS\Language\Text;
+use Joomla\CMS\Table\Nested;
 use Joomla\CMS\Table\Table;
 use Joomla\Database\DatabaseDriver;
-use Joomla\CMS\Language\Text;
 use Joomla\Registry\Registry;
 use Joomla\String\StringHelper;
 
 /**
- * Image table
+ * Project table
  *
  * @since __BUMP_VERSION__
  */
-class ImageTable extends Table
+class ProjectTable extends Table
 {
-	/**
-	 * An array of key names to be json encoded in the bind function
-	 *
-	 * @var    array
-	 * @since __BUMP_VERSION__
-	 */
-//	protected $_jsonEncode = ['params'];
-
 	/**
 	 * Constructor
 	 *
@@ -44,9 +36,9 @@ class ImageTable extends Table
 	 */
 	public function __construct(DatabaseDriver $db)
 	{
-		$this->typeAlias = 'com_rsgallery2.image';
+		$this->typeAlias = 'com_lang4dev.project';
 
-		parent::__construct('#__rsg2_images', 'id', $db);
+		parent::__construct('#__lang4dev_projects', 'id', $db);
 
         $this->access = (int) Factory::getApplication()->get('access');
 	}
@@ -73,6 +65,7 @@ class ImageTable extends Table
 
         return parent::bind($array, $ignore);
     }
+
 
     /**
      * Overloaded check method to ensure data integrity.
@@ -112,11 +105,28 @@ class ImageTable extends Table
             $this->alias = Factory::getDate()->format('Y-m-d-H-i-s');
         }
 
-        // Check the publish down date is not earlier than publish up.
-        if (!empty($this->publish_down) && !empty($this->publish_up) && $this->publish_down < $this->publish_up)
-        {
-            throw new \UnexpectedValueException(sprintf('End publish date is before start publish date.'));
-        }
+//        //--- twin id: check if twin exists -------------------------------------
+//
+//        $this->twin_id = (int)$this->twin_id;
+//
+//        // Nested does not allow parent_id = 0, override this.
+//        if ($this->twin_id > 0) {
+//            // Get the DatabaseQuery object
+//            $query = $this->_db->getQuery(true)
+//                ->select('1')
+//                ->from($this->_db->quoteName($this->_tbl))
+//                ->where($this->_db->quoteName('id') . ' = ' . $this->twin_id);
+//
+//            $query->setLimit(1);
+//
+//            if (empty ($this->_db->setQuery($query)->loadResult())) {
+//                $this->setError(Text::_('JLIB_DATABASE_ERROR_INVALID_PARENT_ID'));
+//
+//                return false;
+//            }
+//        }
+
+        //---   ---------------------------------------------
 
         // Clean up description -- eliminate quotes and <> brackets
 
@@ -128,16 +138,15 @@ class ImageTable extends Table
 //        }        else         {
 //            $this->description = '';
 //        }
-        if (empty($this->description))
+        if (empty($this->note))
         {
-            $this->description = '';
+            $this->note = '';
         }
 
         if (empty($this->params))
         {
             $this->params = '{}';
         }
-
 
         if (!(int) $this->checked_out_time)
         {
@@ -158,8 +167,9 @@ class ImageTable extends Table
     }
 
 
-    /**
-	 * Stores a image reference.
+
+	/**
+	 * Stores a Project.
 	 *
 	 * @param   boolean  $updateNulls  True to update fields even if they are null.
 	 *
@@ -195,7 +205,7 @@ class ImageTable extends Table
             }
 
             if (empty($this->modified_by)) {
-                $this->modified_by = $this->created_user_id;
+                $this->modified_by = $this->created_by;
             }
 
             // Text must be preset
@@ -209,7 +219,7 @@ class ImageTable extends Table
 
         if ($table->load(array('alias' => $this->alias)) && ($table->id != $this->id || $this->id == 0))
         {
-            $this->setError(Text::_('COM_RSGALLERY2_ERROR_UNIQUE_ALIAS'));
+            $this->setError(Text::_('COM_LANG4DEV_ERROR_UNIQUE_ALIAS'));
 
             return false;
         }
@@ -217,53 +227,20 @@ class ImageTable extends Table
         return parent::store($updateNulls);
 	}
 
-	/**
-	 * Deletes file images related to db image item
-	 * before deleting db item
-	 *
-	 * @param null $pk Id of image item
-	 *
-	 * @return bool True if successful
-	 *
-	 * @since __BUMP_VERSION__
-	 */
-	public function delete($pk=null)
-	{
-        /**
-		$IsDeleted = false;
 
-		try
-		{
-
-		    // ToDo: handle deleting of files like in menu (m-controller -> m-model -> m-table)
-
-            $filename          = $this->name;
-
-			//$imgFileModel = JModelLegacy::getInstance('imageFile', 'RSGallery2Model');
-			$imgFileModel = $this->getModel ('imageFile');
-
-			$IsFilesAreDeleted = $imgFileModel->deleteImgItemImages($filename);
-			if (! $IsFilesAreDeleted)
-			{
-				// Remove from database
-			}
-
-            $IsDeleted = parent::delete($pk);
-		}
-		catch (\RuntimeException $e)
-		{
-			$OutTxt = '';
-			$OutTxt .= 'Error executing image.table.delete: "' . $pk . '<br>';
-			$OutTxt .= 'Error: "' . $e->getMessage() . '"' . '<br>';
-
-			$app = Factory::getApplication();
-			$app->enqueueMessage($OutTxt, 'error');
-		}
-
-        return $IsDeleted;
-        /**/
-
-        $return = parent::delete($pk);
+    /**
+     * Method to delete a node and, optionally, its child nodes from the table.
+     *
+     * @param   integer  $pk        The primary key of the node to delete.
+     * @param   boolean  $children  True to delete child nodes, false to move them up a level.
+     *
+     * @return  boolean  True on success.
+     *
+     * @since __BUMP_VERSION__
+     */
+    public function delete($pk = null, $children = false)
+    {
+        $return = parent::delete($pk, $children);
 
         if ($return)
         {
@@ -272,7 +249,6 @@ class ImageTable extends Table
         }
 
         return $return;
-	}
+    }
 
-	/**/
 } // class

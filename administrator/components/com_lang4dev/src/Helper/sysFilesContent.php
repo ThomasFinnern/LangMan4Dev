@@ -3,7 +3,7 @@
  * @package     Finnern\Component\Lang4dev\Administrator\Helper
  * @subpackage
  *
- * @copyright   A copyright
+ * @copyright (C) 2022-2022 Lang4dev Team
  * @license     A "Slug" license name e.g. GPL2
  */
 

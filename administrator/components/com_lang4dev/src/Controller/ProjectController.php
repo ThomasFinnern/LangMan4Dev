@@ -1,9 +1,9 @@
 <?php
 /**
  * @package     Joomla.Administrator
- * @subpackage  com_rsgallery2
+ * @subpackage  com_lang4dev
  *
- * @copyright   (C) 2005 - 2021 RSGallery2 Team 
+ * @copyright (C) 2022-2022 Lang4dev Team
  * @license     GNU General Public License version 2 or later; see LICENSE.txt
  */
 
@@ -75,7 +75,7 @@ class projectController extends FormController
 
         if (count($cids) < 1)
         {
-            $this->setMessage(Text::_('COM_RSGALLERY2_NO_IMAGE_SELECTED'), 'warning');
+            $this->setMessage(Text::_('COM_LANG4DEV_NO_IMAGE_SELECTED'), 'warning');
         }
         else
         {
@@ -118,7 +118,7 @@ class projectController extends FormController
 
                         $filename          = $this->name;
 
-                        //$imgFileModel = JModelLegacy::getInstance('imageFile', 'RSGallery2Model');
+                        //$imgFileModel = JModelLegacy::getInstance('imageFile', 'ProjectModel');
                         $imgFileModel = $this->getModel ('imageFile');
 
                         $IsFilesAreDeleted = $imgFileModel->deleteImgItemImages($filename);
@@ -150,7 +150,7 @@ class projectController extends FormController
 
 
 
-                    $this->setMessage(Text::plural('COM_RSGALLERY2_N_ITEMS_DELETED', count($cids)));
+                    $this->setMessage(Text::plural('COM_LANG4DEV_N_ITEMS_DELETED', count($cids)));
                 }
             }
         }
@@ -238,11 +238,11 @@ class projectController extends FormController
 	Session::checkToken() or die(Text::_('JINVALID_TOKEN'));
 
 		// Set the model
-		/** @var \Rsgallery2\Component\Rsgallery2\Administrator\Model\GalleryModel $model *
+		/** @var \Lang4dev\Component\Lang4dev\Administrator\Model\GalleryModel $model *
 		$model = $this->getModel('Gallery');
 
 		// Preset the redirect
-		$this->setRedirect('index.php?option=com_rsgallery2&view=galleries&extension=' . $this->extension);
+		$this->setRedirect('index.php?option=com_lang4dev&view=galleries&extension=' . $this->extension);
 
 		return parent::batch($model);
 	}

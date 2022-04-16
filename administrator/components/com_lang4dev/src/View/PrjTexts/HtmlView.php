@@ -3,7 +3,7 @@
  * @package     Joomla.Administrator
  * @subpackage  com_lang4dev
  *
- * @copyright   Copyright (C) 2022 - 2022
+ * @copyright (C) 2022-2022 Lang4dev Team
  * @license     GNU General Public License version 2 or later; see LICENSE.txt
  */
 
@@ -60,7 +60,7 @@ class HtmlView extends BaseHtmlView
 
 		$project =
 		$this->project = selectProject('lang4dev');
-//		$this->project = selectProject('rsgallery');
+//		$this->project = selectProject('lang4dev');
 //		$this->project = selectProject('joomgallery');
 ////		$this->project = selectProject('joomla4x');
 

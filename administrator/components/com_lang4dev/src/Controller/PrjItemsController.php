@@ -3,7 +3,7 @@
  * @package     Joomla.Administrator
  * @subpackage  com_lang4dev
  *
- * @copyright   (C) 2022 - 2022 Thomas Finnern
+ * @copyright (C) 2022-2022 Lang4dev Team
  * @license     GNU General Public License version 2 or later; see LICENSE.txt
  */
 
@@ -75,7 +75,7 @@ class PrjItemsController extends AdminController
 
         Session::checkToken() or die(Text::_('JINVALID_TOKEN'));
 
-        $canAdmin = Factory::getApplication()->getIdentity()->authorise('core.manage', 'com_rsgallery2');
+        $canAdmin = Factory::getApplication()->getIdentity()->authorise('core.manage', 'com_lang4dev');
         if (!$canAdmin) {
             $msg .= Text::_('JERROR_ALERTNOAUTHOR');
             $msgType = 'warning';
@@ -90,14 +90,14 @@ class PrjItemsController extends AdminController
 				
 				
 				
-                /** @var \Rsgallery2\Component\Rsgallery2\Administrator\Model\GalleryModel $model */
+                /** @var \Lang4dev\Component\Lang4dev\Administrator\Model\GalleryModel $model */
                 $model = $this->getModel();
 
                 $isOk = $model->rebuild();
                 if ($isOk) {
-                    $msg .= Text::_('COM_RSGALLERY2_GALLERIES_REBUILD_SUCCESS');
+                    $msg .= Text::_('COM_LANG4DEV_GALLERIES_REBUILD_SUCCESS');
                 } else {
-                    $msg .= Text::_('COM_RSGALLERY2_GALLERIES_REBUILD_FAILURE') . ': ' . $model->getError();
+                    $msg .= Text::_('COM_LANG4DEV_GALLERIES_REBUILD_FAILURE') . ': ' . $model->getError();
                 }
 
             } catch (\RuntimeException $e) {
@@ -110,7 +110,7 @@ class PrjItemsController extends AdminController
             }
         }
 
-        $link = 'index.php?option=com_rsgallery2&view=galleries&layout=galleries_tree';
+        $link = 'index.php?option=com_lang4dev&view=galleries&layout=galleries_tree';
         $this->setRedirect($link, $msg, $msgType);
 
         return $isOk;
@@ -131,7 +131,7 @@ class PrjItemsController extends AdminController
 
         Session::checkToken() or die(Text::_('JINVALID_TOKEN'));
 
-        $canAdmin = Factory::getApplication()->getIdentity()->authorise('core.manage', 'com_rsgallery2');
+        $canAdmin = Factory::getApplication()->getIdentity()->authorise('core.manage', 'com_lang4dev');
         if (!$canAdmin) {
             $msg .= Text::_('JERROR_ALERTNOAUTHOR');
             $msgType = 'warning';
@@ -146,9 +146,9 @@ class PrjItemsController extends AdminController
                 // Remove the items.
                 $isOk = $model->reinitNestedGalleryTable();
                 if ($isOk) {
-                    $msg .= Text::_('COM_RSGALLERY2_GALLERIES_TABLE_RESET_SUCCESS');
+                    $msg .= Text::_('COM_LANG4DEV_GALLERIES_TABLE_RESET_SUCCESS');
                 } else {
-                    $msg .= Text::_('COM_RSGALLERY2_GALLERIES_TABLE_RESET_ERROR') . ': ' . $model->getError();
+                    $msg .= Text::_('COM_LANG4DEV_GALLERIES_TABLE_RESET_ERROR') . ': ' . $model->getError();
                 }
 
             } catch (\RuntimeException $e) {
@@ -162,13 +162,13 @@ class PrjItemsController extends AdminController
 
         }
 
-        $link = 'index.php?option=com_rsgallery2&view=galleries&layout=galleries_tree';
+        $link = 'index.php?option=com_lang4dev&view=galleries&layout=galleries_tree';
         $this->setRedirect($link, $msg, $msgType);
 
         return $isOk;
     }
 
-    /** @var \Rsgallery2\Component\Rsgallery2\Administrator\Model\GalleryTreeModel $model */
+    /** @var \Lang4dev\Component\Lang4dev\Administrator\Model\GalleryTreeModel $model */
 
 
 

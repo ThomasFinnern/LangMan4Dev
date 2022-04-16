@@ -1,11 +1,10 @@
 <?php
 /**
- * @package     RSGallery2
- * @subpackage  com_rsgallery2
- * @copyright   (C) 2016-2022 RSGallery2 Team
+ * @package     Lang4dev
+ * @subpackage  com_lang4dev
+ * @copyright (C) 2022-2022 Lang4dev Team
  * @license     http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @author      finnern
- * RSGallery is Free Software
  */
 
 namespace Finnern\Component\Lang4dev\Administrator\Model;
@@ -20,7 +19,7 @@ use Joomla\CMS\MVC\Factory\MVCFactoryInterface;
 use Joomla\CMS\MVC\Model\ListModel;
 
 /**
- * RSGallery2 Component Galleries Model
+ * Lang4dev Component Projects Model
  *
  * @since __BUMP_VERSION__
  */
@@ -224,7 +223,7 @@ class ProjectsModel extends ListModel
 //		if ($assoc)
 //		{
 //			$query->select('COUNT(asso2.id)>1 as association')
-//				->join('LEFT', '#__associations AS asso ON asso.id = a.id AND asso.context=' . $db->quote('com_rsgallery2.item'))
+//				->join('LEFT', '#__associations AS asso ON asso.id = a.id AND asso.context=' . $db->quote('com_lang4dev.item'))
 //				->join('LEFT', '#__associations AS asso2 ON asso2.key = asso.key')
 //				->group('a.id, l.title, uc.name, ag.title, ua.name');
 //		}

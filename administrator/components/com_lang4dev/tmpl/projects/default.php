@@ -55,7 +55,7 @@ if (count($parts) > 1)
 
 if ($saveOrder && !empty($this->items))
 {
-    $saveOrderingUrl = 'index.php?option=com_rsgallery2&task=images.saveOrderAjax&tmpl=component&' . Session::getFormToken() . '=1';
+    $saveOrderingUrl = 'index.php?option=com_lang4dev&task=images.saveOrderAjax&tmpl=component&' . Session::getFormToken() . '=1';
     HTMLHelper::_('draggablelist.draggable');
 }
 
@@ -85,7 +85,7 @@ if ($saveOrder && !empty($this->items))
 
         <table class="table" id="galleryList">
             <caption id="captionTable" class="sr-only">
-                <?php echo Text::_('COM_RSGALLERY2_TABLE_CAPTION'); ?>, <?php echo Text::_('JGLOBAL_SORTED_BY'); ?>
+                <?php echo Text::_('COM_LANG4DEV_TABLE_CAPTION'); ?>, <?php echo Text::_('JGLOBAL_SORTED_BY'); ?>
             </caption>
             <thead>
                 <tr>
@@ -99,7 +99,7 @@ if ($saveOrder && !empty($this->items))
 
                     <th scope="col" style="width:3%" class="text-center d-none d-md-table-cell">
                                         <span class="small" title="<?php echo $this->escape("Remove when order is fixed"); ?>">
-                                            <?php echo Text::_('COM_RSGALLERY2_ORDER'); ?>
+                                            <?php echo Text::_('COM_LANG4DEV_ORDER'); ?>
                                         </span>
                     </th>
                 </tr>

@@ -10,8 +10,8 @@
 		<!-- needed when more entries are general ...
 				field name="intro_text"
                 type="editor"
-                label="COM_RSGALLERY2_INTRODUCTION_TEXT"
-	            description="COM_RSGALLERY2_INTRODUCTION_DESC"
+                label="COM_LANG4DEV_INTRODUCTION_TEXT"
+	            description="COM_LANG4DEV_INTRODUCTION_DESC"
 				filter="JComponentHelper::filterText"
 				buttons="false"
 		/-->
@@ -67,8 +67,8 @@
 
 	<fieldset
 			name="upload"
-			label="COM_RSGALLERY2_CONFIG_TAB_UPLOAD"
-			description="COM_RSGALLERY2_CONFIG_TAB_UPLOAD_DESC"
+			label="COM_LANG4DEV_CONFIG_TAB_UPLOAD"
+			description="COM_LANG4DEV_CONFIG_TAB_UPLOAD_DESC"
 	>
 		<!--field
 				type="spacer"
@@ -99,16 +99,16 @@
 			   type="note"
 			   class="alert alert-primary"
 			   close="true"
-			   label="COM_RSGALLERY2_CFG_IMAGE_MANIPULATION"
-			   description="COM_RSGALLERY2_CFG_IMAGE_MANIPULATION"
+			   label="COM_LANG4DEV_CFG_IMAGE_MANIPULATION"
+			   description="COM_LANG4DEV_CFG_IMAGE_MANIPULATION"
 		/>
 
 		<field
 				name="image_size"
 				type="text"
 				default="800,600,400"
-				label="COM_RSGALLERY2_DISPLAY_PICTURE_SIZE"
-				description="COM_RSGALLERY2_DISPLAY_PICTURE_SIZE_DESC"
+				label="COM_LANG4DEV_DISPLAY_PICTURE_SIZE"
+				description="COM_LANG4DEV_DISPLAY_PICTURE_SIZE_DESC"
 				class="">
 		</field>
 	</fieldset>
@@ -117,8 +117,8 @@
 
 	<fieldset
 			name="debug"
-			label="COM_RSGALLERY2_CONFIG_TAB_DEBUG"
-			description="COM_RSGALLERY2_CONFIG_TAB_DEBUG_DESC"
+			label="COM_LANG4DEV_CONFIG_TAB_DEBUG"
+			description="COM_LANG4DEV_CONFIG_TAB_DEBUG_DESC"
 	>
 		<field type="spacer" name="test_inner_02" hr="true" />
 		<!-- ... block  ... -->
@@ -128,8 +128,8 @@
 				name="isDebugBackend"
 				type="radio"
 				default="0"
-				label="COM_RSGALLERY2_DEBUG_BACKEND"
-				description="COM_RSGALLERY2_DEBUG_BACKEND_DESC"
+				label="COM_LANG4DEV_DEBUG_BACKEND"
+				description="COM_LANG4DEV_DEBUG_BACKEND_DESC"
 				layout="joomla.form.field.radio.switcher"
 				filter="integer"
 				validate="options"
@@ -142,8 +142,8 @@
 				name="isDebugSite"
 				type="radio"
 				default="0"
-				label="COM_RSGALLERY2_DEBUG_SITE"
-				description="COM_RSGALLERY2_DEBUG_SITE_DESC"
+				label="COM_LANG4DEV_DEBUG_SITE"
+				description="COM_LANG4DEV_DEBUG_SITE_DESC"
 				layout="joomla.form.field.radio.switcher"
 				filter="integer"
 				validate="options"
@@ -156,8 +156,8 @@
 				name="isDevelop"
 				type="radio"
 				default="0"
-				label="COM_RSGALLERY2_DEVELOP"
-				description="COM_RSGALLERY2_DEVELOP_DESC"
+				label="COM_LANG4DEV_DEVELOP"
+				description="COM_LANG4DEV_DEVELOP_DESC"
 				layout="joomla.form.field.radio.switcher"
 				filter="integer"
 				validate="options"

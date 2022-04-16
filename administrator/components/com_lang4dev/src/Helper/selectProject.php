@@ -12,24 +12,24 @@ use Finnern\Component\Lang4dev\Administrator\Helper\langProject;
 
 function createPrj_RSG2 () {
 
-	$prjRsgallery2 = new langProject ();
+	$prjLang4dev = new langProject ();
 
-	$subPrj = $prjRsgallery2->addSubProject('com_rsgallery2',
+	$subPrj = $prjLang4dev->addSubProject('com_lang4dev',
 		langSubProject::PRJ_TYPE_COMP_BACK_SYS,
-		JPATH_ADMINISTRATOR . '/components/com_rsgallery2',
+		JPATH_ADMINISTRATOR . '/components/com_lang4dev',
 	);
 
-	$subPrj = $prjRsgallery2->addSubProject('com_rsgallery2',
+	$subPrj = $prjLang4dev->addSubProject('com_lang4dev',
 		langSubProject::PRJ_TYPE_COMP_BACK,
-		JPATH_ADMINISTRATOR. '/components/com_rsgallery2'
+		JPATH_ADMINISTRATOR. '/components/com_lang4dev'
 	);
 
-	$subPrj = $prjRsgallery2->addSubProject('com_rsgallery2',
+	$subPrj = $prjLang4dev->addSubProject('com_lang4dev',
 		langSubProject::PRJ_TYPE_COMP_SITE,
-		JPATH_SITE . '/components/com_rsgallery2'
+		JPATH_SITE . '/components/com_lang4dev'
 	);
 
-	return $prjRsgallery2;
+	return $prjLang4dev;
 }
 
 
@@ -49,7 +49,7 @@ function createPrj_JoomGallery () {
 
 	$subPrj = $prjJoomGallery->addSubProject('com_joomgallery',
 		langSubProject::PRJ_TYPE_COMP_SITE,
-		JPATH_SITE . '/components/com_rsgallery2'
+		JPATH_SITE . '/components/com_lang4dev'
 	);
 
 	$subPrj = $prjJoomGallery->addSubProject('joomgallerycategories',
@@ -116,7 +116,7 @@ function createPrj_Joomla4x ()
 			$langProject = createPrj_Lang4Dev();
 		break;
 
-		case 'rsgallery':
+		case 'lang4dev':
 			$langProject = createPrj_RSG2();
 		break;
 

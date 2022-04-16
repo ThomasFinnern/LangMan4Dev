@@ -3,7 +3,7 @@
  * @package     Joomla.Administrator
  * @subpackage  com_lang4dev
  *
- * @copyright   Copyright (C) 2005 - 2020 Open Source Matters, Inc. All rights reserved.
+ * @copyright (C) 2022-2022 Lang4dev Team
  * @license     GNU General Public License version 2 or later; see LICENSE.txt
  */
 
@@ -18,10 +18,10 @@ use Joomla\CMS\Layout\LayoutHelper;
 use Joomla\CMS\Session\Session;
 
 
-//HTMLHelper::_('stylesheet', 'com_rsgallery2/backend/maintenance.css', array('version' => 'auto', 'relative' => true));
-//HTMLHelper::_('script', 'com_rsgallery2/backend/maintenance.js', ['version' => 'auto', 'relative' => true]);
+//HTMLHelper::_('stylesheet', 'com_lang4dev/backend/maintenance.css', array('version' => 'auto', 'relative' => true));
+//HTMLHelper::_('script', 'com_lang4dev/backend/maintenance.js', ['version' => 'auto', 'relative' => true]);
 
-Text::script('COM_RSGALLERY2_PLEASE_CHOOSE_A_GALLERY_FIRST', true);
+Text::script('COM_LANG4DEV_PLEASE_CHOOSE_A_GALLERY_FIRST', true);
 HTMLHelper::_('stylesheet', 'com_lang4dev/backend/controlPanel.css', array('version' => 'auto', 'relative' => true));
 
 
@@ -189,7 +189,7 @@ function DisplayControlButtons ($cmdButtons){
 function DisplayLogo()
 {
     echo '    <div class="lang4dev_logo">';
-//	             echo HTMLHelper::_('image', 'com_rsgallery2/RSG2_logo.big.png', Text::_('COM_RSGALLERY2_MAIN_LOGO_ALT_TEXT'), null, true);
+//	             echo HTMLHelper::_('image', 'com_lang4dev/RSG2_logo.big.png', Text::_('COM_LANG4DEV_MAIN_LOGO_ALT_TEXT'), null, true);
     echo HTMLHelper::_('image', 'com_lang4dev/Lang4Dev_Logo.svg', Text::_('COM_LANG4DEV_MAIN_LOGO_ALT_TEXT'), null, true);
     echo '     </div>';
 //	echo '<p class="test">';

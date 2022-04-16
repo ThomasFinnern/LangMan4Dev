@@ -19,7 +19,7 @@
 		<field
 				name="name"
 				type="text"
-				label="COM_RSGALLERY2_FILENAME"
+				label="COM_LANG4DEV_PROJECT_NAME"
 				size="40"
 				readonly="true"
 		/>
@@ -35,8 +35,8 @@
 
 		<field
 				name="note"
-				type="text"
-				label="COM_RSGALLERY2_FIELD_NOTE_LABEL"
+				type="textarea"
+				label="COM_LANG4DEV_FIELD_NOTE_LABEL"
 				size="40"
 				maxlength="255"
 		/>
@@ -44,7 +44,7 @@
 		<field
 				name="root_path"
 				type="text"
-				label="COM_RSGALLERY2_PATH_LABEL"
+				label="COM_LANG4DEV_PATH_LABEL"
 				class="readonly"
 				size="40"
 		/>
@@ -73,7 +73,7 @@
 		<field
 				name="created_by_alias"
 				type="text"
-				label="COM_RSGALLERY2_CREATED_BY_ALIAS_LABEL"
+				label="COM_LANG4DEV_CREATED_BY_ALIAS_LABEL"
 				size="20"
 		/>
 
@@ -112,7 +112,7 @@
 
 	</fieldset>
 
-	<fields name="params" label="COM_RSGALLERY2_FIELD_BASIC_LABEL">
+	<fields name="params" label="COM_LANG4DEV_FIELD_BASIC_LABEL">
 
 		<fieldset name="basic">
 
@@ -129,13 +129,13 @@
 			<field
 					name="image"
 					type="media"
-					label="COM_RSGALLERY2_FIELD_IMAGE_LABEL"
+					label="COM_LANG4DEV_FIELD_IMAGE_LABEL"
 			/>
 
 			<field
 					name="image_alt"
 					type="text"
-					label="COM_RSGALLERY2_FIELD_IMAGE_ALT_LABEL"
+					label="COM_LANG4DEV_FIELD_IMAGE_ALT_LABEL"
 					size="20"
 			/>
 		</fieldset>

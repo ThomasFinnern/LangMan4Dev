@@ -3,7 +3,7 @@
  * @package     Joomla.Administrator
  * @subpackage  com_lang4dev
  *
- * @copyright   Copyright (C) 2022 - 2022
+ * @copyright (C) 2022-2022 Lang4dev Team
  * @license     GNU General Public License version 2 or later; see LICENSE.txt
  */
 
@@ -205,7 +205,7 @@ class HtmlView extends BaseHtmlView
                             ->listCheck(true);
                     }
 
-                    ToolBarHelper::custom('imagesProperties.PropertiesView', 'next', 'next', 'COM_RSGALLERY2_ADD_IMAGE_PROPERTIES', true);
+                    ToolBarHelper::custom('imagesProperties.PropertiesView', 'next', 'next', 'COM_LANG4DEV_ADD_IMAGE_PROPERTIES', true);
                     // ToolBarHelper::editList('image.edit');
 
 
