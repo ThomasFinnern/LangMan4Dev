@@ -47,13 +47,13 @@ class HtmlView extends BaseHtmlView
 		$Layout = Factory::getApplication()->input->get('layout');
 		//echo '$Layout: ' . $Layout . '<br>';
 
-		$l4dConfig = ComponentHelper::getComponent('com_Lang4dev')->getParams();
+		$l4dConfig = ComponentHelper::getComponent('com_lang4dev')->getParams();
 		$this->isDevelop = $l4dConfig->get('isDevelop');
 
 
 		//---  --------------------------------------------------------------
 		/**
-		HTMLHelper::_('sidebar.setAction', 'index.php?option=com_Lang4dev&view=config&layout=RawView');
+		HTMLHelper::_('sidebar.setAction', 'index.php?option=com_lang4dev&view=config&layout=RawView');
 		/**
 		$Layout = Factory::getApplication()->input->get('layout');
 		Lang4devHelper::addSubmenu('config');
@@ -122,7 +122,7 @@ class HtmlView extends BaseHtmlView
 		// Options button.
 		if (Factory::getApplication()->getIdentity()->authorise('core.admin', 'com_lang4dev'))
 		{
-			$toolbar->preferences('com_Lang4dev');
+			$toolbar->preferences('com_lang4dev');
 		}
 	}
 

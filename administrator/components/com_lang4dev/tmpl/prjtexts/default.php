@@ -6,7 +6,7 @@ use Joomla\CMS\Language\Text;
 use Joomla\CMS\Router\Route;
 
 
-function renderSubProjectMissing ($missing)
+function renderSubProjectMissing ($missing, $comment = '')
 {
 	if (count ($missing) > 0)
 	{
@@ -19,10 +19,9 @@ function renderSubProjectMissing ($missing)
 				<!-- h5 class="card-title"></h5-->
 				<p class="card-text">
 					<?php
-
 					foreach ($missing as $TransId)
 					{
-						echo $TransId . '=""<br>';
+						echo $comment . $TransId . '=""<br>';
 					}
 
 					?>
@@ -162,9 +161,17 @@ $transIdsClassified = $prjFiles->getTransIdsClassified();
 				$notUsed = $transIdsClassified['notUsed'];
 				$doubles  = $transIdsClassified['doubles'];
 
+
+
 				// ToDo: Use constants ?
 				renderSubProjectStatistic ($missing, $same, $notUsed, $doubles);
-				renderSubProjectMissing ($missing);
+
+				$comment = '';
+				if ($this->isDoCommentIds) {
+					$comment = ';';
+				}
+
+				renderSubProjectMissing ($missing, $comment);
 				?>
 				</p>
 			</div>

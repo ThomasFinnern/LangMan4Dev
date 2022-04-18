@@ -5,7 +5,7 @@
 	<author>Thomas Finnern</author>
 	<authorEmail>lang4dev@tomfinnern.de</authorEmail>
 	<authorUrl>https://github.com/ThomasFinnern</authorUrl>
-	<copyright>(c) 2022-2022 RSGallery2 Team</copyright>
+	<copyright>(c) 2022-2022 Lang4dev Team</copyright>
 	<license>GNU General Public License version 2 or later;</license>
 	<version>0.0.0.2</version>
 	<description>COM_LANG4DEV_XML_DESCRIPTION</description>
@@ -39,7 +39,7 @@
 			      img="class:home"
 			      link="option=com_lang4dev">COM_LANG4DEV_MENU_CONTROL_PANEL
 			</menu>
-			<menu link="option=com_lang4dev">COM_LANG4DEV</menu>
+			<!--menu link="option=com_lang4dev">COM_LANG4DEV</menu-->
 			<menu view="COM_LANG4DEV_MENU_PROJECTS"
 			      img="class:home"
 			      link="option=com_lang4dev&amp;view=projects">COM_LANG4DEV_MENU_PROJECTS
@@ -73,8 +73,10 @@
 		</submenu>
 
 		<files folder="administrator/components/com_lang4dev">
+			<filename>access.xml</filename>
 			<filename>changelog.xml</filename>
 			<filename>config.xml</filename>
+			<folder>forms</folder>
 			<filename>install_langman4dev.php</filename>
 			<filename>lang4dev.xml</filename>
 			<folder>language</folder>

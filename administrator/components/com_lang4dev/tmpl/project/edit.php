@@ -47,23 +47,29 @@ $tmpl    = $isModal || $input->get('tmpl', '', 'cmd') === 'component' ? '&tmpl=c
         <?php echo HTMLHelper::_('uitab.addTab', 'myTab', 'general', Text::_('COM_LANG4DEV_GENERAL')); ?>
 		<div class="row">
             <div class="col-lg-9">
-                <?php echo'-------------- lg-9.start: ><br>'; ?>
+                <?php // echo'-------------- lg-9.start: ><br>'; ?>
                 <div>
                     <div class="card-body">
                         <fieldset class="adminform">
                             <?php
-                            echo'-------------- name: ><br>';
+                            //echo'-------------- name: ><br>';
                             echo $this->form->renderField('name');
-                            echo'-------------- start: ><br>';
+                            //echo'-------------- start: ><br>';
 
-                            echo $this->form->renderField('note');
-                            echo'<br>-------------- end: ><br>';
+                            echo $this->form->renderField('root_path');
+                            echo $this->form->renderField('root_path2');
+
+                            echo $this->form->renderField('twin_id');
+
+                            echo $this->form->renderField('notes');
+
+                            //echo'<br>-------------- end: ><br>';
 
                             ?>
                         </fieldset>
                     </div>
                 </div>
-                <?php echo'-------------- lg-9.end: ><br>'; ?>
+                <?php // echo'-------------- lg-9.end: ><br>'; ?>
             </div>
 		</div>
 

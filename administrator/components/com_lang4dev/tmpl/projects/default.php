@@ -109,7 +109,85 @@ if ($saveOrder && !empty($this->items))
             <?php
             foreach ($this->items as $i => $item) : ?>
 
-                <?php echo $item->name; ?>
+	            <?php
+	            // Get permissions
+	            $canEdit    = $user->authorise('core.edit',       $extension . '.project.' . $item->id);
+	            $canCheckin = $user->authorise('core.admin',      'com_checkin') || $item->checked_out == $userId || $item->checked_out == 0;
+	            $canEditOwn = $user->authorise('core.edit.own',   $extension . '.project.' . $item->id) && $item->created_by == $userId;
+	            $canChange  = $user->authorise('core.edit.state', $extension . '.project.' . $item->id) && $canCheckin;
+
+	            $editLink = Route::_('index.php?option=com_rsgallery2&task=project.edit&id=' . $item->id);
+	            // $editGalleryLink = Route::_("index.php?option=com_rsgallery2&task=gallery.edit&id=" . $item->gallery_id);
+
+	            $created_by = Factory::getUser($item->created_by);
+	            $modified_by = Factory::getUser($item->modified_by);
+	            if (empty($modified_by->name)) {
+		            $modified_by = $created_by;
+	            }
+
+				?>
+
+            <tr class="row<?php echo $i % 2; ?>" >
+	            <td class="text-center d-none d-md-table-cell">
+		            <?php echo HTMLHelper::_('grid.id', $i, $item->id); ?>
+	            </td>
+	            <td class="order text-center d-none d-md-table-cell">
+		            <?php
+		            $iconClass = '';
+		            if (!$canChange)
+		            {
+			            $iconClass = ' inactive';
+		            }
+		            elseif (!$saveOrder)
+		            {
+			            $iconClass = ' inactive tip-top hasTooltip" title="' . HTMLHelper::_('tooltipText', 'JORDERINGDISABLED');
+		            }
+		            ?>
+		            <span class="sortable-handler<?php echo $iconClass ?>">
+											<span class="fa fa-ellipsis-v" aria-hidden="true"></span>
+										</span>
+		            <?php if ($canChange && $saveOrder) : ?>
+			            <input type="text" style="display:none" name="order[]" size="5" value="<?php echo $item->ordering; ?>" class="width-20 text-area-order">
+		            <?php endif; ?>
+	            </td>
+	            <td class="small d-none d-md-table-cell">
+		            <?php echo $item->ordering; ?>
+	            </td>
+
+	            <td class="small d-none d-md-table-cell">
+		            <?php echo $i . ': ' .$item->name; ?>
+	            </td>
+
+	            <th scope="row">
+		            <?php if ($item->checked_out) : ?>
+			            <?php echo HTMLHelper::_('jgrid.checkedout', $i, $item->editor, $item->checked_out_time, 'images.', $canCheckin); ?>
+		            <?php endif; ?>
+		            <?php if ($canEdit || $canEditOwn) : ?>
+			            <?php $editIcon = $item->checked_out ? '' : '<span class="fa fa-pencil-square mr-2" aria-hidden="true"></span>'; ?>
+			            <a class="hasTooltip" href="<?php echo $editLink; ?>"
+			               title="<?php echo Text::_('JACTION_EDIT'); ?> <?php echo $this->escape(addslashes($item->title)); ?>">
+				            <?php echo $editIcon; ?>
+				            <?php echo $this->escape($item->title); ?></a>
+		            <?php else : ?>
+			            <?php echo $this->escape($item->title); ?>
+		            <?php endif; ?>
+
+		            <span class="small" title="<?php echo $this->escape(""); ?>">
+											<?php if (empty($item->note)) : ?>
+												<?php echo Text::sprintf('JGLOBAL_LIST_ALIAS', $this->escape($item->alias)); ?>
+											<?php else : ?>
+												<?php echo Text::sprintf('JGLOBAL_LIST_ALIAS_NOTE', $this->escape($item->alias), $this->escape($item->note)); ?>
+											<?php endif; ?>
+										</span>
+	            </th>
+
+
+
+
+
+
+
+	            </tr>
 
             <?php endforeach; ?>
             </tbody>

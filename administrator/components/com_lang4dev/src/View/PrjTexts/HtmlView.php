@@ -38,8 +38,15 @@ use function Finnern\Component\Lang4dev\Administrator\Helper\selectProject;
  */
 class HtmlView extends BaseHtmlView
 {
-	protected $isDevelop;
 	protected $project;
+
+	protected $isDebugBackend;
+	protected $isDevelop;
+	/**
+	 * @var mixed|\stdClass
+	 * @since version
+	 */
+	protected mixed $isDoCommentIds;
 
 	/**
 	 * Method to display the view.
@@ -52,11 +59,14 @@ class HtmlView extends BaseHtmlView
 	 */
 	public function display($tpl = null)
 	{
-		$Layout = Factory::getApplication()->input->get('layout');
-		//echo '$Layout: ' . $Layout . '<br>';
+		//--- config --------------------------------------------------------------------
 
-		$l4dConfig = ComponentHelper::getComponent('com_Lang4dev')->getParams();
+		$l4dConfig = ComponentHelper::getComponent('com_lang4dev')->getParams();
+		//$compo_params = ComponentHelper::getComponent('com_lang4dev')->getParams();
+		$this->isDebugBackend = $l4dConfig->get('isDebugBackend');
 		$this->isDevelop = $l4dConfig->get('isDevelop');
+
+		$this->isDoCommentIds = $l4dConfig->get('isDoComment_prepared_missing_ids');
 
 		$project =
 		$this->project = selectProject('lang4dev');
@@ -71,12 +81,15 @@ class HtmlView extends BaseHtmlView
 
 
         /**
-		HTMLHelper::_('sidebar.setAction', 'index.php?option=com_Lang4dev&view=config&layout=RawView');
+		HTMLHelper::_('sidebar.setAction', 'index.php?option=com_lang4dev&view=config&layout=RawView');
 		/**
 		$Layout = Factory::getApplication()->input->get('layout');
 		Lang4devHelper::addSubmenu('config');
 		$this->sidebar = \JHtmlSidebar::render();
 		**/
+
+		$Layout = Factory::getApplication()->input->get('layout');
+		//echo '$Layout: ' . $Layout . '<br>';
 
 		$this->addToolbar($Layout);
 		/**/
@@ -140,7 +153,7 @@ class HtmlView extends BaseHtmlView
 		// Options button.
 		if (Factory::getApplication()->getIdentity()->authorise('core.admin', 'com_lang4dev'))
 		{
-			$toolbar->preferences('com_Lang4dev');
+			$toolbar->preferences('com_lang4dev');
 		}
 	}
 

@@ -565,7 +565,7 @@ class ProjectModel extends AdminModel
 
         if (empty($table->id))
         {
-            $table->generateAlias ();
+            // $table->generateAlias ();
 
             // Set ordering to the last item if not set
             if (empty($table->ordering))

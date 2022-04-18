@@ -86,7 +86,7 @@ class HtmlView extends BaseHtmlView
 		$Layout = Factory::getApplication()->input->get('layout');
 		//echo '$Layout: ' . $Layout . '<br>';
 
-		$l4dConfig = ComponentHelper::getComponent('com_Lang4dev')->getParams();
+		$l4dConfig = ComponentHelper::getComponent('com_lang4dev')->getParams();
 		$this->isDevelop = $l4dConfig->get('isDevelop');
 
         $this->items         = $this->get('Items');
@@ -101,7 +101,7 @@ class HtmlView extends BaseHtmlView
 
 		//---  --------------------------------------------------------------
 		/**
-		HTMLHelper::_('sidebar.setAction', 'index.php?option=com_Lang4dev&view=config&layout=RawView');
+		HTMLHelper::_('sidebar.setAction', 'index.php?option=com_lang4dev&view=config&layout=RawView');
 		/**
 		$Layout = Factory::getApplication()->input->get('layout');
 		Lang4devHelper::addSubmenu('config');
@@ -123,8 +123,7 @@ class HtmlView extends BaseHtmlView
 	 */
 	protected function addToolbar($Layout)
     {
-        //$canDo = \Joomla\Component\Content\Administrator\Helper\ContentHelper::getActions('com_content', 'category', $this->state->get('filter.category_id'));
-        $canDo = true;
+    	$canDo = \Joomla\Component\Content\Administrator\Helper\ContentHelper::getActions('com_content', 'category', $this->state->get('filter.category_id'));
         $user = Factory::getUser();
 
         // Get the toolbar object instance
@@ -165,8 +164,10 @@ class HtmlView extends BaseHtmlView
                 // Set the title
                 ToolBarHelper::title(Text::_('COM_LANG4DEV_SUBMENU_PROJECTS_PANEL'), 'edit');
 
-                ToolBarHelper::addNew('project.add');
 
+	            if ($canDo->get('core.create')) {
+	                ToolBarHelper::addNew('project.add');
+                }
                 /**
                 if ($canDo->get('core.edit.state') || count($this->transitions)) {
                     $dropdown = $toolbar->dropdownButton('status-group')
@@ -212,17 +213,19 @@ class HtmlView extends BaseHtmlView
                 }
                 /**/
 
-                $toolbar->delete('projects.delete')
-                    ->text('JTOOLBAR_EMPTY_TRASH')
-                    ->message('JGLOBAL_CONFIRM_DELETE')
-                    ->listCheck(true);
-
+	            if ($canDo->get('core.delete'))
+	            {
+		            $toolbar->delete('projects.delete')
+			            ->text('JTOOLBAR_EMPTY_TRASH')
+			            ->message('JGLOBAL_CONFIRM_DELETE')
+			            ->listCheck(true);
+	            }
 
                 ToolBarHelper::cancel('lang4dev.cancel', 'JTOOLBAR_CLOSE');
 
                 // Options button.
                 if (Factory::getApplication()->getIdentity()->authorise('core.admin', 'com_lang4dev')) {
-                    $toolbar->preferences('com_Lang4dev');
+                    $toolbar->preferences('com_lang4dev');
                 }
 
             break;

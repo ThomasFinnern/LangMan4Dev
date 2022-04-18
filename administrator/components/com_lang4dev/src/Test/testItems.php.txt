@@ -13,7 +13,7 @@ $CopyDbImages = Text::_('COM_LANG4DEV_DB_TRANSFER_J3X_IMAGES');
 $CopyDbImagesDesc = Text::_('COM_LANG4DEV_DB_TRANSFER_J3X_IMAGES_DESC');
 $CopyImages = Text::_('COM_LANG4DEV_MOVE_J3X_IMAGES');
 $CopyImagesDesc = Text::_('COM_LANG4DEV_MOVE_J3X_IMAGES_DESC');
-$RSG2_Zone = new zoneContainer(Text::_('COM_LANG4DEV_RSGALLERY2_ZONE'), Text::_('COM_LANG4DEV_RSGALLERY2_ZONE_DESC'), 'rsg2', 'rsg2Zone');
+$RSG2_Zone = new zoneContainer(Text::_('COM_LANG4DEV_LANG4DEV_ZONE'), Text::_('COM_LANG4DEV_LANG4DEV_ZONE_DESC'), 'rsg2', 'rsg2Zone');
 $app->enqueueMessage(Text::_('COM_LANG4DEV_SERVER_DIR_EMPTY'));
 $app->enqueueMessage(Text::_('COM_LANG4DEV_SERVER_DIR_NOT_EXIST') . '<br>'
 $app->enqueueMessage(Text::_('COM_LANG4DEV_SERVER_FILES_DO_NOT_EXIST') . '<br>'
@@ -139,8 +139,8 @@ $upgrade_ZoneInfo = Text::_('COM_LANG4DEV_UPGRADE_ZONE_DESCRIPTION');
 . ' title="' . HTMLHelper::tooltipText('COM_LANG4DEV_NEW_GALLERY') . '">'
 . ' title="' . Text::_('COM_LANG4DEV_JUMP_TO_DOCUMENTATION') . '" >www.rsg.../documentation</a>';
 . ' title="' . Text::_('COM_LANG4DEV_JUMP_TO_FORUM') . '" >' . $keyTranslation . '</a></h3>';;
-. ' title="' . Text::_('COM_LANG4DEV_JUMP_TO_FORUM') . '" >www.forum.rsgallery2.org</a>';
-. ' title="' . Text::_('COM_LANG4DEV_JUMP_TO_FORUM') . '" >www.rsgallery2.org</a>';
+. ' title="' . Text::_('COM_LANG4DEV_JUMP_TO_FORUM') . '" >www.forum.lang4dev.org</a>';
+. ' title="' . Text::_('COM_LANG4DEV_JUMP_TO_FORUM') . '" >www.lang4dev.org</a>';
 . ' title="' . Text::_('COM_LANG4DEV_JUMP_TO_GNU_ORG') . '" >GNU GPL</a>';
 . '" data-text="' . htmlspecialchars(Text::_('COM_LANG4DEV_SELECT_A_GALLERY', true), ENT_COMPAT, 'UTF-8') . '" value="' . $value . '">';
 . '* ?  COM_LANG4DEV_REMOVE_INSTALLATION_LEFT_OVERS <br>'
@@ -161,7 +161,7 @@ $upgrade_ZoneInfo = Text::_('COM_LANG4DEV_UPGRADE_ZONE_DESCRIPTION');
 //                               class="control-label"><?php echo Text::_('COM_LANG4DEV_ONE_GALLERY_MUST_EXIST'); ?></label>
 //                $toolbar->appendButton( 'Link', 'upload', 'COM_LANG4DEV_SAVE_AND_GOTO_UPLOAD', $link);
 //                echo '<h3>J3x ' . Text::_('COM_LANG4DEV_RAW_IMAGES_TXT') . '</h3>';
-//              echo HTMLHelper::_('image', 'com_rsgallery2/RSG2_logo.big.png', Text::_('COM_LANG4DEV_MAIN_LOGO_ALT_TEXT'), null, true);
+//              echo HTMLHelper::_('image', 'com_lang4dev/RSG2_logo.big.png', Text::_('COM_LANG4DEV_MAIN_LOGO_ALT_TEXT'), null, true);
 //            $app->enqueueMessage(Text::plural('COM_LANG4DEV_N_ITEMS_DELETED', $imgDeletedCount), 'notice');
 //            $html[] = '      title="' . HtmlHelper::tooltipText('COM_LANG4DEV_WATERMARK_IMAGE_FOUND') . '" ';
 //            $html[] = '      title="' . HtmlHelper::tooltipText('COM_LANG4DEV_WATERMARK_IMAGE_NOT_FOUND') . '" ';
@@ -180,8 +180,8 @@ $upgrade_ZoneInfo = Text::_('COM_LANG4DEV_UPGRADE_ZONE_DESCRIPTION');
 // ToolBarHelper::custom ('gallery.save2upload','upload','','COM_LANG4DEV_SAVE_AND_GOTO_UPLOAD', false);
 // ToolBarHelper::custom('MaintenanceJ3x.moveSelectedJ3xImages2J4x', 'copy', '', 'COM_LANG4DEV_MOVE_SELECTED_J3X_IMAGES', false);
 // ToolBarHelper::title(Text::_('COM_LANG4DEV_MANAGE_MAINTENANCE'), 'cogs'); // 'maintenance');
-// [$isRemoved_acl,       $msgTmp] = $this->PurgeTable('#__rsg2_acl', Text::_('COM_LANG4DEV_PURGED_TABLE_RSGALLERY2_ACL')) . '<br>';
-// [$isRemoved_comments,  $msgTmp] = $this->PurgeTable('#__rsg2_comments', Text::_('COM_LANG4DEV_PURGED_TABLE_RSGALLERY2_COMMENTS')) . '<br>';
+// [$isRemoved_acl,       $msgTmp] = $this->PurgeTable('#__rsg2_acl', Text::_('COM_LANG4DEV_PURGED_TABLE_LANG4DEV_ACL')) . '<br>';
+// [$isRemoved_comments,  $msgTmp] = $this->PurgeTable('#__rsg2_comments', Text::_('COM_LANG4DEV_PURGED_TABLE_LANG4DEV_COMMENTS')) . '<br>';
 // [description] => COM_LANG4DEV_XML_DESCRIPTION
 // echo Text::_('COM_LANG4DEV_MAINT_CONSOLDB_NO_MISSING_ITEMS_TXT');
 // echo Text::_('COM_LANG4DEV_MAINT_PREPARED_NOT_READY_DESC');
@@ -190,18 +190,18 @@ $upgrade_ZoneInfo = Text::_('COM_LANG4DEV_UPGRADE_ZONE_DESCRIPTION');
 // echo Text::_('COM_LANG4DEV_NO_NEW_GALLERIES');
 // echo Text::_('COM_LANG4DEV_NO_NEW_IMAGES');
 // echo Text::_('COM_LANG4DEV_UPDATE_TEXT');
-// throw new \Exception(Text::_('COM_LANG4DEV_ERROR_RSGALLERY2_NOT_FOUND'), 404);
+// throw new \Exception(Text::_('COM_LANG4DEV_ERROR_LANG4DEV_NOT_FOUND'), 404);
 //$app->enqueueMessage(Text::_('COM_LANG4DEV_INVALID_GALLERY_ID'), 'error');
 //$title = Text::_('COM_LANG4DEV_ABOUT') . ' <strong>' . $Rsg2Version . ' </strong>';
-////              echo HTMLHelper::_('image', 'com_rsgallery2/RSG2_logo.big.png', Text::_('COM_LANG4DEV_MAIN_LOGO_ALT_TEXT'), null, true);
+////              echo HTMLHelper::_('image', 'com_lang4dev/RSG2_logo.big.png', Text::_('COM_LANG4DEV_MAIN_LOGO_ALT_TEXT'), null, true);
 ////    echo '            <span class="badge badge-pill badge-info">' . Text::_('COM_LANG4DEV_PLEASE_GOTO_CONFIGURATION') . '</span>';
-////    echo HTMLHelper::_('image', 'com_rsgallery2/RSG2_logoText.svg', Text::_('COM_LANG4DEV_MAIN_LOGO_ALT_TEXT'), null, true);
+////    echo HTMLHelper::_('image', 'com_lang4dev/RSG2_logoText.svg', Text::_('COM_LANG4DEV_MAIN_LOGO_ALT_TEXT'), null, true);
 //Log::add(Text::_('COM_LANG4DEV_UPDATE_TEXT'), Log::INFO, 'rsg2');
 //ToolBarHelper::custom ('MaintenanceJ3x.copySelectedJ3xGalleries2J4x','undo','','COM_LANG4DEV_COPY_SELECTED_J3X_GALLERIES', true);
 //ToolBarHelper::custom ('MaintenanceJ3x.copySelectedJ3xImages2J4x','undo','','COM_LANG4DEV_COPY_SELECTED_J3X_IMAGES', false);
 //ToolBarHelper::custom ('copyoldconfig.recompare','upload','','COM_LANG4DEV_OLD_CONFIGURATION_RECOMPARE', true);
 //ToolBarHelper::custom('MaintenanceJ3x.moveJ3xImages2J4x', 'copy', '', 'COM_LANG4DEV_MOVE_ALL_J3X_IMAGES', false);
-//[$isRemoved, $msgTmp] = $this->PurgeTable('#__rsgallery2_cats', Text::_('COM_LANG4DEV_PURGED_TABLE_RSGALLERY2_CATS')) . '<br>';
+//[$isRemoved, $msgTmp] = $this->PurgeTable('#__lang4dev_cats', Text::_('COM_LANG4DEV_PURGED_TABLE_LANG4DEV_CATS')) . '<br>';
 //echo HTMLHelper::_('searchtools.sort', 'COM_LANG4DEV_NAME', 'a.name', $listDirn, $listOrder);
 //echo Text::_('COM_LANG4DEV_UNINSTALL_TEXT');
 <!--                            title="--><?php //echo Text::_('COM_LANG4DEV_ADD_IMAGES_PROPERTIES_DESC'); ?><!--"-->
@@ -222,11 +222,11 @@ $upgrade_ZoneInfo = Text::_('COM_LANG4DEV_UPGRADE_ZONE_DESCRIPTION');
 <!-- description="COM_LANG4DEV_MENU_SELECT_GALLERY_DESC"-->
 <!-- label class="control-label" for="description2[]" ><?php echo Text::_('COM_LANG4DEV_DESCRIPTION'); ?></label>
 <!-- label="COM_LANG4DEV_MENU_SELECT_GALLERY_LABEL"-->
-<!-- menu link="option=com_rsgallery2">COM_LANG4DEV_MENU</menu -->
+<!-- menu link="option=com_lang4dev">COM_LANG4DEV_MENU</menu -->
 <!--legend><?php echo Text::_('COM_LANG4DEV_REFRESH_TEXT'); ?>XXXXX</legend-->
 <!--legend><?php echo Text::_('COM_LANG4DEV_UPLOAD_BY_DRAG_AND_DROP_LABEL'); ?></legend-->
 <!--legend><strong><?php echo Text::_('COM_LANG4DEV_MOVE_J3X_IMAGES'); ?></strong></legend-->
-<!--menu view="rsgallery2">COM_LANG4DEV_MENU</menu-->
+<!--menu view="lang4dev">COM_LANG4DEV_MENU</menu-->
 <![CDATA[COM_LANG4DEV_GALLERIES_VIEW_DEFAULT_DESC]]>
 <![CDATA[COM_LANG4DEV_GALLERY_VIEW_EDIT_DESC]]>
 <![CDATA[COM_LANG4DEV_MENU_GALLERIES_J3X_LEGACY_VIEW_DESC]]>
@@ -240,7 +240,7 @@ $upgrade_ZoneInfo = Text::_('COM_LANG4DEV_UPGRADE_ZONE_DESCRIPTION');
 <![CDATA[COM_LANG4DEV_MENU_VIEW_SLIDESHOW_DESC]]>
 <![CDATA[COM_LANG4DEV_MENU_VIEW_SLIDESHOW_J3X_DESC]]>
 <![CDATA[COM_LANG4DEV_MENU_VIEW_SLIDE_PAGE_J3X_DESC]]>
-<![CDATA[COM_LANG4DEV_RSGALLERY2_VIEW_DEFAULT_DESC]]>
+<![CDATA[COM_LANG4DEV_LANG4DEV_VIEW_DEFAULT_DESC]]>
 <?php
 <?php //echo HTMLHelper::_('bootstrap.addTab', 'myTab', 'DbCopyJ3xConfig', Text::_('COM_LANG4DEV_DB_COPY_J3X_CONFIG', true)); ?>
 <?php //echo HTMLHelper::_('uitab.addTab', 'myTab', 'dragAndDrop', Text::_('COM_LANG4DEV_DO_UPLOAD')); ?>
@@ -354,7 +354,7 @@ $upgrade_ZoneInfo = Text::_('COM_LANG4DEV_UPGRADE_ZONE_DESCRIPTION');
 <layout title="COM_LANG4DEV_MENU_VIEW_SLIDESHOW_J3X_TITLE">
 <layout title="COM_LANG4DEV_MENU_VIEW_SLIDESHOW_TITLE">
 <layout title="COM_LANG4DEV_MENU_VIEW_SLIDE_PAGE_J3X_TITLE">
-<layout title="COM_LANG4DEV_RSGALLERY2_VIEW_DEFAULT_TITLE">
+<layout title="COM_LANG4DEV_LANG4DEV_VIEW_DEFAULT_TITLE">
 <legend><strong><?php echo Text::_('COM_LANG4DEV_COMPARE_AND_COPY_J3X_CONFIG'); ?></strong></legend>
 <legend><strong><?php echo Text::_('COM_LANG4DEV_CONFIG_MINUS_RAW_EDIT_TXT'); ?></strong></legend>
 <legend><strong><?php echo Text::_('COM_LANG4DEV_DB_TRANSFER_J3X_GALLERIES'); ?></strong></legend>
@@ -367,7 +367,7 @@ $upgrade_ZoneInfo = Text::_('COM_LANG4DEV_UPGRADE_ZONE_DESCRIPTION');
 <menu view="COM_LANG4DEV_MENU_IMAGES"
 <menu view="COM_LANG4DEV_MENU_MAINTENANCE"
 <menu view="COM_LANG4DEV_MENU_UPLOAD"
-<menu view="rsgallery2">COM_LANG4DEV_MENU
+<menu view="lang4dev">COM_LANG4DEV_MENU
 <menu-quicktask-title>COM_LANG4DEV_DASHBOARD_ADD_GALLERY</menu-quicktask-title>
 <name>COM_LANG4DEV</name>
 <option value="0">COM_LANG4DEV_CONFIG_GALLERIES_COLUMN_TYPE_AUTO</option>
@@ -472,8 +472,8 @@ Text::_('COM_LANG4DEV_MANIFEST_INFO_DESC'),
 Text::_('COM_LANG4DEV_MENU_CONFIG'),
 Text::_('COM_LANG4DEV_MOVE_J3X_IMAGES'),
 Text::_('COM_LANG4DEV_MOVE_J3X_IMAGES_DESC'),
-Text::_('COM_LANG4DEV_PREPARE_REMOVE_RSGALLERY2'),
-Text::_('COM_LANG4DEV_PREPARE_REMOVE_RSGALLERY2_DESC'),
+Text::_('COM_LANG4DEV_PREPARE_REMOVE_LANG4DEV'),
+Text::_('COM_LANG4DEV_PREPARE_REMOVE_LANG4DEV_DESC'),
 Text::_('COM_LANG4DEV_PURGE_DATA_AND_IMAGES'),
 Text::_('COM_LANG4DEV_PURGE_DATA_AND_IMAGES_DESC'),
 Text::_('COM_LANG4DEV_RAW_ACLS_TXT'),
@@ -486,8 +486,8 @@ Text::_('COM_LANG4DEV_REPAIR_IMAGE_PATHS'),
 Text::_('COM_LANG4DEV_REPAIR_IMAGE_PATHS_DESC'),
 Text::_('COM_LANG4DEV_REPAIR_IMAGE_PATHS_J3X'),
 Text::_('COM_LANG4DEV_REPAIR_IMAGE_PATHS_J3X_DESC'),
-Text::_('COM_LANG4DEV_UNDO_PREPARE_REMOVE_RSGALLERY2'),
-Text::_('COM_LANG4DEV_UNDO_PREPARE_REMOVE_RSGALLERY2_DESC'),
+Text::_('COM_LANG4DEV_UNDO_PREPARE_REMOVE_LANG4DEV'),
+Text::_('COM_LANG4DEV_UNDO_PREPARE_REMOVE_LANG4DEV_DESC'),
 Text::script('COM_LANG4DEV_PLEASE_CHOOSE_A_GALLERY_FIRST', true);
 ToolBarHelper::custom ('gallery.save2upload','upload','','COM_LANG4DEV_SAVE_AND_GOTO_UPLOAD', false);
 ToolBarHelper::custom('MaintConsolidateDb.assignParentGallery', 'images', '', 'COM_LANG4DEV_ASSIGN_SELECTED_GALLERY', true);
@@ -522,11 +522,11 @@ ToolBarHelper::title(Text::_('COM_LANG4DEV_MANAGE_IMAGES'), 'image');
 ToolBarHelper::title(Text::_('COM_LANG4DEV_MANAGE_MAINTENANCE'), 'cogs'); // 'maintenance');
 ToolBarHelper::title(Text::_('COM_LANG4DEV_MOVE_J3X_IMAGES'), 'screwdriver');
 ToolBarHelper::title(Text::_('COM_LANG4DEV_SUBMENU_CONTROL_PANEL'), 'home-2');
-[$isRemoved, $msgTmp] = $this->PurgeTable('#__rsgallery2_acl', Text::_('COM_LANG4DEV_PURGED_TABLE_RSGALLERY2_ACL')) . '<br>';
-[$isRemoved, $msgTmp] = $this->PurgeTable('#__rsgallery2_comments', Text::_('COM_LANG4DEV_PURGED_TABLE_RSGALLERY2_COMMENTS')) . '<br>';
-[$isRemoved, $msgTmp] = $this->PurgeTable('#__rsgallery2_config', Text::_('COM_LANG4DEV_PURGED_TABLE_RSGALLERY2_CONFIG')) . '<br>';
-[$isRemoved, $msgTmp] = $this->PurgeTable('#__rsgallery2_files', Text::_('COM_LANG4DEV_PURGED_IMAGE_ENTRIES_FROM_DATABASE')) . '<br>';
-[$isRemoved, $msgTmp] = $this->PurgeTable('#__rsgallery2_galleries', Text::_('COM_LANG4DEV_PURGED_GALLERIES_FROM_DATABASE')) . '<br>';
+[$isRemoved, $msgTmp] = $this->PurgeTable('#__lang4dev_acl', Text::_('COM_LANG4DEV_PURGED_TABLE_LANG4DEV_ACL')) . '<br>';
+[$isRemoved, $msgTmp] = $this->PurgeTable('#__lang4dev_comments', Text::_('COM_LANG4DEV_PURGED_TABLE_LANG4DEV_COMMENTS')) . '<br>';
+[$isRemoved, $msgTmp] = $this->PurgeTable('#__lang4dev_config', Text::_('COM_LANG4DEV_PURGED_TABLE_LANG4DEV_CONFIG')) . '<br>';
+[$isRemoved, $msgTmp] = $this->PurgeTable('#__lang4dev_files', Text::_('COM_LANG4DEV_PURGED_IMAGE_ENTRIES_FROM_DATABASE')) . '<br>';
+[$isRemoved, $msgTmp] = $this->PurgeTable('#__lang4dev_galleries', Text::_('COM_LANG4DEV_PURGED_GALLERIES_FROM_DATABASE')) . '<br>';
 [$isRemoved_galleries, $msgTmp] = $this->PurgeTable('#__rsg2_galleries', Text::_('COM_LANG4DEV_PURGED_GALLERIES_FROM_DATABASE')) . '<br>';
 [$isRemoved_images,    $msgTmp] = $this->PurgeTable('#__rsg2_images', Text::_('COM_LANG4DEV_PURGED_IMAGE_ENTRIES_FROM_DATABASE')) . '<br>';
 array_unshift($options, HTMLHelper::_('select.option', '0', Text::_('COM_LANG4DEV_J3X_MENU_GALLERIES_OVERVIEW')));
@@ -658,7 +658,7 @@ echo '<h3>J3x ' . Text::_('COM_LANG4DEV_RAW_GALLERIES_TXT') . '</h3>';
 echo '<p><h3>' . Text::_('COM_LANG4DEV_CONFIGURATION_3x') . '</h3></p>';
 echo '<p><h3>' . Text::_('COM_LANG4DEV_CONFIG_MINUS_RAW_VIEW') . '</h3></p>';
 echo '<p><h3>' . Text::_('COM_LANG4DEV_MANIFEST_INFO_VIEW') . '</h3></p>';
-echo HTMLHelper::_('image', 'com_rsgallery2/RSG2_logoText.svg', Text::_('COM_LANG4DEV_MAIN_LOGO_ALT_TEXT'), null, true);
+echo HTMLHelper::_('image', 'com_lang4dev/RSG2_logoText.svg', Text::_('COM_LANG4DEV_MAIN_LOGO_ALT_TEXT'), null, true);
 echo Text::_('COM_LANG4DEV_MOVE_J3X_IMAGES_USE') . '.&nbsp'
 echo Text::_('COM_LANG4DEV_NO_INCONSISTENCIES_IN_DATABASE');
 label="*??COM_LANG4DEV_CFG_GALLERIES_VIEW_LABEL"
@@ -748,21 +748,21 @@ label="COM_LANG4DEV_PATH_LABEL"
 label="COM_LANG4DEV_PRESELECT_LATEST_GALLERY_LABEL"
 label="COM_LANG4DEV_PREVIOUS_VERSION"
 label="COM_LANG4DEV_SELECT_FOR_PARENT_GALLERY"
-label="COM_LANG4DEV_SELECT_RSGALLERY2_LABEL"
+label="COM_LANG4DEV_SELECT_LANG4DEV_LABEL"
 label="COM_LANG4DEV_SPECIFY_GALLERY_LABEL"
 label="COM_LANG4DEV_THUMBNAIL_SIZE"
 label="COM_LANG4DEV_THUMBNAIL_STYLE"
 label="COM_LANG4DEV_THUMB_PATH"
 label="COM_LANG4DEV_USE_J3X_PATHS"
-link="option=com_config&amp;view=component&amp;component=com_rsgallery2">COM_LANG4DEV_MENU_CONFIG
-link="option=com_rsgallery2">COM_LANG4DEV_MENU_CONTROL_PANEL
-link="option=com_rsgallery2&amp;view=galleries">COM_LANG4DEV_MENU_GALLERIES
-link="option=com_rsgallery2&amp;view=images">COM_LANG4DEV_MENU_IMAGES
-link="option=com_rsgallery2&amp;view=maintenance">COM_LANG4DEV_MENU_MAINTENANCE
-link="option=com_rsgallery2&amp;view=upload">COM_LANG4DEV_MENU_UPLOAD
+link="option=com_config&amp;view=component&amp;component=com_lang4dev">COM_LANG4DEV_MENU_CONFIG
+link="option=com_lang4dev">COM_LANG4DEV_MENU_CONTROL_PANEL
+link="option=com_lang4dev&amp;view=galleries">COM_LANG4DEV_MENU_GALLERIES
+link="option=com_lang4dev&amp;view=images">COM_LANG4DEV_MENU_IMAGES
+link="option=com_lang4dev&amp;view=maintenance">COM_LANG4DEV_MENU_MAINTENANCE
+link="option=com_lang4dev&amp;view=upload">COM_LANG4DEV_MENU_UPLOAD
 protected $text_prefix = 'COM_LANG4DEV';
 quicktask-title="COM_LANG4DEV_DASHBOARD_ADD_GALLERY"
-throw new \Exception(Text::_('COM_LANG4DEV_ERROR_RSGALLERY2_NOT_FOUND'), 404);
+throw new \Exception(Text::_('COM_LANG4DEV_ERROR_LANG4DEV_NOT_FOUND'), 404);
 title="<?php echo "???" . Text::_('COM_LANG4DEV_J3X_IMAGES_DESELECT_BY_GALLERY_DEC'); ?>"
 title="<?php echo Text::_('COM_LANG4DEV_COPY_TO_CLIPBOARD_DESC'); ?>"
 title="<?php echo Text::_('COM_LANG4DEV_CREATE_GALLERY_DESC'); ?>"

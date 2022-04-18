@@ -3,9 +3,9 @@
 	<!-- ... Tab General ................................. -->
 
 	<fieldset
-		name="lang4dev"
-		label="COM_LANG4DEV_FIELD_CONFIG_INDIVIDUAL_FOO_DISPLAY"
-		description="COM_LANG4DEV_FIELD_CONFIG_INDIVIDUAL_FOO_DESC"
+		name="tab01"
+		label="COM_LANG4DEV_CONFIG_TAB_GENERAL"
+		description="COM_LANG4DEV_CONFIG_TAB_GENERAL_DESC"
 	>
 		<!-- needed when more entries are general ...
 				field name="intro_text"
@@ -17,7 +17,22 @@
 		/-->
 		
 		<field
-				name="ToDo_list_general"
+				name="ToDo_list_general0"
+				type="textarray"
+				label="!!! ToDo !!!: In config - general"
+				description="ToDo list for config in this tab"
+				rows="10"
+				class="text-danger"
+				showon="isDevelop:1"
+				readonly="true"
+				default="* add _NOTE_ part to lang of note elements\n
+				* use display instead of show for const and menu ..."
+		>
+			<option value="0"></option>
+		</field>
+
+		<!--field
+				name="ToDo_list_general_old"
 				type="list"
 				default="0"
 				label="!!! ToDo !!!: In config - general"
@@ -30,8 +45,20 @@
 			<option value="2">* </option>
 			<option value="3">* </option>
 			<option value="4">* </option>
-		</field>
+		</field-->
 
+
+		<field
+				name="isDoComment_prepared_missing_ids"
+				type="radio"
+				label="COM_LANG4DEV_COMMENT_PREPARED_MISSING_IDS"
+				description="COM_LANG4DEV_COMMENT_PREPARED_MISSING_IDS_DESC"
+				default="1"
+				layout="joomla.form.field.radio.switcher"
+		>
+			<option value="0">JNO</option>
+			<option value="1">JYES</option>
+		</field>
 
 
 		<field
@@ -41,9 +68,10 @@
 		/>
 
 		<field
-			name="show_foo_name_label"
+			name="Example_show_foo_name_label"
 			type="list"
-			label="COM_LANG4DEV_FIELD_FOO_SHOW_CATEGORY_LABEL"
+			label="COM_LANG4DEV_FIELD_TEST_SHOW_CATEGORY_LABEL"
+			description="COM_LANG4DEV_FIELD_TEST_SHOW_CATEGORY_LABEL_DESC"
 			default="1"
 			>
 			<option value="0">JNO</option>
@@ -51,9 +79,10 @@
 		</field>
 
 		<field
-			name="show_name"
+			name="example_show_name"
 			type="radio"
-			label="COM_LANG4DEV_FIELD_PARAMS_NAME_LABEL"
+			label="COM_LANG4DEV_TEST_FIELD_PARAMS_NAME_LABEL"
+			description="COM_LANG4DEV_TEST_FIELD_PARAMS_NAME_LABEL_DESC"
 			default="1"
 			layout="joomla.form.field.radio.switcher"
 			>
@@ -66,9 +95,9 @@
 	<!-- ... Tab Upload ................................. -->
 
 	<fieldset
-			name="upload"
-			label="COM_LANG4DEV_CONFIG_TAB_UPLOAD"
-			description="COM_LANG4DEV_CONFIG_TAB_UPLOAD_DESC"
+			name="tab02"
+			label="COM_LANG4DEV_CONFIG_TAB02"
+			description="COM_LANG4DEV_CONFIG_TAB02_DESC"
 	>
 		<!--field
 				type="spacer"
@@ -187,7 +216,7 @@
 			label="JCONFIG_PERMISSIONS_LABEL"
 			validate="rules"
 			filter="rules"
-			component="com_rsgallery2"
+			component="com_lang4dev"
 			section="component"
 		/>
 

@@ -12,6 +12,7 @@ namespace Finnern\Component\Lang4dev\Administrator\View\Project;
 \defined('_JEXEC') or die;
 
 use Joomla\CMS\Component\ComponentHelper;
+use Joomla\CMS\Form\Form;
 use Joomla\CMS\Helper\ContentHelper;
 use Joomla\CMS\Factory;
 use Joomla\CMS\HTML\HTMLHelper;
@@ -33,11 +34,11 @@ use Joomla\Component\Content\Administrator\Extension\ContentComponent;
 class HtmlView extends BaseHtmlView
 {
     /**
-     * The \JForm object
+     * The \Form object
      *
-     * @var  \JForm
+     * @var  Form
      */
-    protected $form;
+    protected mixed $form;
 
     /**
      * An array of items
@@ -93,10 +94,10 @@ class HtmlView extends BaseHtmlView
 	{
         //--- config --------------------------------------------------------------------
 
-        $rsgConfig = ComponentHelper::getComponent('com_lang4dev')->getParams();
+        $l4dConfig = ComponentHelper::getComponent('com_lang4dev')->getParams();
         //$compo_params = ComponentHelper::getComponent('com_lang4dev')->getParams();
-        $this->isDebugBackend = $rsgConfig->get('isDebugBackend');
-        $this->isDevelop = $rsgConfig->get('isDevelop');
+        $this->isDebugBackend = $l4dConfig->get('isDebugBackend');
+        $this->isDevelop = $l4dConfig->get('isDevelop');
 
         //--- Form --------------------------------------------------------------------
 
@@ -158,12 +159,12 @@ class HtmlView extends BaseHtmlView
         switch ($Layout) {
             case 'edit':
             default:
-                ToolBarHelper::title(Text::_('COM_LANG4DEV_EDIT_IMAGE', 'image'));
+                ToolBarHelper::title(Text::_('COM_LANG4DEV_EDIT_PROJECT', 'project'));
 
                 //--- apply, save and close ... -----------------------------------
 
-                ToolBarHelper::apply('image.apply');
-                ToolBarHelper::save('image.save');
+                ToolBarHelper::apply('project.apply');
+                ToolBarHelper::save('project.save');
 
 
                 $toolbar->delete('projects.delete')
@@ -182,7 +183,7 @@ class HtmlView extends BaseHtmlView
 
                 // Options button.
                 if (Factory::getApplication()->getIdentity()->authorise('core.admin', 'com_lang4dev')) {
-                    $toolbar->preferences('com_Lang4dev');
+                    $toolbar->preferences('com_lang4dev');
                 }
 
             break;

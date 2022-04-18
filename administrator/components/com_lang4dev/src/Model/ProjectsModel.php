@@ -52,7 +52,7 @@ class ProjectsModel extends ListModel
 //				'modified_by', 'a.modified_by',
 
 				'parent_id', 'a.parent_id',
-				'lft', 'a.lft',
+//				'lft', 'a.lft',
 
 				'hits', 'a.hits',
 //				'tag',
@@ -81,7 +81,7 @@ class ProjectsModel extends ListModel
 	 *
 	 * @since __BUMP_VERSION__
 	 */
-	protected function populateState($ordering = 'a.lft', $direction = 'asc')
+	protected function populateState($ordering = 'a.id', $direction = 'asc')
 	{
 		$app = Factory::getApplication();
 

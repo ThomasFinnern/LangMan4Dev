@@ -13,7 +13,7 @@
 <!-- <option value="a.modified_by DESC">COM_LANG4DEV_MODIFIED_BY_DESC</option>-->
 <!-- description="COM_LANG4DEV_MENU_SELECT_GALLERY_DESC"-->
 <!-- label="COM_LANG4DEV_MENU_SELECT_GALLERY_LABEL"-->
-<!-- menu link="option=com_rsgallery2">COM_LANG4DEV_MENU</menu -->
+<!-- menu link="option=com_lang4dev">COM_LANG4DEV_MENU</menu -->
 <!--menu view="rsgallery2">COM_LANG4DEV_MENU</menu-->
 <![CDATA[COM_LANG4DEV_GALLERIES_VIEW_DEFAULT_DESC]]>
 <![CDATA[COM_LANG4DEV_GALLERY_VIEW_EDIT_DESC]]>
@@ -268,12 +268,12 @@ label="COM_LANG4DEV_THUMBNAIL_SIZE"
 label="COM_LANG4DEV_THUMBNAIL_STYLE"
 label="COM_LANG4DEV_THUMB_PATH"
 label="COM_LANG4DEV_USE_J3X_PATHS"
-link="option=com_config&amp;view=component&amp;component=com_rsgallery2">COM_LANG4DEV_MENU_CONFIG
-link="option=com_rsgallery2">COM_LANG4DEV_MENU_CONTROL_PANEL
-link="option=com_rsgallery2&amp;view=galleries">COM_LANG4DEV_MENU_GALLERIES
-link="option=com_rsgallery2&amp;view=images">COM_LANG4DEV_MENU_IMAGES
-link="option=com_rsgallery2&amp;view=maintenance">COM_LANG4DEV_MENU_MAINTENANCE
-link="option=com_rsgallery2&amp;view=upload">COM_LANG4DEV_MENU_UPLOAD
+link="option=com_config&amp;view=component&amp;component=com_lang4dev">COM_LANG4DEV_MENU_CONFIG
+link="option=com_lang4dev">COM_LANG4DEV_MENU_CONTROL_PANEL
+link="option=com_lang4dev&amp;view=galleries">COM_LANG4DEV_MENU_GALLERIES
+link="option=com_lang4dev&amp;view=images">COM_LANG4DEV_MENU_IMAGES
+link="option=com_lang4dev&amp;view=maintenance">COM_LANG4DEV_MENU_MAINTENANCE
+link="option=com_lang4dev&amp;view=upload">COM_LANG4DEV_MENU_UPLOAD
 quicktask-title="COM_LANG4DEV_DASHBOARD_ADD_GALLERY"
 title="COM_LANG4DEV_ACCESS_COMPONENT_COMMENT"
 title="COM_LANG4DEV_ACCESS_COMPONENT_CREATE_OWN"

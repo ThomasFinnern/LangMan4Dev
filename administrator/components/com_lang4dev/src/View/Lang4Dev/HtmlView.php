@@ -83,7 +83,7 @@ class HtmlView extends BaseHtmlView
 		$this->extensionVersion = $oVersion->getVersion(); // getLongVersion, getVersion
 		
 		
-		$l4dConfig = ComponentHelper::getComponent('com_Lang4dev')->getParams();
+		$l4dConfig = ComponentHelper::getComponent('com_lang4dev')->getParams();
 		$this->isDevelop = $l4dConfig->get('isDevelop');
 
 		
