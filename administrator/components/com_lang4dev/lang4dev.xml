@@ -56,6 +56,14 @@
 			      img="class:language"
 			      link="option=com_lang4dev&amp;view=translations">COM_LANG4DEV_MENU_TRANSLATIONS
 			</menu>
+			<menu view="COM_LANG4DEV_MENU_TRANSLATIONS"
+			      img="class:language"
+			      link="option=com_lang4dev&amp;view=translations">COM_LANG4DEV_MENU_TRANSLATIONS
+			</menu>
+			<menu view="COM_LANG4DEV_MENU_MAINTENANCE"
+			      img="class:equalizer"
+			      link="option=com_lang4dev&amp;view=maintenance">COM_LANG4DEV_MENU_MAINTENANCE
+			</menu>
 			<menu view="COM_LANG4DEV_MENU_CONFIG"
 			      img="class:config"
 			      link="option=com_config&amp;view=component&amp;component=com_lang4dev">COM_LANG4DEV_MENU_CONFIG

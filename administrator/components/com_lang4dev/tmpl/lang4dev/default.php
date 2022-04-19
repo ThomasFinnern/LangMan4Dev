@@ -85,6 +85,15 @@ $cmdButtons[] = new cmdButton(
     'viewTranslations'
 );
 
+// translations
+$cmdButtons[] = new cmdButton(
+    Route::_('index.php?option=com_lang4dev&view=maintenance'),
+    Text::_('COM_LANG4DEV_MAINTENANCE'),
+    Text::_('COM_LANG4DEV_MAINTENANCE_DESC') . '                        ',
+    array('icon-cog', 'icon-equalizer'),
+    'viewTranslations'
+);
+
 function DisplayButton($button)
 {
     global $imageClass;
