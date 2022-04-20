@@ -3,5 +3,5 @@
 #
 
 #DROP TABLE IF EXISTS `#__lang4dev_projects`;
-#DROP TABLE IF EXISTS `#__lang4dev_sub_projects`;
+#DROP TABLE IF EXISTS `#__lang4dev_subprojects`;
 

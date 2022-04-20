@@ -48,7 +48,7 @@ ALTER TABLE `#__lang4dev_projects` ADD COLUMN  `title` varchar(255) NOT NULL DEF
 -- sub projects
 --
 
-CREATE TABLE IF NOT EXISTS `#__lang4dev_sub_projects` (
+CREATE TABLE IF NOT EXISTS `#__lang4dev_subprojects` (
     `id` int NOT NULL AUTO_INCREMENT,
     `name` varchar(255) NOT NULL DEFAULT '',
     `alias` varchar(400) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NOT NULL DEFAULT '',

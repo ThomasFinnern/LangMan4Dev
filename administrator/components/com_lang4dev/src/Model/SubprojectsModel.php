@@ -19,11 +19,11 @@ use Joomla\CMS\MVC\Factory\MVCFactoryInterface;
 use Joomla\CMS\MVC\Model\ListModel;
 
 /**
- * Lang4dev Component Projects Model
+ * Lang4dev Component Subp Model
  *
  * @since __BUMP_VERSION__
  */
-class ProjectsModel extends ListModel
+class SubrojectsModel extends ListModel
 {
 	/**
 	 * Constructor.
@@ -41,7 +41,6 @@ class ProjectsModel extends ListModel
 		{
 			$config['filter_fields'] = array(
 				'id', 'a.id',
-				'title', 'a.title',
 				'name', 'a.name',
 
 				'created', 'a.created',
@@ -171,7 +170,6 @@ class ProjectsModel extends ListModel
 				/**/
 				'list.select',
 				'a.id, '
-				. 'a.title, '
 				. 'a.name, '
 				. 'a.alias, '
                 . 'a.note, '
@@ -196,7 +194,7 @@ class ProjectsModel extends ListModel
 				. 'a.access'
 			)
 		);
-		$query->from('#__lang4dev_projects AS a');
+		$query->from('#__lang4dev_subprojects AS a');
 
 //		/* Count child images */
 //		$query->select('COUNT(img.gallery_id) as image_count')
@@ -267,8 +265,7 @@ class ProjectsModel extends ListModel
 		{
 			$search = $db->quote('%' . $db->escape($search, true) . '%');
 			$query->where(
-				'a.title LIKE ' . $search
-				. ' OR a.name LIKE ' . $search
+				'a.name LIKE ' . $search
 				. ' OR a.alias LIKE ' . $search
 				. ' OR a.description LIKE ' . $search
 				. ' OR a.note LIKE ' . $search
@@ -321,7 +318,6 @@ class ProjectsModel extends ListModel
 		$query->group(
 		/**/
 			'a.id, '
-			. 'a.title, '
 			. 'a.name, '
 			. 'a.alias, '
             . 'a.note, '

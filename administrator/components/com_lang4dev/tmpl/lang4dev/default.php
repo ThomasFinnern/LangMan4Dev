@@ -21,7 +21,7 @@ use Joomla\CMS\Session\Session;
 //HTMLHelper::_('stylesheet', 'com_lang4dev/backend/maintenance.css', array('version' => 'auto', 'relative' => true));
 //HTMLHelper::_('script', 'com_lang4dev/backend/maintenance.js', ['version' => 'auto', 'relative' => true]);
 
-Text::script('COM_LANG4DEV_PLEASE_CHOOSE_A_GALLERY_FIRST', true);
+//Text::script('COM_LANG4DEV_PLEASE_CHOOSE_A_GALLERY_FIRST', true);
 HTMLHelper::_('stylesheet', 'com_lang4dev/backend/controlPanel.css', array('version' => 'auto', 'relative' => true));
 
 

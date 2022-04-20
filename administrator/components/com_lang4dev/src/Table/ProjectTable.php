@@ -36,7 +36,7 @@ class ProjectTable extends Table
 	 */
 	public function __construct(DatabaseDriver $db)
 	{
-		$this->typeAlias = 'com_lang4dev.project';
+		$this->typeAlias = 'com_lang4dev.projects';
 
 		parent::__construct('#__lang4dev_projects', 'id', $db);
 
@@ -94,7 +94,7 @@ class ProjectTable extends Table
 
         // ToDo: aliase must be singular see below store ?
         if (empty($this->alias)) {
-            $this->alias = $this->name;
+            $this->alias = $this->title;
         }
 
         $this->alias = ApplicationHelper::stringURLSafe($this->alias, $this->language);
@@ -153,15 +153,15 @@ class ProjectTable extends Table
             $this->checked_out_time = null;
         }
 
-        if (!(int) $this->publish_up)
-        {
-            $this->publish_up = null;
-        }
+        // if (!(int) $this->publish_up)
+        // {
+            // $this->publish_up = null;
+        // }
 
-        if (!(int) $this->publish_down)
-        {
-            $this->publish_down = null;
-        }
+        // if (!(int) $this->publish_down)
+        // {
+            // $this->publish_down = null;
+        // }
 
         return true;
     }
@@ -209,8 +209,8 @@ class ProjectTable extends Table
             }
 
             // Text must be preset
-            if ($this->description == null) {
-                $this->description = '';
+            if ($this->note == null) {
+                $this->note = '';
             }
         }
 
@@ -244,6 +244,7 @@ class ProjectTable extends Table
 
         if ($return)
         {
+			// ToDo: subProject
 //            $helper = new TagsHelper;
 //            $helper->tagDeleteInstances($pk);
         }
