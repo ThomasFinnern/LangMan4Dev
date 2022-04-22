@@ -59,7 +59,7 @@ if ($saveOrder && !empty($this->items))
 }
 
 ?>
-<form action="<?php echo Route::_('index.php?option=com_lang4dev&view=projects'); ?>"
+<form action="<?php echo Route::_('index.php?option=com_lang4dev&view=subprojects'); ?>"
       method="post" name="adminForm" id="item-form" class="form-validate">
 
 	<div>

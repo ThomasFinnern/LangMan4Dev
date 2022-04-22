@@ -23,7 +23,7 @@ use Joomla\CMS\MVC\Model\ListModel;
  *
  * @since __BUMP_VERSION__
  */
-class SubrojectsModel extends ListModel
+class SubprojectsModel extends ListModel
 {
 	/**
 	 * Constructor.

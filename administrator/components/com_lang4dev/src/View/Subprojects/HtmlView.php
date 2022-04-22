@@ -162,11 +162,11 @@ class HtmlView extends BaseHtmlView
              * /**/
             default:
                 // Set the title
-                ToolBarHelper::title(Text::_('COM_LANG4DEV_SUBMENU_PROJECTS_PANEL'), 'edit');
+                ToolBarHelper::title(Text::_('COM_LANG4DEV_SUBMENU_SUBPROJECTS_PANEL'), 'edit');
 
 
 	            if ($canDo->get('core.create')) {
-	                ToolBarHelper::addNew('project.add');
+	                ToolBarHelper::addNew('subproject.add');
                 }
                 /**
                 if ($canDo->get('core.edit.state') || count($this->transitions)) {
@@ -215,7 +215,7 @@ class HtmlView extends BaseHtmlView
 
 	            if ($canDo->get('core.delete'))
 	            {
-		            $toolbar->delete('projects.delete')
+		            $toolbar->delete('subprojects.delete')
 			            ->text('JTOOLBAR_EMPTY_TRASH')
 			            ->message('JGLOBAL_CONFIRM_DELETE')
 			            ->listCheck(true);
