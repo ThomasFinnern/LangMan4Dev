@@ -21,7 +21,7 @@ use Joomla\Registry\Registry;
 use Joomla\String\StringHelper;
 
 /**
- * Project table
+ * Subproject table
  *
  * @since __BUMP_VERSION__
  */
