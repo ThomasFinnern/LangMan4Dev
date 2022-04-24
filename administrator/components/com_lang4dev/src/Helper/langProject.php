@@ -23,6 +23,7 @@ class langProject
 
     public $isSysFileFound = false;
 	public $componentPrefix = "";
+	public $twinId = "";
 
 
     /**

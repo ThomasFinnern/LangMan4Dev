@@ -45,16 +45,6 @@
 		/>
 
 		<field
-				name="root_path2"
-				type="file"
-				label="COM_LANG4DEV_PRJ_ROOT_PATH"
-				description="COM_LANG4DEV_PRJ_ROOT_PATH_DESC"
-				class="readonly"
-				size="40"
-		/>
-
-
-		<field
 				name="twin_id"
 				type="text"
 				label="COM_LANG4DEV_PROJECT_ORIGIN_TWIN_ID"
@@ -153,7 +143,7 @@
 		<fieldset name="basic">
 
 			<field
-					name="gallery_layout"
+					name="test01"
 					type="componentlayout"
 					label="JFIELD_ALT_LAYOUT_LABEL"
 					class="custom-select"
@@ -163,13 +153,13 @@
 			/>
 
 			<field
-					name="image"
+					name="test02"
 					type="media"
 					label="COM_LANG4DEV_FIELD_IMAGE_LABEL"
 			/>
 
 			<field
-					name="image_alt"
+					name="test02"
 					type="text"
 					label="COM_LANG4DEV_FIELD_IMAGE_ALT_LABEL"
 					size="20"

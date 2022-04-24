@@ -26,6 +26,9 @@ class langSubProject extends langFileNamesSet
 	public $installPathFilename = "";
     public $componentPrefix = "";
 
+	public $twinId = "";
+
+
     // !!! ToDo: text_prefix !!!
     // public $text_prefix;
 

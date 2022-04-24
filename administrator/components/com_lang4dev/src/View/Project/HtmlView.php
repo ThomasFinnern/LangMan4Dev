@@ -176,9 +176,9 @@ class HtmlView extends BaseHtmlView
 
                 //ToolBarHelper::save2new('image.save2new');
                 if (empty($this->item->id)) {
-                    ToolBarHelper::cancel('lang4dev.cancel', 'JTOOLBAR_CLOSE');
+                    ToolBarHelper::cancel('project.cancel', 'JTOOLBAR_CLOSE');
                 } else {
-                    ToolBarHelper::cancel('lang4dev.cancel', 'JTOOLBAR_CLOSE');
+                    ToolBarHelper::cancel('project.cancel', 'JTOOLBAR_CLOSE');
                 }
 
                 // Options button.

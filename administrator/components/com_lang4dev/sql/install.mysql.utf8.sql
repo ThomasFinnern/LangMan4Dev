@@ -8,8 +8,9 @@ CREATE TABLE IF NOT EXISTS `#__lang4dev_projects` (
     `id` int NOT NULL AUTO_INCREMENT,
     `name` varchar(255) NOT NULL DEFAULT '',
     `alias` varchar(400) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NOT NULL DEFAULT '',
-    `note` text NOT NULL DEFAULT '',
+    `notes` text NOT NULL DEFAULT '',
     `root_path` varchar(255) NOT NULL DEFAULT '',
+	`type`  int NOT NULL DEFAULT 0,
 
     `params` text NOT NULL,
 
@@ -52,7 +53,7 @@ CREATE TABLE IF NOT EXISTS `#__lang4dev_subprojects` (
     `id` int NOT NULL AUTO_INCREMENT,
     `name` varchar(255) NOT NULL DEFAULT '',
     `alias` varchar(400) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NOT NULL DEFAULT '',
-    `note` text NOT NULL DEFAULT '',
+    `notes` text NOT NULL DEFAULT '',
 
     `type`  int NOT NULL DEFAULT 0,
     `root_path` varchar(255) NOT NULL DEFAULT '',
@@ -88,7 +89,7 @@ CREATE TABLE IF NOT EXISTS `#__lang4dev_subprojects` (
   KEY `idx_access` (`access`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 DEFAULT COLLATE=utf8mb4_unicode_ci;
 
--- INSERT INTO `#__lang4dev_sub_projects` (`name`,`alias`,`note`, `base_path`) VALUES
+-- INSERT INTO `#__lang4dev_subprojects` (`name`,`alias`,`note`, `base_path`) VALUES
 -- ('com_lang4dev','com_lang4dev','Test data pointing to this component pathes',
 -- 'administrator/components/com_lang4dev'),
 -- ('com_lang4dev','com_lang4dev','Test data pointing to this component pathes',

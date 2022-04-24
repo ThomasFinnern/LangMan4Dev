@@ -159,15 +159,15 @@ class HtmlView extends BaseHtmlView
         switch ($Layout) {
             case 'edit':
             default:
-                ToolBarHelper::title(Text::_('COM_LANG4DEV_EDIT_PROJECT', 'project'));
+                ToolBarHelper::title(Text::_('COM_LANG4DEV_EDIT_SUB_PROJECT', 'subproject'));
 
                 //--- apply, save and close ... -----------------------------------
 
-                ToolBarHelper::apply('project.apply');
-                ToolBarHelper::save('project.save');
+                ToolBarHelper::apply('subproject.apply');
+                ToolBarHelper::save('subproject.save');
 
 
-                $toolbar->delete('projects.delete')
+                $toolbar->delete('subprojects.delete')
                     ->text('JTOOLBAR_DELETE')
                     ->message('JGLOBAL_CONFIRM_DELETE')
                     ->listCheck(true);
@@ -175,11 +175,11 @@ class HtmlView extends BaseHtmlView
                 //--- cancel  -----------------------------------
 
                 //ToolBarHelper::save2new('image.save2new');
-                if (empty($this->item->id)) {
-                    ToolBarHelper::cancel('lang4dev.cancel', 'JTOOLBAR_CLOSE');
-                } else {
-                    ToolBarHelper::cancel('lang4dev.cancel', 'JTOOLBAR_CLOSE');
-                }
+		        if (empty($this->item->id)) {
+			        ToolBarHelper::cancel('subproject.cancel', 'JTOOLBAR_CLOSE');
+		        } else {
+			        ToolBarHelper::cancel('subproject.cancel', 'JTOOLBAR_CLOSE');
+		        }
 
                 // Options button.
                 if (Factory::getApplication()->getIdentity()->authorise('core.admin', 'com_lang4dev')) {

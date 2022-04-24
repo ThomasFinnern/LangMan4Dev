@@ -25,7 +25,7 @@ use Joomla\String\StringHelper;
  *
  * @since __BUMP_VERSION__
  */
-class SubrojectTable extends Table
+class SubprojectTable extends Table
 {
 	/**
 	 * Constructor
@@ -38,7 +38,7 @@ class SubrojectTable extends Table
 	{
 		$this->typeAlias = 'com_lang4dev.subprojects';
 
-		parent::__construct('#__lang4dev_sub_projects', 'id', $db);
+		parent::__construct('#__lang4dev_subprojects', 'id', $db);
 
         $this->access = (int) Factory::getApplication()->get('access');
 	}

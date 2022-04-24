@@ -16,6 +16,7 @@ use Joomla\CMS\Language\Text;
 use Joomla\CMS\MVC\Controller\FormController;
 use Joomla\CMS\MVC\Factory\MVCFactoryInterface;
 use Joomla\CMS\MVC\Model\BaseDatabaseModel;
+use Joomla\CMS\Router\Router;
 use Joomla\CMS\Session\Session;
 use Joomla\Registry\Registry;
 use Joomla\Utilities\ArrayHelper;
@@ -57,7 +58,25 @@ class projectController extends FormController
 		}
 	}
 
-    /**
+	/**
+	 * Standard cancel, back to list view
+	 *
+	 * @param null $key
+	 *
+	 * @return bool
+	 *
+	 * @since __BUMP_VERSION__
+	 */
+	public function cancel($key = null)
+	{
+		Session::checkToken() or die(Text::_('JINVALID_TOKEN'));
+		$link = Router::_('index.php?option=com_lang4dev&view=projects');
+		$this->setRedirect($link);
+
+		return true;
+	}
+
+	/**
      * Remove an item.
      *
      * @return  void

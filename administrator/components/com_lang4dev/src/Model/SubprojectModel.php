@@ -36,7 +36,7 @@ use Joomla\Utilities\ArrayHelper;
 // associations: use Finnern\Component\Lang4def\Administrator\Helper\Lang4devHelper;
 
 /**
- * Lang4dev Component Subroject Model
+ * Lang4dev Component Subproject Model
  *
  * @since __BUMP_VERSION__
  */
@@ -573,7 +573,7 @@ class SubprojectModel extends AdminModel
                 $db = $this->getDbo();
                 $query = $db->getQuery(true)
                     ->select('MAX(ordering)')
-                    ->from($db->quoteName('#__lang4dev_sub'));
+                    ->from($db->quoteName('#__lang4dev_subprojects'));
                 $db->setQuery($query);
                 $max = $db->loadResult();
 

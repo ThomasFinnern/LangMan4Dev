@@ -36,15 +36,15 @@ $layout  = $isModal ? 'modal' : 'edit';
 $tmpl    = $isModal || $input->get('tmpl', '', 'cmd') === 'component' ? '&tmpl=component' : '';
 ?>
 
-<form action="<?php echo Route::_('index.php?option=com_lang4dev&extension=' . $input->getCmd('extension', 'com_lang4dev') . '&layout=' . $layout . $tmpl . '&id=' . (int) $this->item->id); ?>"
-      method="post" name="adminForm" id="image-form" class="form-validate">
+<form action="<?php echo Route::_('index.php?option=com_lang4dev&view=subproject&layout=edit&id=' . (int) $this->item->id); ?>"
+      method="post" name="adminForm" id="adminForm" class="form-validate">
 
 	<?php echo LayoutHelper::render('joomla.edit.title_alias', $this); ?>
 
 	<div>
 		<?php echo HTMLHelper::_('uitab.startTabSet', 'myTab', array('active' => 'general')); ?>
 
-        <?php echo HTMLHelper::_('uitab.addTab', 'myTab', 'general', Text::_('COM_LANG4DEV_GENERAL')); ?>
+        <?php echo HTMLHelper::_('uitab.addTab', 'myTab', 'general', Text::_('JDETAILS')); ?>
 		<div class="row">
             <div class="col-lg-9">
                 <?php // echo'-------------- lg-9.start: ><br>'; ?>
@@ -52,18 +52,19 @@ $tmpl    = $isModal || $input->get('tmpl', '', 'cmd') === 'component' ? '&tmpl=c
                     <div class="card-body">
                         <fieldset class="adminform">
                             <?php
-                            //echo'-------------- name: ><br>';
-                            echo $this->form->renderField('name');
-                            //echo'-------------- start: ><br>';
+                            echo'-------------- prjId/type: ><br>';
+                            echo $this->form->renderField('prjId');
+                            echo $this->form->renderField('type');
+                            echo'-------------- start: ><br>';
 
                             echo $this->form->renderField('root_path');
-                            echo $this->form->renderField('root_path2');
+                            echo $this->form->renderField('$prjXmlFilePath');
 
-                            echo $this->form->renderField('twin_id');
+                            // echo $this->form->renderField('twin_id');
 
                             echo $this->form->renderField('notes');
 
-                            //echo'<br>-------------- end: ><br>';
+                            echo'<br>-------------- end: ><br>';
 
                             ?>
                         </fieldset>
@@ -73,17 +74,17 @@ $tmpl    = $isModal || $input->get('tmpl', '', 'cmd') === 'component' ? '&tmpl=c
             </div>
 		</div>
 
-		<?php echo HTMLHelper::_('uitab.endTab'); ?>
-
 		<?php echo LayoutHelper::render('joomla.edit.params', $this); ?>
 
-		<?php echo HTMLHelper::_('uitab.addTab', 'myTab', 'publishing', Text::_('COM_LANG4DEV_FIELDSET_PUBLISHING')); ?>
+		<?php echo HTMLHelper::_('uitab.endTab'); ?>
+
+		<?php echo HTMLHelper::_('uitab.addTab', 'myTab', 'publishing', Text::_('COM_LANG4DEV_SUBPROJECT_INFO')); ?>
         <div class="row">
             <div class="col-12 col-lg-6">
                 <fieldset id="fieldset-publishingdata" class="options-form">
                     <legend><?php echo Text::_('JGLOBAL_FIELDSET_PUBLISHING'); ?></legend>
                     <div>
-                        <?php echo LayoutHelper::render('joomla.edit.publishingdata', $this); ?>
+                        <?php // echo LayoutHelper::render('joomla.edit.publishingdata', $this); ?>
                     </div>
                 </fieldset>
             </div>
