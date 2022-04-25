@@ -85,9 +85,9 @@ class SubprojectTable extends Table
             return false;
         }
 
-        // Check for valid name.
-        if (trim($this->name) == '') {
-            throw new \UnexpectedValueException(sprintf('The name is empty'));
+        // Check for valid project id.
+        if (trim($this->prjId) == '') {
+            throw new \UnexpectedValueException(sprintf('The prjId is empty'));
         }
 
         // //--- alias -------------------------------------------------------------

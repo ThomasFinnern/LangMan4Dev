@@ -10,7 +10,6 @@ CREATE TABLE IF NOT EXISTS `#__lang4dev_projects` (
     `alias` varchar(400) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NOT NULL DEFAULT '',
     `notes` text NOT NULL DEFAULT '',
     `root_path` varchar(255) NOT NULL DEFAULT '',
-	`type`  int NOT NULL DEFAULT 0,
 
     `params` text NOT NULL,
 
@@ -51,11 +50,11 @@ ALTER TABLE `#__lang4dev_projects` ADD COLUMN  `title` varchar(255) NOT NULL DEF
 
 CREATE TABLE IF NOT EXISTS `#__lang4dev_subprojects` (
     `id` int NOT NULL AUTO_INCREMENT,
-    `name` varchar(255) NOT NULL DEFAULT '',
+    `title` varchar(255) NOT NULL DEFAULT '', 
+    `prjId` varchar(255) NOT NULL DEFAULT '',
     `alias` varchar(400) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NOT NULL DEFAULT '',
     `notes` text NOT NULL DEFAULT '',
 
-    `type`  int NOT NULL DEFAULT 0,
     `root_path` varchar(255) NOT NULL DEFAULT '',
 --    `lang_path_type` varchar(255) NOT NULL DEFAULT '',
     `lang_path_type` varchar(255) NOT NULL DEFAULT '',

@@ -722,14 +722,14 @@ class SubprojectModel extends AdminModel
 //            }
 //        }
 
-//        // Bind the data.
-//		if (!$table->bind($data))
-//		{
-//			$this->setError($table->getError());
-//
-//			return false;
-//		}
-//
+        // Bind the data.
+		if (!$table->bind($data))
+		{
+			$this->setError($table->getError());
+
+			return false;
+		}
+
 //		// Bind the rules.
 //		if (isset($data['rules']))
 //		{

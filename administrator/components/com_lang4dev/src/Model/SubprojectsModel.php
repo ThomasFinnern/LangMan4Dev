@@ -41,7 +41,8 @@ class SubprojectsModel extends ListModel
 		{
 			$config['filter_fields'] = array(
 				'id', 'a.id',
-				'name', 'a.name',
+				'title', 'a.title',
+				'prjId', 'a.prjId',
 
 				'created', 'a.created',
 				'created_by', 'a.created_by',
@@ -170,12 +171,12 @@ class SubprojectsModel extends ListModel
 				/**/
 				'list.select',
 				'a.id, '
-				. 'a.name, '
+				. 'a.title, '
+				. 'a.prjId, '
 				. 'a.alias, '
                 . 'a.note, '
                 . 'a.root_path, '
                 . 'a.twin_id,'
-
 
                 . 'a.params, '
 
@@ -318,7 +319,8 @@ class SubprojectsModel extends ListModel
 		$query->group(
 		/**/
 			'a.id, '
-			. 'a.name, '
+			. 'a.title, '
+			. 'a.prjId, '
 			. 'a.alias, '
             . 'a.note, '
             . 'a.root_path, '
