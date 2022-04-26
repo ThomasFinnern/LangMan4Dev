@@ -16,6 +16,7 @@ use Joomla\CMS\Language\Text;
 use Joomla\CMS\MVC\Controller\FormController;
 use Joomla\CMS\MVC\Factory\MVCFactoryInterface;
 use Joomla\CMS\MVC\Model\BaseDatabaseModel;
+use Joomla\CMS\Router\Route;
 use Joomla\CMS\Router\Router;
 use Joomla\CMS\Session\Session;
 use Joomla\Registry\Registry;
@@ -70,10 +71,32 @@ class subprojectController extends FormController
 	public function cancel($key = null)
 	{
 		Session::checkToken() or die(Text::_('JINVALID_TOKEN'));
-		$link = Router::_('index.php?option=com_lang4dev&view=subprojects');
+		$link = Route::_('index.php?option=com_lang4dev&view=subprojects');
 		$this->setRedirect($link);
 
 		return true;
+	}
+	
+	public function detectDetails () {
+		
+		
+		Session::checkToken() or die(Text::_('JINVALID_TOKEN'));
+		
+		
+		// model =
+
+		$model = $this->getModel('Subproject');
+		$data = [];
+		$model->save($data);
+
+		// save
+		$OutTxt = "detectDetails for sub project has started:";
+		$app = Factory::getApplication();
+		$app->enqueueMessage($OutTxt, 'warning');
+
+		
+		$link = 'index.php?option=com_lang4dev&view=subproject&layout=edit&id=' . '1';
+		$this->setRedirect($link);
 	}
 
 	/**

@@ -33,7 +33,7 @@
 	<field name="type"
 	       type="list"
 	       label="COM_LANG4DEV_SUBPROJECT_TYPE"
-	       description="COM_LANG4DEV_PROJECT_TYPE_DESC"
+	       description="COM_LANG4DEV_SUBPROJECT_TYPE_DESC"
 	>
 		<option value="0">COM_LANG4DEV_PRJ_TYPE_NONE</option>
 		<option value="1">COM_LANG4DEV_PRJ_TYPE_COMP_BACK_SYS</option>

@@ -172,9 +172,14 @@ class HtmlView extends BaseHtmlView
                     ->message('JGLOBAL_CONFIRM_DELETE')
                     ->listCheck(true);
 
+//				ToolbarHelper::custom('mycontroller.processData', 'process', 'process_f2.png', 'COM_MYCOMPONENT_PROCESS_DATA', false);
+				ToolbarHelper::custom('subproject.detectDetails', 'refresh', 'home', 'COM_LANG4DEV_SUB_DETECT_DETAILS', false);
+				
+                //ToolBarHelper::save2new('subproject.save2new');
+				
+				
                 //--- cancel  -----------------------------------
 
-                //ToolBarHelper::save2new('image.save2new');
 		        if (empty($this->item->id)) {
 			        ToolBarHelper::cancel('subproject.cancel', 'JTOOLBAR_CLOSE');
 		        } else {
