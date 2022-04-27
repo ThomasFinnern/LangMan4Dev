@@ -174,7 +174,7 @@ class ProjectsModel extends ListModel
 				. 'a.title, '
 				. 'a.name, '
 				. 'a.alias, '
-                . 'a.note, '
+                . 'a.notes, '
                 . 'a.root_path, '
                 . 'a.twin_id,'
 
@@ -271,7 +271,7 @@ class ProjectsModel extends ListModel
 				. ' OR a.name LIKE ' . $search
 				. ' OR a.alias LIKE ' . $search
 				. ' OR a.description LIKE ' . $search
-				. ' OR a.note LIKE ' . $search
+				. ' OR a.notes LIKE ' . $search
 				. ' OR a.created LIKE ' . $search
 				. ' OR a.modified LIKE ' . $search
 			);
@@ -324,7 +324,7 @@ class ProjectsModel extends ListModel
 			. 'a.title, '
 			. 'a.name, '
 			. 'a.alias, '
-            . 'a.note, '
+            . 'a.notes, '
             . 'a.root_path, '
             . 'a.twin_id,'
 

@@ -174,7 +174,7 @@ class SubprojectsModel extends ListModel
 				. 'a.title, '
 				. 'a.prjId, '
 				. 'a.alias, '
-                . 'a.note, '
+                . 'a.notes, '
                 . 'a.root_path, '
                 . 'a.twin_id,'
 
@@ -269,7 +269,7 @@ class SubprojectsModel extends ListModel
 				'a.name LIKE ' . $search
 				. ' OR a.alias LIKE ' . $search
 				. ' OR a.description LIKE ' . $search
-				. ' OR a.note LIKE ' . $search
+				. ' OR a.notes LIKE ' . $search
 				. ' OR a.created LIKE ' . $search
 				. ' OR a.modified LIKE ' . $search
 			);
@@ -322,7 +322,7 @@ class SubprojectsModel extends ListModel
 			. 'a.title, '
 			. 'a.prjId, '
 			. 'a.alias, '
-            . 'a.note, '
+            . 'a.notes, '
             . 'a.root_path, '
             . 'a.twin_id,'
 

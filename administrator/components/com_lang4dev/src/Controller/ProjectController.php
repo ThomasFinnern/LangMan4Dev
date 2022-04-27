@@ -21,7 +21,9 @@ use Joomla\CMS\Router\Router;
 use Joomla\CMS\Session\Session;
 use Joomla\Registry\Registry;
 use Joomla\Utilities\ArrayHelper;
-use Symfony\Component\Yaml\Yaml;
+
+use Finnern\Component\Lang4dev\Administrator\Helper\langProject;
+use Finnern\Component\Lang4dev\Administrator\Helper\langSubProject;
 
 /**
  * The Gallery Controller
@@ -71,7 +73,8 @@ class projectController extends FormController
 	public function cancel($key = null)
 	{
 		Session::checkToken() or die(Text::_('JINVALID_TOKEN'));
-		$link = Route::_('index.php?option=com_lang4dev&view=projects');
+		//$link = Route::_('index.php?option=com_lang4dev&view=projects');
+		$link = 'index.php?option=com_lang4dev&view=projects';
 		$this->setRedirect($link);
 
 		return true;
@@ -81,14 +84,35 @@ class projectController extends FormController
 
 
 		Session::checkToken() or die(Text::_('JINVALID_TOKEN'));
+		
+		/**
+		$prj = new langProject ();
 
+		$subPrj = $prj->addSubProject('com_lang4dev',
+			langSubProject::PRJ_TYPE_COMP_BACK_SYS,
+			JPATH_ADMINISTRATOR . '/components/com_lang4dev',
+		);
+
+		$subPrj = $prj->addSubProject('com_lang4dev',
+			langSubProject::PRJ_TYPE_COMP_BACK,
+			JPATH_ADMINISTRATOR. '/components/com_lang4dev'
+		);
+
+		$subPrj = $prj->addSubProject('com_lang4dev',
+			langSubProject::PRJ_TYPE_COMP_SITE,
+			JPATH_SITE . '/components/com_lang4dev'
+		);
+		/**/
 
 		// model =
 		// save
+		
+		
+		
+		
 		$OutTxt = "detectDetails for project has started:";
 		$app = Factory::getApplication();
 		$app->enqueueMessage($OutTxt, 'warning');
-
 
 		$link = 'index.php?option=com_lang4dev&view=project&layout=edit&id=' . '1';
 		$this->setRedirect($link);

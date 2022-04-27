@@ -21,7 +21,11 @@ use Joomla\CMS\Router\Router;
 use Joomla\CMS\Session\Session;
 use Joomla\Registry\Registry;
 use Joomla\Utilities\ArrayHelper;
-use Symfony\Component\Yaml\Yaml;
+// ???? use Symfony\Component\Yaml\Yaml;
+
+use Finnern\Component\Lang4dev\Administrator\Helper\langSubProject;
+
+
 
 /**
  * The Gallery Controller
@@ -71,7 +75,8 @@ class subprojectController extends FormController
 	public function cancel($key = null)
 	{
 		Session::checkToken() or die(Text::_('JINVALID_TOKEN'));
-		$link = Route::_('index.php?option=com_lang4dev&view=subprojects');
+		// $link = Route::_('index.php?option=com_lang4dev&view=subprojects');
+		$link = 'index.php?option=com_lang4dev&view=subprojects';
 		$this->setRedirect($link);
 
 		return true;
@@ -81,8 +86,13 @@ class subprojectController extends FormController
 		
 		
 		Session::checkToken() or die(Text::_('JINVALID_TOKEN'));
-		
-		
+
+		$data  = $this->input->post->get('jform', array(), 'array');
+
+		$prdId = $data ['prjId'];
+
+		$subPrj = new langSubProject ();
+
 		// model =
 
 		$model = $this->getModel('Subproject');
