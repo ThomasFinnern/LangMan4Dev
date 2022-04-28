@@ -22,7 +22,7 @@ class langProject
 	public $subProjects = [];
 
     public $isSysFileFound = false;
-	public $componentPrefix = "";
+	public $langIdPrefix = "";
 	public $twinId = "";
 
 
@@ -66,16 +66,16 @@ class langProject
 				$hasSysFiles = ! ($subProject->prjType == langSubProject::PRJ_TYPE_COMP_BACK
 					|| $subProject->prjType == langSubProject::PRJ_TYPE_COMP_SITE);
 
-				// On sys file receive componentPrefix
+				// On sys file receive langIdPrefix
 					$subProject->findPrjFiles();
 				if($hasSysFiles)
 				{
-					$this->componentPrefix = $subProject->componentPrefix;
+					$this->langIdPrefix = $subProject->langIdPrefix;
 				}
 				else
 				{
-					// On not sys file assign componentPrefix (ToDo: solve: may not exist yet)
-					$subProject->componentPrefix = $this->componentPrefix;
+					// On not sys file assign langIdPrefix (ToDo: solve: may not exist yet)
+					$subProject->langIdPrefix = $this->langIdPrefix;
 					// $subProject->findPrjFiles();
 				}
 

@@ -76,34 +76,48 @@ if ($saveOrder && !empty($this->items))
 			<!--div class="alert alert-info"-->
 			<span class="fa fa-info-circle" aria-hidden="true"></span><span
 					class="sr-only"><?php echo Text::_('INFO'); ?></span>
-			<?php echo Text::_('COM_LANG4DEV_NO_SUB_PROJECT_CREATED'); // JGLOBAL_NO_MATCHING_RESULTS ?>
+			<?php echo Text::_('COM_LANG4DEV_CREATE_YOUR_FIRST_PROJECT'); // JGLOBAL_NO_MATCHING_RESULTS ?>
 			<!--/div-->
 		</div>
 	</div>
 
 	<?php else : ?>
 
-		<table class="table" id="galleryList">
+		<table class="table" id="subprojetsList">
 			<caption id="captionTable" class="sr-only">
 				<?php echo Text::_('COM_LANG4DEV_TABLE_CAPTION'); ?>, <?php echo Text::_('JGLOBAL_SORTED_BY'); ?>
 			</caption>
 			<thead>
-			<tr>
-				<td style="width:1%" class="text-center">
-					<?php echo HTMLHelper::_('grid.checkall'); ?>
-				</td>
+				<tr>
+					<td style="width:1%" class="text-center">
+						<?php echo HTMLHelper::_('grid.checkall'); ?>
+					</td>
 
-				<th scope="col" style="width:1%" class="text-center d-none d-md-table-cell">
-					<?php echo HTMLHelper::_('searchtools.sort', '', 'a.ordering', $listDirn, $listOrder, null, 'asc', 'JGRID_HEADING_ORDERING', 'icon-menu-2'); ?>
-				</th>
+					<th scope="col" style="width:1%" class="text-center d-none d-md-table-cell">
+						<?php echo HTMLHelper::_('searchtools.sort', '', 'a.ordering', $listDirn, $listOrder, null, 'asc', 'JGRID_HEADING_ORDERING', 'icon-menu-2'); ?>
+					</th>
 
-				<th scope="col" style="width:3%" class="text-center d-none d-md-table-cell">
-                                        <span class="small"
-                                              title="<?php echo $this->escape("Remove when order is fixed"); ?>">
-                                            <?php echo Text::_('COM_LANG4DEV_ORDER'); ?>
-                                        </span>
-				</th>
-			</tr>
+					<th scope="col" style="width:3%" class="text-center d-none d-md-table-cell">
+	                                        <span class="small"
+	                                              title="<?php echo $this->escape("Remove when order is fixed"); ?>">
+	                                            <?php echo Text::_('JGRID_HEADING_ORDERING'); ?>
+	                                        </span>
+					</th>
+
+					<th>
+						<?php echo Text::_('JGLOBAL_TITLE'); ?>
+					</th>
+
+					<th>
+						<?php echo Text::_('JGRID_HEADING_ID'); ?>
+					</th>
+
+					<th>
+						<?php echo Text::_('COM_LANG4DEV_SUBPROJECT_ROOT_PATH'); ?>
+					</th>
+
+
+				</tr>
 			</thead>
 
 			<tbody <?php if ($saveOrder) : ?> class="js-draggable" data-url="<?php echo $saveOrderingUrl; ?>" data-direction="<?php echo strtolower($listDirn); ?>" data-nested="false"<?php endif; ?>>
@@ -117,8 +131,9 @@ if ($saveOrder && !empty($this->items))
 				$canEditOwn = $user->authorise('core.edit.own', $extension . '.project.' . $item->id) && $item->created_by == $userId;
 				$canChange  = $user->authorise('core.edit.state', $extension . '.project.' . $item->id) && $canCheckin;
 
-				$editLink = Route::_('index.php?option=com_rsgallery2&task=project.edit&id=' . $item->id);
-				// $editGalleryLink = Route::_("index.php?option=com_rsgallery2&task=gallery.edit&id=" . $item->gallery_id);
+				$editLink = Route::_('index.php?option=com_lang4dev&task=subproject.edit&id=' . $item->id);
+				//$editLink = Route::_('index.php?option=com_lang4dev&view=subproject&layout=edit&id=' . $item->id);
+				// $editGalleryLink = Route::_("index.php?option=com_lang4dev&task=gallery.edit&id=" . $item->gallery_id);
 
 				$created_by  = Factory::getUser($item->created_by);
 				$modified_by = Factory::getUser($item->modified_by);
@@ -158,7 +173,7 @@ if ($saveOrder && !empty($this->items))
 					</td>
 
 					<td class="small d-none d-md-table-cell">
-						<?php echo $i . ': ' . $item->name; ?>
+						<?php echo $i . ': ' . $item->title; ?>
 					</td>
 
 					<th scope="row">

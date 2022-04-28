@@ -23,7 +23,7 @@ class sysFilesContent
 
 	public $prjXmlPathFilename;
 	public $installPathFilename;
-	public $componentPrefix;
+	public $langIdPrefix;
 
 	public function findPrjFiles ($prjId='', $prjType=langSubProject::PRJ_TYPE_NONE,
                                   $prjRootPath = '', $prjXmlFilePath = '') {
@@ -210,7 +210,7 @@ class sysFilesContent
 	            if (is_file ($prjXmlPathFilename))
 	            {
 
-		            [$fileName, $componentPrefix] = $this->extractPrjVars($prjXmlPathFilename);
+		            [$fileName, $langIdPrefix] = $this->extractPrjVars($prjXmlPathFilename);
 
 		            $installFile = $this->prjXmlFilePath . '/' . $fileName;
 
@@ -220,7 +220,7 @@ class sysFilesContent
 			            $this->installPathFilename = $installFile;
 		            }
 
-		            $this->componentPrefix = $componentPrefix;
+		            $this->langIdPrefix = $langIdPrefix;
 	            }
             }
 
@@ -243,7 +243,7 @@ class sysFilesContent
     public function extractPrjVars ($prjXmlPathFileName)
     {
         $installFileName = '';
-	    $componentPrefix = '';
+	    $langIdPrefix = '';
 
         try {
 
@@ -275,7 +275,7 @@ class sysFilesContent
                     // standard : change log for each version are sub items
                     if (array_key_exists('name', $prjArray)) {
 
-	                    $componentPrefix = $prjArray ['name'];
+	                    $langIdPrefix = $prjArray ['name'];
 
                     }
                 }
@@ -292,7 +292,7 @@ class sysFilesContent
             $app->enqueueMessage($OutTxt, 'error');
         }
 
-        return [$installFileName, $componentPrefix];
+        return [$installFileName, $langIdPrefix];
     }
 
 	public function detectLangBasePath ($basePath = '', $isSysFiles = false) {

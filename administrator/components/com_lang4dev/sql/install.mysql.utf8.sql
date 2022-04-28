@@ -6,10 +6,13 @@
 
 CREATE TABLE IF NOT EXISTS `#__lang4dev_projects` (
     `id` int NOT NULL AUTO_INCREMENT,
-    `name` varchar(255) NOT NULL DEFAULT '',
+	`title` varchar(255) NOT NULL DEFAULT '',
+	`name` varchar(255) NOT NULL DEFAULT '',
+
     `alias` varchar(400) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NOT NULL DEFAULT '',
     `notes` text NOT NULL DEFAULT '',
     `root_path` varchar(255) NOT NULL DEFAULT '',
+	`prjType` int NOT NULL DEFAULT 0,
 
     `params` text NOT NULL,
 
@@ -50,18 +53,25 @@ ALTER TABLE `#__lang4dev_projects` ADD COLUMN  `title` varchar(255) NOT NULL DEF
 
 CREATE TABLE IF NOT EXISTS `#__lang4dev_subprojects` (
     `id` int NOT NULL AUTO_INCREMENT,
-    `title` varchar(255) NOT NULL DEFAULT '', 
+    `title` varchar(255) NOT NULL DEFAULT '',
+	`alias` varchar(400) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NOT NULL DEFAULT '',
     `prjId` varchar(255) NOT NULL DEFAULT '',
-    `alias` varchar(400) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NOT NULL DEFAULT '',
+
+	`subPrjType` int NOT NULL DEFAULT 0,
+	`root_path` varchar(255) NOT NULL DEFAULT '',
+
+    `prefix` varchar(255) NOT NULL DEFAULT '',
     `notes` text NOT NULL DEFAULT '',
 
-    `root_path` varchar(255) NOT NULL DEFAULT '',
---    `lang_path_type` varchar(255) NOT NULL DEFAULT '',
+	`prjXmlPathFilename` varchar(255) NOT NULL DEFAULT '',
+	`installPathFilename` varchar(255) NOT NULL DEFAULT '',
+
+	`parent_id` int NOT NULL DEFAULT 0,
+	`twin_id` int NOT NULL DEFAULT 0,
+
+--    `lang_path_type` en_GB subfolder or not  '',
     `lang_path_type` varchar(255) NOT NULL DEFAULT '',
     `lang_ids` text NOT NULL DEFAULT '',
-
-    `parent_id` int NOT NULL DEFAULT 0,
-    `twin_id` int NOT NULL DEFAULT 0,
 
     `params` text NOT NULL,
     `ordering` int unsigned NOT NULL DEFAULT '0',

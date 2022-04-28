@@ -28,7 +28,7 @@ use Finnern\Component\Lang4dev\Administrator\Helper\transIdLocations;
 class searchTransIdLocations
 {
 	public $fileTypes = 'php, xml';
-	public $componentPrefix = '';
+	public $langIdPrefix = '';
 	public $searchPaths = [];
 	public $transIdLocations;
 
@@ -41,12 +41,12 @@ class searchTransIdLocations
 	/**
 	 * @since __BUMP_VERSION__
 	 */
-	public function __construct($searchPaths = array(), $componentPrefix = 'COM_LANG4DEV_')
+	public function __construct($searchPaths = array(), $langIdPrefix = 'COM_LANG4DEV_')
 	{
 		// ToDO: check for uppercase and trailing '_'
 
 		$this->transIdLocations       = new transIdLocations();
-		$this->componentPrefix = $componentPrefix;
+		$this->langIdPrefix = $langIdPrefix;
 
 		// if ( !empty ($searchPaths)) ... ???
 		$this->searchPaths = $searchPaths;
@@ -57,7 +57,7 @@ class searchTransIdLocations
 	// Index in line for found '*/'
 	public function findAllTranslationIds()
 	{
-		// ToDo: log $componentPrefix, $searchPaths
+		// ToDo: log $langIdPrefix, $searchPaths
 
 		$this->transIdLocations = new transIdLocations();
 
@@ -85,7 +85,7 @@ class searchTransIdLocations
 				{
 					//--- search in path -------------------------------
 
-					$this->searchLangIdsInPath($searchPath, $this->componentPrefix);
+					$this->searchLangIdsInPath($searchPath, $this->langIdPrefix);
 				}
 				else
 				{
@@ -337,9 +337,9 @@ class searchTransIdLocations
 // https://stackoverflow.com/questions/4722007/php-preg-match-to-find-whole-words
 
 			// Python solution
-			// py$searchRegex = "\\b" + $this->componentPrefix + "\\w+";
+			// py$searchRegex = "\\b" + $this->langIdPrefix + "\\w+";
 			// Finds multiple words per line
-			$searchRegex = '/' . $this->componentPrefix . "\w+/";
+			$searchRegex = '/' . $this->langIdPrefix . "\w+/";
 
 			// test find all words then iterate through array
 			preg_match_all($searchRegex, $line, $matchGroups);
@@ -500,9 +500,9 @@ class searchTransIdLocations
 			// find all words then iterate through array
 
 			// Python solution
-			// py$searchRegex = "\\b" + $this->componentPrefix + "\\w+";
+			// py$searchRegex = "\\b" + $this->langIdPrefix + "\\w+";
 			// Finds multiple words per line
-			$searchRegex = '/' . $this->componentPrefix . "\w+/";
+			$searchRegex = '/' . $this->langIdPrefix . "\w+/";
 
 			// test find all words then iterate through array
 			preg_match_all($searchRegex, $line, $matchGroups);

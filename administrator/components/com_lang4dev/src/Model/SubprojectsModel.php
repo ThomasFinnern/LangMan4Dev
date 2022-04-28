@@ -43,6 +43,9 @@ class SubprojectsModel extends ListModel
 				'id', 'a.id',
 				'title', 'a.title',
 				'prjId', 'a.prjId',
+				'subPrjType', 'a.subPrjType',
+				'parent_id', 'a.parent_id',
+				'lang_path_type', 'a.lang_path_type',
 
 				'created', 'a.created',
 				'created_by', 'a.created_by',
@@ -150,7 +153,7 @@ class SubprojectsModel extends ListModel
 	}
 
 	/**
-	 * Method to get a database query to list galleries.
+	 * Method to get a database query to list sub projects.
 	 *
 	 * @return  \DatabaseQuery object.
 	 *
@@ -172,13 +175,26 @@ class SubprojectsModel extends ListModel
 				'list.select',
 				'a.id, '
 				. 'a.title, '
-				. 'a.prjId, '
 				. 'a.alias, '
-                . 'a.notes, '
-                . 'a.root_path, '
+				. 'a.prjId, '
+
+				. 'a.subPrjType, '
+				. 'a.root_path, '
+
+				. 'a.prefix, '
+				. 'a.notes, '
+
+				. 'a.prjXmlPathFilename, '
+				. 'a.installPathFilename, '
+
+                . 'a.parent_id,'
                 . 'a.twin_id,'
 
-                . 'a.params, '
+				. 'a.lang_path_type,'
+				. 'a.lang_ids,'
+
+				. 'a.params, '
+				. 'a.ordering,'
 
 				. 'a.checked_out, '
 				. 'a.checked_out_time, '
@@ -188,11 +204,13 @@ class SubprojectsModel extends ListModel
 				. 'a.modified, '
 				. 'a.modified_by, '
 
-				. 'a.ordering,'
+				. 'a.published,'
 
 				. 'a.approved,'
-                . 'a.asset_id,'
+				. 'a.asset_id,'
 				. 'a.access'
+
+				. 'a.version,'
 			)
 		);
 		$query->from('#__lang4dev_subprojects AS a');
@@ -264,6 +282,7 @@ class SubprojectsModel extends ListModel
 		$search = $this->getState('filter.search');
 		if (!empty($search))
 		{
+			// yyyy continue
 			$search = $db->quote('%' . $db->escape($search, true) . '%');
 			$query->where(
 				'a.name LIKE ' . $search

@@ -28,9 +28,10 @@
 	<field name="prjId"
 	       type="text"
 	       label="COM_LANG4DEV_SUBPROJECT_ID"
-	       description="COM_LANG4DEV_SUBPROJECT_ID_DESC" />
+	       description="COM_LANG4DEV_SUBPROJECT_ID_DESC"
+	/>
 
-	<field name="type"
+	<field name="subPrjType"
 	       type="list"
 	       label="COM_LANG4DEV_SUBPROJECT_TYPE"
 	       description="COM_LANG4DEV_SUBPROJECT_TYPE_DESC"
@@ -46,22 +47,14 @@
 	<field name="root_path"
 	       type="text"
 	       label="COM_LANG4DEV_SUBPROJECT_ROOT_PATH"
-	       description="COM_LANG4DEV_SUBPROJECT_ROOT_PATH_DESC"  />
-
-	<field name="prjXmlFilePath"
-	       type="text"
-	       label="COM_LANG4DEV_SUBPROJECT_XML_FILE_PATH"
-	       description="COM_LANG4DEV_SUBPROJECT_XML_FILE_PATH_DESC"  />
-
-	<field
-			name="twin_id"
-			type="text"
-			label="COM_LANG4DEV_SUBPROJECT_ORIGIN_TWIN_ID"
-			description="COM_LANG4DEV_SUBPROJECT_ORIGIN_TWIN_ID_DESC"
-			default="0"
-			class="readonly"
+	       description="COM_LANG4DEV_SUBPROJECT_ROOT_PATH_DESC"
 	/>
 
+	<field name="prefix"
+	       type="text"
+	       label="COM_LANG4DEV_SUBPROJECT_PREFIX"
+	       description="COM_LANG4DEV_SUBPROJECT_PREFIX_DESC"
+	/>
 
 	<field
 			name="notes"
@@ -71,6 +64,37 @@
 			size="40"
 			maxlength="255"
 	/>
+
+	<field name="prjXmlPathFilename"
+	       type="text"
+	       label="COM_LANG4DEV_SUBPROJECT_XML_PATH_FILE_NAME"
+	       description="COM_LANG4DEV_SUBPROJECT_XML_PATH_FILE_NAME_DESC"  />
+
+	<field name="installPathFilename"
+	       type="text"
+	       label="COM_LANG4DEV_SUBPROJECT_INSTALL_PATH_FILE_NAME"
+	       description="COM_LANG4DEV_SUBPROJECT_INSTALL_PATH_FILE_NAME_DESC"  />
+
+	<field
+			name="parent_id"
+			type="number"
+			label="COM_LANG4DEV_SUBPROJECT_ORIGIN_TWIN_ID"
+			description="COM_LANG4DEV_SUBPROJECT_ORIGIN_TWIN_ID_DESC"
+			default="0"
+			class="readonly"
+	/>
+
+	<field
+			name="twin_id"
+			type="number"
+			label="COM_LANG4DEV_SUBPROJECT_ORIGIN_TWIN_ID"
+			description="COM_LANG4DEV_SUBPROJECT_ORIGIN_TWIN_ID_DESC"
+			default="0"
+			class="readonly"
+	/>
+
+	<!-- lang_path_type -->
+	<!-- lang_ids -->
 
 	<field
 			name="extension"

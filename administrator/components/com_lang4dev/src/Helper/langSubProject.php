@@ -24,7 +24,7 @@ class langSubProject extends langFileNamesSet
 
 	public $prjXmlPathFilename = "";
 	public $installPathFilename = "";
-    public $componentPrefix = "";
+    public $langIdPrefix = "";
 
 	public $twinId = "";
 
@@ -87,7 +87,7 @@ class langSubProject extends langFileNamesSet
 	        $hasSysFiles = ! ($this->prjType == langSubProject::PRJ_TYPE_COMP_BACK
 		        || $this->prjType == langSubProject::PRJ_TYPE_COMP_SITE);
 
-	        // On sys file receive componentPrefix
+	        // On sys file receive langIdPrefix
 	        if($hasSysFiles)
 	        {
 
@@ -118,7 +118,7 @@ class langSubProject extends langFileNamesSet
 			        }
 			        $this->prjXmlPathFilename  = $finder->prjXmlPathFilename;
 			        $this->installPathFilename = $finder->installPathFilename;
-			        $this->componentPrefix     = $finder->componentPrefix;
+			        $this->langIdPrefix     = $finder->langIdPrefix;
 		        }
 
 		        $this->detectLangBasePath($this->prjXmlFilePath, $this->isSysFiles);
@@ -185,7 +185,7 @@ class langSubProject extends langFileNamesSet
 	    $searchTransIdLocations->prjXmlPathFilename = $this->prjXmlPathFilename;
         $searchTransIdLocations->installPathFilename = $this->installPathFilename;
 
-        $searchTransIdLocations->componentPrefix = $this->componentPrefix;
+        $searchTransIdLocations->langIdPrefix = $this->langIdPrefix;
         // sys file selected
         if ($isSysFiles || $this->isSysFiles) {
 
