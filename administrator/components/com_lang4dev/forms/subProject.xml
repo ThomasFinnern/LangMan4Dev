@@ -2,10 +2,9 @@
 <form>
 	<field
 			name="id"
-			type="number"
+			type="hidden"
 			label="JGLOBAL_FIELD_ID_LABEL"
 			default="0"
-			class="readonly"
 			readonly="true"
 	/>
 

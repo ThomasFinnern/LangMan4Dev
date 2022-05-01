@@ -46,13 +46,18 @@ $assoc = false; // ToDo: check how it is used
 	<div>
 		<?php echo HTMLHelper::_('uitab.startTabSet', 'myTab', array('active' => 'general')); ?>
 
-        <?php echo HTMLHelper::_('uitab.addTab', 'myTab', 'general', Text::_('JDETAILS')); ?>
+        <?php echo HTMLHelper::_('uitab.addTab', 'myTab', 'general', Text::_('COM_LANG4DEV_SUB_PROJECT')); ?>
 		<div class="row">
             <div class="col-lg-9">
                 <?php // echo'-------------- lg-9.start: ><br>'; ?>
-                <div>
+	            <div class="card">
                     <div class="card-body">
-                        <fieldset class="adminform">
+	                    <div class="card-header"  style="background-color: lightgrey";>
+		                    <?php echo Text::_('COM_LANG4DEV_SUBPROJECT_BASE'); ?>
+	                    </div>
+	                    <br>
+
+	                    <fieldset class="adminform">
                             <?php
                             // echo'-------------- prjId/type: ><br>';
                             echo $this->form->renderField('id');
@@ -68,6 +73,29 @@ $assoc = false; // ToDo: check how it is used
                             // echo'<br>-------------- end: ><br>';
 
                             ?>
+
+	                        <!--div class="card  text-dark bg-light mb-3  border-success"-->
+		                        <div class="card-header"  style="background-color: lightgrey";>
+			                        <?php echo Text::_('JDETAILS'); ?>
+		                        </div>
+								<br>
+
+		                        <!--div class="card-body"-->
+			                        <!--h5 class="card-title"><?php echo Text::_('JDETAILS'); ?></h5-->
+			                        <?php
+			                        echo $this->form->renderField('prefix');
+
+			                        echo $this->form->renderField('prjXmlPathFilename');
+			                        echo $this->form->renderField('installPathFilename');
+
+			                        echo $this->form->renderField('parent_id');
+			                        echo $this->form->renderField('twin_id');
+
+			                        ?>
+
+		                        <!--/div-->
+		                        <!--/div-->
+
                         </fieldset>
                     </div>
                 </div>
@@ -82,16 +110,6 @@ $assoc = false; // ToDo: check how it is used
 		<?php echo HTMLHelper::_('uitab.addTab', 'myTab', 'publishing', Text::_('INFO')); ?>
         <div class="row">
             <div class="col-12 col-lg-6">
-	            <?php
-	            echo $this->form->renderField('prefix');
-
-	            echo $this->form->renderField('prjXmlPathFilename');
-	            echo $this->form->renderField('installPathFilename');
-
-	            echo $this->form->renderField('parent_id');
-	            echo $this->form->renderField('twin_id');
-
-	            ?>
                 <fieldset id="fieldset-publishingdata" class="options-form">
                     <legend><?php echo Text::_('JGLOBAL_FIELDSET_PUBLISHING'); ?></legend>
                     <div>
