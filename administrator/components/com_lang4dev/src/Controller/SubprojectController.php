@@ -96,50 +96,42 @@ class subprojectController extends FormController
 		$data  = $this->input->post->get('jform', array(), 'array');
 
 		// sub project
-		/**
-		$prjId = (int) $data ['prjId'];
-		$prjType = (int) $data ['type'];
-		$prjType = $data ['root_path'];
-		$prjRootPath = '';
 		/**/
-		$input = Factory::getApplication()->input;
+		$prjId = $data ['prjId'];
+		$prjType = (int) $data ['subPrjType'];
 
-		$prjId   = $input->get('prjid', 0, 'CMD'); // ? WORD ? CMD
-		$prjType   = $input->get('type', 0, 'INT');
-		// ToDo: check: Note: Does NOT accept absolute paths, or paths ending in a trailing slash.
-		$rootPath   = $input->get('id', 0, 'PATH');
+		$rootPath = trim($data ['root_path']);
+		$data ['root_path'] = $rootPath;
+		/**/
+
+		//--- retrieve data from paths --------------------------------------------
 
 		$subPrj = new langSubProject ();
 		$subPrj->prjId = $prjId;
 		$subPrj->prjType = $prjType;
 		$subPrj->prjRootPath = $rootPath;
 
-		$subPrj->findPrjFiles();
+		$isFilesFound = $subPrj->findPrjFiles();
 
-		$data[''] = $subPrj->prjXmlPathFilename;
-		$subPrj->installPathFilename;
-		$subPrj->langIdPrefix;
+		if ($isFilesFound)
+		{
+			$data['prjXmlPathFilename']  = $subPrj->prjXmlPathFilename;
+			$data['installPathFilename'] = $subPrj->installPathFilename;
+			$data['prefix']              = $subPrj->langIdPrefix;
+		}
 
-
-		// model =
-
-//		$model = $this->getModel('Subproject');
-//		$data = [];
-//		$model->save($data);
-
-		// save
-		$OutTxt = "detectDetails for sub project has started:";
-		$app = Factory::getApplication();
-		$app->enqueueMessage($OutTxt, 'warning');
+		//--- write to post data for save --------------------------------------
 
 		// Add new data to input before process by parent save()
 		$this->input->post->set('jform', $data);
 
-		$result = parent::save($key=null, $urlVar='id');
+		$result = parent::save($key=null, $urlVar='id') && $isFilesFound;
 
-		$link = 'index.php?option=com_lang4dev&view=subproject&layout=edit&id=' . '1';
+		//--- return to edit --------------------------------
+
+		$id = (int) $data ['id'];
+		$link = 'index.php?option=com_lang4dev&view=subproject&layout=edit&id=' . $id;
 		$this->setRedirect($link);
-
 
 		return $result;
 	}

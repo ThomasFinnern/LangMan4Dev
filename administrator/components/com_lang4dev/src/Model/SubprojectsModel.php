@@ -208,9 +208,9 @@ class SubprojectsModel extends ListModel
 
 				. 'a.approved,'
 				. 'a.asset_id,'
-				. 'a.access'
+				. 'a.access,'
 
-				. 'a.version,'
+				. 'a.version'
 			)
 		);
 		$query->from('#__lang4dev_subprojects AS a');

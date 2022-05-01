@@ -28,7 +28,7 @@ class sysFilesContent
 	public function findPrjFiles ($prjId='', $prjType=langSubProject::PRJ_TYPE_NONE,
                                   $prjRootPath = '', $prjXmlFilePath = '') {
 
-        $isFilesFound = false;
+        $isFileFound = false;
 
         try {
             //--- Assign from function call variables ------------------------------------
@@ -81,13 +81,13 @@ class sysFilesContent
 		            $app = Factory::getApplication();
 		            $app->enqueueMessage($OutTxt, 'error');
 
-		            return $isFilesFound;
+		            return $isFileFound;
 	            }
             }
 
             //--- find install file  ------------------------------------
 
-	        if ($isSearchXml)
+	        if ($isSearchXml && $isSearchInstall && $isFileFound)
 	        {
 		        $isFileFound = $this->findInstallFile();
 
@@ -98,17 +98,16 @@ class sysFilesContent
 			        $app = Factory::getApplication();
 			        $app->enqueueMessage($OutTxt, 'error');
 
-			        return $isFilesFound;
+			        return $isFileFound;
 		        }
 	        }
 
 //            //---   ------------------------------------
 //
 //            //$this->detectLangBasePath($this->prjRootPath);
-//            $this->detectLangBasePath($this->prjXmlFilePath, $this->isSysFiles);
+//            $this->detectLangBasePath($this->prjXmlFilePath, $this->useLangSysIni);
 //            $this->searchLangFiles();
 //
-            $isFilesFound = true;
         }
         catch (\RuntimeException $e)
         {
@@ -121,7 +120,7 @@ class sysFilesContent
         }
 
 
-        return $isFilesFound;
+        return $isFileFound;
     }
 
     public function searchXmlProjectFile ($projectFileName, $searchPath) {
@@ -295,7 +294,7 @@ class sysFilesContent
         return [$installFileName, $langIdPrefix];
     }
 
-	public function detectLangBasePath ($basePath = '', $isSysFiles = false) {
+	public function detectLangBasePath ($basePath = '', $useLangSysIni = false) {
 
 		if ($basePath == '') {
 
@@ -318,7 +317,7 @@ class sysFilesContent
 			return;
 		}
 
-		$this->isSysFiles = $isSysFiles;
+		$this->useLangSysIni = $useLangSysIni;
 		$isPathFound = $this->searchDir4LangID ($basePath);
 
 
@@ -343,7 +342,7 @@ class sysFilesContent
 		$isPathFound = false;
 
 		$end = '.ini';
-		if ($this->isSysFiles) {
+		if ($this->useLangSysIni) {
 			$end = '.sys.ini';
 		}
 
@@ -406,7 +405,7 @@ class sysFilesContent
 		$this->langIds = [];
 		$baseName = '';
 
-		if ($this->isSysFiles == true) {
+		if ($this->useLangSysIni == true) {
 			$regex = '\.sys\.ini$';
 		} else {
 			// ToDO: regex with check for not .sys. before search string

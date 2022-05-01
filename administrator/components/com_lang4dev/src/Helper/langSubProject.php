@@ -32,7 +32,7 @@ class langSubProject extends langFileNamesSet
     // !!! ToDo: text_prefix !!!
     // public $text_prefix;
 
-    public $isSysFiles = false;
+    public $useLangSysIni = false;
 
     protected $langFiles = []; // $langId -> translation file(s)
 	protected $transIdLocations = [];
@@ -68,9 +68,73 @@ class langSubProject extends langFileNamesSet
 
 		if ($this->prjType == langSubProject::PRJ_TYPE_COMP_BACK_SYS)
 		{
-			$this->isSysFiles = true;
+			$this->useLangSysIni = true;
 		}
     }
+
+
+
+
+    private function subPrjHasSysFiles ()
+    {
+	    /* not valid for prjType == ??? *
+	    $hasSysFiles = ! ($this->prjType == langSubProject::PRJ_TYPE_COMP_BACK
+	    || $this->prjType == langSubProject::PRJ_TYPE_COMP_SITE);
+	    /**/
+
+	    $hasSysFiles = true;
+
+		if ($this->prjType == langSubProject::PRJ_TYPE_COMP_BACK) {
+			$hasSysFiles = false;
+		}
+
+		if ($this->prjType == langSubProject::PRJ_TYPE_COMP_SITE) {
+			$hasSysFiles = false;
+		}
+
+		return $hasSysFiles;
+    }
+
+
+    private function checkRootPath ()
+    {
+	    $isOk = false;
+
+	    // continue when path has enough characters
+	    if (strlen($this->prjRootPath) > 5)
+	    {
+		    if (is_dir($this->prjRootPath))
+		    {
+			    $isOk = true;
+		    }
+		    else
+		    {
+			    // try root path of component
+			    if (str_starts_with($this->prjRootPath, '/',) || str_starts_with($this->prjRootPath, '\\',))
+			    {
+				    $testPath = JPATH_ROOT . $this->prjRootPath;
+			    }
+			    else
+			    {
+				    $testPath = JPATH_ROOT . '/' . $this->prjRootPath;
+			    }
+
+			    if (is_dir($testPath))
+			    {
+
+				    $isOk = true;
+
+				    // ToDO: keep root path without JPATH_ROOT part.
+				    // Needs a access function of the prjRootPath
+				    // with flag it is on server (instead of PC)
+				    $this->prjRootPath = $testPath;
+			    }
+		    }
+	    }
+
+		return $isOk;
+    }
+
 
     public function findPrjFiles () {
 
@@ -78,59 +142,61 @@ class langSubProject extends langFileNamesSet
 
         try {
 
-            //--- pre check type
+        	//--- check valid path ---------------------------------------------------
 
-            if ($this->prjType == langSubProject::PRJ_TYPE_COMP_BACK_SYS) {
-                $this->isSysFiles = true;
-            }
-
-	        $hasSysFiles = ! ($this->prjType == langSubProject::PRJ_TYPE_COMP_BACK
-		        || $this->prjType == langSubProject::PRJ_TYPE_COMP_SITE);
-
-	        // On sys file receive langIdPrefix
-	        if($hasSysFiles)
-	        {
-
-		        //--- Assign from function call variables ------------------------------------
-
-		        $finder = new sysFilesContent();
-
-		        $finder->prjId       = $this->prjId;
-		        $finder->prjType     = $this->prjType;
-		        $finder->prjRootPath = $this->prjRootPath;
-
-		        // use sysFilesContent
-		        // new ...;
-
-		        $isFilesFound = $finder->findPrjFiles();
-
-		        // take results
-		        if ($isFilesFound)
-		        {
-			        // Path and name
-			        if ($this->isSysFiles)
-			        {
-				        $this->prjXmlFilePath = $finder->prjXmlFilePath;
-			        }
-			        else
-			        {
-				        $this->prjXmlFilePath = $this->prjRootPath;
-			        }
-			        $this->prjXmlPathFilename  = $finder->prjXmlPathFilename;
-			        $this->installPathFilename = $finder->installPathFilename;
-			        $this->langIdPrefix     = $finder->langIdPrefix;
-		        }
-
-		        $this->detectLangBasePath($this->prjXmlFilePath, $this->isSysFiles);
-	        }
-			else
+	        // continue when path is valid
+	        $isRootPathValid = $this->checkRootPath ();
+			if($isRootPathValid)
 			{
-				$this->detectLangBasePath($this->prjRootPath, $this->isSysFiles);
+
+				//--- pre check type -----------------
+
+				if ($this->prjType == langSubProject::PRJ_TYPE_COMP_BACK_SYS)
+				{
+					$this->useLangSysIni = true;
+				}
+
+				//--- project XML and script file -------------------------------------------------
+
+				$hasSysFiles = $this->subPrjHasSysFiles();
+				if ($hasSysFiles)
+				{
+
+					//--- Assign from variables function call ------------------------------------
+
+					$finder = new sysFilesContent();
+
+					$finder->prjId       = $this->prjId;
+					$finder->prjType     = $this->prjType;
+					$finder->prjRootPath = $this->prjRootPath;
+
+					// use sysFilesContent
+					// new ...;
+
+					$isFilesFound = $finder->findPrjFiles();
+
+					// take results
+					if ($isFilesFound)
+					{
+						$this->prjXmlFilePath = $finder->prjXmlFilePath;
+
+						$this->prjXmlFilePath = $finder->prjXmlFilePath;
+						$this->prjXmlPathFilename  = $finder->prjXmlPathFilename;
+						$this->installPathFilename = $finder->installPathFilename;
+						$this->langIdPrefix        = $finder->langIdPrefix;
+					}
+
+					$this->detectLangBasePath($this->prjXmlFilePath, $this->useLangSysIni);
+				}
+				else
+				{
+					$this->prjXmlFilePath = $this->prjRootPath;
+					$this->detectLangBasePath($this->prjRootPath, $this->useLangSysIni);
+				}
+
+				//$this->detectLangBasePath($this->prjRootPath);
+				$this->searchLangFiles();
 			}
-
-            //$this->detectLangBasePath($this->prjRootPath);
-            $this->searchLangFiles();
-
         }
         catch (\RuntimeException $e)
         {
@@ -177,17 +243,17 @@ class langSubProject extends langFileNamesSet
         return $this->langFiles [$langId];
     }
 
-    public function scanCode4TransIdsLocations ($isSysFiles=false) {
+    public function scanCode4TransIdsLocations ($useLangSysIni=false) {
 
 		$searchTransIdLocations = new searchTransIdLocations ();
 
-	    $searchTransIdLocations->isSysFiles = $this->isSysFiles;
+	    $searchTransIdLocations->useLangSysIni = $this->useLangSysIni;
 	    $searchTransIdLocations->prjXmlPathFilename = $this->prjXmlPathFilename;
         $searchTransIdLocations->installPathFilename = $this->installPathFilename;
 
         $searchTransIdLocations->langIdPrefix = $this->langIdPrefix;
         // sys file selected
-        if ($isSysFiles || $this->isSysFiles) {
+        if ($useLangSysIni || $this->useLangSysIni) {
 
             //--- scan project files  ------------------------------------
 
@@ -248,7 +314,7 @@ class langSubProject extends langFileNamesSet
         // if not cached or $isReadOriginal
         if (empty($this->transIdLocations) || $isScanOriginal) {
 
-            return $this->scanCode4TransIdsLocations ($this->isSysFiles);
+            return $this->scanCode4TransIdsLocations ($this->useLangSysIni);
         }
 
         return $this->transIdLocations;

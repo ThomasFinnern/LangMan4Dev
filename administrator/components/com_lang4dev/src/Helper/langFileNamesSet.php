@@ -33,7 +33,7 @@ class langFileNamesSet
     public $langIds = [];
     public $langFileNames = [];
 
-    protected $isSysFiles = false;
+    protected $useLangSysIni = false;
     protected $isLangInFolders = false; // lang file are divided in folders instead of containing the name i front
     protected $isLangIdPre2Name = false; // ToDo: is this needed ?
 
@@ -48,13 +48,13 @@ class langFileNamesSet
         $this->langIds = [];
         $this->langFileNames = [];
 
-        $this->isSysFiles = false;
+        $this->useLangSysIni = false;
         $this->isLangInFolders = false; // lang file are divided in folders instead of containing the name i front
         $this->isLangIdPre2Name = false; // ToDo: is this needed ?
 
     }
 
-    public function detectLangBasePath ($basePath = '', $isSysFiles = false) {
+    public function detectLangBasePath ($basePath = '', $useLangSysIni = false) {
 
     	if ($basePath == '') {
 
@@ -88,7 +88,7 @@ class langFileNamesSet
             return;
         }
 
-	    $this->isSysFiles = $isSysFiles;
+	    $this->useLangSysIni = $useLangSysIni;
         $isPathFound = $this->searchDir4LangID ($basePath);
 
 
@@ -122,7 +122,7 @@ class langFileNamesSet
         $isPathFound = false;
 
         $end = '.ini';
-        if ($this->isSysFiles) {
+        if ($this->useLangSysIni) {
 	        $end = '.sys.ini';
         }
 
@@ -179,7 +179,7 @@ class langFileNamesSet
         return $isPathFound;
     }
 
-    // ToDo: detectBasePath does not need to know about isSysFiles, do it here ? or tell by construct
+    // ToDo: detectBasePath does not need to know about useLangSysIni, do it here ? or tell by construct
     public function collectLangFiles () {
 
         $isFound = false;
@@ -196,7 +196,7 @@ class langFileNamesSet
 	    $this->langIds = [];
 	    $baseName = '';
 
-	    if ($this->isSysFiles == true) {
+	    if ($this->useLangSysIni == true) {
 		    $regex = '\.sys\.ini$';
 	    } else {
 	    	// ToDO: regex with check for not .sys. before search string
@@ -294,7 +294,7 @@ class langFileNamesSet
 
 	    $lines [] = '$basePath = "' . $this->langBasePath . '"';
 	    $lines [] = '$baseName = "' . $this->baseName . '"';
-	    $lines [] = '$isSysFiles = "' . ($this->isSysFiles  ? 'true' : 'false') . '"';
+	    $lines [] = '$useLangSysIni = "' . ($this->useLangSysIni  ? 'true' : 'false') . '"';
 	    $lines [] = '$isLangInFolders = "' . ($this->isLangInFolders  ? 'true' : 'false') . '"';
 	    $lines [] = '$isLangIdPre2Name = "' . ($this->isLangIdPre2Name  ? 'true' : 'false') . '"';
 

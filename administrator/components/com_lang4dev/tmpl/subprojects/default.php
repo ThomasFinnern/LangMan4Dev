@@ -76,7 +76,7 @@ if ($saveOrder && !empty($this->items))
 			<!--div class="alert alert-info"-->
 			<span class="fa fa-info-circle" aria-hidden="true"></span><span
 					class="sr-only"><?php echo Text::_('INFO'); ?></span>
-			<?php echo Text::_('COM_LANG4DEV_CREATE_YOUR_FIRST_PROJECT'); // JGLOBAL_NO_MATCHING_RESULTS ?>
+			<?php echo Text::_('COM_LANG4DEV_CREATE_A_SUBPROJECT_FIRST'); // JGLOBAL_NO_MATCHING_RESULTS ?>
 			<!--/div-->
 		</div>
 	</div>

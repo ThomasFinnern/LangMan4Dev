@@ -12,7 +12,7 @@
 	<field
 			name="title"
 			type="text"
-			label="COM_LANG4DEV_SUBPROJECT_TITLE"
+			label="JGLOBAL_TITLE"
 			size="40"
 	/>
 
@@ -78,8 +78,8 @@
 	<field
 			name="parent_id"
 			type="number"
-			label="COM_LANG4DEV_SUBPROJECT_ORIGIN_TWIN_ID"
-			description="COM_LANG4DEV_SUBPROJECT_ORIGIN_TWIN_ID_DESC"
+			label="COM_LANG4DEV_SUBPROJECT_PARENT_ID"
+			description="COM_LANG4DEV_SUBPROJECT_PARENT_ID_DESC"
 			default="0"
 			class="readonly"
 	/>
@@ -170,7 +170,7 @@
 			size="1"
 	/>
 
-	<!-- componentPrefix, prjXmlPathFilename, installPathFilename, isSysFiles -->
+	<!-- componentPrefix, prjXmlPathFilename, installPathFilename, useLangSysIni -->
 
 
 	<!-- ? $langFiles = [], $transIdLocations = [], $transIdsClassified; -->

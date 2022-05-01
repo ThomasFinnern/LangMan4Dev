@@ -34,6 +34,8 @@ $this->useCoreUI = true;
 $isModal = $input->get('layout') == 'modal' ? true : false;
 $layout  = $isModal ? 'modal' : 'edit';
 $tmpl    = $isModal || $input->get('tmpl', '', 'cmd') === 'component' ? '&tmpl=component' : '';
+
+$assoc = false; // ToDo: check how it is used
 ?>
 
 <form action="<?php echo Route::_('index.php?option=com_lang4dev&view=subproject&layout=edit&id=' . (int) $this->item->id); ?>"
@@ -52,19 +54,18 @@ $tmpl    = $isModal || $input->get('tmpl', '', 'cmd') === 'component' ? '&tmpl=c
                     <div class="card-body">
                         <fieldset class="adminform">
                             <?php
-                            echo'-------------- prjId/type: ><br>';
+                            // echo'-------------- prjId/type: ><br>';
+                            echo $this->form->renderField('id');
                             echo $this->form->renderField('prjId');
-                            echo $this->form->renderField('type');
-                            echo'-------------- start: ><br>';
-
+                            echo $this->form->renderField('subPrjType');
                             echo $this->form->renderField('root_path');
-                            echo $this->form->renderField('$prjXmlFilePath');
+
 
                             // echo $this->form->renderField('twin_id');
 
                             echo $this->form->renderField('notes');
 
-                            echo'<br>-------------- end: ><br>';
+                            // echo'<br>-------------- end: ><br>';
 
                             ?>
                         </fieldset>
@@ -78,9 +79,19 @@ $tmpl    = $isModal || $input->get('tmpl', '', 'cmd') === 'component' ? '&tmpl=c
 
 		<?php echo HTMLHelper::_('uitab.endTab'); ?>
 
-		<?php echo HTMLHelper::_('uitab.addTab', 'myTab', 'publishing', Text::_('COM_LANG4DEV_SUBPROJECT_INFO')); ?>
+		<?php echo HTMLHelper::_('uitab.addTab', 'myTab', 'publishing', Text::_('INFO')); ?>
         <div class="row">
             <div class="col-12 col-lg-6">
+	            <?php
+	            echo $this->form->renderField('prefix');
+
+	            echo $this->form->renderField('prjXmlPathFilename');
+	            echo $this->form->renderField('installPathFilename');
+
+	            echo $this->form->renderField('parent_id');
+	            echo $this->form->renderField('twin_id');
+
+	            ?>
                 <fieldset id="fieldset-publishingdata" class="options-form">
                     <legend><?php echo Text::_('JGLOBAL_FIELDSET_PUBLISHING'); ?></legend>
                     <div>

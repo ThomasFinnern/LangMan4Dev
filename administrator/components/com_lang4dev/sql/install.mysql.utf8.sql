@@ -6,7 +6,6 @@
 
 CREATE TABLE IF NOT EXISTS `#__lang4dev_projects` (
     `id` int NOT NULL AUTO_INCREMENT,
-	`title` varchar(255) NOT NULL DEFAULT '',
 	`name` varchar(255) NOT NULL DEFAULT '',
 
     `alias` varchar(400) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NOT NULL DEFAULT '',

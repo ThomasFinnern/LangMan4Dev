@@ -32,7 +32,7 @@ class searchTransIdLocations
 	public $searchPaths = [];
 	public $transIdLocations;
 
-	public $isSysFiles = false;
+	public $useLangSysIni = false;
 	public $prjXmlPathFilename = "";
 	public $installPathFilename = "";
 

@@ -80,7 +80,7 @@ class langProject
 				}
 
                 /**
-                if ($subProject->isSysFiles) {
+                if ($subProject->useLangSysIni) {
 
                     $this->isSysFileFound = true;
 
