@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<form>
+	<field
+			name="id"
+			type="hidden"
+			label="JGLOBAL_FIELD_ID_LABEL"
+			default="0"
+			readonly="true"
+	/>
+
+	<field
+			id="SelectSubprojects"
+			name="SelectSubprojects"
+			type="SubprojectsListField"
+			label="COM_LANG4DEV_SELECT_SUB_PROJECT"
+			description="COM_LANG4DEV_SELECT_SUB_PROJECT_DESC"
+			required="true"
+	/>
+
+
+</form>

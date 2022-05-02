@@ -135,6 +135,9 @@ $transIdsClassified = $prjFiles->getTransIdsClassified();
 <form action="<?php echo Route::_('index.php?option=com_lang4dev&view=prjtexts'); ?>" method="post" name="adminForm" id="item-form" class="form-validate">
 
 	<?php
+
+	echo $this->form->renderField('SelectSubprojects');
+
 	$idx = 1;
 
 	$subProjects = $this->project->subProjects;
