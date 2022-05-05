@@ -136,7 +136,7 @@ $transIdsClassified = $prjFiles->getTransIdsClassified();
 
 	<?php
 
-	echo $this->form->renderField('SelectSubprojects');
+//	echo $this->form->renderField('SelectSubprojects');
 
 	$idx = 1;
 
@@ -197,6 +197,7 @@ $transIdsClassified = $prjFiles->getTransIdsClassified();
 <!-- ToDo: header -->
 	<table>
 		<tr>
+			<th><?php echo Text::_('*Line Number') ?></th>
 			<th><?php echo Text::_('COM_LANG4DEV_LINE_NR') ?></th>
 			<th><?php echo Text::_('COM_LANG4DEV_NAME') ?></th>
 			<th><?php echo Text::_('COM_LANG4DEV_TRANSLATION') ?></th>

@@ -62,6 +62,31 @@
 
 
 		<field
+				name="isSearchForTranslationIds"
+				type="radio"
+				label="COM_LANG4DEV_SEARCH_TRANS_IDS"
+				description="COM_LANG4DEV_SEARCH_TRANS_IDS_DESC"
+				default="1"
+				layout="joomla.form.field.radio.switcher"
+		>
+			<option value="0">JNO</option>
+			<option value="1">JYES</option>
+		</field>
+
+
+		<field
+				name="isSearchForStringIn_TEXT_"
+				type="radio"
+				label="COM_LANG4DEV_SEARCH_STRING_IN_TEXT_"
+				description="COM_LANG4DEV_SEARCH_STRING_IN_TEXT_DESC"
+				default="1"
+				layout="joomla.form.field.radio.switcher"
+		>
+			<option value="0">JNO</option>
+			<option value="1">JYES</option>
+		</field>
+
+		<field
 				type="spacer"
 				name="spacer_admin"
 				hr="true"
@@ -72,7 +97,7 @@
 			type="list"
 			label="COM_LANG4DEV_FIELD_TEST_SHOW_CATEGORY_LABEL"
 			description="COM_LANG4DEV_FIELD_TEST_SHOW_CATEGORY_LABEL_DESC"
-			default="1"
+			default="0"
 			>
 			<option value="0">JNO</option>
 			<option value="1">JYES</option>

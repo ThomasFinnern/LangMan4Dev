@@ -258,11 +258,11 @@ class langSubProject extends langFileNamesSet
             //--- scan project files  ------------------------------------
 
             // scan project XML
-            $searchTransIdLocations->searchTransIdsIn_XML_file(
+            $searchTransIdLocations->searchTransIds_in_XML_file(
                 baseName($this->prjXmlPathFilename), dirname($this->prjXmlPathFilename));
 
             // scan install file
-            $searchTransIdLocations->searchTransIdsIn_PHP_file(
+            $searchTransIdLocations->searchTransIds_in_PHP_file(
                 baseName($this->installPathFilename), dirname($this->installPathFilename));
         }
         else {

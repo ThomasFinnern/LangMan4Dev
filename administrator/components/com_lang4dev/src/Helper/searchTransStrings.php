@@ -25,28 +25,27 @@ use Finnern\Component\Lang4dev\Administrator\Helper\transIdLocations;
  *
  * @package Lang4dev
  */
-class searchTransIdLocations
+class searchTransStrings
 {
-	public $fileTypes = 'php, xml';
-	public $langIdPrefix = '';
-	public $searchPaths = [];
-	public $transIdLocations;
-
-	public $useLangSysIni = false;
-	public $prjXmlPathFilename = "";
-	public $installPathFilename = "";
-
-	protected $name = 'Lang4dev';
+//	public $fileTypes = 'php, xml';
+//	public $langIdPrefix = '';
+//	public $searchPaths = [];
+//	public $transIdLocations;
+//
+//	public $useLangSysIni = false;
+//	public $prjXmlPathFilename = "";
+//	public $installPathFilename = "";
+//
+//	protected $name = 'Lang4dev';
 
 	/**
 	 * @since __BUMP_VERSION__
 	 */
-	public function __construct($searchPaths = array(), $langIdPrefix = 'COM_LANG4DEV_')
+	public function __construct($searchPaths = array())
 	{
 		// ToDO: check for uppercase and trailing '_'
 
 		$this->transIdLocations       = new transIdLocations();
-		$this->langIdPrefix = $langIdPrefix;
 
 		// if ( !empty ($searchPaths)) ... ???
 		$this->searchPaths = $searchPaths;
@@ -55,7 +54,8 @@ class searchTransIdLocations
 
 	// Attention the removing of comments may lead to wrong
 	// Index in line for found '*/'
-	public function findAllTranslationIds()
+	// find and collect strings in TEXT::_('<string>') which need to be translated
+	public function findAllTranslationStrings()
 	{
 		// ToDo: log $langIdPrefix, $searchPaths
 
@@ -66,8 +66,6 @@ class searchTransIdLocations
 			/*--------------------------------------------------------------
 			checks
 			--------------------------------------------------------------*/
-
-			//--- prefix --------------------------------------------------
 
 			//--- paths given --------------------------------------------------
 
@@ -85,7 +83,7 @@ class searchTransIdLocations
 				{
 					//--- search in path -------------------------------
 
-					$this->searchLangIds_in_Path($searchPath, $this->langIdPrefix);
+					$this->searchTransStrings_in_Path($searchPath);
 				}
 				else
 				{
@@ -106,7 +104,7 @@ class searchTransIdLocations
 		return $this->transIdLocations; // ? a lot to return ?
 	}
 
-	public function searchLangIds_in_Path($searchPath)
+	public function searchTransStrings_in_Path($searchPath)
 	{
 		try
 		{
@@ -123,20 +121,12 @@ class searchTransIdLocations
                 {
                     continue;
                 }
-                if ($ext == 'xml' && $filePath == $this->prjXmlPathFilename)
-                {
-                    continue;
-                }
 
                 //--- scan content of valid  files -----------------------------------
 
                 if ($ext == 'php')
 				{
-					$this->searchTransIds_in_PHP_file($fileName, $searchPath);
-				}
-				if ($ext == 'xml')
-				{
-					$this->searchTransIds_in_XML_file($fileName, $searchPath);
+					$this->searchTransStrings_in_PHP_file($fileName, $searchPath);
 				}
 			}
 
@@ -145,7 +135,7 @@ class searchTransIdLocations
 			foreach ($this->folderInDir($searchPath) as $folderName)
 			{
 				$subFolder = $searchPath . DIRECTORY_SEPARATOR . $folderName;
-				$this->searchLangIds_in_Path($subFolder);
+				$this->searchTransStrings_in_Path($subFolder);
 			}
 
 		}
@@ -186,7 +176,7 @@ class searchTransIdLocations
 
 	// Multiple items in one line
 
-	public function searchTransIds_in_PHP_file($fileName, $path)
+	public function searchTransStrings_in_PHP_file($fileName, $path)
 	{
 		$isInComment = false;
 
@@ -214,7 +204,7 @@ class searchTransIdLocations
 				if (strlen($bareLine) > 0)
 				{
 
-					$items = $this->searchLangIdsInLinePHP($bareLine);
+					$items = $this->searchTransStrings_in_line_PHP($bareLine);
 
 					//--- add items
 					foreach ($items as $item)
@@ -326,7 +316,7 @@ class searchTransIdLocations
 
 	// Multiple items in one line
 	// Must be cleaned from comments first
-	public function searchLangIdsInLinePHP($line)
+	public function searchTransStrings_in_line_PHP($line)
 	{
 		$items = [];
 		$matches = [];
@@ -339,7 +329,8 @@ class searchTransIdLocations
 			// Python solution
 			// py$searchRegex = "\\b" + $this->langIdPrefix + "\\w+";
 			// Finds multiple words per line
-			$searchRegex = '/' . $this->langIdPrefix . "\w+/";
+			// $searchRegex = '/' . $this->langIdPrefix . "\w+/";
+			$searchRegex = '/' . 'TEXT::_([\"\'].*[\"\'])/';
 
 			// test find all words then iterate through array
 			preg_match_all($searchRegex, $line, $matchGroups);
@@ -350,11 +341,14 @@ class searchTransIdLocations
 				$idx = 0;
 
 				// all items found in line
-				foreach ($matchGroups[0] as $name)
+				foreach ($matchGroups[0] as $string)
 				{
-					$colIdx = strpos($line, $name, $idx);
+					$name = createVarName($string);
+
+					$colIdx = strpos($line, $string, $idx);
 
 					$item = new transIdLocation ($name, '', '', -1, $colIdx);
+					$item->string = $string; // additional
 
 					// ? same twice ?
 					$items [] = $item;
@@ -378,167 +372,6 @@ class searchTransIdLocations
 		return $items;
 	}
 
-	public function searchTransIds_in_XML_file($fileName, $path)
-	{
-		$isInComment = false;
-
-		try
-		{
-			$lineNr = 0;
-
-			// Read all lines
-			$filePath = $path . DIRECTORY_SEPARATOR . $fileName;
-
-			$lines = file($filePath);
-
-			// content found
-			foreach ($lines as $line)
-			{
-				$lineNr = $lineNr + 1;
-
-				//--- remove comments --------------
-
-				$bareLine = $this->removeCommentXML($line, $isInComment);
-
-				//--- find items --------------
-
-				if (strlen($bareLine) > 0)
-				{
-
-					$items = $this->searchLangIdsInLineXML($bareLine);
-
-					//--- add items
-					foreach ($items as $item)
-					{
-						$item->file    = $fileName;
-						$item->path    = $path;
-						$item->lineNr = $lineNr;
-
-						$this->transIdLocations->addItem($item);
-					}
-				}
-
-			}
-		}
-		catch (\RuntimeException $e)
-		{
-			$OutTxt = '';
-			$OutTxt .= 'Error executing searchTransIdsIn_XML_file: "' . '<br>';
-			$OutTxt .= 'Error: "' . $e->getMessage() . '"' . '<br>';
-
-			$app = Factory::getApplication();
-			$app->enqueueMessage($OutTxt, 'error');
-		}
-
-//		return $this->transIdLocations;
-	}
-
-	public function removeCommentXML($line, &$isInComment)
-	{
-		$bareLine = $line;
-
-		try
-		{
-
-			// No inside a '<--' comment
-			if ( ! $isInComment)
-			{
-				//--- check for comments ---------------------------------------
-
-				$commStart = '<!--';
-				$commStartIdx = strpos ($line, $commStart);
-
-				// comment exists, keep start of string
-				if ($commStartIdx != false)
-				{
-					$bareLine = strstr($line, $commStart, true);
-					$isInComment = true;
-
-				} // No comment indicator
-
-			} else {
-				//--- Inside a '/*' comment
-
-				$bareLine = '';
-
-				$commEnd = '-->';
-				$commEndIdx = strpos ($line, $commEnd);
-
-				// end found ?
-				if ($commEndIdx != false)
-				{
-					// Keep end of string
-					$bareLine = strstr($line, $commEnd);
-
-					// handle rest of string
-					$isInComment = false;
-					$bareLine = $this->removeCommentPHP($bareLine, $isInComment);
-				}
-			}
-
-		}
-		catch (\RuntimeException $e)
-		{
-			$OutTxt = '';
-			$OutTxt .= 'Error executing removeCommentXML: "' . '<br>';
-			$OutTxt .= 'Error: "' . $e->getMessage() . '"' . '<br>';
-
-			$app = Factory::getApplication();
-			$app->enqueueMessage($OutTxt, 'error');
-		}
-
-		return $bareLine;
-	}
-
-	public function searchLangIdsInLineXML($line)
-	{
-		$items = [];
-		$matches = [];
-
-		try
-		{
-			// find all words then iterate through array
-
-			// Python solution
-			// py$searchRegex = "\\b" + $this->langIdPrefix + "\\w+";
-			// Finds multiple words per line
-			$searchRegex = '/' . $this->langIdPrefix . "\w+/";
-
-			// test find all words then iterate through array
-			preg_match_all($searchRegex, $line, $matchGroups);
-
-			if (!empty($matchGroups))
-			// if (count ($matchGroups) > 0)
-			{
-				$idx = 0;
-
-				// all items found in line
-				foreach ($matchGroups[0] as $name)
-				{
-					$colIdx = strpos($line, $name, $idx);
-
-					$item = new transIdLocation ($name, '', '', -1, $colIdx);
-
-					// ? same twice ?
-					$items [] = $item;
-
-					// search behind last find
-					$idx = $idx + strlen($name);
-				}
-			}
-		}
-		catch (\RuntimeException $e)
-		{
-			$OutTxt = '';
-			$OutTxt .= 'Error executing searchLangIdsInLineXML: "' . '<br>';
-			$OutTxt .= 'Error: "' . $e->getMessage() . '"' . '<br>';
-
-			$app = Factory::getApplication();
-			$app->enqueueMessage($OutTxt, 'error');
-		}
-
-		return $items;
-	}
 
 	public function folderInDir($folder)
 	{
