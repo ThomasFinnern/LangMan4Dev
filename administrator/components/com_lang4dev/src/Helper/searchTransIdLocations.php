@@ -13,7 +13,6 @@ namespace Finnern\Component\Lang4dev\Administrator\Helper;
 use Joomla\CMS\Factory;
 use Joomla\CMS\Filesystem\Folder;
 
-use Finnern\Component\Lang4dev\Administrator\Helper\transIdLocation;
 use Finnern\Component\Lang4dev\Administrator\Helper\transIdLocations;
 
 // no direct access

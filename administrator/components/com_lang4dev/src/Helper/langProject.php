@@ -190,6 +190,32 @@ class langProject
         return $isFilesFound;
     }
 
+    public function scanCode4TransStrings()
+    {
+        $isFilesFound = false;
+
+        try
+        {
+            foreach ($this->subProjects as $subProject)
+            {
+
+                $subProject->scanCode4TransStringsLocations(); // scanCode4TransIdsLocations
+
+            }
+        }
+        catch (\RuntimeException $e)
+        {
+            $OutTxt = '';
+            $OutTxt .= 'Error executing findFiles: "' . '<br>';
+            $OutTxt .= 'Error: "' . $e->getMessage() . '"' . '<br>';
+
+            $app = Factory::getApplication();
+            $app->enqueueMessage($OutTxt, 'error');
+        }
+
+        return $isFilesFound;
+    }
+
 
 } // class
 

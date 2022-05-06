@@ -129,6 +129,7 @@ $prjFiles  = $this->project->subProjects[0];; // ToDo: remove
 $langFile     = $prjFiles->getLangFile('en-GB');  // ToDo: remove
 $translations = $langFile->translations;
 $transIdLocations = $prjFiles->getTransIdLocations();
+$transStringLocations = $prjFiles->getTransStringsLocations();
 $transIdsClassified = $prjFiles->getTransIdsClassified();
 
 ?>
@@ -163,7 +164,6 @@ $transIdsClassified = $prjFiles->getTransIdsClassified();
 				$same    = $transIdsClassified['same'];
 				$notUsed = $transIdsClassified['notUsed'];
 				$doubles  = $transIdsClassified['doubles'];
-
 
 
 				// ToDo: Use constants ?
@@ -255,7 +255,28 @@ $transIdsClassified = $prjFiles->getTransIdsClassified();
 
 	</table>
 
+<hr>
+	<h5>Test translation string locations </h5>
+	<?php
+	$idx = 1;
+	foreach ($transStringLocations as $transIdLocation) : ?>
+		<?php foreach ($transIdLocation as $item) : ?>
+			<tr>
+				<td><?php echo $idx; ?></td>
 
+				<td><?php echo $item->name; ?></td>
+				<td><?php echo $item->lineNr; ?></td>
+				<td><?php echo $item->colIdx; ?></td>
+				<td><?php echo $item->file; ?></td>
+				<td><?php echo $item->path; ?></td>
+			</tr>
+		<?php endforeach; ?>
+
+		<?php $idx++; ?>
+	<?php endforeach; ?>
+
+
+	<hr>
 
 	<input type="hidden" name="task" value="" />
     <?php echo HTMLHelper::_('form.token'); ?>

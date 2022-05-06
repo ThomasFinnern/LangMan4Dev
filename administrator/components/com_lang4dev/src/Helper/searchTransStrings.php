@@ -13,8 +13,8 @@ namespace Finnern\Component\Lang4dev\Administrator\Helper;
 use Joomla\CMS\Factory;
 use Joomla\CMS\Filesystem\Folder;
 
-use Finnern\Component\Lang4dev\Administrator\Helper\transIdLocation;
 use Finnern\Component\Lang4dev\Administrator\Helper\transIdLocations;
+use Joomla\String\Normalise;
 
 // no direct access
 \defined('_JEXEC') or die;
@@ -30,7 +30,7 @@ class searchTransStrings
 //	public $fileTypes = 'php, xml';
 //	public $langIdPrefix = '';
 //	public $searchPaths = [];
-//	public $transIdLocations;
+	public $transStringLocations;
 //
 //	public $useLangSysIni = false;
 //	public $prjXmlPathFilename = "";
@@ -41,11 +41,12 @@ class searchTransStrings
 	/**
 	 * @since __BUMP_VERSION__
 	 */
-	public function __construct($searchPaths = array())
+	public function __construct($searchPaths = array(), $langIdPrefix = 'COM_LANG4DEV_')
 	{
 		// ToDO: check for uppercase and trailing '_'
 
-		$this->transIdLocations       = new transIdLocations();
+		$this->transStringLocations       = new transIdLocations();
+		$this->langIdPrefix = $langIdPrefix;
 
 		// if ( !empty ($searchPaths)) ... ???
 		$this->searchPaths = $searchPaths;
@@ -59,13 +60,15 @@ class searchTransStrings
 	{
 		// ToDo: log $langIdPrefix, $searchPaths
 
-		$this->transIdLocations = new transIdLocations();
+		$this->transStringLocations = new transIdLocations();
 
 		try
 		{
 			/*--------------------------------------------------------------
 			checks
 			--------------------------------------------------------------*/
+
+			//--- prefix --------------------------------------------------
 
 			//--- paths given --------------------------------------------------
 
@@ -83,7 +86,7 @@ class searchTransStrings
 				{
 					//--- search in path -------------------------------
 
-					$this->searchTransStrings_in_Path($searchPath);
+					$this->searchTransStrings_in_Path($searchPath, $this->langIdPrefix);
 				}
 				else
 				{
@@ -101,7 +104,7 @@ class searchTransStrings
 			$app->enqueueMessage($OutTxt, 'error');
 		}
 
-		return $this->transIdLocations; // ? a lot to return ?
+		return $this->transStringLocations; // ? a lot to return ?
 	}
 
 	public function searchTransStrings_in_Path($searchPath)
@@ -213,7 +216,7 @@ class searchTransStrings
 						$item->path    = $path;
 						$item->lineNr = $lineNr;
 
-						$this->transIdLocations->addItem($item);
+						$this->transStringLocations->addItem($item);
 					}
 				}
 
@@ -228,7 +231,7 @@ class searchTransStrings
 			$app->enqueueMessage($OutTxt, 'error');
 		}
 
-		// return $this->transIdLocations;
+		// return $this->transStringLocations;
 	}
 
 	public function removeCommentPHP($line, &$isInComment)
@@ -330,7 +333,8 @@ class searchTransStrings
 			// py$searchRegex = "\\b" + $this->langIdPrefix + "\\w+";
 			// Finds multiple words per line
 			// $searchRegex = '/' . $this->langIdPrefix . "\w+/";
-			$searchRegex = '/' . 'TEXT::_([\"\'].*[\"\'])/';
+			// $searchRegex = '/' . 'Text::_\(\'(.*)\'/';
+			$searchRegex = '/' . 'Text::_\([\'"](.*)[\'"]' . '/';
 
 			// test find all words then iterate through array
 			preg_match_all($searchRegex, $line, $matchGroups);
@@ -343,7 +347,7 @@ class searchTransStrings
 				// all items found in line
 				foreach ($matchGroups[0] as $string)
 				{
-					$name = createVarName($string);
+					$name = $this->createTransID($string);
 
 					$colIdx = strpos($line, $string, $idx);
 
@@ -372,6 +376,34 @@ class searchTransStrings
 		return $items;
 	}
 
+    public function createTransID ($string)
+    {
+		$transId = '??? ' . $string;
+
+		try
+		{
+			$prefix = $this->langIdPrefix;
+			if ( ! str_ends_with ($prefix, '_')) {
+				$prefix = $prefix . '_';
+			}
+
+			$transId01 = Normalise::toDashSeparated ($string);
+			$transIdß2 = Normalise::toKey ($string);
+
+			$transId = Normalise::toDashSeparated ($string);
+		}
+		catch (\RuntimeException $e)
+		{
+			$OutTxt = '';
+			$OutTxt .= 'Error executing createTransID: "' . $string . '<br>';
+			$OutTxt .= 'Error: "' . $e->getMessage() . '"' . '<br>';
+
+			$app = Factory::getApplication();
+			$app->enqueueMessage($OutTxt, 'error');
+		}
+
+    	return $transId ;
+    }
 
 	public function folderInDir($folder)
 	{

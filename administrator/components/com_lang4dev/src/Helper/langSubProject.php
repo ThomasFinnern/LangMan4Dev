@@ -36,6 +36,7 @@ class langSubProject extends langFileNamesSet
 
     protected $langFiles = []; // $langId -> translation file(s)
 	protected $transIdLocations = [];
+	protected $transStrings = [];
     protected $transIdsClassified;
 
 
@@ -285,6 +286,44 @@ class langSubProject extends langFileNamesSet
         return $this->transIdLocations;
     }
 
+    public function scanCode4TransStringsLocations ($useLangSysIni=false) {
+
+		$searchTransIdLocations = new searchTransStrings ();
+
+	    $searchTransIdLocations->useLangSysIni = $this->useLangSysIni;
+	    $searchTransIdLocations->prjXmlPathFilename = $this->prjXmlPathFilename;
+        $searchTransIdLocations->installPathFilename = $this->installPathFilename;
+
+        $searchTransIdLocations->langIdPrefix = $this->langIdPrefix;
+        // sys file selected
+        if ($useLangSysIni || $this->useLangSysIni) {
+
+            //--- scan project files  ------------------------------------
+
+            // scan install file
+            $searchTransIdLocations->searchTransStrings_in_PHP_file(
+                baseName($this->installPathFilename), dirname($this->installPathFilename));
+        }
+        else {
+            //--- scan all not project files ------------------------------------
+
+            // start path
+            $searchPath = $this->prjXmlFilePath;
+            if (empty($searchPath)) {
+                $searchPath = $this->prjRootPath;
+            }
+            $searchTransIdLocations->searchPaths = array ($searchPath);
+
+            //--- do scan all not project files ------------------------------------
+
+            $searchTransIdLocations->findAllTranslationStrings();
+        }
+
+        $this->transStrings = $searchTransIdLocations->transStringLocations->items;
+
+        return $this->transStrings;
+    }
+
     public function getPrjTransIdNames ()
     {
         $names = [];
@@ -315,6 +354,17 @@ class langSubProject extends langFileNamesSet
         if (empty($this->transIdLocations) || $isScanOriginal) {
 
             return $this->scanCode4TransIdsLocations ($this->useLangSysIni);
+        }
+
+        return $this->transIdLocations;
+    }
+
+    public function getTransStringsLocations ($isScanOriginal=false)
+    {
+        // if not cached or $isReadOriginal
+        if (empty($this->transStrings) || $isScanOriginal) {
+
+            return $this->scanCode4TransStringsLocations ($this->useLangSysIni);
         }
 
         return $this->transIdLocations;
