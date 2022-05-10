@@ -11,6 +11,7 @@ namespace Finnern\Component\Lang4dev\Administrator\View\Translate;
 
 \defined('_JEXEC') or die;
 
+require_once(__DIR__ . '/../../Helper/selectProject.php');
 use Joomla\CMS\Component\ComponentHelper;
 use Joomla\CMS\Helper\ContentHelper;
 use Joomla\CMS\Factory;
@@ -23,6 +24,8 @@ use Joomla\CMS\Toolbar\Toolbar;
 use Joomla\CMS\Toolbar\ToolbarHelper;
 
 use Finnern\Component\Lang4dev\Administrator\Helper\Lang4devHelper;
+use function Finnern\Component\Lang4dev\Administrator\Helper\selectProject;
+
 
 /**
  * View class for a list of lang4dev.
@@ -31,7 +34,15 @@ use Finnern\Component\Lang4dev\Administrator\Helper\Lang4devHelper;
  */
 class HtmlView extends BaseHtmlView
 {
-	//protected $configVars;
+	protected $project;
+
+	protected $isDebugBackend;
+	protected $isDevelop;
+	/**
+	 * @var mixed|\stdClass
+	 * @since version
+	 */
+	protected mixed $isDoCommentIds;
 
 	/**
 	 * Method to display the view.
@@ -44,12 +55,21 @@ class HtmlView extends BaseHtmlView
 	 */
 	public function display($tpl = null)
 	{
-		$Layout = Factory::getApplication()->input->get('layout');
-		//echo '$Layout: ' . $Layout . '<br>';
+		//--- config --------------------------------------------------------------------
 
 		$l4dConfig = ComponentHelper::getComponent('com_lang4dev')->getParams();
+		$this->isDebugBackend = $l4dConfig->get('isDebugBackend');
 		$this->isDevelop = $l4dConfig->get('isDevelop');
 
+		$this->isDoCommentIds = $l4dConfig->get('isDoComment_prepared_missing_ids');
+
+		$project =
+		$this->project = selectProject('lang4dev');
+//		$this->project = selectProject('lang4dev');
+//		$this->project = selectProject('joomgallery');
+////		$this->project = selectProject('joomla4x');
+
+		$project->readSubsLangFile();
 
 		//---  --------------------------------------------------------------
 		/**
@@ -59,6 +79,9 @@ class HtmlView extends BaseHtmlView
 		Lang4devHelper::addSubmenu('config');
 		$this->sidebar = \JHtmlSidebar::render();
 		**/
+
+		$Layout = Factory::getApplication()->input->get('layout');
+		//echo '$Layout: ' . $Layout . '<br>';
 
 		$this->addToolbar($Layout);
 		/**/

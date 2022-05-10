@@ -173,7 +173,8 @@ class langProject
             foreach ($this->subProjects as $subProject)
             {
 
-                $subProject->scanCode4TransIdsLocations();
+	            $transIdLocations = $subProject->scanCode4TransIdsLocations();
+	            $isFilesFound = count($transIdLocations) > 0;
 
             }
         }
@@ -199,8 +200,8 @@ class langProject
             foreach ($this->subProjects as $subProject)
             {
 
-                $subProject->scanCode4TransStringsLocations(); // scanCode4TransIdsLocations
-
+	            $transStringsLocations = $subProject->scanCode4TransStringsLocations(); // scanCode4TransIdsLocations
+	            $isFilesFound = count($transStringsLocations) > 0;
             }
         }
         catch (\RuntimeException $e)

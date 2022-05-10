@@ -359,7 +359,7 @@ class searchTransIdLocations
 					$items [] = $item;
 
 					// search behind last find
-					$idx = $idx + strlen($name);
+					$idx = $colIdx + strlen($name);
 				}
 			}
 

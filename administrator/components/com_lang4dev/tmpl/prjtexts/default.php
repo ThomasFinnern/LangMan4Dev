@@ -19,9 +19,9 @@ function renderSubProjectMissing ($missing, $comment = '')
 				<!-- h5 class="card-title"></h5-->
 				<p class="card-text">
 					<?php
-					foreach ($missing as $TransId)
+					foreach ($missing as $transId)
 					{
-						echo $comment . $TransId . '=""<br>';
+						echo $comment . $transId . '=""<br>';
 					}
 
 					?>
@@ -31,7 +31,41 @@ function renderSubProjectMissing ($missing, $comment = '')
 		<?php
 	}
 
+	return;
+}
 
+function renderSubProjectDeveloperTexts ($transStringsLocations, $comment = '')
+{
+	if (count ($transStringsLocations) > 0)
+	{
+		?>
+		<div class="card bg-light border">
+			<h3 class="card-header bg-white" >
+				<?php echo "Developer pure texts"; ?>
+			</h3>
+			<div class="card-body">
+				<!-- h5 class="card-title"></h5-->
+				<p class="card-text">
+					<?php
+					foreach ($transStringsLocations as $transIds)
+					{
+						foreach ($transIds as $transId)
+						{
+							echo '# ' . $transId->file
+									. ' [L'. $transId->lineNr . 'C' . $transId->colIdx . '] in '
+								. ' (' . $transId->path . ')<br>';
+							echo $comment . $transId->name . '="' . $transId->string . '"<br>';
+						}
+					}
+
+					?>
+				</p>
+			</div>
+		</div>
+		<?php
+	}
+
+	return;
 }
 
 function renderSubProjectStatistic ($missing, $same, $notUsed, $doubles) {
@@ -125,11 +159,11 @@ function renderSubProjectStatistic ($missing, $same, $notUsed, $doubles) {
 
 }
 
-$prjFiles  = $this->project->subProjects[0];; // ToDo: remove
+$prjFiles  = $this->project->subProjects[0]; // ToDo: remove
 $langFile     = $prjFiles->getLangFile('en-GB');  // ToDo: remove
 $translations = $langFile->translations;
 $transIdLocations = $prjFiles->getTransIdLocations();
-$transStringLocations = $prjFiles->getTransStringsLocations();
+$transStringLocations = $this->project->subProjects[1]->getTransStringsLocations();
 $transIdsClassified = $prjFiles->getTransIdsClassified();
 
 ?>
@@ -175,6 +209,12 @@ $transIdsClassified = $prjFiles->getTransIdsClassified();
 				}
 
 				renderSubProjectMissing ($missing, $comment);
+
+				//$transStringsLocations = $subProject->filteredTransStringsLocations();
+				$transStringsLocations = $subProject->getTransStringsLocations();
+				renderSubProjectDeveloperTexts ($transStringsLocations, $comment);
+
+
 				?>
 				</p>
 			</div>
@@ -265,11 +305,13 @@ $transIdsClassified = $prjFiles->getTransIdsClassified();
 				<td><?php echo $idx; ?></td>
 
 				<td><?php echo $item->name; ?></td>
+				<td><?php echo $item->string; ?></td>
 				<td><?php echo $item->lineNr; ?></td>
 				<td><?php echo $item->colIdx; ?></td>
 				<td><?php echo $item->file; ?></td>
 				<td><?php echo $item->path; ?></td>
 			</tr>
+			<br>
 		<?php endforeach; ?>
 
 		<?php $idx++; ?>

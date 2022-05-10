@@ -62,7 +62,6 @@ class HtmlView extends BaseHtmlView
 		//--- config --------------------------------------------------------------------
 
 		$l4dConfig = ComponentHelper::getComponent('com_lang4dev')->getParams();
-		//$compo_params = ComponentHelper::getComponent('com_lang4dev')->getParams();
 		$this->isDebugBackend = $l4dConfig->get('isDebugBackend');
 		$this->isDevelop = $l4dConfig->get('isDevelop');
 

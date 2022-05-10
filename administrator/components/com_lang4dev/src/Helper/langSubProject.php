@@ -36,7 +36,7 @@ class langSubProject extends langFileNamesSet
 
     protected $langFiles = []; // $langId -> translation file(s)
 	protected $transIdLocations = [];
-	protected $transStrings = [];
+	protected $transStringsLocations = [];
     protected $transIdsClassified;
 
 
@@ -319,9 +319,9 @@ class langSubProject extends langFileNamesSet
             $searchTransIdLocations->findAllTranslationStrings();
         }
 
-        $this->transStrings = $searchTransIdLocations->transStringLocations->items;
+        $this->transStringsLocations = $searchTransIdLocations->transStringLocations->items;
 
-        return $this->transStrings;
+        return $this->transStringsLocations;
     }
 
     public function getPrjTransIdNames ()
@@ -353,7 +353,7 @@ class langSubProject extends langFileNamesSet
         // if not cached or $isReadOriginal
         if (empty($this->transIdLocations) || $isScanOriginal) {
 
-            return $this->scanCode4TransIdsLocations ($this->useLangSysIni);
+	        $this->scanCode4TransIdsLocations ($this->useLangSysIni);
         }
 
         return $this->transIdLocations;
@@ -362,12 +362,12 @@ class langSubProject extends langFileNamesSet
     public function getTransStringsLocations ($isScanOriginal=false)
     {
         // if not cached or $isReadOriginal
-        if (empty($this->transStrings) || $isScanOriginal) {
+        if (empty($this->transStringsLocations) || $isScanOriginal) {
 
-            return $this->scanCode4TransStringsLocations ($this->useLangSysIni);
+	        $this->scanCode4TransStringsLocations ($this->useLangSysIni);
         }
 
-        return $this->transIdLocations;
+        return $this->transStringsLocations;
     }
 
     public function classifyTransIds (){
