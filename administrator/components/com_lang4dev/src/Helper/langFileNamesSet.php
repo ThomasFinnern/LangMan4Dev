@@ -185,12 +185,12 @@ class langFileNamesSet
         $isFound = false;
 
         // try ?
-        $isFound = $this->searchLangFiles ();
+        $isFound = $this->detectLangFiles ();
 
         return $isFound;
     }
 
-    protected function searchLangFiles () {
+    protected function detectLangFiles () {
 
     	$isBaseNameSet = false;
 	    $this->langIds = [];

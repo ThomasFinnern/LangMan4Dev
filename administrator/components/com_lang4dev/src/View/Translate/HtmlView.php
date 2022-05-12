@@ -38,11 +38,7 @@ class HtmlView extends BaseHtmlView
 
 	protected $isDebugBackend;
 	protected $isDevelop;
-	/**
-	 * @var mixed|\stdClass
-	 * @since version
-	 */
-	protected mixed $isDoCommentIds;
+	protected $isDoCommentIds;
 
 	/**
 	 * Method to display the view.
@@ -61,13 +57,36 @@ class HtmlView extends BaseHtmlView
 		$this->isDebugBackend = $l4dConfig->get('isDebugBackend');
 		$this->isDevelop = $l4dConfig->get('isDevelop');
 
-		$this->isDoCommentIds = $l4dConfig->get('isDoComment_prepared_missing_ids');
+        //--- Form --------------------------------------------------------------------
+
+        $this->form = $this->get('Form');
+//        $errors = $this->get('Errors')
+//        $this->item = $this->get('Item');
+//        $this->state = $this->get('State');
+
+        //$section = $this->state->get('gallery.section') ? $this->state->get('gallery.section') . '.' : '';
+        //$this->canDo = ContentHelper::getActions($this->state->get('gallery.component'), $section . 'gallery', $this->item->id);
+//        $this->canDo = ContentHelper::getActions('com_lang4dev', 'project', $this->item->id);
+//        $this->assoc = $this->get('Assoc');
+
+        $errors = $this->get('Errors');
+
+//        // Check for errors.
+//        if (count($errors = $this->get('Errors')))
+//        {
+//            throw new GenericDataException(implode("\n", $errors), 500);
+//        }
+
+        //--- project --------------------------------------------------------------------
+
+//		$this->isDoCommentIds = $l4dConfig->get('isDoComment_prepared_missing_ids');
 
 		$project =
 		$this->project = selectProject('lang4dev');
 //		$this->project = selectProject('lang4dev');
 //		$this->project = selectProject('joomgallery');
 ////		$this->project = selectProject('joomla4x');
+
 
 		// ? use config lang ids or found ids
 		
@@ -80,6 +99,9 @@ class HtmlView extends BaseHtmlView
 			
 		}
 		/**/
+
+        $project->findPrjFiles();
+
 		$project->detectLangFiles();
 		
 		$project->readAllLangFiles();
@@ -149,11 +171,15 @@ class HtmlView extends BaseHtmlView
 			/**/
 			default:
                 ToolBarHelper::cancel('lang4dev.cancel', 'JTOOLBAR_CLOSE');
-				
-				
-				
-				
-				break;
+
+                ToolbarHelper::custom('translate.selectSourceLangId', 'icon-flag', '', 'COM_LANG4DEV_TRANS_SELECT_SOURCE_LANG_ID', false);
+                ToolbarHelper::custom('translate.selectTargetLangId', 'icon-task', 'equalizer', 'COM_LANG4DEV_TRANS_SELECT_TARGET_LANG_ID', false);
+
+                ToolbarHelper::custom('translate.createLangId', 'icon-copy', '', 'COM_LANG4DEV_TRANSLATE_ADD_LANG_FILE', false);
+
+
+
+                break;
 		}
 
 		// Set the title

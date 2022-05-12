@@ -195,8 +195,6 @@ class langSubProject extends langFileNamesSet
 					$this->detectLangBasePath($this->prjRootPath, $this->useLangSysIni);
 				}
 
-				//$this->detectLangBasePath($this->prjRootPath);
-				$this->searchLangFiles();
 			}
         }
         catch (\RuntimeException $e)
@@ -448,6 +446,26 @@ class langSubProject extends langFileNamesSet
 
 		return $typename;
 	}
+
+    public function detectLangFiles() {
+
+        try
+        {
+            parent::detectLangFiles();
+        }
+        catch (\RuntimeException $e)
+        {
+            $OutTxt = '';
+            $OutTxt .= 'Error executing detectLangFiles: "' . '<br>';
+            $OutTxt .= 'Error: "' . $e->getMessage() . '"' . '<br>';
+
+            $app = Factory::getApplication();
+            $app->enqueueMessage($OutTxt, 'error');
+        }
+
+        return; // $isFilesFound;
+        // ToDo: ....
+    }
 
 
 } // class

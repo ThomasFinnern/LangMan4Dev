@@ -67,7 +67,7 @@ class langProject
 					|| $subProject->prjType == langSubProject::PRJ_TYPE_COMP_SITE);
 
 				// On sys file receive langIdPrefix
-					$subProject->findPrjFiles();
+				$subProject->findPrjFiles();
 				if($hasSysFiles)
 				{
 					$this->langIdPrefix = $subProject->langIdPrefix;
@@ -95,7 +95,7 @@ class langProject
 		catch (\RuntimeException $e)
 		{
 			$OutTxt = '';
-			$OutTxt .= 'Error executing findFiles: "' . '<br>';
+			$OutTxt .= 'Error executing findPrjFiles: "' . '<br>';
 			$OutTxt .= 'Error: "' . $e->getMessage() . '"' . '<br>';
 
 			$app = Factory::getApplication();
@@ -217,8 +217,27 @@ class langProject
         return $isFilesFound;
     }
 
-	public function detectLangFiles()
+	public function detectLangFiles() {
 
+        try
+        {
+
+            foreach ($this->subProjects as $subProject)
+            {
+                $subProject->detectLangFiles();
+            }
+        }
+        catch (\RuntimeException $e)
+        {
+            $OutTxt = '';
+            $OutTxt .= 'Error executing detectLangFiles: "' . '<br>';
+            $OutTxt .= 'Error: "' . $e->getMessage() . '"' . '<br>';
+
+            $app = Factory::getApplication();
+            $app->enqueueMessage($OutTxt, 'error');
+        }
+
+        return; // $isFilesFound;
 		// ToDo: ....
 	}
 

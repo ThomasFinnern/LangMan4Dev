@@ -42,11 +42,7 @@ class HtmlView extends BaseHtmlView
 
 	protected $isDebugBackend;
 	protected $isDevelop;
-	/**
-	 * @var mixed|\stdClass
-	 * @since version
-	 */
-	protected mixed $isDoCommentIds;
+	protected $isDoCommentIds;
 
 	/**
 	 * Method to display the view.
@@ -67,13 +63,16 @@ class HtmlView extends BaseHtmlView
 
 		$this->isDoCommentIds = $l4dConfig->get('isDoComment_prepared_missing_ids');
 
-		$project =
+        //--- project --------------------------------------------------------------------
+
+        $project =
 		$this->project = selectProject('lang4dev');
 //		$this->project = selectProject('lang4dev');
 //		$this->project = selectProject('joomgallery');
 ////		$this->project = selectProject('joomla4x');
 
 		$project->findPrjFiles();
+		$project->detectLangFiles();
 		$project->readSubsLangFile();
 
 		$project->scanCode4TransIds();

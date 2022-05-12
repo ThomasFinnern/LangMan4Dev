@@ -54,7 +54,8 @@ $cmdButtons[] = new cmdButton(
     Route::_('index.php?option=com_lang4dev&view=projects'),
     Text::_('COM_LANG4DEV_PROJECTS'),
     Text::_('COM_LANG4DEV_PROJECTS_DESC') . '                        ',
-    array('icon-equalizer', 'icon-edit'),
+    array('fas fa-tasks', 'icon-flag'),
+//    array('icon-equalizer', 'icon-edit'),
     'viewProjects'
 );
 
@@ -63,7 +64,8 @@ $cmdButtons[] = new cmdButton(
     Route::_('index.php?option=com_lang4dev&view=prjtexts'),
     Text::_('COM_LANG4DEV_PRJ_TEXTS'),
     Text::_('COM_LANG4DEV_PRJ_TEXTS_DESC') . '                        ',
-    array('icon-forward', 'icon-list'),
+//    array('icon-forward', 'icon-list'),
+    array('icon-code', 'icon-list'),
     'viewPrjTexts'
 );
 

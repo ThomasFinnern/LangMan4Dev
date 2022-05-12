@@ -106,7 +106,7 @@ class sysFilesContent
 //
 //            //$this->detectLangBasePath($this->prjRootPath);
 //            $this->detectLangBasePath($this->prjXmlFilePath, $this->useLangSysIni);
-//            $this->searchLangFiles();
+//            $this->detectLangFiles();
 //
         }
         catch (\RuntimeException $e)
@@ -399,7 +399,7 @@ class sysFilesContent
 		return $isPathFound;
 	}
 
-	protected function searchLangFiles () {
+	protected function detectLangFiles () {
 
 		$isBaseNameSet = false;
 		$this->langIds = [];
