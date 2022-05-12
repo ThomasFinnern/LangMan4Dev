@@ -143,7 +143,7 @@ class langProject
             foreach ($this->subProjects as $subProject)
             {
                 // all existing
-                foreach ($this->subProjects->langIds as $langId) {
+                foreach ($subProject->langIds as $langId) {
 
                     $subProject->readLangFile($langId, $isReadOriginal);
                 }
@@ -217,6 +217,10 @@ class langProject
         return $isFilesFound;
     }
 
+	public function detectLangFiles()
+
+		// ToDo: ....
+	}
 
 } // class
 

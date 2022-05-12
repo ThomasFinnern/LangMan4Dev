@@ -69,7 +69,20 @@ class HtmlView extends BaseHtmlView
 //		$this->project = selectProject('joomgallery');
 ////		$this->project = selectProject('joomla4x');
 
-		$project->readSubsLangFile();
+		// ? use config lang ids or found ids
+		
+		// init required langIds 
+		/**
+		foreach ($project->subProjects as $subProject)
+		{
+			
+			$this->subProjects->langIds = config;
+			
+		}
+		/**/
+		$project->detectLangFiles();
+		
+		$project->readAllLangFiles();
 
 		//---  --------------------------------------------------------------
 		/**
@@ -136,6 +149,10 @@ class HtmlView extends BaseHtmlView
 			/**/
 			default:
                 ToolBarHelper::cancel('lang4dev.cancel', 'JTOOLBAR_CLOSE');
+				
+				
+				
+				
 				break;
 		}
 
