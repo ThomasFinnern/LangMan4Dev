@@ -58,6 +58,8 @@ function renderSubProjectDeveloperTexts ($transStringsLocations, $comment = '')
 						}
 					}
 
+
+
 					?>
 				</p>
 			</div>

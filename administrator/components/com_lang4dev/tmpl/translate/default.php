@@ -64,28 +64,40 @@ function renderLangIdTexts ($form)
 
     foreach ($subProjects as $subProject) {
 
-    $title = $subProject->prjId . ': ' . $subProject->getPrjTypeText();
-    // style="width: 18rem; bg-light .bg-transparent bg-secondary text-white
+	    $title = $subProject->prjId . ': ' . $subProject->getPrjTypeText();
+	    // style="width: 18rem; bg-light .bg-transparent bg-secondary text-white
 
-    ?>
-    <div class="card ">
-        <h2 class="card-header " style="background-color: #ced4da;">
-            <?php echo $title; ?>
-        </h2>
+	    ?>
+	    <div class="card ">
+	        <h2 class="card-header " style="background-color: #ced4da;">
+	            <?php echo $title; ?>
+	        </h2>
 
+		    <?php
+	        // ToDo: prepare data in htmlview
+		    foreach ($subProject->getLangIds () as $langId) {
+		    	$langFile = $subProject->getLangFile($langId);
+			?>
+			    <hr>
+		        <div class="card-body">
+		            <h5 class="card-title"><?php echo $langId; ?></h5>
+		            <p class="card-text">
+		                <?php
+		                $linesArray = $langFile->translationLinesArray();
+		                $fileLines = implode("<br>", $linesArray);
 
-        <div class="card-body">
-            <!-- h5 class="card-title"></h5-->
-            <p class="card-text">
-                <?php
+						echo $fileLines;
 
+		                ?>
 
+		            </p>
+		        </div>
+		    <?php
+		    }
+		    ?>
 
-                ?>
-            </p>
-        </div>
-    </div>
-    <?php
+	    </div>
+	    <?php
 
 	}
 

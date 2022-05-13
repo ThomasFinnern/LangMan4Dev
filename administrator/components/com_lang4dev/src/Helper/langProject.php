@@ -263,7 +263,7 @@ class langProject
 			$app->enqueueMessage($OutTxt, 'error');
 		}
 
-		return $$isAligned;
+		return $isAligned;
 	}
 
 } // class

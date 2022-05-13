@@ -224,6 +224,21 @@ class langSubProject extends langFileNamesSet
         return $this->langFiles [$langId];
     }
 
+    // read content of language file  ==> get translation in langFiles
+    public function getLangIds ()
+    {
+    	$langIds = [];
+
+
+    	foreach ($this->langFiles as $langId => $langFile) {
+
+		    $langIds [] = $langId;
+
+	    }
+
+        return $langIds;
+    }
+
 
     // read content of language file  ==> get translation in langFiles
     public function readLangFile ($langId='en-GB') {
@@ -475,7 +490,7 @@ class langSubProject extends langFileNamesSet
         {
 
         	// fetch main translation items
-			foreach ($this->langFiles as $langId => $temp)
+			foreach ($this->langFiles as $langId => $langFile)
 			{
 				if ($langId == $mainLangId) {
 
