@@ -20,7 +20,10 @@ defined('_JEXEC') or die;
  * Keeps one translation (line) of one language item
  * with above comments, behind comments
  * ? empty lines ?
- *
+ * 
+ * prepared items have a twin in the main language and 
+ * no content (content may exist on later code development)
+ * 
  * @package Lang4dev
  *
  * @since   __BUMP_VERSION__
@@ -32,6 +35,7 @@ class langTranslation
 	public $commentsBefore = [];
 	public $commentBehind = '';
 	public $lineNr = -1;
+	public $prepared = false;
 
 	/**
 	 * @since __BUMP_VERSION__
@@ -41,13 +45,15 @@ class langTranslation
 		$translationText = '',
 		$commentsBefore = [],
 		$commentBehind = '',
-		$lineNr = -1)
+		$lineNr = -1, 
+		$prepared = false)
 	{
 		$this->name            = $name;
 		$this->translationText = $translationText;
 		$this->commentsBefore  = $commentsBefore;
 		$this->commentBehind   = $commentBehind;
-		$this->lineNr         = $lineNr;
+		$this->lineNr          = $lineNr;
+		$this->prepared        = $prepared;
 	}
 
 	/**
@@ -66,7 +72,8 @@ class langTranslation
 		$this->translationText = '';
 		$this->commentsBefore  = [];
 		$this->commentBehind   = '';
-		$this->lineNr         = $lineNr;
+		$this->lineNr          = $lineNr;
+		$this->prepared        = false;
 	}
 
 }

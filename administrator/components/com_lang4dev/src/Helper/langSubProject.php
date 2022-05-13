@@ -467,6 +467,52 @@ class langSubProject extends langFileNamesSet
         // ToDo: ....
     }
 
+    public function alignTranslationsByMain($mainLangId) {
+
+		$mainTrans = [];
+
+        try
+        {
+
+        	// fetch main translation items
+			foreach ($this->langFiles as $langId => $temp)
+			{
+				if ($langId == $mainLangId) {
+
+					$mainTrans = $this->langFiles[$langId]->translations;
+				}
+			}
+
+
+	        // for each other call
+	        foreach ($this->langFiles as $langId => $temp)
+	        {
+		        if ($langId != $mainLangId) {
+
+		        	$this->langFiles[$langId]->alignTranslationsByMain ($mainTrans);
+		        }
+	        }
+
+        }
+        catch (\RuntimeException $e)
+        {
+            $OutTxt = '';
+            $OutTxt .= 'Error executing alignTranslationsByMain: "' . '<br>';
+            $OutTxt .= 'Error: "' . $e->getMessage() . '"' . '<br>';
+
+            $app = Factory::getApplication();
+            $app->enqueueMessage($OutTxt, 'error');
+        }
+
+        return; // $isFilesFound;
+        // ToDo: ....
+    }
+
+
+
+
+
+
 
 } // class
 

@@ -40,6 +40,7 @@ class langFile
 
 	public $translations = [];  // All translations
 	public $translationDoubles = []; // Line to item
+	public $translationSurplus = []; // TransId not in main translation
 	public $header = [];  // Start comments on translation file
 	public $trailer = [];  // Last lines after last translation
 
@@ -375,9 +376,9 @@ class langFile
 	 * Joke: sort like Cinderella put the good ones in the pot, the bad ones in the crop
 	 *
 	 * Each input name is sorted into one of three types
-	 *  * missing in file
-	 *  * same
-	 *  * not used
+	 *  * missing:    transId item is not defined in lang file 
+	 *  * translated: transId item has a translation item matching in lang file 
+	 *  * notUsed:    not used translations in lang file
 	 *
 	 * @param $TransIds
 	 *
@@ -387,12 +388,12 @@ class langFile
 	public function separateByTransIds ($TransIds) {
 
 		$missing = [];
-		$same    = [];
+		$translated    = [];
 		$notUsed = [];
 
 		try {
 
-			//--- missing and same ------------------------------------
+			//--- missing and translated ------------------------------------
 
 			foreach ($TransIds as $TransId) {
 
@@ -400,17 +401,17 @@ class langFile
 				if (empty ($this->translations[$TransId])) {
 					$missing[] = $TransId;
 				} else {
-					// ID is same
-					$same[] = $TransId;
+					// ID is translated
+					$translated[] = $TransId;
 				}
 			}
 
-			//--- missing and same ------------------------------------
+			//--- not used in code ------------------------------------
 
 			foreach ($this->getItemNames () as $TransId)
 			{
 				// ID is not used
-				if ( ! in_array ($TransId, $same)) {
+				if ( ! in_array ($TransId, $translated)) {
 					$notUsed[] = $TransId;
 				}
 			}
@@ -425,9 +426,30 @@ class langFile
 			$app->enqueueMessage($OutTxt, 'error');
 		}
 
-		return [$missing, $same, $notUsed];
+		return [$missing, $translated, $notUsed];
 	}
 
+
+	//
+	public function alignTranslationsByMain ($mainTranslations) {
+		
+		$alignedTranslations = [];
+		
+		foreach ($mainTranslations as $mainTrans) {
+		
+			//--- if already exist -> use definition ------------
+		
+				// New line number from main
+		
+			// if not exist create dummy element
+		
+				// mark as prepared
+
+			$alignedTranslations [] = $mainTrans;
+		}
+				
+		$this->translations = $alignedTranslations;
+	}
 
 	// ToDo: Set var in interface for double entries -> call function ? if (! doClean) ... ?
 	public function translationLinesArray($isWriteEmptyTranslations = false)
@@ -572,6 +594,31 @@ class langFile
 	}
 
 
+
+	public function collectDoubles()
+	{
+		$doubles = [];
+
+		$doublesNames = $this->getDoubleItemNames();
+
+
+		foreach ($doublesNames as $transId) {
+
+			// ? not needed ? $doubles [$transId] = [];
+			$doubles [$transId][] = $this->translations [$transId];
+
+			foreach ($this->translationDoubles as $lineId => $translation)
+			{
+				if ($translation->transId == $transId)
+				{
+					$doubles [$transId][] = $translation;
+				}
+			}
+		}
+
+		return $doubles;
+	}
+
     public function __toText () {
 
         $lines = [];
@@ -603,30 +650,6 @@ class langFile
         return $lines;
     }
 
-
-	public function collectDoubles()
-	{
-		$doubles = [];
-
-		$doublesNames = $this->getDoubleItemNames();
-
-
-		foreach ($doublesNames as $transId) {
-
-			// ? not needed ? $doubles [$transId] = [];
-			$doubles [$transId][] = $this->translations [$transId];
-
-			foreach ($this->translationDoubles as $lineId => $translation)
-			{
-				if ($translation->transId == $transId)
-				{
-					$doubles [$transId][] = $translation;
-				}
-			}
-		}
-
-		return $doubles;
-	}
 
 
 

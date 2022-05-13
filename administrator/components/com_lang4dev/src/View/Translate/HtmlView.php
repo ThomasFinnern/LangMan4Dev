@@ -106,6 +106,11 @@ class HtmlView extends BaseHtmlView
 		
 		$project->readAllLangFiles();
 
+
+		// ToDo: tell main translation
+		$mainTransId = "en-GB";
+		$project->alignTranslationsByMain($mainTransId);
+
 		//---  --------------------------------------------------------------
 		/**
 		HTMLHelper::_('sidebar.setAction', 'index.php?option=com_lang4dev&view=config&layout=RawView');
