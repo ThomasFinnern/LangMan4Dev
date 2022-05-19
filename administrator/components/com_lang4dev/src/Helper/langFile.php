@@ -23,6 +23,8 @@ use function defined;
 // no direct access
 defined('_JEXEC') or die;
 
+// ToDo: put extract of translation (id, text) into own class which may be exchanged
+
 /**
  * Collect all translation files of one folder (existing) - write
  * The files uses is limitet as *.ini are not useful
@@ -270,7 +272,7 @@ class langFile
 
         } catch (\RuntimeException $e) {
             $OutTxt = '';
-            $OutTxt .= 'Error executing detectInstallFile: "' . '<br>';
+            $OutTxt .= 'Error executing assignTranslationLines: ' . '<br>';
             $OutTxt .= 'Error: "' . $e->getMessage() . '"' . '<br>';
 
             $app = Factory::getApplication();
@@ -310,6 +312,87 @@ class langFile
 	}
 
 
+	public function extractTranslation  ($line){
+
+		$isValid = false;
+		$transId = "";
+		$transText = "";
+
+		//--- translation split --------------------------------------
+		try
+		{
+			[$pName, $pTranslation] = explode('=', $line, 2);
+
+			$transId         = trim($pName);
+			$translationPart = trim($pTranslation);
+
+			// Extract translation between double quotas
+			// preg_match:
+			preg_match("/(?:(?:\"(?:\\\\\"|[^\"])+\")|(?:'(?:\\\'|[^'])+'))/is",
+				$translationPart, $match);
+			if (!empty ($match))
+			{
+				$transText = substr($match[0], 1, -1);
+			}
+
+			$isValid = $this->checkTransId($transId);
+			$isValid &= $this->checkTransText($transText);
+
+		} catch (\RuntimeException $e) {
+			$OutTxt = '';
+			$OutTxt .= 'Error executing extractTranslation line part: "' . $line . '"<br>';
+			$OutTxt .= 'Error: "' . $e->getMessage() . '"' . '<br>';
+
+			$app = Factory::getApplication();
+			$app->enqueueMessage($OutTxt, 'error');
+		}
+
+		return [$isValid, $transId, $transText];
+	}
+
+	private function checkTransId(string $transId)
+	{
+		$iSValid = false;
+
+		try {
+		// only upper case and underscores allowed
+
+		$iSValid = true;
+
+		} catch (\RuntimeException $e)
+		{
+			$OutTxt = '';
+			$OutTxt .= 'Error executing checkTransId: "' . $transId . '"<br>';
+			$OutTxt .= 'Error: "' . $e->getMessage() . '"' . '<br>';
+
+			$app = Factory::getApplication();
+			$app->enqueueMessage($OutTxt, 'error');
+		}
+
+		return $iSValid;
+	}
+
+	private function checkTransText(string $transText)
+	{
+		$iSValid = false;
+
+		try {
+		// match first " with last ?
+		// allow \" in between
+
+		$iSValid = true;
+
+		} catch (\RuntimeException $e) {
+			$OutTxt = '';
+			$OutTxt .= 'Error executing checkTransText: "' . $transText . '"<br>';
+			$OutTxt .= 'Error: "' . $e->getMessage() . '"' . '<br>';
+
+			$app = Factory::getApplication();
+			$app->enqueueMessage($OutTxt, 'error');
+		}
+
+		return $iSValid;
+	}
 
 	public function translationIdExists($transId)
 	{
@@ -742,8 +825,6 @@ class langFile
 
         return $lines;
     }
-
-
 
 
 } // class
