@@ -33,6 +33,7 @@ class langTranslation
 	public $commentLines = [];
 	public string $commentBehind = '';
 	public int $lineNr = -1;
+	public bool $isPrepared = false; // TransId exist, no text though 
 
 	/**
 	 * @since __BUMP_VERSION__
@@ -42,13 +43,15 @@ class langTranslation
 		$translationText = '',
 		$commentLines = [],
 		$commentBehind = '',
-		$lineNr = -1)
+		$lineNr = -1,
+		$isPrepared = false)
 	{
 		$this->id              = $id;
 		$this->translationText = $translationText;
 		$this->commentLines    = $commentLines;
 		$this->commentBehind   = $commentBehind;
 		$this->lineNr          = $lineNr;
+		$this->isPrepared      = $isPrepared;
 	}
 
 	/**
@@ -68,6 +71,7 @@ class langTranslation
 		$this->commentLines    = [];
 		$this->commentBehind   = '';
 		$this->lineNr          = $lineNr;
+		$this->isPrepared      = false;
 	}
 
 }

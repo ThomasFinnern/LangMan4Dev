@@ -73,29 +73,44 @@ function renderLangIdTexts ($form)
 	            <?php echo $title; ?>
 	        </h2>
 
-		    <?php
-	        // ToDo: prepare data in htmlview
-		    foreach ($subProject->getLangIds () as $langId) {
-		    	$langFile = $subProject->getLangFile($langId);
-			?>
-			    <hr>
-		        <div class="card-body">
-		            <h5 class="card-title"><?php echo $langId; ?></h5>
-		            <p class="card-text">
-		                <?php
-		                $linesArray = $langFile->translationLinesArray();
-		                $fileLines = implode("<br>", $linesArray);
+		    <div class="card-body">
+			    <?php
+		        // ToDo: prepare data in htmlview
+			    foreach ($subProject->getLangIds () as $langId) {
+			        $langFile = $subProject->getLangFile($langId);
+				?>
+				    <div class="card bg-light border">
+					    <h3 class="card-header bg-white" >
+						    <?php echo $langId; ?>
+					    </h3>
 
-						echo $fileLines;
+				        <div class="card-body">
 
-		                ?>
+				            <div class="card-text">
+						        <textarea id="w3review" name="w3review" rows="12" cols="120">
 
-		            </p>
-		        </div>
-		    <?php
-		    }
-		    ?>
+					                <?php
+					                $linesArray = $langFile->translationLinesArray();
+					                // ksort($linesArray);
+					                foreach($linesArray as $line) {
 
+					                	echo $line . '<br>';
+
+					                }
+
+					                // $fileLines = implode("<br>", $linesArray);
+									// echo $fileLines;
+
+					                ?>
+				                </textarea>
+					        </div>
+				        </div>
+			        </div>
+			    <?php
+			    }
+			    ?>
+		    </div>
+x
 	    </div>
 	    <?php
 

@@ -35,7 +35,25 @@ defined('_JEXEC') or die;
  */
 class langFile
 {
-    public $langId = 'en-GB'; // 'en-GB'  // lang ID
+	/* valid from PHP 8.1 on
+	enum LineType
+	{
+		case none;
+		case Comment;
+		case Prepared;
+		case NoText;
+		case TransId;
+	}
+	/**/
+
+	const LINE_TYPE__NONE = 0;
+	const LINE_TYPE__TRANS_ID = 1;
+	const LINE_TYPE__COMMENT = 2;
+	const LINE_TYPE__PREPARED = 4;
+	const LINE_TYPE__NO_TEXT = 5;
+
+
+	public $langId = 'en-GB'; // 'en-GB'  // lang ID
 	public $langPathFileName = 'd:/xampp/htdocs/joomla4x/administrator/components/com_lang4dev/language/en-GB/com_lang4dev.ini';
 
 	public $translations = [];  // All translations
@@ -99,8 +117,31 @@ class langFile
 
                 return;
             }
+			
+			$lines = file($filePath);
 
-            $this->clear();
+			$this->assignTranslationLines ($lines);
+
+        } catch (\RuntimeException $e) {
+            $OutTxt = '';
+            $OutTxt .= 'Error executing readFileContent: "' . '<br>';
+            $OutTxt .= 'File: "' . $filePath . '"<br>';
+            $OutTxt .= 'langId: "' . $langId . '"<br>';
+            $OutTxt .= 'Error: "' . $e->getMessage() . '"' . '<br>';
+
+            $app = Factory::getApplication();
+            $app->enqueueMessage($OutTxt, 'error');
+        }
+
+        return $isAssigned;
+    }
+
+		
+	public function assignTranslationLines ($lines) {
+
+		try {
+
+			$this->clear();
 
             // Keep first comments as header
 
@@ -109,16 +150,20 @@ class langFile
             # init new item
             $nextItem = new langTranslation();
 
-            $lines = file($filePath);
-
             // all lines
             foreach ($lines as $lineNr => $line) {
                 $line = trim($line);
-
+				
+				$lineType = check4Linetype ($line);
+				
                 // Inside header
                 if ($isHeaderActive) {
+					
+					$isCommentLine = check4CommentLine ($line);
+					
                     # Comment line
-                    if (str_starts_with($line, ';')) {
+					if ($lineType == self::LINE_TYPE__COMMENT) {
+					
                         $this->header [] = $line;
                         continue;
                     } else {
@@ -133,12 +178,23 @@ class langFile
                     }
                 }
 
+
                 //--- content lines -----------------------------
 
                 // Comment or empty line
-                if (str_starts_with($line, ';') || strlen($line) < 1) {
+                // if (str_starts_with($line, ';') || strlen($line) < 1) {
+                if ($lineType == self::LINE_TYPE__COMMENT || $lineType == self::LINE_TYPE__NO_TEXT) {
                     $nextItem->commentsBefore [] = $line;
                 } else {
+
+		            // Remove comment indicator on prepared translations
+					if ($lineType == self::LINE_TYPE__PREPARED)
+					{
+						$line = substr($line, 1);
+						$nextItem->isPrepared = true;
+
+					}
+
                     //--- translation split --------------------------------------
 
                     [$pName, $pTranslation] = explode('=', $line, 2);
@@ -223,6 +279,37 @@ class langFile
 
         return $isAssigned;
     }
+
+	private function check4Linetype ($line=''){
+		
+		$lineType = self::LINE_TYPE__NONE;
+
+		// comment or preparation line ?
+		if (str_starts_with($line, ';'))
+		{
+			// strip further comment from behind
+
+			$idx = strrpos($line, ';');
+
+			if($idx >= 0) {
+				$line = trim(substr($line, 0, $idx));
+
+			}
+
+			// check for upper case and underscore, then '=' followed by ....
+
+
+
+
+
+
+		}
+		
+		
+		return $lineType;
+	}
+
+
 
 	public function translationIdExists($transId)
 	{
@@ -345,7 +432,7 @@ class langFile
 			// backup ?
 			if ($doBackup)
 			{
-				//
+				// 
 				File::copy($filePath, File::stripExt($filePath) . '.bak');
 			}
 
@@ -439,7 +526,7 @@ class langFile
 		
 			//--- if already exist -> use definition ------------
 		
-				// New line number from main
+			// New line number from main
 		
 			// if not exist create dummy element
 		
@@ -467,6 +554,7 @@ class langFile
 
 			// translation lines
 			$idx = 0;
+			
 			// check each line for existing translation
 			foreach ($this->translations as $transId => $translation)
 			{
@@ -482,6 +570,11 @@ class langFile
 
 				$translationText = $translation->translationText;
 				$line            = $transId . '="' . $translationText . '"';
+				
+				// do comment not translated lines (TransId exist, no text though)
+				if ($translation->isPrepared) {
+					$line = ";" . $line;
+				}
 
 				//--- comment behind --------------------
 

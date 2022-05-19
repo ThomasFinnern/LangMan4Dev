@@ -2,57 +2,28 @@
 
 Joomla! language manager for extension developers
 
+Started Feb 2022
+
 **Supports language translation handling for joomla extensions**
 
-Main features (intended, started Feb 2022)
+## Use cases:
 
-- Create/Update other language files from en_en files
-- Import translations by link to older version (J4x <- J3x) *
+1) Developer translations
+   1) Developer may use Translation IDs like COM_LANG4DEV_... in the TEXT::_('...') definition and place where these are expected.  
+    This component will collect all and provide prepared lines to include in the lang files
+   2) Write plain text in the TEXT::_('...') definition.  
+    This component will collect all and provide prepared lines to include in the lang files. the lang IDS have to be adjusted though   
+      
+1) Component user translations
+    * The user of another component should be able to do the translation himself
+    He can add his own country language files. These are presented in a top bottom compare view where the items lines are prepeared and aligned in main file order
+    The user will get a plain textarea to edit the items  
+  
+1) In general the translation of joomla! *.ini files to another language shall be possible
+    * This is the long term intention of this component 
 
-## Draft of possible functions
-
-Possible functions
-
-- Merge old lang files
-- Create new lang files
-- Update new items to files
-- Projects
-
-- Import base file to local
-
-- Import by folders
-
-- Import by link to external project
-
-- Scan project for new com_... definitions
-
-- Scan project for empty"""
-
-- Delta view en-en <=> other language
-
-- Support several translation projects
-
-- Edit translation item as files
-
-- Search in core files
-
-- Present
-
-- Edit as items side by side
-
-- Import base file to local
-
-- Check file consistency
-
-- Import base files
-
--
-- Search for translations by name a) for resulting com- --- name b) also in Joomla core
-
-  ```
-  1) Use com_name
-  2) To be copied
-  ```
+## limitations
+  * This component may allow to replace language files of foreign components but will not exchange lang items in the code of foreign components 
 
 ### Rules for translation files
 
@@ -108,6 +79,56 @@ a) 4 delta
 - file layout in folders
 
 or side by side
+
+## Draft of possible functions
+
+Possible functions
+
+- Create/Update other language files from en_en files
+- Import translations by link to older version (J4x <- J3x) *
+
+- Merge old lang files
+- Create new lang files
+- Update new items to files
+- Projects
+
+- He can add his own country language files.  
+
+- Import base file to local
+
+- Import by folders
+
+- Import by link to external project
+
+- Scan project for new com_... definitions
+
+- Scan project for empty"""
+
+- Delta view en-en <=> other language
+
+- Support several translation projects
+
+- Edit translation item as files
+
+- Search in core files
+
+- Present
+
+- Edit as items side by side
+
+- Import base file to local
+
+- Check file consistency
+
+- Import base files
+
+-
+- Search for translations by name a) for resulting com- --- name b) also in Joomla core
+
+  ```
+  1) Use com_name
+  2) To be copied
+  ```
 
 ### ideas for functions in far future
 
