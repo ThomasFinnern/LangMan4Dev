@@ -35,25 +35,25 @@ class langTranslation
 	public $commentsBefore = [];
 	public $commentBehind = '';
 	public $lineNr = -1;
-	public $prepared = false;
+	public $isPrepared = false;
 
 	/**
 	 * @since __BUMP_VERSION__
 	 */
 	public function __construct(
-		$name = '',
+		$transId = '',
 		$translationText = '',
 		$commentsBefore = [],
 		$commentBehind = '',
 		$lineNr = -1, 
-		$prepared = false)
+		$isPrepared = false)
 	{
-		$this->name            = $name;
+		$this->transId         = $transId;
 		$this->translationText = $translationText;
 		$this->commentsBefore  = $commentsBefore;
 		$this->commentBehind   = $commentBehind;
 		$this->lineNr          = $lineNr;
-		$this->prepared        = $prepared;
+		$this->isPrepared      = $isPrepared;
 	}
 
 	/**
@@ -68,12 +68,12 @@ class langTranslation
 
 	public function init($lineNr = -1)
 	{
-		$this->name            = '';
+		$this->transId            = '';
 		$this->translationText = '';
 		$this->commentsBefore  = [];
 		$this->commentBehind   = '';
 		$this->lineNr          = $lineNr;
-		$this->prepared        = false;
+		$this->isPrepared        = false;
 	}
 
 }

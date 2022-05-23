@@ -16,9 +16,10 @@ use Joomla\CMS\Factory;
 use Joomla\CMS\Filesystem\File;
 use Joomla\CMS\Filesystem\Folder;
 
-use Finnern\Component\Lang4dev\Administrator\Helper\translation;
+use Finnern\Component\Lang4dev\Administrator\Helper\langTranslation;
+
 use RuntimeException;
-use function defined;
+// use function defined;
 
 // no direct access
 defined('_JEXEC') or die;
@@ -52,7 +53,7 @@ class langFile
 	const LINE_TYPE__TRANS_ID = 1;
 	const LINE_TYPE__COMMENT = 2;
 	const LINE_TYPE__PREPARED = 4;
-	const LINE_TYPE__NO_TEXT = 5;
+	const LINE_TYPE__INVALID_ID = 5;
 
 
 	public $langId = 'en-GB'; // 'en-GB'  // lang ID
@@ -156,12 +157,10 @@ class langFile
             foreach ($lines as $lineNr => $line) {
                 $line = trim($line);
 				
-				$lineType = check4Linetype ($line);
+				$lineType = $this->check4LineType ($line);
 				
                 // Inside header
                 if ($isHeaderActive) {
-					
-					$isCommentLine = check4CommentLine ($line);
 					
                     # Comment line
 					if ($lineType == self::LINE_TYPE__COMMENT) {
@@ -179,13 +178,12 @@ class langFile
                         }
                     }
                 }
-
-
+                
                 //--- content lines -----------------------------
 
                 // Comment or empty line
                 // if (str_starts_with($line, ';') || strlen($line) < 1) {
-                if ($lineType == self::LINE_TYPE__COMMENT || $lineType == self::LINE_TYPE__NO_TEXT) {
+                if ($lineType == self::LINE_TYPE__COMMENT || $lineType == self::LINE_TYPE__INVALID_ID) {
                     $nextItem->commentsBefore [] = $line;
                 } else {
 
@@ -199,31 +197,14 @@ class langFile
 
                     //--- translation split --------------------------------------
 
-                    [$pName, $pTranslation] = explode('=', $line, 2);
+	                [$isValid, $transId, $transText, $commentBehind] = $this->extractTranslation ($line);
 
-                    $nextItem->transId = $transId = trim($pName);
-
-                    $translationPart = trim($pTranslation);
-
-                    // Extract translation between double quotas
-                    // preg_match:
-                    preg_match("/(?:(?:\"(?:\\\\\"|[^\"])+\")|(?:'(?:\\\'|[^'])+'))/is",
-                        $translationPart, $match);
-                    if (!empty ($match)) {
-                        $nextItem->translationText = substr($match[0], 1, -1);
-	                    $nextItem->lineNr = $lineNr+1;
-                    }
-
-                    //--- comment behind -----------------------------------------
-
-                    $Length = strlen($nextItem->translationText) + 2; // 2*" + ' '
-                    $rest = trim(substr($translationPart, $Length));
-
-                    $idx = strpos($rest, ';');
-                    if ($idx !== false) {
-                        $commentBehind = trim(substr($rest, $idx + 1));
-                        $nextItem->commentBehind = $commentBehind;
-                    }
+	                if ($isValid)
+	                {
+		                $nextItem->transId = $transId;
+		                $nextItem->translationText = $transText;
+		                $nextItem->commentBehind = $commentBehind;
+	                }
 
                     //---  ----------------------------------------
 
@@ -282,7 +263,7 @@ class langFile
         return $isAssigned;
     }
 
-	private function check4Linetype ($line=''){
+	private function check4LineType ($line=''){
 		
 		$lineType = self::LINE_TYPE__NONE;
 
@@ -294,49 +275,89 @@ class langFile
 			$idx = strrpos($line, ';');
 
 			if($idx >= 0) {
+				
 				$line = trim(substr($line, 0, $idx));
 
 			}
 
-			// check for upper case and underscore, then '=' followed by ....
+			// determine if valid translation is existing behind coment character 
+			[$isValid, $transId, $transText] = $this->extractTranslation ($line);
 
+			if ($isValid) {
+				$lineType = self::LINE_TYPE__PREPARED;
+			} else {
+				$lineType = self::LINE_TYPE__COMMENT;
+			}
 
+		} else {
+			//--- no comment line ----------------------------------------------
+			
+			// determine if valid translation is existing  
+			[$isValid, $transId, $transText] = $this->extractTranslation ($line);
 
+			if ($isValid) {
+				$lineType = self::LINE_TYPE__TRANS_ID;
 
-
-
+			} else {
+				// not defined line ? empty or invlaid text
+				$lineType = self::LINE_TYPE__INVALID_ID;
+			}
+			
 		}
-		
 		
 		return $lineType;
 	}
 
-
+// needs line to have removed pre text and does not cara about post comment in line  
 	public function extractTranslation  ($line){
 
 		$isValid = false;
 		$transId = "";
 		$transText = "";
+		$commentBehind = "";
 
 		//--- translation split --------------------------------------
 		try
 		{
+//			if(strstr($line, '=')) {}
 			[$pName, $pTranslation] = explode('=', $line, 2);
 
-			$transId         = trim($pName);
-			$translationPart = trim($pTranslation);
-
-			// Extract translation between double quotas
-			// preg_match:
-			preg_match("/(?:(?:\"(?:\\\\\"|[^\"])+\")|(?:'(?:\\\'|[^'])+'))/is",
-				$translationPart, $match);
-			if (!empty ($match))
+			if (empty ($pTranslation))
 			{
-				$transText = substr($match[0], 1, -1);
+				$tran = $pName;
 			}
 
-			$isValid = $this->checkTransId($transId);
-			$isValid &= $this->checkTransText($transText);
+			if ( ! empty ($pTranslation))
+			{
+				$transId         = trim($pName);
+				$translationPart = trim($pTranslation);
+
+				// Extract translation between double quotas
+				// preg_match:
+				preg_match("/(?:(?:\"(?:\\\\\"|[^\"])+\")|(?:'(?:\\\'|[^'])+'))/is",
+					$translationPart, $match);
+				if (!empty ($match))
+				{
+					$transText = trim(substr($match[0], 1, -1));
+				}
+
+				$isValid = $this->checkTransId($transId);
+				$isValid &= $this->checkTransText($transText);
+
+				if ($isValid)
+				{
+
+					$length = strlen($transText) + 2; // 2*" + ' '
+					$behind = trim(substr($translationPart, $length));
+
+					$idx = strpos($behind, ';');
+					if ($idx !== false)
+					{
+						$commentBehind = trim(substr($behind, $idx + 1));
+					}
+
+				}
+			}
 
 		} catch (\RuntimeException $e) {
 			$OutTxt = '';
@@ -347,7 +368,7 @@ class langFile
 			$app->enqueueMessage($OutTxt, 'error');
 		}
 
-		return [$isValid, $transId, $transText];
+		return [$isValid, $transId, $transText, $commentBehind];
 	}
 
 	private function checkTransId(string $transId)
