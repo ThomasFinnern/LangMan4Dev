@@ -43,7 +43,52 @@ function renderLangIdTexts ($form)
 }
 
 
+function renderLangTransFile ($langId, $langFile, $isMain=false){
 
+	?>
+	<div class="card bg-light border">
+		<h3 class="card-header bg-white" >
+			<?php echo $langId; ?>
+		</h3>
+
+		<div class="card-body">
+
+			<div class="card-text">
+		        <textarea id="w3review" name="w3review" rows="12" cols="120"
+					<?php
+					if($isMain)
+					{
+						echo 'readonly';
+					}
+					?>
+		        >
+	                <?php
+	                $linesArray = $langFile->translationLinesArray();
+	                // ksort($linesArray);
+	                foreach($linesArray as $line) {
+
+		                echo $line . '&#10;';
+
+	                }
+
+	                // $fileLines = implode("<br>", $linesArray);
+	                // echo $fileLines;
+
+	                ?>
+                </textarea>
+			</div>
+		</div>
+	</div>
+
+
+
+
+
+
+	<?php
+
+	return;
+}
 
 
 
@@ -75,42 +120,29 @@ function renderLangIdTexts ($form)
 
 		    <div class="card-body">
 			    <?php
-		        // ToDo: prepare data in htmlview
-			    foreach ($subProject->getLangIds () as $langId) {
-			        $langFile = $subProject->getLangFile($langId);
-				?>
-				    <div class="card bg-light border">
-					    <h3 class="card-header bg-white" >
-						    <?php echo $langId; ?>
-					    </h3>
-
-				        <div class="card-body">
-
-				            <div class="card-text">
-						        <textarea id="w3review" name="w3review" rows="12" cols="120">
-
-					                <?php
-					                $linesArray = $langFile->translationLinesArray();
-					                // ksort($linesArray);
-					                foreach($linesArray as $line) {
-
-					                	echo $line . '<br>';
-
-					                }
-
-					                // $fileLines = implode("<br>", $linesArray);
-									// echo $fileLines;
-
-					                ?>
-				                </textarea>
-					        </div>
-				        </div>
-			        </div>
-			    <?php
-			    }
+				
+				// first show main lang 
+				foreach ($subProject->getLangIds () as $langId) {
+					
+					if ($langId == $this->main_langId) {
+						
+						$langFile = $subProject->getLangFile($langId);
+						renderLangTransFile ($langId, $langFile, true);
+					}
+				}
+				
+				// second show translation  lang 
+				foreach ($subProject->getLangIds () as $langId) {
+					
+					if ($langId == $this->trans_langId || $this->isShowTranslationOfAllIds) {
+						
+						$langFile = $subProject->getLangFile($langId);
+						renderLangTransFile ($langId, $langFile, false);
+					}
+				}
 			    ?>
 		    </div>
-x
+
 	    </div>
 	    <?php
 

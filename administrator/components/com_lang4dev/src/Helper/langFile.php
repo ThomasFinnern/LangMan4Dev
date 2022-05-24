@@ -320,7 +320,7 @@ class langFile
 		try
 		{
 //			if(strstr($line, '=')) {}
-			[$pName, $pTranslation] = explode('=', $line, 2);
+			[$pName, $pTranslation] = array_pad(explode('=', $line, 2), 2,'');
 
 			if (empty ($pTranslation))
 			{

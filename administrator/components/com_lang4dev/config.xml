@@ -15,7 +15,37 @@
 				filter="JComponentHelper::filterText"
 				buttons="false"
 		/-->
-		
+
+		<field
+				name="main_langId"
+				type="text"
+				default="en-GB"
+				label="COM_RSGALLERY2_MAIN_LANGUAGE_ID"
+				description="COM_RSGALLERY2_MAIN_LANGUAGE_ID_DESC"
+				class="">
+		</field>
+
+		<field
+				name="trans_langId"
+				type="text"
+				default="de-DE"
+				label="COM_RSGALLERY2_TRANS_LANGUAGE_ID"
+				description="COM_RSGALLERY2_TRANS_LANGUAGE_ID_DESC"
+				class="">
+		</field>
+
+		<field
+				name="isShowTranslationOfAllIds"
+				type="radio"
+				label="COM_LANG4DEV_SHOW_TRANSLATION_OF_ALL_IDS"
+				description="COM_LANG4DEV_SHOW_TRANSLATION_OF_ALL_IDS_DESC"
+				default="1"
+				layout="joomla.form.field.radio.switcher"
+		>
+			<option value="0">JNO</option>
+			<option value="1">JYES</option>
+		</field>
+
 		<field
 				name="ToDo_list_general0"
 				type="textarray"
