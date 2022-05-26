@@ -2,6 +2,7 @@
 
 \defined('_JEXEC') or die;
 use Joomla\CMS\HTML\HTMLHelper;
+use Joomla\CMS\Language\Text;
 use Joomla\CMS\Router\Route;
 
 
@@ -66,6 +67,7 @@ function renderLangTransFile ($langId, $langFile, $isMain=false){
 				?>
 
 		        <textarea id="w3review" name="<?php echo $langId; ?>" rows="12" cols="120"
+		                  style="overflow-x: scroll; "
 					<?php
 					if($isMain)
 					{
@@ -98,7 +100,9 @@ function renderLangTransFile ($langId, $langFile, $isMain=false){
     <hr>
     <?php renderLangIdTexts ($this->form); ?>
     <hr>
-    <?php
+	<input type="checkbox" name="checkall-toggle" value=""
+	       title="<?php echo Text::_('JGLOBAL_CHECK_ALL'); ?>" onclick="Joomla.checkAll(this)"/>
+	<?php
 
     $idx = 1;
 

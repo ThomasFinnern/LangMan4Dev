@@ -6,15 +6,20 @@ use Joomla\CMS\Language\Text;
 use Joomla\CMS\Router\Route;
 
 
-function renderSubProjectMissing ($missing, $comment = '')
+function renderMissingPreparedTransIds ($missing, $comment = '')
 {
 	if (count ($missing) > 0)
 	{
 		?>
 		<div class="card bg-light border">
 			<h3 class="card-header bg-white" >
-				<?php echo "*Prepared Missing Ids"; ?>
-			</h3>
+				<?php echo Text::_('COM_LANG4DEV_MISSING_TRANS_IDS_PREPARED'); ?>
+				<!--span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger border border-light"-->
+				<span class="badge rounded-pill  bg-danger border border-light"
+						style="position: relative; top: -12px; left: +5px; ">
+				    <?php echo count ($missing); ?>
+				    <span class="visually-hidden">Count missing</span>
+				</span>			</h3>
 			<div class="card-body">
 				<!-- h5 class="card-title"></h5-->
 				<p class="card-text">
@@ -28,6 +33,9 @@ function renderSubProjectMissing ($missing, $comment = '')
 				</p>
 			</div>
 		</div>
+		<br>
+		<br>
+
 		<?php
 	}
 
@@ -73,14 +81,14 @@ function renderSubProjectDeveloperTexts ($transStringsLocations, $comment = '')
 function renderSubProjectStatistic ($missing, $same, $notUsed, $doubles) {
 
 ?>
-    <div class="row g-4">
-        <div class="col">
+    <div class="row g-3">
+        <!--div class="col">
 	        <div class="d-inline-flex position-relative">
 				<span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger border border-light">
 				    <?php echo count ($missing); ?>
 				    <span class="visually-hidden">Count missing</span>
 				</span>
-		        <h3>Missing Translation IDs&nbsp;&nbsp;&nbsp;</h3>
+		        <h3><?php echo Text::_('COM_LANG4DEV_MISSING_TRANSLATION_IDS'); ?>&nbsp;&nbsp;&nbsp;</h3>
 	        </div>
 	        <br>
 
@@ -93,7 +101,7 @@ function renderSubProjectStatistic ($missing, $same, $notUsed, $doubles) {
             	echo '<strong>%</strong>';
             }
             ?>
-        </div>
+        </div-->
 
         <div class="col">
 	        <div class="d-inline-flex position-relative">
@@ -101,7 +109,7 @@ function renderSubProjectStatistic ($missing, $same, $notUsed, $doubles) {
 					<?php echo count ($same); ?>
 					<span class="visually-hidden">count same</span>
 				</span>
-                <h3>Same Lang Ids&nbsp;&nbsp;&nbsp;</h3>
+		        <h3><?php echo Text::_('COM_LANG4DEV_MATCHING_TRANSLATION_IDS'); ?>&nbsp;&nbsp;&nbsp;</h3>
 	        </div>
 	        <br>
 
@@ -111,7 +119,7 @@ function renderSubProjectStatistic ($missing, $same, $notUsed, $doubles) {
 	            // ToDo: hide with button
 				?>
 		        <a class="btn btn-sm"  style="color: black; background-color: #ced4da;" data-bs-toggle="collapse" href="#collapseExample" role="button" aria-expanded="false" aria-controls="collapseExample">
-			        <?php echo Text::_('COM_LANG4DEV_SHOW_SAME'); ?>
+			        <?php echo Text::_('COM_LANG4DEV_SHOW_MATCHING_IDS'); ?>
 		        </a>
 	            <div class="collapse" id="collapseExample">
 		            <br>
@@ -132,7 +140,7 @@ function renderSubProjectStatistic ($missing, $same, $notUsed, $doubles) {
 					<?php echo count ($notUsed); ?>
 					<span class="visually-hidden">count same</span>
 				</span>
-		        <h3>Not Used Lang Ids&nbsp;&nbsp;&nbsp;</h3>
+		        <h3><?php echo Text::_('COM_LANG4DEV_SURPLUS_TRANSLATIONS'); ?>&nbsp;&nbsp;&nbsp;</h3>
 	        </div>
 	        <br>
 
@@ -168,10 +176,17 @@ $transIdLocations = $prjFiles->getTransIdLocations();
 $transStringLocations = $this->project->subProjects[1]->getTransStringsLocations();
 $transIdsClassified = $prjFiles->getTransIdsClassified();
 
+$comment = '';
+if ($this->isDoCommentIds) {
+	$comment = ';';
+}
+
 ?>
 <form action="<?php echo Route::_('index.php?option=com_lang4dev&view=prjtexts'); ?>" method="post" name="adminForm" id="item-form" class="form-validate">
 
 	<?php
+
+	// ToDo: tell main lang and info
 
 //	echo $this->form->renderField('SelectSubprojects');
 
@@ -201,16 +216,10 @@ $transIdsClassified = $prjFiles->getTransIdsClassified();
 				$notUsed = $transIdsClassified['notUsed'];
 				$doubles  = $transIdsClassified['doubles'];
 
+				renderMissingPreparedTransIds ($missing, $comment);
 
 				// ToDo: Use constants ?
 				renderSubProjectStatistic ($missing, $same, $notUsed, $doubles);
-
-				$comment = '';
-				if ($this->isDoCommentIds) {
-					$comment = ';';
-				}
-
-				renderSubProjectMissing ($missing, $comment);
 
 				//$transStringsLocations = $subProject->filteredTransStringsLocations();
 				$transStringsLocations = $subProject->getTransStringsLocations();

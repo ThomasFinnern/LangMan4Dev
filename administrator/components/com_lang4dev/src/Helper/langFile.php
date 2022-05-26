@@ -207,9 +207,10 @@ class langFile
 		                $nextItem->transId = $transId;
 		                $nextItem->translationText = $transText;
 		                $nextItem->commentBehind = $commentBehind;
+		                $nextItem->lineNr = $lineNr;
 	                }
 
-                    //---  ----------------------------------------
+                    //--- save as new or existing ----------------------------------------
 
                     # Is new element
                     if (!in_array($transId, $this->translations)) {
@@ -630,31 +631,67 @@ class langFile
 		$alignedTranslations = [];
 		
 		foreach ($mainTranslations as $mainTrans) {
-		//foreach ($mainTranslations as $transId => $translationText) {
 
 			$transId = $mainTrans->transId;
 
-			//--- if already exist -> use definition ------------
-		
-			// New line number from main
-		
 			// if not exist create dummy element
 			if(empty ($this->translations [$transId]))
 			{
-				$translationText = $mainTrans->translationText;
-				$commentsBefore = '';
-				$commentBehind = '';
+				//--- create prepared item -------------------------
+
+				$translationText = '' ;
+				$commentsBefore = $this->prepareCommentsBefore ($mainTrans->commentsBefore);
+				$commentBehind = $this->prepareComment($mainTrans->commentBehind);
 				$lineNr = $mainTrans->lineNr;
 				// mark as prepared
 				$isPrepared = true;
+
 				$nextItem = new langTranslation($transId,  $translationText,  $commentsBefore,
 					$commentBehind, $lineNr, $isPrepared);
 
-				$alignedTranslations [] = $mainTrans;
+				$alignedTranslations [$transId] = $nextItem;
+
+			} else {
+				//--- Item exist, use it ------------------------
+
+				$translation = $this->translations [$transId];
+
+				// New line number from main
+				$translation->lineNr = $mainTrans->lineNr;
+
+				$alignedTranslations [$transId] = $translation;
 			}
+
 		}
+
+		// ToDo: what about not used translations ? throw away ? or own category ?
+
 				
 		$this->translations = $alignedTranslations;
+	}
+
+	public function prepareCommentsBefore ($mainCommentsBefore=[]) {
+		$commentsBefore = [];
+
+		foreach  ($mainCommentsBefore as $commentLine) {
+
+			$commentsBefore[] = $this->prepareComment ($commentLine);
+
+		}
+
+		return $commentsBefore;
+	}
+
+	public function prepareComment ($mainComment='') {
+
+		$comment = '';
+
+		if (strlen($mainComment) > 0) {
+
+			$comment = '%Main%' . $mainComment . '%';
+		}
+
+		return $comment;
 	}
 
 	// ToDo: Set var in interface for double entries -> call function ? if (! doClean) ... ?
