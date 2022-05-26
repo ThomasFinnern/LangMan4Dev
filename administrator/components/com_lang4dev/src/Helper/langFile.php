@@ -14,7 +14,7 @@ namespace Finnern\Component\Lang4dev\Administrator\Helper;
 
 use Joomla\CMS\Factory;
 use Joomla\CMS\Filesystem\File;
-use Joomla\CMS\Filesystem\Folder;
+//use Joomla\CMS\Filesystem\Folder;
 
 use Finnern\Component\Lang4dev\Administrator\Helper\langTranslation;
 
@@ -64,6 +64,7 @@ class langFile
 	public $translationSurplus = []; // TransId not in main translation
 	public $header = [];  // Start comments on translation file
 	public $trailer = [];  // Last lines after last translation
+	public $isSystType = false;  # lang file type (normal/sys)
 
 	/**
 	 * @since __BUMP_VERSION__
@@ -118,12 +119,14 @@ class langFile
                 $app = Factory::getApplication();
                 $app->enqueueMessage($OutTxt, 'warning');
 
-                return;
-            }
-			
-			$lines = file($filePath);
+            } else
+            {
+	            $lines = file($filePath);
 
-			$this->assignTranslationLines ($lines);
+	            $this->assignTranslationLines($lines);
+
+	            $isAssigned = true;
+            }
 
         } catch (\RuntimeException $e) {
             $OutTxt = '';
@@ -627,16 +630,28 @@ class langFile
 		$alignedTranslations = [];
 		
 		foreach ($mainTranslations as $mainTrans) {
-		
+		//foreach ($mainTranslations as $transId => $translationText) {
+
+			$transId = $mainTrans->transId;
+
 			//--- if already exist -> use definition ------------
 		
 			// New line number from main
 		
 			// if not exist create dummy element
-		
+			if(empty ($this->translations [$transId]))
+			{
+				$translationText = $mainTrans->translationText;
+				$commentsBefore = '';
+				$commentBehind = '';
+				$lineNr = $mainTrans->lineNr;
 				// mark as prepared
+				$isPrepared = true;
+				$nextItem = new langTranslation($transId,  $translationText,  $commentsBefore,
+					$commentBehind, $lineNr, $isPrepared);
 
-			$alignedTranslations [] = $mainTrans;
+				$alignedTranslations [] = $mainTrans;
+			}
 		}
 				
 		$this->translations = $alignedTranslations;

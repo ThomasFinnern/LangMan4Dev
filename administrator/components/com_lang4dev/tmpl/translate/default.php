@@ -54,28 +54,25 @@ function renderLangTransFile ($langId, $langFile, $isMain=false){
 		<div class="card-body">
 
 			<div class="card-text">
-		        <textarea id="w3review" name="w3review" rows="12" cols="120"
+
+				<?php
+				$linesArray = $langFile->translationLinesArray();
+				$langText = '';
+				// ksort($linesArray);
+				foreach($linesArray as $line) {
+
+					$langText .= $line . '&#10;';
+				}
+				?>
+
+		        <textarea id="w3review" name="<?php echo $langId; ?>" rows="12" cols="120"
 					<?php
 					if($isMain)
 					{
-						echo 'readonly';
+						echo 'class="bg-warning" readonly';
 					}
 					?>
-		        >
-	                <?php
-	                $linesArray = $langFile->translationLinesArray();
-	                // ksort($linesArray);
-	                foreach($linesArray as $line) {
-
-		                echo $line . '&#10;';
-
-	                }
-
-	                // $fileLines = implode("<br>", $linesArray);
-	                // echo $fileLines;
-
-	                ?>
-                </textarea>
+		        ><?php echo $langText; ?></textarea>
 			</div>
 		</div>
 	</div>
