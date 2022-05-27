@@ -5,38 +5,39 @@ use Joomla\CMS\HTML\HTMLHelper;
 use Joomla\CMS\Language\Text;
 use Joomla\CMS\Router\Route;
 
-
-
 function renderLangIdTexts ($form)
 {
     ?>
-    <div class="row g-4">
-        <div class="col">
-            <div class="d-inline-flex position-relative">
-
+    <div class="d-flex flex-row py-0 my-0">
+        <div class="mx-2 py-0 border border-primary">
                 <?php echo $form->renderField('selectSourceLangId'); ?>
-
-            </div>
         </div>
 
-        <div class="col">
-            <div class="d-inline-flex position-relative">
-
+	    <div class="mx-2 py-0 border border-success">
                 <?php echo $form->renderField('selectTargetLangId'); ?>
-
-            </div>
         </div>
 
-        <div class="col">
-            <div class="d-inline-flex position-relative">
-
+	    <div class="mx-2 py-0 border border-warning">
                 <?php echo $form->renderField('createLangId'); ?>
-
-            </div>
         </div>
+    </div>
+    <?php
 
+    return;
+}
 
+function renderCheckAll ($form)
+{
+    ?>
+    <div class="d-flex flex-row">
+        <div class="mx-2 p-2">
 
+	        <input class="form-check-input" id="checkall-toggle" type="checkbox" name="checkall-toggle" value=""
+	               title="<?php echo Text::_('JGLOBAL_CHECK_ALL'); ?>" onclick="Joomla.checkAll(this)">
+	        <label for="checkall-toggle"><?php echo Text::_('COM_LANG4DEV_CHECK_ALL_LANG_FILE_EDITS'); ?></label>
+	        <br>
+
+        </div>
     </div>
     <?php
 
@@ -44,7 +45,28 @@ function renderLangIdTexts ($form)
 }
 
 
-function renderLangTransFile ($langId, $langFile, $isMain=false){
+function renderCheckLangEdited ($subPrjId, $idx, $checked=false)
+{
+	?>
+	<div class="d-flex flex-row">
+		<div class="py-2">
+
+		<input class="form-check-input cache-entry" type="checkbox"
+		       id="cb<?php echo $idx; ?>" name="cid[]" value="<?php echo $subPrjId; ?>">
+		<label class="form-check-label" for="cb<?php echo $idx; ?>">
+			<?php echo Text::_('COM_LANG4DEV_CHECK_FOR_SAVE_OF_EDIT_FILE'); ?>
+		</label>
+
+		</div>
+	</div>
+	<?php
+
+	return;
+}
+
+
+
+function renderLangTransFile ($langId, $langFile, $isMain=false, $editCount=0){
 
 	?>
 	<div class="card bg-light border">
@@ -57,8 +79,15 @@ function renderLangTransFile ($langId, $langFile, $isMain=false){
 			<div class="card-text">
 
 				<?php
+				if( ! $isMain)
+				{
+					$subPrjId = $langId;
+					renderCheckLangEdited($subPrjId, $editCount, $checked = false);
+				}
+
 				$linesArray = $langFile->translationLinesArray();
 				$langText = '';
+
 				// ksort($linesArray);
 				foreach($linesArray as $line) {
 
@@ -66,7 +95,7 @@ function renderLangTransFile ($langId, $langFile, $isMain=false){
 				}
 				?>
 
-		        <textarea id="w3review" name="<?php echo $langId; ?>" rows="12" cols="120"
+		        <textarea id="translations" name="<?php echo $langId; ?>" rows="12" cols="120"
 		                  style="overflow-x: scroll; "
 					<?php
 					if($isMain)
@@ -95,13 +124,12 @@ function renderLangTransFile ($langId, $langFile, $isMain=false){
 <form action="<?php echo Route::_('index.php?option=com_lang4dev&view=translate'); ?>" method="post" name="adminForm" id="item-form" class="form-validate">
 
     <?php
-    echo 'default.php: ' . realpath(dirname(__FILE__));
+//    echo 'default.php: ' . realpath(dirname(__FILE__));
     ?>
-    <hr>
     <?php renderLangIdTexts ($this->form); ?>
-    <hr>
-	<input type="checkbox" name="checkall-toggle" value=""
-	       title="<?php echo Text::_('JGLOBAL_CHECK_ALL'); ?>" onclick="Joomla.checkAll(this)"/>
+
+    <?php renderCheckAll ($this->form); ?>
+
 	<?php
 
     $idx = 1;
@@ -121,14 +149,17 @@ function renderLangTransFile ($langId, $langFile, $isMain=false){
 
 		    <div class="card-body">
 			    <?php
-				
-				// first show main lang 
+
+			    $editCount=0;
+
+			    // first show main lang
 				foreach ($subProject->getLangIds () as $langId) {
 					
 					if ($langId == $this->main_langId) {
 						
 						$langFile = $subProject->getLangFile($langId);
-						renderLangTransFile ($langId, $langFile, true);
+						renderLangTransFile ($langId, $langFile, true, $editCount);
+						$editCount++;
 					}
 				}
 				
@@ -138,7 +169,8 @@ function renderLangTransFile ($langId, $langFile, $isMain=false){
 					if ($langId == $this->trans_langId || $this->isShowTranslationOfAllIds) {
 						
 						$langFile = $subProject->getLangFile($langId);
-						renderLangTransFile ($langId, $langFile, false);
+						renderLangTransFile ($langId, $langFile, false, $editCount);
+						$editCount++;
 					}
 				}
 			    ?>

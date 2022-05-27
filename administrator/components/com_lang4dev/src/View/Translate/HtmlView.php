@@ -187,7 +187,7 @@ class HtmlView extends BaseHtmlView
                 ToolBarHelper::cancel('lang4dev.cancel', 'JTOOLBAR_CLOSE');
 
                 ToolbarHelper::custom('translate.selectSourceLangId', 'icon-flag', '', 'COM_LANG4DEV_TRANS_SELECT_SOURCE_LANG_ID', false);
-                ToolbarHelper::custom('translate.selectTargetLangId', 'icon-task', 'equalizer', 'COM_LANG4DEV_TRANS_SELECT_TARGET_LANG_ID', false);
+                ToolbarHelper::custom('translate.selectTargetLangId', 'icon-edit', '', 'COM_LANG4DEV_TRANS_SELECT_TARGET_LANG_ID', false);
 
                 ToolbarHelper::custom('translate.createLangId', 'icon-copy', '', 'COM_LANG4DEV_TRANSLATE_ADD_LANG_FILE', false);
 

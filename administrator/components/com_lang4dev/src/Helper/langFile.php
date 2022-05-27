@@ -280,7 +280,7 @@ class langFile
 
 			if($idx >= 0) {
 				
-				$line = trim(substr($line, 0, $idx));
+				$line = trim(substr($line, $idx+1));
 
 			}
 

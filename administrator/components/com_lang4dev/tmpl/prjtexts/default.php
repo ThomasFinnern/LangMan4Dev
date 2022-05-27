@@ -19,7 +19,8 @@ function renderMissingPreparedTransIds ($missing, $comment = '')
 						style="position: relative; top: -12px; left: +5px; ">
 				    <?php echo count ($missing); ?>
 				    <span class="visually-hidden">Count missing</span>
-				</span>			</h3>
+				</span>
+			</h3>
 			<div class="card-body">
 				<!-- h5 class="card-title"></h5-->
 				<p class="card-text">
@@ -34,7 +35,6 @@ function renderMissingPreparedTransIds ($missing, $comment = '')
 			</div>
 		</div>
 		<br>
-		<br>
 
 		<?php
 	}
@@ -44,12 +44,19 @@ function renderMissingPreparedTransIds ($missing, $comment = '')
 
 function renderSubProjectDeveloperTexts ($transStringsLocations, $comment = '')
 {
-	if (count ($transStringsLocations) > 0)
+	$locationsCount = count ($transStringsLocations);
+	if ($locationsCount > 0)
 	{
 		?>
 		<div class="card bg-light border">
 			<h3 class="card-header bg-white" >
-				<?php echo "Developer pure texts"; ?>
+				<?php echo Text::_('COM_LANG4DEV_DEVELOPER_AD_HOC_TEXTS'); ?>
+				<!--span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger border border-light"-->
+				<span class="badge rounded-pill  bg-danger border border-light"
+				      style="position: relative; top: -12px; left: +5px; ">
+				    <?php echo $locationsCount; ?>
+				    <span class="visually-hidden">Count missing</span>
+				</span>
 			</h3>
 			<div class="card-body">
 				<!-- h5 class="card-title"></h5-->
@@ -59,19 +66,31 @@ function renderSubProjectDeveloperTexts ($transStringsLocations, $comment = '')
 					{
 						foreach ($transIds as $transId)
 						{
+							/**
 							echo '# ' . $transId->file
 									. ' [L'. $transId->lineNr . 'C' . $transId->colIdx . '] in '
 								. ' (' . $transId->path . ')<br>';
 							echo $comment . $transId->name . '="' . $transId->string . '"<br>';
+							/**/
+
+							/**/
+
+
+							echo $comment . $transId->name . '="' . $transId->string . '"'
+								. ' ;' .  $transId->file
+								. ' [L'. $transId->lineNr . 'C' . $transId->colIdx . '] 
+								. <br>';
+							/**/
 						}
 					}
-
-
 
 					?>
 				</p>
 			</div>
 		</div>
+		<br>
+		<br>
+
 		<?php
 	}
 
@@ -197,6 +216,10 @@ if ($this->isDoCommentIds) {
 	foreach ($subProjects as $subProject) {
 
 		$title = $subProject->prjId . ': ' . $subProject->getPrjTypeText();
+
+		//$transStringsLocations = $subProject->filteredTransStringsLocations();
+		$transStringsLocations = $subProject->getTransStringsLocations();
+
 // style="width: 18rem; bg-light .bg-transparent bg-secondary text-white
 
 		?>
@@ -218,12 +241,11 @@ if ($this->isDoCommentIds) {
 
 				renderMissingPreparedTransIds ($missing, $comment);
 
+				renderSubProjectDeveloperTexts ($transStringsLocations, $comment);
+
+
 				// ToDo: Use constants ?
 				renderSubProjectStatistic ($missing, $same, $notUsed, $doubles);
-
-				//$transStringsLocations = $subProject->filteredTransStringsLocations();
-				$transStringsLocations = $subProject->getTransStringsLocations();
-				renderSubProjectDeveloperTexts ($transStringsLocations, $comment);
 
 
 				?>
