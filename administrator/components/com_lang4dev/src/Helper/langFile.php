@@ -524,7 +524,7 @@ class langFile
 	 * @throws \Exception
 	 * @since version
 	 */
-	public function translationsToFile($filePath = "", $doBackup = false)
+	public function writeToFile($filePath = "", $doBackup = false)
 	{
 
 		$isSaved = false;
@@ -555,7 +555,7 @@ class langFile
 		}
 		catch (RuntimeException $e)
 		{
-			$OutTxt = 'Error executing translationsToFile: "' . '<br>';
+			$OutTxt = 'Error executing writeToFile: "' . '<br>';
 			$OutTxt .= 'Error: "' . $e->getMessage() . '"' . '<br>';
 
 			$app = Factory::getApplication();

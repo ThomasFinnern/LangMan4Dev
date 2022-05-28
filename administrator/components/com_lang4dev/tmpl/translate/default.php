@@ -51,8 +51,10 @@ function renderCheckLangEdited ($subPrjId, $idx, $checked=false)
 	<div class="d-flex flex-row">
 		<div class="py-2">
 
-		<input class="form-check-input cache-entry" type="checkbox"
-		       id="cb<?php echo $idx; ?>" name="cid[]" value="<?php echo $subPrjId; ?>">
+			<?php echo HTMLHelper::_('grid.id', $idx, $subPrjId, false, 'cid', 'cb', $subPrjId); ?>
+
+		<!--input class="form-check-input cache-entry" type="checkbox"
+		       id="cb<?php echo $idx; ?>" name="cid[]" value="<?php echo $subPrjId; ?>"-->
 		<label class="form-check-label" for="cb<?php echo $idx; ?>">
 			<?php echo Text::_('COM_LANG4DEV_CHECK_FOR_SAVE_OF_EDIT_FILE'); ?>
 		</label>
@@ -66,7 +68,7 @@ function renderCheckLangEdited ($subPrjId, $idx, $checked=false)
 
 
 
-function renderLangTransFile ($langId, $langFile, $isMain=false, $editCount=0){
+function renderLangTransFile ($langId, $langFile, $isMain=false, $editIdx=0){
 
 	?>
 	<div class="card bg-light border">
@@ -82,7 +84,7 @@ function renderLangTransFile ($langId, $langFile, $isMain=false, $editCount=0){
 				if( ! $isMain)
 				{
 					$subPrjId = $langId;
-					renderCheckLangEdited($subPrjId, $editCount, $checked = false);
+					renderCheckLangEdited($subPrjId, $editIdx, $checked = false);
 				}
 
 				$linesArray = $langFile->translationLinesArray();
@@ -93,17 +95,31 @@ function renderLangTransFile ($langId, $langFile, $isMain=false, $editCount=0){
 
 					$langText .= $line . '&#10;';
 				}
-				?>
 
-		        <textarea id="translations" name="<?php echo $langId; ?>" rows="12" cols="120"
-		                  style="overflow-x: scroll; "
-					<?php
-					if($isMain)
-					{
-						echo 'class="bg-warning" readonly';
-					}
+
+				// source text
+				if($isMain) {
 					?>
-		        ><?php echo $langText; ?></textarea>
+
+			        <textarea id="translations" name="<?php echo $langId; ?>" rows="12" cols="120"
+					<textarea id="<?php echo $langId . '_' . $editIdx. '_main'; ?>"
+					          name="langsEdited[]" rows="12" cols="120"
+			                  style="overflow-x: scroll; " class="bg-warning" readonly
+			        ><?php echo $langText; ?></textarea>
+
+					<?php
+				}  else {
+					?>
+					// target edit text
+					<textarea id="<?php echo $langId . '_' . $editIdx. '_target'; ?>"
+					          name="langEdited[]" rows="12" cols="120"
+					          style="overflow-x: scroll; "
+					><?php echo $langText; ?></textarea>
+					<input type="text" name="langPathFileNames[]" value="<?php echo $langFile->langPathFileName; ?>" />
+
+					<?php
+				}
+				?>
 			</div>
 		</div>
 	</div>
@@ -132,8 +148,6 @@ function renderLangTransFile ($langId, $langFile, $isMain=false, $editCount=0){
 
 	<?php
 
-    $idx = 1;
-
     $subProjects = $this->project->subProjects;
 
     foreach ($subProjects as $subProject) {
@@ -150,7 +164,7 @@ function renderLangTransFile ($langId, $langFile, $isMain=false, $editCount=0){
 		    <div class="card-body">
 			    <?php
 
-			    $editCount=0;
+			    $editIdx =0;
 
 			    // first show main lang
 				foreach ($subProject->getLangIds () as $langId) {
@@ -158,8 +172,8 @@ function renderLangTransFile ($langId, $langFile, $isMain=false, $editCount=0){
 					if ($langId == $this->main_langId) {
 						
 						$langFile = $subProject->getLangFile($langId);
-						renderLangTransFile ($langId, $langFile, true, $editCount);
-						$editCount++;
+						renderLangTransFile ($langId, $langFile, true, $editIdx);
+						$editIdx++;
 					}
 				}
 				
@@ -169,8 +183,8 @@ function renderLangTransFile ($langId, $langFile, $isMain=false, $editCount=0){
 					if ($langId == $this->trans_langId || $this->isShowTranslationOfAllIds) {
 						
 						$langFile = $subProject->getLangFile($langId);
-						renderLangTransFile ($langId, $langFile, false, $editCount);
-						$editCount++;
+						renderLangTransFile ($langId, $langFile, false, $editIdx);
+						$editIdx++;
 					}
 				}
 			    ?>
