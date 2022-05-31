@@ -51,6 +51,8 @@ function renderCheckLangEdited ($subPrjId, $idx, $checked=false)
 	<div class="d-flex flex-row">
 		<div class="py-2">
 
+			<?php // public static function id($rowNum, $recId, $checkedOut = false, $name = 'cid', $stub = 'cb', $title = '', $formId = null) ?>
+
 			<?php echo HTMLHelper::_('grid.id', $idx, $subPrjId, false, 'cid', 'cb', $subPrjId); ?>
 
 		<!--input class="form-check-input cache-entry" type="checkbox"
@@ -94,6 +96,7 @@ function renderLangTransFile ($langId, $langFile, $isMain=false, $editIdx=0){
 				foreach($linesArray as $line) {
 
 					$langText .= $line . '&#10;';
+					//$langText .= $line . '\n';
 				}
 
 
@@ -101,21 +104,20 @@ function renderLangTransFile ($langId, $langFile, $isMain=false, $editIdx=0){
 				if($isMain) {
 					?>
 
-			        <textarea id="translations" name="<?php echo $langId; ?>" rows="12" cols="120"
 					<textarea id="<?php echo $langId . '_' . $editIdx. '_main'; ?>"
-					          name="langsEdited[]" rows="12" cols="120"
-			                  style="overflow-x: scroll; " class="bg-warning" readonly
+					          name="langsEdited[]" rows="12"
+			                  style="overflow-x: scroll; min-width: 100%; overflow-wrap: normal; " class="bg-warning" readonly
 			        ><?php echo $langText; ?></textarea>
 
 					<?php
 				}  else {
-					?>
 					// target edit text
+					?>
 					<textarea id="<?php echo $langId . '_' . $editIdx. '_target'; ?>"
-					          name="langEdited[]" rows="12" cols="120"
-					          style="overflow-x: scroll; "
+					          name="langEdited[]" rows="12"
+					          style="overflow-x: scroll; min-width: 100%; "
 					><?php echo $langText; ?></textarea>
-					<input type="text" name="langPathFileNames[]" value="<?php echo $langFile->langPathFileName; ?>" />
+					<input type="text" name="langPathFileNames[]" value="<?php echo $langFile->langPathFileName; ?>"  hidden />
 
 					<?php
 				}

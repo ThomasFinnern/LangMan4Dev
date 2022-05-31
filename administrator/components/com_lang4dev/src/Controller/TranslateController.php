@@ -145,6 +145,10 @@ class TranslateController extends AdminController
 			$ids = $this->input->get('cid', array(), 'array');
 			$ids = ArrayHelper::toInteger($ids);
 
+			if (empty($ids))
+			{
+				$this->app->enqueueMessage(Text::_('COM_LANG4DEV_NO_BANNERS_SELECTED'), 'warning');
+			}
 
 			// lang file names
 			$langPathFileNames = $input->get('langPathFileNames', array(), 'ARRAY');
