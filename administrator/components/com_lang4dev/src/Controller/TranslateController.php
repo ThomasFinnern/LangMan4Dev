@@ -152,6 +152,76 @@ class TranslateController extends AdminController
 
 			// lang file names
 			$langPathFileNames = $input->get('langPathFileNames', array(), 'ARRAY');
+			$filesCount = count($langPathFileNames);
+
+			// lang filed edited
+			$langsEdited = $input->get('langEdited', array(), 'ARRAY');
+			$editedCount = count($langsEdited);
+
+
+			// The Ids point to the selected (and text) file to save
+
+			foreach ($ids as $idx) {
+
+				if($idx < $filesCount) {
+
+					$langPathFileName = $langPathFileNames [$idx];
+
+					$isNameVerified = $this->verifyLangFileName($langPathFileName);
+
+					if ($isNameVerified)
+					{
+						if($idx < $editedCount)
+						{
+							$langEdited = $langsEdited [$idx];
+
+							//=======================================
+							// write file
+							//=======================================
+
+							// create lang file parts from text
+							$langFile = new langFile ();
+							$langFile->assignTranslationLines($langEdited);
+
+							// write lang file
+							$langFile->langPathFileName = $langPathFileNames[$idx];
+							$langFile->writeToFile('', $doBackup);
+
+
+
+						} else {
+
+
+							// outtext ....
+
+
+						}
+					} else { // ! $isNameVerified
+
+						$isNameVerified = false;
+
+						$OutTxt = Text::_('COM_LANG4DEV_TRANSLATE_SAVE_EDITED_INVALID_FILE_NAME')
+							. ': "' . $langPathFileName .'"';
+						$app    = Factory::getApplication();
+						$app->enqueueMessage($OutTxt, 'error');
+					}
+
+
+
+
+				}
+
+
+
+
+			}
+
+
+
+
+
+
+
 
 			// verify langPathFileName
 
@@ -169,9 +239,6 @@ class TranslateController extends AdminController
 
 			if ($isNameVerified)
 			{
-
-				// lang filed edited
-				$langsEdited = $input->get('langEdited', array(), 'ARRAY');
 
 				// sanitize by read into lang file by transId / translation
 				$langFiles = [];
