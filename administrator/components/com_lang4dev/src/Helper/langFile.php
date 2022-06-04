@@ -18,6 +18,7 @@ use Joomla\CMS\Filesystem\File;
 
 use Finnern\Component\Lang4dev\Administrator\Helper\langTranslation;
 
+use Joomla\CMS\Filesystem\Folder;
 use RuntimeException;
 // use function defined;
 
@@ -537,21 +538,30 @@ class langFile
 		try
 		{
 
+			// not on dos:$filePath = Folder::makeSafe($filePath);
+
 			// backup ?
 			if ($doBackup)
 			{
-				// 
-				File::copy($filePath, File::stripExt($filePath) . '.bak');
+				//
+				if (File::exists($filePath))
+				{
+					File::copy($filePath, File::stripExt($filePath) . '.bak');
+				}
 			}
 
+			// all lines standard translation
 			$linesArray = $this->translationLinesArray();
-			$fileLines = implode("\n", $linesArray);
-
-			File::write($filePath, $fileLines);
 
 			// ToDo: Check surplus (obsolete) translations to append (see *.py)
+			// call translationLines?All?Array instead
 
-			$isSaved = true;
+			// prepare one string
+			$fileLines = implode("\n", $linesArray);
+
+			// write to file
+			$isSaved = File::write($filePath, $fileLines);
+
 		}
 		catch (RuntimeException $e)
 		{
