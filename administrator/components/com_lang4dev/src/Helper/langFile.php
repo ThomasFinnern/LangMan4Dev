@@ -17,6 +17,7 @@ use Joomla\CMS\Filesystem\File;
 //use Joomla\CMS\Filesystem\Folder;
 
 use Finnern\Component\Lang4dev\Administrator\Helper\langTranslation;
+use Finnern\Component\Lang4dev\Administrator\Helper\langPathFileName;
 
 use Joomla\CMS\Filesystem\Folder;
 use RuntimeException;
@@ -37,7 +38,7 @@ defined('_JEXEC') or die;
  *
  * @since       version
  */
-class langFile
+class langFile extends langPathFileName
 {
 	/* valid from PHP 8.1 on
 	enum LineType
@@ -57,27 +58,25 @@ class langFile
 	const LINE_TYPE__INVALID_ID = 5;
 
 
-	public $langId = 'en-GB'; // 'en-GB'  // lang ID
-	public $langPathFileName = 'd:/xampp/htdocs/joomla4x/administrator/components/com_lang4dev/language/en-GB/com_lang4dev.ini';
+// base class -> public $langId = 'en-GB'; // 'en-GB'  // lang ID
+// base class -> public $langPathFileName = 'd:/xampp/htdocs/joomla4x/administrator/components/com_lang4dev/language/en-GB/com_lang4dev.ini';
+// base class -> 	public $isSysFile = false;  # lang file type (normal/sys)
 
 	public $translations = [];  // All translations
 	public $translationDoubles = []; // Line to item
 	public $translationSurplus = []; // TransId not in main translation
 	public $header = [];  // Start comments on translation file
 	public $trailer = [];  // Last lines after last translation
-	public $isSystType = false;  # lang file type (normal/sys)
 
 	/**
 	 * @since __BUMP_VERSION__
 	 */
 	public function __construct($langPathFileName = '')
 	{
-		$this->langPathFileName = $langPathFileName;
-
-		$this->clear();
+		parent::__construct ($langPathFileName);
 
 		# load file if exists
-		if (strlen($langPathFileName))
+		if ($this->isValidPathFileName($langPathFileName, true))
 		{
 			$this->readFileContent($langPathFileName);
 		}
@@ -85,13 +84,11 @@ class langFile
 
 	public function clear()
 	{
-
+		parent::
 		$this->translations        = [];  # All translations
 		$this->translationDoubles  = [];
 		$this->header              = [];  # Start comments on translation file
 		$this->trailer             = [];  # Trailing comments on translation file
-		$this->langId              = '????'; #'en-GB'  # lang ID
-		$this->isSystType          = false;  # lang file type (normal/sys)
 	}
 
 	public function readFileContent($filePath = '', $langId = 'en-GB')
@@ -884,7 +881,7 @@ class langFile
 
         $lines [] = 'langId = "' . $this->langId . '"';
         $lines [] = 'langPathFileName = "' . $this->langPathFileName . '"';
-        $lines [] = '$isSystType = "' . $this->isSystType . '"';
+        $lines [] = '$isSysFile = "' . $this->isSysFile . '"';
 
         $lines [] = '--- $header ------------------------';
         foreach ($this->header as $headerLine) {

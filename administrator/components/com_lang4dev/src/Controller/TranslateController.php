@@ -18,9 +18,10 @@ use Joomla\CMS\Language\Text;
 use Joomla\CMS\MVC\Controller\AdminController;
 use Joomla\CMS\MVC\Factory\MVCFactoryInterface;
 use Joomla\CMS\Session\Session;
+use Joomla\Utilities\ArrayHelper;
 
 use Finnern\Component\Lang4dev\Administrator\Helper\langFile;
-use Joomla\Utilities\ArrayHelper;
+use Finnern\Component\Lang4dev\Administrator\Helper\langPathFileName;
 
 /**
  * The Galleries List Controller
@@ -126,17 +127,16 @@ class TranslateController extends AdminController
 		Session::checkToken() or die(Text::_('JINVALID_TOKEN'));
 
 		// User is allowed to change
-		// ToDo: $canSave = ...;
-		$canSave = true;
+		// ToDo: $canCreateFile = ...;
+		$canCreateFile = true;
 
-		if ( ! $canSave ) {
+		if ( ! $canCreateFile ) {
 
 			$OutTxt = Text::_('COM_LANG4DEV_TRANSLATE_CREATE_LANG_INVALID_RIGHTS');
 			$app    = Factory::getApplication();
 			$app->enqueueMessage($OutTxt, 'error');
-		} else
-		{
-			
+		} else {
+
 
 			// target id valid ?
 
@@ -198,9 +198,11 @@ class TranslateController extends AdminController
 
 				if($idx < $filesCount) {
 
-					$langPathFileName = $langPathFileNames [$idx];
+					// $langPathFileName = $langPathFileNames [$idx];
+					// $isNameVerified = $this->verifyLangFileName($langPathFileName);
 
-					$isNameVerified = $this->verifyLangFileName($langPathFileName);
+					$oLangPathFileName = new langPathFileName ($langPathFileNames [$idx]);
+					$isNameVerified = $oLangPathFileName->isValidPathFileName ();
 
 					if ($isNameVerified)
 					{
@@ -216,7 +218,7 @@ class TranslateController extends AdminController
 						$langFile->assignTranslationLines($langText);
 
 						// write lang file
-						$langFile->langPathFileName = $langPathFileNames[$idx];
+						$langFile->setLangPathFileName ($langPathFileNames[$idx]);
 						$isWritten = $langFile->writeToFile('', $doBackup);
 
 
@@ -226,9 +228,9 @@ class TranslateController extends AdminController
 						$debug = 1;
 						if (empty ($debug))
 						{
-							$langFileName = basename($langFile->langPathFileName);
+							$langFileName = $langFile->getLangFileName();
 						} else 	{
-							$langFileName = $langFile->langPathFileName;
+							$langFileName = $langFile->getLangPathFileName();
 						}
 
 						// Message on not found items
@@ -258,7 +260,7 @@ class TranslateController extends AdminController
 					} else { // ! $isNameVerified
 
 						$OutTxt = Text::_('COM_LANG4DEV_TRANSLATE_ERORR_INVALID_FILE_NAME')
-							. ': "' . $langPathFileName .'"';
+							. ': "' . $oLangPathFileName->getLangPathFileName() .'"';
 						$app    = Factory::getApplication();
 						$app->enqueueMessage($OutTxt, 'error');
 					}
@@ -278,21 +280,29 @@ class TranslateController extends AdminController
 
 
 
-
-
+	// ToDo: part of langFile / langFielNames class ?
+	// ends on ini and does exist
 	private function verifyLangFileName(string $langPathFileName = '')
 	{
 		$isNameVerified = true;
 
 		if ( ! str_ends_with ($langPathFileName, '.ini')) {
 
-			$isNameVerified = true;
+			$isNameVerified = false;
 
 		} else {
 
+			// ToDo: name/path has valid lang ID
+
+
+
+
+
+
+			// ToDo: flag if it maust exist
 			if ( ! File::exists ($langPathFileName)) {
 
-				$isNameVerified = true;
+				$isNameVerified = false;
 
 			}
 		}

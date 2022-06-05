@@ -1,0 +1,7 @@
+;COM_LANG4DEV="Lang4dev"
+;COM_LANG4DEV_XML_DESCRIPTION=""
+COM_LANG4DEV_INSTALLERSCRIPT_PREFLIGHT="Preflight ist übersetzt"
+;COM_LANG4DEV_INSTALLERSCRIPT_UPDATE="Update ist vorbereitet und hat einen Text"
+;COM_LANG4DEV_INSTALLERSCRIPT_UNINSTALL=""
+;COM_LANG4DEV_INSTALLERSCRIPT_INSTALL="This should !!! NOT !!! be shown"
+COM_LANG4DEV_INSTALLERSCRIPT_INSTALL="install hat einen Kommentar zuvor. This should be shown"
