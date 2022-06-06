@@ -98,7 +98,7 @@ class langFileNamesSet
 
             //--- path does not exist -------------------------------
 
-            $OutTxt = 'Warning: langFileNamesSet.searchDir4LangID: Base path for lang names not found below  "' . $basePath . '"<br>';
+            $OutTxt = 'Warning: langFileNamesSet.searchDir4LangID: Base path for lang names not found behind path  "' . $basePath . '"<br>';
 
             $app = Factory::getApplication();
             $app->enqueueMessage($OutTxt, 'warning');
@@ -260,33 +260,6 @@ class langFileNamesSet
 
         return $isBaseNameSet;
     }
-
-    /**
-    public function langIds () {
-        $langIds = [];
-
-        try {
-
-            foreach ($this->langFileNames as $langId => $langFile) {
-                $langIds [] = $langId;
-            }
-
-
-        }
-        catch (\RuntimeException $e) {
-            $OutTxt = '';
-            $OutTxt .= 'Error executing findPrjFiles: "' . '<br>';
-            $OutTxt .= 'Error: "' . $e->getMessage() . '"' . '<br>';
-
-            $app = Factory::getApplication();
-            $app->enqueueMessage($OutTxt, 'error');
-        }
-
-
-
-        return $langIds;
-    }
-    /**/
 
     public function __toText () {
 

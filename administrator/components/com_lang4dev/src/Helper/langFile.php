@@ -63,7 +63,7 @@ class langFile extends langPathFileName
 // base class -> 	public $isSysFile = false;  # lang file type (normal/sys)
 
 	public $translations = [];  // All translations
-	public $translationDoubles = []; // Line to item
+	public $translationDoubles = []; // Same langId a sceond time ? Maybe with different text ?
 	public $translationSurplus = []; // TransId not in main translation
 	public $header = [];  // Start comments on translation file
 	public $trailer = [];  // Last lines after last translation
@@ -84,31 +84,28 @@ class langFile extends langPathFileName
 
 	public function clear()
 	{
-		parent::
+		// parent::clear();  Name is still needed
+
 		$this->translations        = [];  # All translations
 		$this->translationDoubles  = [];
 		$this->header              = [];  # Start comments on translation file
 		$this->trailer             = [];  # Trailing comments on translation file
 	}
 
-	public function readFileContent($filePath = '', $langId = 'en-GB')
+	public function readFileContent($filePath = '')
     {
         $isAssigned = false;
 
         try {
 
-            // ToDo: try catch ...
-
-            $this->langId = $langId;
-
-            if (!empty ($filePath)) {
+            if ( ! empty ($filePath)) {
                 // ToDo: do we want to assign a different  file content or do we want to restart with new files
                 $this->langPathFileName = $filePath;
             } else {
                 $filePath = $this->langPathFileName;
             }
 
-            if (!is_file($filePath)) {
+            if ( ! is_file($filePath)) {
 
                 //--- path does not exist -------------------------------
 
@@ -875,6 +872,30 @@ class langFile extends langPathFileName
 		return $doubles;
 	}
 
+	// Prepare for a different language by throwing away the translations and keeping the IDS
+	public function resetToPreparedTranslations()
+	{
+		$this->translationDoubles = [];
+		$this->translationSurplus = [];
+
+		// Attention ToDo: how to change the header
+		// Attention ToDo: how to change the trailer
+
+		foreach ($this->translations as $translation) {
+
+			$translation->translationText = '';
+			$translation->isPrepared = true;
+
+			// Attention ToDo: how to change the commentsBefore lines
+			// Attention ToDo: how to change the commentBehind
+		}
+
+		return;
+	}
+
+
+
+
     public function __toText () {
 
         $lines = [];
@@ -905,6 +926,5 @@ class langFile extends langPathFileName
 
         return $lines;
     }
-
 
 } // class

@@ -70,12 +70,15 @@ function renderCheckLangEdited ($subPrjId, $idx, $checked=false)
 
 
 
-function renderLangFileEditText ($langId, $langFile, $isMain=false, $editIdx=0){
+function renderLangFileEditText ($langId, $langFile, $subPrjPath, $isMain=false, $editIdx=0){
 
 	?>
 	<div class="card bg-light border">
 		<h3 class="card-header bg-white" >
-			<?php echo $langId; ?>
+			<?php echo $langId; ?> &nbsp;
+			<div class="fs-4 fw-normal" >
+			<?php echo $subPrjPath; ?>
+			</div>
 		</h3>
 
 		<div class="card-body">
@@ -117,7 +120,7 @@ function renderLangFileEditText ($langId, $langFile, $isMain=false, $editIdx=0){
 					          name="langsText[]" rows="12"
 					          style="overflow-x: scroll; min-width: 100%; "
 					><?php echo $langText; ?></textarea>
-					<input type="text" name="langPathFileNames[]" value="<?php echo $langFile->langPathFileName; ?>"  hidden />
+					<input type="text" name="langPathFileNames[]" value="<?php echo $langFile->getLangPathFileName(); ?>"  hidden />
 
 					<?php
 				}
@@ -174,7 +177,8 @@ function renderLangFileEditText ($langId, $langFile, $isMain=false, $editIdx=0){
 					if ($langId == $this->main_langId) {
 						
 						$langFile = $subProject->getLangFile($langId);
-						renderLangFileEditText ($langId, $langFile, true, $editIdx);
+						$subPrjPath = $langFile->getlangSubPrjPathFileName ();
+						renderLangFileEditText ($langId, $langFile, $subPrjPath, true, $editIdx);
 						$editIdx++;
 					}
 				}
@@ -185,7 +189,8 @@ function renderLangFileEditText ($langId, $langFile, $isMain=false, $editIdx=0){
 					if ($langId == $this->trans_langId || $this->isShowTranslationOfAllIds) {
 						
 						$langFile = $subProject->getLangFile($langId);
-						renderLangFileEditText ($langId, $langFile, false, $editIdx);
+						$subPrjPath = $langFile->getlangSubPrjPathFileName ();
+						renderLangFileEditText ($langId, $langFile, $subPrjPath, false, $editIdx);
 						$editIdx++;
 					}
 				}

@@ -248,7 +248,7 @@ class langSubProject extends langFileNamesSet
 
         // $langFile = new langFile ($langFileName);
         $langFile = new langFile ();
-        $langFile->readFileContent($langFileName, $langId);
+        $langFile->readFileContent($langFileName);
 
         $this->langFiles [$langId] = $langFile;
 

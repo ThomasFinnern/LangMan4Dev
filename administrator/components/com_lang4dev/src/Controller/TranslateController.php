@@ -130,6 +130,9 @@ class TranslateController extends AdminController
 		// ToDo: $canCreateFile = ...;
 		$canCreateFile = true;
 
+		// ToDo: try / catch
+
+
 		if ( ! $canCreateFile ) {
 
 			$OutTxt = Text::_('COM_LANG4DEV_TRANSLATE_CREATE_LANG_INVALID_RIGHTS');
@@ -137,16 +140,100 @@ class TranslateController extends AdminController
 			$app->enqueueMessage($OutTxt, 'error');
 		} else {
 
+			$input = Factory::getApplication()->input;
+			$data  = $this->input->post->get('jform', array(), 'array');
 
-			// target id valid ?
+			$targetlangId = $data ['createLangId'];
+			$sourcelangId = $data ['selectSourceLangId'];
 
-			// get project / subproject id
+			// form lang file names (wrong lang ID)
+			$langPathFileNames = $input->get('langPathFileNames', array(), 'ARRAY');
 
-			// set source lang ID in  project db
+			// check for valid form ?
+			$isTargetVerified = $this->isValidLangIdName ($targetlangId);
+			$isSourceVerified = $this->isValidLangIdName($sourcelangId);
 
-			$OutTxt = "createLangId for translation has started:";
-			$app    = Factory::getApplication();
-			$app->enqueueMessage($OutTxt, 'info');
+			if ($isTargetVerified && $isSourceVerified)
+			{
+				$createdFileNames = [];
+
+				// load source files by using form target lang files names
+				foreach ($langPathFileNames as $langPathFileName)
+				{
+					// create empty lang file with just a filename
+					$langFile = new langfile(); // empty lang file
+					$langFile->setLangPathFileName ($langPathFileName);
+
+					// Exchange lang ID with source lang ID
+					$langFile->setLangID ($sourcelangId);
+
+					// Read main translations
+					$isRead = $langFile->readFileContent();
+
+					// file did exist and was read
+					if ($isRead) {
+
+						//--- create new lang file ---------------------------------------
+
+						// change name
+						$langFile->setLangID ($targetlangId);
+
+						// remove translations (attention comments may still be old language)
+						$langFile->resetToPreparedTranslations();
+
+						// prepare new path
+						$langFile->createLangFolder ();
+
+
+						// write results
+						$isWritten = $langFile->writeToFile();
+
+						if ($isWritten) {
+
+							$createdFileNames [] = $langFile->getlangSubPrjPathFileName();
+
+						} else {
+
+							// Message on not written
+
+							$OutTxt = Text::_('COM_LANG4DEV_TRANSLATE_COULD_NOT_WRITE_LANG_FILE')
+								. ': "' . $langFile->getlangFileName() .'"';
+							$app    = Factory::getApplication();
+							$app->enqueueMessage($OutTxt, 'error');
+
+						}
+					}
+
+					if ( count ($createdFileNames) > 0) {
+
+						$OutTxt = Text::_('COM_LANG4DEV_TRANSLATE_CREATED_LANG_FILES') . '\n'
+							. implode (',\n', $createdFileNames);
+						$app    = Factory::getApplication();
+						$app->enqueueMessage($OutTxt, 'info');
+
+					}
+
+				}
+			} else {
+
+				//--- invalid lang ID names ------------------------
+
+				if (! $isTargetVerified)
+				{
+					$OutTxt = Text::_('COM_LANG4DEV_TRANSLATE_WRONG_LANG_ID')
+						. ': "' . $targetlangId .'"';
+					$app    = Factory::getApplication();
+					$app->enqueueMessage($OutTxt, 'error');
+				}
+
+				if (! $isSourceVerified)
+				{
+					$OutTxt = Text::_('COM_LANG4DEV_TRANSLATE_WRONG_LANG_ID')
+						. ': "' . $sourcelangId .'"';
+					$app    = Factory::getApplication();
+					$app->enqueueMessage($OutTxt, 'error');
+				}
+			}
 
 		}
 
@@ -306,6 +393,34 @@ class TranslateController extends AdminController
 
 			}
 		}
+
+		return $isNameVerified;
+	}
+
+	private function isValidLangIdName($langId)
+	{
+		$isNameVerified = true;
+
+		// check string length
+		if (strlen ($langId) != 5) {
+			$isNameVerified = false;
+		} else {
+
+			// '-' at the right offset
+			if (substr ($langId, 2,1) != '-')
+			{
+				$isNameVerified = false;
+			}
+
+			// only char or - ^[a-zA-Z\-]*$
+			if ( ! preg_match('/[^a-zA-Z]/', $langId))
+			{
+				$isNameVerified = false;
+			}
+		}
+
+		// ToDo: compare with a list ....
+
 
 		return $isNameVerified;
 	}
