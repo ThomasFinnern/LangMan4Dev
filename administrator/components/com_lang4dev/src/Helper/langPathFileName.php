@@ -76,9 +76,10 @@ class langPathFileName
 		$prjPath = self::extractProjectPath ($this->langPathFileName);
 
 		// path parts
-		[$fileName, $oldLangId, $isIdPreceded, $isSysFile] =
+		// 2022.06.07 // 2022.06.07 $langId[$fileName, $oldLangId, $isIdPreceded, $isSysFile] =
+		[$fileName, $langId, $isIdPreceded, $isSysFile] =
 			self::extractNameParts($this->langPathFileName);
-		$langId = $this->langId;
+		// 2022.06.07 $langId = $this->langId;
 
 		// reformat sub project path
 		$fullPath = self::createLangPathFileName ($fileName, $prjPath, $langId, $isIdPreceded, $isSysFile);
@@ -186,7 +187,8 @@ class langPathFileName
 	public function extractNameFlags()
 	{
 
-		[$fileName, $this->langId, $this->isIdPreceded, $this->isSysFile] = self::extractNameParts($this->langPathFileName);
+		[$fileName, $this->langId, $this->isIdPreceded, $this->isSysFile] =
+			self::extractNameParts($this->langPathFileName);
 
 	}
 
@@ -220,6 +222,12 @@ class langPathFileName
 
 
 		return $langPathFileName;
+	}
+
+	// use local filename insead of external one
+	public function check4ValidPathFileName ($isMustExist=false)
+	{
+		return self::isValidPathFileName ($this->getlangFileName(), $isMustExist);
 	}
 
 	public static function isValidPathFileName ($langPathFileName = '', $isMustExist=false) {
@@ -267,7 +275,7 @@ class langPathFileName
 
 		try
 		{
-			// use local one
+			// use local one if nothing is given
 			if ($langPathFileName = '') {
 
 				$langPathFileName = $this->getlangFileName();

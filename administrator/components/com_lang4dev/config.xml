@@ -17,36 +17,6 @@
 		/-->
 
 		<field
-				name="main_langId"
-				type="text"
-				default="en-GB"
-				label="COM_RSGALLERY2_MAIN_LANGUAGE_ID"
-				description="COM_RSGALLERY2_MAIN_LANGUAGE_ID_DESC"
-				class="">
-		</field>
-
-		<field
-				name="trans_langId"
-				type="text"
-				default="de-DE"
-				label="COM_RSGALLERY2_TRANS_LANGUAGE_ID"
-				description="COM_RSGALLERY2_TRANS_LANGUAGE_ID_DESC"
-				class="">
-		</field>
-
-		<field
-				name="isShowTranslationOfAllIds"
-				type="radio"
-				label="COM_LANG4DEV_SHOW_TRANSLATION_OF_ALL_IDS"
-				description="COM_LANG4DEV_SHOW_TRANSLATION_OF_ALL_IDS_DESC"
-				default="1"
-				layout="joomla.form.field.radio.switcher"
-		>
-			<option value="0">JNO</option>
-			<option value="1">JYES</option>
-		</field>
-
-		<field
 				name="ToDo_list_general0"
 				type="textarray"
 				label="!!! ToDo !!!: In config - general"
@@ -92,31 +62,6 @@
 
 
 		<field
-				name="isSearchForTranslationIds"
-				type="radio"
-				label="COM_LANG4DEV_SEARCH_TRANS_IDS"
-				description="COM_LANG4DEV_SEARCH_TRANS_IDS_DESC"
-				default="1"
-				layout="joomla.form.field.radio.switcher"
-		>
-			<option value="0">JNO</option>
-			<option value="1">JYES</option>
-		</field>
-
-
-		<field
-				name="isSearchForStringIn_TEXT_"
-				type="radio"
-				label="COM_LANG4DEV_SEARCH_STRING_IN_TEXT_"
-				description="COM_LANG4DEV_SEARCH_STRING_IN_TEXT_DESC"
-				default="1"
-				layout="joomla.form.field.radio.switcher"
-		>
-			<option value="0">JNO</option>
-			<option value="1">JYES</option>
-		</field>
-
-		<field
 				type="spacer"
 				name="spacer_admin"
 				hr="true"
@@ -147,12 +92,12 @@
 
 	</fieldset>
 
-	<!-- ... Tab Upload ................................. -->
+	<!-- ... Tab Project ................................. -->
 
 	<fieldset
 			name="tab02"
-			label="COM_LANG4DEV_CONFIG_TAB02"
-			description="COM_LANG4DEV_CONFIG_TAB02_DESC"
+			label="COM_LANG4DEV_CONFIG_TAB_PROJECT"
+			description="COM_LANG4DEV_CONFIG_TAB_PROJECT_DESC"
 	>
 		<!--field
 				type="spacer"
@@ -161,11 +106,11 @@
 		/-->
 
 		<field
-				name="ToDo_list_upload"
+				name="ToDo_list_project"
 				type="list"
 				default="0"
-				label="!!! ToDo !!!: In config - upload"
-				description="Developers ToDo list may still contain elements when RSG2 is ready to ship :-("
+				label="!!! ToDo !!!: In config - project"
+				description="Developers ToDo list may still contain elements when project is ready to ship :-("
 				class="text text-danger"
 				showon="isDevelop:1"
 		>
@@ -177,22 +122,165 @@
 		</field>
 
 
-		<!-- ... block upload images ... -->
-
-		<field name="note_images_upload"
-			   type="note"
-			   class="alert alert-primary"
-			   close="true"
-			   label="COM_LANG4DEV_CFG_IMAGE_MANIPULATION"
-			   description="COM_LANG4DEV_CFG_IMAGE_MANIPULATION"
-		/>
+		<!-- ... block project ... -->
 
 		<field
-				name="image_size"
+				name="dummyProject"
 				type="text"
-				default="800,600,400"
-				label="COM_LANG4DEV_DISPLAY_PICTURE_SIZE"
-				description="COM_LANG4DEV_DISPLAY_PICTURE_SIZE_DESC"
+				default="???? project"
+				label="COM_LANG4DEV_PROJECT_DUMMY"
+				description="COM_LANG4DEV_PROJECT_DUMMY_DESC"
+				class="">
+		</field>
+	</fieldset>
+
+	<!-- ... Tab prjTextIds ................................. -->
+
+	<fieldset
+			name="tab03"
+			label="COM_LANG4DEV_CONFIG_TAB_PRJ_TRANS_IDS"
+			description="COM_LANG4DEV_CONFIG_TAB_PRJ_TRANS_IDS_DESC"
+	>
+		<!--field
+				type="spacer"
+				name="spacer_upload_01"
+				hr="true"
+		/-->
+
+		<field
+				name="ToDo_list_prj_trans_IDS"
+				type="list"
+				default="0"
+				label="!!! ToDo !!!: In config - PRJ trans IDS"
+				description="Developers ToDo list may still contain elements when project is ready to ship :-("
+				class="text text-danger"
+				showon="isDevelop:1"
+		>
+			<option value="0">* </option>
+			<option value="1">* </option>
+			<option value="2">* </option>
+			<option value="3">* </option>
+			<option value="4">* </option>
+		</field>
+
+
+		<!-- ... block Trans IDS ... -->
+
+		<field
+				name="isSearchForTranslationIds"
+				type="radio"
+				label="COM_LANG4DEV_SEARCH_TRANS_IDS"
+				description="COM_LANG4DEV_SEARCH_TRANS_IDS_DESC"
+				default="1"
+				layout="joomla.form.field.radio.switcher"
+		>
+			<option value="0">JNO</option>
+			<option value="1">JYES</option>
+		</field>
+
+
+		<field
+				name="isSearchForStringIn_TEXT_"
+				type="radio"
+				label="COM_LANG4DEV_SEARCH_STRING_IN_TEXT_"
+				description="COM_LANG4DEV_SEARCH_STRING_IN_TEXT_DESC"
+				default="1"
+				layout="joomla.form.field.radio.switcher"
+		>
+			<option value="0">JNO</option>
+			<option value="1">JYES</option>
+		</field>
+
+		<field
+				name="dummyTransIds"
+				type="text"
+				default="???? TransIds"
+				label="COM_LANG4DEV_PRJ_TRANS_IDS_DUMMY"
+				description="COM_LANG4DEV_PRJ_TRANS_IDS_DUMMY_DESC"
+				class="">
+		</field>
+	</fieldset>
+
+	<!-- ... Tab Translation ................................. -->
+
+	<fieldset
+			name="tab04"
+			label="COM_LANG4DEV_CONFIG_TAB_TRANSLATION"
+			description="COM_LANG4DEV_CONFIG_TAB_TRANSLATION_DESC"
+	>
+		<!--field
+				type="spacer"
+				name="spacer_upload_01"
+				hr="true"
+		/-->
+
+		<field
+				name="ToDo_list_translation"
+				type="list"
+				default="0"
+				label="!!! ToDo !!!: In config - translation"
+				description="Developers ToDo list may still contain elements when project is ready to ship :-("
+				class="text text-danger"
+				showon="isDevelop:1"
+		>
+			<option value="0">* </option>
+			<option value="1">* </option>
+			<option value="2">* </option>
+			<option value="3">* </option>
+			<option value="4">* </option>
+		</field>
+
+
+		<!-- ... block translation ... -->
+
+		<field
+				name="main_langId"
+				type="text"
+				default="en-GB"
+				label="COM_RSGALLERY2_MAIN_LANGUAGE_ID"
+				description="COM_RSGALLERY2_MAIN_LANGUAGE_ID_DESC"
+				class="">
+		</field>
+
+		<field
+				name="trans_langId"
+				type="text"
+				default="de-DE"
+				label="COM_RSGALLERY2_TRANS_LANGUAGE_ID"
+				description="COM_RSGALLERY2_TRANS_LANGUAGE_ID_DESC"
+				class="">
+		</field>
+
+		<field
+				name="isShowTranslationOfAllIds"
+				type="radio"
+				label="COM_LANG4DEV_SHOW_TRANSLATION_OF_ALL_IDS"
+				description="COM_LANG4DEV_SHOW_TRANSLATION_OF_ALL_IDS_DESC"
+				default="1"
+				layout="joomla.form.field.radio.switcher"
+		>
+			<option value="0">JNO</option>
+			<option value="1">JYES</option>
+		</field>
+
+		<field
+				name="isEditAndSaveMainTranslationFile"
+				type="radio"
+				label="COM_LANG4DEV_EDIT_AND_SAVE_MAIN_TRANSLATION_FILE"
+				description="COM_LANG4DEV_EDIT_AND_SAVE_MAIN_TRANSLATION_FILE_DESC"
+				default="0"
+				layout="joomla.form.field.radio.switcher"
+		>
+			<option value="0">JNO</option>
+			<option value="1">JYES</option>
+		</field>
+
+		<field
+				name="dummyTranslation"
+				type="text"
+				default="??? dummy translation"
+				label="COM_LANG4DEV_PROJECT_DUMMY"
+				description="COM_LANG4DEV_PROJECT_DUMMY_DESC"
 				class="">
 		</field>
 	</fieldset>

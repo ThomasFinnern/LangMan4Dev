@@ -70,7 +70,8 @@ function renderCheckLangEdited ($subPrjId, $idx, $checked=false)
 
 
 
-function renderLangFileEditText ($langId, $langFile, $subPrjPath, $isMain=false, $editIdx=0){
+function renderLangFileEditText ($langId, $langFile, $subPrjPath,
+	$isMain=false, $isEditAndSaveMainTranslationFile=false, $editIdx=0, ){
 
 	?>
 	<div class="card bg-light border">
@@ -86,7 +87,8 @@ function renderLangFileEditText ($langId, $langFile, $subPrjPath, $isMain=false,
 			<div class="card-text">
 
 				<?php
-				if( ! $isMain)
+				// ToDo: enable edit of main language by config
+				if( ! $isMain || $isEditAndSaveMainTranslationFile)
 				{
 					$subPrjId = $langId;
 					renderCheckLangEdited($subPrjId, $editIdx, $checked = false);
@@ -178,7 +180,8 @@ function renderLangFileEditText ($langId, $langFile, $subPrjPath, $isMain=false,
 						
 						$langFile = $subProject->getLangFile($langId);
 						$subPrjPath = $langFile->getlangSubPrjPathFileName ();
-						renderLangFileEditText ($langId, $langFile, $subPrjPath, true, $editIdx);
+						renderLangFileEditText ($langId, $langFile, $subPrjPath,
+							true, $this->isEditAndSaveMainTranslationFile, $editIdx);
 						$editIdx++;
 					}
 				}
@@ -187,11 +190,17 @@ function renderLangFileEditText ($langId, $langFile, $subPrjPath, $isMain=false,
 				foreach ($subProject->getLangIds () as $langId) {
 					
 					if ($langId == $this->trans_langId || $this->isShowTranslationOfAllIds) {
-						
-						$langFile = $subProject->getLangFile($langId);
-						$subPrjPath = $langFile->getlangSubPrjPathFileName ();
-						renderLangFileEditText ($langId, $langFile, $subPrjPath, false, $editIdx);
-						$editIdx++;
+
+						if ($langId != $this->main_langId)
+						{
+
+							$langFile   = $subProject->getLangFile($langId);
+							$subPrjPath = $langFile->getlangSubPrjPathFileName();
+							renderLangFileEditText($langId, $langFile, $subPrjPath,
+								false, $this->isEditAndSaveMainTranslationFile, $editIdx);
+							$editIdx++;
+						}
+
 					}
 				}
 			    ?>

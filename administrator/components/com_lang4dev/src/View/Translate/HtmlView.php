@@ -45,6 +45,7 @@ class HtmlView extends BaseHtmlView
 	protected $main_langId;
 	protected $trans_langId;
 	protected $isShowTranslationOfAllIds;
+	protected $isEditAndSaveMainTranslationFile;
 
 
 	/**
@@ -67,6 +68,7 @@ class HtmlView extends BaseHtmlView
 		$this->main_langId = $l4dConfig->get('main_langId');
 		$this->trans_langId = $l4dConfig->get('trans_langId');
 		$this->isShowTranslationOfAllIds = $l4dConfig->get('isShowTranslationOfAllIds');
+		$this->isEditAndSaveMainTranslationFile = $l4dConfig->get('isEditAndSaveMainTranslationFile');
 
         //--- Form --------------------------------------------------------------------
 

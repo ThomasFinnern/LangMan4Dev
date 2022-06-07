@@ -289,7 +289,7 @@ class TranslateController extends AdminController
 					// $isNameVerified = $this->verifyLangFileName($langPathFileName);
 
 					$oLangPathFileName = new langPathFileName ($langPathFileNames [$idx]);
-					$isNameVerified = $oLangPathFileName->isValidPathFileName ();
+					$isNameVerified = $oLangPathFileName->check4ValidPathFileName ();
 
 					if ($isNameVerified)
 					{

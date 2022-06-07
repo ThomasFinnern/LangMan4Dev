@@ -101,6 +101,7 @@ class langFile extends langPathFileName
             if ( ! empty ($filePath)) {
                 // ToDo: do we want to assign a different  file content or do we want to restart with new files
                 $this->langPathFileName = $filePath;
+	            $this->extractNameFlags();
             } else {
                 $filePath = $this->langPathFileName;
             }
