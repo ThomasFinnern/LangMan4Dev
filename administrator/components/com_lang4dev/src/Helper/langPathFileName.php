@@ -1,12 +1,16 @@
 <?php
 /**
- * This class contains translations file
- * with references to empty lines and comments
+ * Handle path and file names regarding
+ *  - lang id in front of name (not necessary any more
+ *  - sys file indicator
+ *  - extract ang id
+ *
+ * the path may be extrctrd into parts or the parts may create a valid path
  *
  * @version
  * @package       Lang4dev
  * @copyright (C) 2022-2022 Lang4dev Team
- * @license
+ * @license     GPL2
  */
 
 
@@ -41,6 +45,8 @@ use Joomla\CMS\Filesystem\Folder;
  */
 class langPathFileName
 {
+	// ToDo: ? plg / mod in administrator language ... ??? fall back ....
+
 	protected $langPathFileName = '???.ini';
 	protected $langId = 'en-GB'; // 'en-GB'  // lang ID
 	public $isIdPreceded = false;

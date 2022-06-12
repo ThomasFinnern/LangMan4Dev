@@ -24,6 +24,7 @@ use Joomla\Utilities\ArrayHelper;
 
 use Finnern\Component\Lang4dev\Administrator\Helper\langProject;
 use Finnern\Component\Lang4dev\Administrator\Helper\langSubProject;
+use Finnern\Component\Lang4dev\Administrator\Helper\subPrjPath;
 
 /**
  * The Gallery Controller
@@ -62,6 +63,22 @@ class projectController extends FormController
 	}
 
 	/**
+	 * Proxy for getModel
+	 *
+	 * @param   string  $name    The model name. Optional.
+	 * @param   string  $prefix  The class prefix. Optional.
+	 * @param   array   $config  The array of possible config values. Optional.
+	 *
+	 * @return  \Joomla\CMS\MVC\Model\BaseDatabaseModel  The model.
+	 *
+	 * @since __BUMP_VERSION__
+	 */
+	public function getModel($name = 'Project', $prefix = 'Administrator', $config = array('ignore_request' => true))
+	{
+		return parent::getModel($name, $prefix, $config);
+	}
+
+	/**
 	 * Standard cancel, back to list view
 	 *
 	 * @param null $key
@@ -73,7 +90,7 @@ class projectController extends FormController
 	public function cancel($key = null)
 	{
 		Session::checkToken() or die(Text::_('JINVALID_TOKEN'));
-		//$link = Route::_('index.php?option=com_lang4dev&view=projects');
+
 		$link = 'index.php?option=com_lang4dev&view=projects';
 		$this->setRedirect($link);
 
@@ -81,42 +98,121 @@ class projectController extends FormController
 	}
 
 	public function detectDetails () {
-
-
 		Session::checkToken() or die(Text::_('JINVALID_TOKEN'));
-		
-		/**
-		$prj = new langProject ();
 
-		$subPrj = $prj->addSubProject('com_lang4dev',
-			langSubProject::PRJ_TYPE_COMP_BACK_SYS,
-			JPATH_ADMINISTRATOR . '/components/com_lang4dev',
-		);
+		// User is allowed to change
+		// ToDo: $canCreateFile = ...;
+		$canCreateFile = true;
+		$id = -1;
+		$prjId = '';
+		$prjRootPath = '';
 
-		$subPrj = $prj->addSubProject('com_lang4dev',
-			langSubProject::PRJ_TYPE_COMP_BACK,
-			JPATH_ADMINISTRATOR. '/components/com_lang4dev'
-		);
+		if ( ! $canCreateFile ) {
 
-		$subPrj = $prj->addSubProject('com_lang4dev',
-			langSubProject::PRJ_TYPE_COMP_SITE,
-			JPATH_SITE . '/components/com_lang4dev'
-		);
-		/**/
+			$OutTxt = Text::_('COM_LANG4DEV_TRANSLATE_CREATE_LANG_INVALID_RIGHTS');
+			$app    = Factory::getApplication();
+			$app->enqueueMessage($OutTxt, 'error');
+		} else
+		{
 
-		// model =
-		// save
-		
-		
-		
-		
+			$input = Factory::getApplication()->input;
+			$data  = $this->input->post->get('jform', array(), 'array');
+
+			$id = (int)$data ['id'];
+			$prjId = $data ['name'];
+			$prjRootPath = $data ['root_path'];
+
+
+
+			// detect path by project name or root path is given
+			$oSubPrjPath = new subPrjPath($prjId,$prjRootPath);
+//			[$isRootValid, $isJoomlaPath, $rootPath, $subPrjPath]
+//				= oSubPrjPath->detectRootPath ($prjId,$prjRootPath);
+
+			$isChanged = false;
+
+			if ($oSubPrjPath->isRootValid) {
+
+				$subPrjPath = $oSubPrjPath->getSubPrjPath();
+				if ($prjRootPath != $subPrjPath)
+				{
+					$prjRootPath = $subPrjPath;
+
+					// write back into input
+					$isChanged = true;
+					//$input->set('jform['root_path']', $prjRootPath);
+					$data ['root_path'] = $prjRootPath;
+				}
+
+			}
+
+			// write back into input
+			if ($isChanged){
+
+				$this->input->post->set('jform', $data);
+
+			}
+
+
+			//--- search sub projects ---------------------------------
+
+			// List of existing sub projects
+
+			// search for missing subprojects
+
+				// create if necessary ???
+
+
+
+			$model = $this->getModel ();
+
+			// Test whether the data is valid.
+			//$validData = $model->validate($form, $data);
+
+			// Check for validation errors.
+			//if ($validData === false)
+
+
+
+
+
+
+
+			$model->save ($data);
+
+			/**
+			 * $prj = new langProject ();
+			 *
+			 * $subPrj = $prj->addSubProject('com_lang4dev',
+			 * langSubProject::PRJ_TYPE_COMP_BACK_SYS,
+			 * JPATH_ADMINISTRATOR . '/components/com_lang4dev',
+			 * );
+			 *
+			 * $subPrj = $prj->addSubProject('com_lang4dev',
+			 * langSubProject::PRJ_TYPE_COMP_BACK,
+			 * JPATH_ADMINISTRATOR. '/components/com_lang4dev'
+			 * );
+			 *
+			 * $subPrj = $prj->addSubProject('com_lang4dev',
+			 * langSubProject::PRJ_TYPE_COMP_SITE,
+			 * JPATH_SITE . '/components/com_lang4dev'
+			 * );
+			 * /**/
+
+			// model =
+			// save
+
+		}
+
+
 		$OutTxt = "detectDetails for project has started:";
 		$app = Factory::getApplication();
 		$app->enqueueMessage($OutTxt, 'warning');
 
-		$link = 'index.php?option=com_lang4dev&view=project&layout=edit&id=' . '1';
+		$link = 'index.php?option=com_lang4dev&view=project&layout=edit&id=' . $id;
 		$this->setRedirect($link);
 	}
+
 
 	/**
      * Remove an item.
@@ -169,7 +265,7 @@ class projectController extends FormController
                 {
                     // Delete image files physically
 
-                    /** ToDo: folowing
+                    /** ToDo: following
                     $IsDeleted = false;
 
                     try

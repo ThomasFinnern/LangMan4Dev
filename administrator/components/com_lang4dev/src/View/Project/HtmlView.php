@@ -181,6 +181,9 @@ class HtmlView extends BaseHtmlView
                     ToolBarHelper::cancel('project.cancel', 'JTOOLBAR_CLOSE');
                 }
 
+		        ToolbarHelper::custom('project.detectDetails', 'icon-task', '', 'COM_LANG4DEV_DETECT_DETAILS', false);
+
+
                 // Options button.
                 if (Factory::getApplication()->getIdentity()->authorise('core.admin', 'com_lang4dev')) {
                     $toolbar->preferences('com_lang4dev');

@@ -76,7 +76,8 @@ class TranslateController extends AdminController
 	public function cancel($key = null)
 	{
 		Session::checkToken() or die(Text::_('JINVALID_TOKEN'));
-		$link = 'index.php?option=com_lang4dev&view=translation';
+		//$link = 'index.php?option=com_lang4dev&view=translation';
+		$link = 'index.php?option=com_lang4dev';
 		$this->setRedirect($link);
 
 		return true;
@@ -90,6 +91,11 @@ class TranslateController extends AdminController
 		// get project / subproject id
 
 		// set source lang ID in  project db
+
+
+
+
+
 
 		$OutTxt = "selectSourceLangId for translation has started:";
 		$app = Factory::getApplication();
@@ -139,6 +145,8 @@ class TranslateController extends AdminController
 			$app    = Factory::getApplication();
 			$app->enqueueMessage($OutTxt, 'error');
 		} else {
+
+			// ToDo: try ...
 
 			$input = Factory::getApplication()->input;
 			$data  = $this->input->post->get('jform', array(), 'array');
