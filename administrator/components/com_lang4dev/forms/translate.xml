@@ -27,4 +27,27 @@
 				default="nn-NN"
 		/>
 
+		<!-- project selection -->
+		<field
+				id="SelectProject"
+				name="SelectProject"
+				type="ProjectSelect"
+				label="COM_RSGALLERY2_SPECIFY_GALLERY_LABEL"
+				description="COM_RSGALLERY2_SPECIFY_GALLERY_DESC"
+				required="true"
+		/>
+
+
+		<!-- sub project selection -->
+		<field
+			id="SelectSubproject"
+			name="SelectSubproject"
+			type="SubprojectsListField"
+			label="COM_LANG4DEV_SELECT_SUB_PROJECT"
+			description="COM_LANG4DEV_SELECT_SUB_PROJECT_DESC"
+			required="true"
+	/>
+
+
+
 </form>
