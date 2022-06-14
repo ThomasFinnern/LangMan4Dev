@@ -26,6 +26,24 @@ function renderLangIdTexts ($form)
     return;
 }
 
+function renderProjectSelection ($form)
+{
+    ?>
+    <div class="d-flex flex-row py-0 my-0">
+        <div class="mx-2 py-0 border border-primary">
+                <?php echo $form->renderField('selectProject'); ?>
+        </div>
+
+	    <div class="mx-2 py-0 border border-success">
+                <?php echo $form->renderField('selectSubproject'); ?>
+        </div>
+
+    </div>
+    <?php
+
+    return;
+}
+
 function renderCheckAll ($form)
 {
     ?>
@@ -150,6 +168,8 @@ function renderLangFileEditText ($langId, $langFile, $subPrjPath,
 //    echo 'default.php: ' . realpath(dirname(__FILE__));
     ?>
     <?php renderLangIdTexts ($this->form); ?>
+
+    <?php renderProjectSelection ($this->form); ?>
 
     <?php renderCheckAll ($this->form); ?>
 

@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<form>
-
-		<field
+<form addfieldprefix="Finnern\Component\Lang4dev\Administrator\Field">
+<field
 				name="selectSourceLangId"
 				type="text"
 				label="COM_LANG4DEV_TRANS_SOURCE_LANG_ID"
@@ -29,20 +28,20 @@
 
 		<!-- project selection -->
 		<field
-				id="SelectProject"
-				name="SelectProject"
+				id="selectProject"
+				name="selectProject"
 				type="ProjectSelect"
-				label="COM_RSGALLERY2_SPECIFY_GALLERY_LABEL"
-				description="COM_RSGALLERY2_SPECIFY_GALLERY_DESC"
+				label="COM_LANG4DEV_SELECT_PROJECT"
+				description="COM_LANG4DEV_SELECT_PROJECT_DESC"
 				required="true"
 		/>
 
 
 		<!-- sub project selection -->
 		<field
-			id="SelectSubproject"
-			name="SelectSubproject"
-			type="SubprojectsListField"
+			id="selectSubproject"
+			name="selectSubproject"
+			type="SubprojectSelectField"
 			label="COM_LANG4DEV_SELECT_SUB_PROJECT"
 			description="COM_LANG4DEV_SELECT_SUB_PROJECT_DESC"
 			required="true"
