@@ -15,6 +15,7 @@ namespace Finnern\Component\Lang4dev\Administrator\Field;
 
 \defined('_JEXEC') or die;
 
+use Finnern\Component\Lang4dev\Administrator\Helper\sessionProjectId;
 use Joomla\CMS\Factory;
 use Joomla\CMS\Form\Field\ListField;
 use Joomla\CMS\HTML\HTMLHelper;
@@ -30,13 +31,8 @@ use Joomla\CMS\Language\Text;
  */
 class SubprojectSelectField extends ListField
 {
-	/**
-	 * Cached array of the category items.
-	 *
-	 * @var    array
-	 * @since __BUMP_VERSION__
-	 */
-//	protected static $options = [];
+
+	protected $prjId=-1;
 
     /**
      * The field type.
@@ -47,19 +43,30 @@ class SubprojectSelectField extends ListField
      */
 	protected $type = 'SubprojectSelect';
 
-	/**
-	 * Method to get the field input markup for a generic list.
-	 * Use the multiple attribute to enable multiselect.
-	 *
-	 * @return  string  The field input markup.
-	 *
-	 * @since __BUMP_VERSION__
-	 *
 	protected function getInput()
 	{
-		return $this->getOptions() ? parent::getInput() : '';
+		//--- Set selection of project and sub project --------------------
+
+		$sessionProjectId = new sessionProjectId();
+		[$prjId, $subPrjId] = $sessionProjectId->getIds();
+
+		$this->setValue ($subPrjId);
+		$this->prjId = $prjId;
+
+		/**
+		if ($this->form->getValue('id', 0) == 0)
+		{
+		return '<span class="readonly">' . Text::_('COM_MENUS_ITEM_FIELD_ORDERING_TEXT') . '</span>';
+		}
+		else
+		{
+		return parent::getInput();
+		}
+		/**/
+
+		return parent::getInput();
 	}
-	/**/
+
 
 	/**
 	 * Method to get a list of options for a list input.
@@ -81,6 +88,8 @@ class SubprojectSelectField extends ListField
 				->select($db->quoteName('id', 'value'))
 				->select($db->quoteName('title', 'text'))
 
+				->where($db->quoteName('parent_id') . ' = ' . (int) $this->prjId)
+
                 ->from($db->quoteName('#__lang4dev_subprojects'))
 				// ToDo: Use option in XML to select ASC/DESC
 				->order($db->quoteName('id') . ' DESC')
@@ -88,6 +97,14 @@ class SubprojectSelectField extends ListField
 
 			// Get the options.
 			$subprojects = $db->setQuery($query)->loadObjectList();
+
+			//--- Set selection of project and sub project --------------------
+
+			$sessionProjectId = new sessionProjectId();
+			[$prjId, $subPrjId] = $sessionProjectId->getIds();
+
+			$this->value = $subPrjId;
+
 		}
 		catch (\RuntimeException $e)
 		{

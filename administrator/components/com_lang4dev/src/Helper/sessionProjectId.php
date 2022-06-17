@@ -97,8 +97,8 @@ class sessionProjectId
 				$subPrjId = (int) $session->get('_lang4dev.subPrjId', '0');
 			}
 
-			// Is not set
-			if ($prjId < 0)
+			// Is not set (in control) => use latest
+			if ($prjId <= 0)
 			{
 				//--- retrieve last created from DB ---------------------------------
 
@@ -120,7 +120,7 @@ class sessionProjectId
 	{
 		$max = 0; // indicates nothing found in DB
 
-		$db = $this->getDbo();
+		$db = Factory::getDbo();
 		$query = $db->getQuery(true)
 			->select('MAX(id)')
 			->from($db->quoteName('#__lang4dev_projects'));

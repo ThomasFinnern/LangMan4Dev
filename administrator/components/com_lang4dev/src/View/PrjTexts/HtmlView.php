@@ -63,6 +63,10 @@ class HtmlView extends BaseHtmlView
 
 		$this->isDoCommentIds = $l4dConfig->get('isDoComment_prepared_missing_ids');
 
+		//--- Form --------------------------------------------------------------------
+
+		$this->form = $this->get('Form');
+
         //--- project --------------------------------------------------------------------
 
         $project =

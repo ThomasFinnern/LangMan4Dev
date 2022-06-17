@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<form addfieldprefix="Finnern\Component\Lang4dev\Administrator\Field">
+	<field
+			name="selectSourceLangId"
+			type="text"
+			label="COM_LANG4DEV_TRANS_SOURCE_LANG_ID"
+			description="COM_LANG4DEV_TRANS_SOURCE_LANG_ID_DESC"
+			default="en-GB"
+			class="readonly"
+	/>
+
+	<field
+			name="selectTargetLangId"
+			type="text"
+			label="COM_LANG4DEV_TRANS_TARGET_LANG_ID"
+			description="COM_LANG4DEV_TRANS_TARGET_LANG_ID_DESC"
+			default="de-DE"
+			class="readonly"
+	/>
+
+	<!-- project selection -->
+	<field
+			id="selectProject"
+			name="selectProject"
+			type="ProjectSelect"
+			label="COM_LANG4DEV_SELECT_PROJECT"
+			description="COM_LANG4DEV_SELECT_PROJECT_DESC"
+			onchange="Joomla.submitform('translate.selectProject', this.form)"
+	/>
+
+
+	<!-- sub project selection -->
+	<field
+			id="selectSubproject"
+			name="selectSubproject"
+			type="SubprojectSelectField"
+			label="COM_LANG4DEV_SELECT_SUB_PROJECT"
+			description="COM_LANG4DEV_SELECT_SUB_PROJECT_DESC"
+			onchange="this.form.submit();"
+	/>
+
+</form>

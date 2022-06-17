@@ -15,6 +15,7 @@ namespace Finnern\Component\Lang4dev\Administrator\Field;
 
 \defined('_JEXEC') or die;
 
+use Finnern\Component\Lang4dev\Administrator\Helper\sessionProjectId;
 use Joomla\CMS\Factory;
 use Joomla\CMS\Form\Field\ListField;
 use Joomla\CMS\HTML\HTMLHelper;
@@ -54,12 +55,37 @@ class ProjectSelectField extends ListField
 	 * @return  string  The field input markup.
 	 *
 	 * @since __BUMP_VERSION__
+	 */
+
+	/**
+	 * Method to get the field input markup.
 	 *
+	 * @return  string  The field input markup.
+	 *
+	 * @since   1.7
+	 */
 	protected function getInput()
 	{
-		return $this->getOptions() ? parent::getInput() : '';
+		//--- Set selection of project and sub project --------------------
+
+		$sessionProjectId = new sessionProjectId();
+		[$prjId, $subPrjId] = $sessionProjectId->getIds();
+
+		$this->setValue ($prjId);
+
+		/**
+		if ($this->form->getValue('id', 0) == 0)
+		{
+			return '<span class="readonly">' . Text::_('COM_MENUS_ITEM_FIELD_ORDERING_TEXT') . '</span>';
+		}
+		else
+		{
+			return parent::getInput();
+		}
+		/**/
+
+		return parent::getInput();
 	}
-	/**/
 
 	/**
 	 * Method to get a list of options for a list input.
@@ -88,6 +114,7 @@ class ProjectSelectField extends ListField
 
 			// Get the options.
 			$projects = $db->setQuery($query)->loadObjectList();
+
 		}
 		catch (\RuntimeException $e)
 		{

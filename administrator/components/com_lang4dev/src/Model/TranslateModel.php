@@ -80,20 +80,6 @@ class TranslateModel extends AdminModel
 		}
 
 
-		//--- Set selection of project and subproject --------------------
-
-
-
-		$sessionProjectId = new sessionProjectId();
-		[$prjId, $subPrjId] = $sessionProjectId->getIds();
-
-		// $data ['selectProject'] = $prjId;
-		// $data ['selectSubproject'] = $subPrjId;
-
-		$form->setFieldAttribute('selectProject', 'value', $prjId);
-		$form->setFieldAttribute('selectSubproject', 'value', $prjId);
-		Option-> $this->value = array(2, 3);
-
 		return $form;
 	}
 

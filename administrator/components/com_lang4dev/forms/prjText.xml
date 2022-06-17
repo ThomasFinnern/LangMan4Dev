@@ -8,26 +8,27 @@
 			readonly="true"
 	/>
 
-		<!-- project selection -->
-		<field
-				id="SelectProject"
-				name="SelectProject"
-				type="ProjectSelect"
-				label="COM_RSGALLERY2_SPECIFY_GALLERY_LABEL"
-				description="COM_RSGALLERY2_SPECIFY_GALLERY_DESC"
-				required="true"
-		/>
+	<!-- project selection -->
+	<field
+			id="selectProject"
+			name="selectProject"
+			type="ProjectSelect"
+			label="COM_LANG4DEV_SELECT_PROJECT"
+			description="COM_LANG4DEV_SELECT_PROJECT_DESC"
+			onchange="Joomla.submitform('translate.selectProject', this.form)"
+	/>
 
 
-		<!-- sub project selection -->
-		<field
-			id="SelectSubproject"
-			name="SelectSubproject"
-			type="SubprojectsListField"
+	<!-- sub project selection -->
+	<field
+			id="selectSubproject"
+			name="selectSubproject"
+			type="SubprojectSelectField"
 			label="COM_LANG4DEV_SELECT_SUB_PROJECT"
 			description="COM_LANG4DEV_SELECT_SUB_PROJECT_DESC"
-			required="true"
+			onchange="this.form.submit();"
 	/>
+
 
 
 </form>

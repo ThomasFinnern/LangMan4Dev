@@ -5,6 +5,24 @@ use Joomla\CMS\HTML\HTMLHelper;
 use Joomla\CMS\Language\Text;
 use Joomla\CMS\Router\Route;
 
+function renderProjectSelection ($form)
+{
+	?>
+	<div class="d-flex flex-row py-0 my-0">
+		<div class="mx-2 py-0 border border-primary">
+			<?php // echo $form->renderField('selectProject'); ?>
+		</div>
+
+		<div class="mx-2 py-0 border border-success">
+			<?php //echo $form->renderField('selectSubproject'); ?>
+		</div>
+
+	</div>
+	<?php
+
+	return;
+}
+
 
 function renderMissingPreparedTransIds ($missing, $comment = '')
 {
@@ -207,7 +225,7 @@ if ($this->isDoCommentIds) {
 
 	// ToDo: tell main lang and info
 
-//	echo $this->form->renderField('SelectSubprojects');
+	renderProjectSelection($this->form);
 
 	$idx = 1;
 

@@ -570,7 +570,7 @@ class ProjectModel extends AdminModel
             // Set ordering to the last item if not set
             if (empty($table->ordering))
             {
-                $db = $this->getDbo();
+	            $db = $this->getDbo();
                 $query = $db->getQuery(true)
                     ->select('MAX(ordering)')
                     ->from($db->quoteName('#__lang4dev_projects'));
