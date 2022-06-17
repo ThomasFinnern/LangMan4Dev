@@ -70,37 +70,38 @@ class ProjectSelectField extends ListField
 	 */
 	protected function getOptions()
 	{
-		$subprojects = array();
+		$projects = array();
 
 		try
 		{
-			// $user = Factory::getApplication()->getIdentity(); // Todo: Restrict to accessible subprojects
+			// $user = Factory::getApplication()->getIdentity(); // Todo: Restrict to accessible projects
 			$db    = Factory::getDbo();
 
 			$query = $db->getQuery(true)
-                ->select('id AS value, title AS text')
+				->select($db->quoteName('id', 'value'))
+				->select($db->quoteName('title', 'text'))
+
                 ->from($db->quoteName('#__lang4dev_projects'))
-//				->where($db->quoteName('id') . ' != 1' )
-//				->where($db->quoteName('published') . ' = 1')
 				// ToDo: Use option in XML to select ASC/DESC
-				->order('DSC');
+				->order($db->quoteName('id') . ' DESC')
+			;
 
 			// Get the options.
-			$subprojects = $db->setQuery($query)->loadObjectList();
+			$projects = $db->setQuery($query)->loadObjectList();
 		}
 		catch (\RuntimeException $e)
 		{
 			Factory::getApplication()->enqueueMessage($e->getMessage(), 'error');
 		}
 
-		$options = $subprojects;
+		$options = $projects;
 
 //        // Pad the option text with spaces using depth level as a multiplier.
 //        for ($i = 0, $n = count($options); $i < $n; $i++) {
 //            $options[$i]->text = str_repeat('- ', !$options[$i]->level ? 0 : $options[$i]->level - 1) . $options[$i]->text;
 //        }
 
-        // Put "Select an option" on the top of the list.
+		// Put "Select an option" on the top of the list.
 		array_unshift($options, HTMLHelper::_('select.option', '0', Text::_('COM_LANG4DEV_SELECT_PROJECT')));
 
         // Merge any additional options in the XML definition.

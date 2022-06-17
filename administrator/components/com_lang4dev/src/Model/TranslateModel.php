@@ -11,6 +11,7 @@ namespace Finnern\Component\Lang4dev\Administrator\Model;
 
 \defined('_JEXEC') or die;
 
+use Finnern\Component\Lang4dev\Administrator\Helper\sessionProjectId;
 use Joomla\CMS\Access\Rules;
 use Joomla\CMS\Association\AssociationServiceInterface;
 use Joomla\CMS\Categories\CategoryServiceInterface;
@@ -77,6 +78,21 @@ class TranslateModel extends AdminModel
 		{
 			return false;
 		}
+
+
+		//--- Set selection of project and subproject --------------------
+
+
+
+		$sessionProjectId = new sessionProjectId();
+		[$prjId, $subPrjId] = $sessionProjectId->getIds();
+
+		// $data ['selectProject'] = $prjId;
+		// $data ['selectSubproject'] = $subPrjId;
+
+		$form->setFieldAttribute('selectProject', 'value', $prjId);
+		$form->setFieldAttribute('selectSubproject', 'value', $prjId);
+		Option-> $this->value = array(2, 3);
 
 		return $form;
 	}

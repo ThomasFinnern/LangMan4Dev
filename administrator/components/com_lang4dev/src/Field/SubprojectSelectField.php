@@ -78,12 +78,13 @@ class SubprojectSelectField extends ListField
 			$db    = Factory::getDbo();
 
 			$query = $db->getQuery(true)
-                ->select('id AS value, title AS text')
+				->select($db->quoteName('id', 'value'))
+				->select($db->quoteName('title', 'text'))
+
                 ->from($db->quoteName('#__lang4dev_subprojects'))
-//				->where($db->quoteName('id') . ' != 1' )
-//				->where($db->quoteName('published') . ' = 1')
 				// ToDo: Use option in XML to select ASC/DESC
-				->order('DSC');
+				->order($db->quoteName('id') . ' DESC')
+				;
 
 			// Get the options.
 			$subprojects = $db->setQuery($query)->loadObjectList();

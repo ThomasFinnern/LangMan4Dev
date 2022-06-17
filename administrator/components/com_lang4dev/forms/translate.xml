@@ -33,7 +33,7 @@
 				type="ProjectSelect"
 				label="COM_LANG4DEV_SELECT_PROJECT"
 				description="COM_LANG4DEV_SELECT_PROJECT_DESC"
-				required="true"
+				onchange="Joomla.submitform('translate.selectProject', this.form)"
 		/>
 
 
@@ -44,8 +44,8 @@
 			type="SubprojectSelectField"
 			label="COM_LANG4DEV_SELECT_SUB_PROJECT"
 			description="COM_LANG4DEV_SELECT_SUB_PROJECT_DESC"
-			required="true"
-	/>
+			onchange="this.form.submit();"
+		/>
 
 
 

@@ -116,7 +116,7 @@ class projectController extends FormController
 		{
 
 			$input = Factory::getApplication()->input;
-			$data  = $this->input->post->get('jform', array(), 'array');
+			$data  = $input->post->get('jform', array(), 'array');
 
 			$id = (int)$data ['id'];
 			$prjId = $data ['name'];
@@ -212,7 +212,6 @@ class projectController extends FormController
 		$link = 'index.php?option=com_lang4dev&view=project&layout=edit&id=' . $id;
 		$this->setRedirect($link);
 	}
-
 
 	/**
      * Remove an item.

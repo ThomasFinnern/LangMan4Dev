@@ -11,6 +11,7 @@ namespace Finnern\Component\Lang4dev\Administrator\Controller;
 
 \defined('_JEXEC') or die;
 
+use Finnern\Component\Lang4dev\Administrator\Helper\sessionProjectId;
 use Joomla\CMS\Application\CMSApplication;
 use Joomla\CMS\Factory;
 use Joomla\CMS\Filesystem\File;
@@ -90,7 +91,7 @@ class TranslateController extends AdminController
 
 		// get project / subproject id
 
-		// set source lang ID in  project db
+		// set source lang ID in project db
 
 
 
@@ -149,7 +150,7 @@ class TranslateController extends AdminController
 			// ToDo: try ...
 
 			$input = Factory::getApplication()->input;
-			$data  = $this->input->post->get('jform', array(), 'array');
+			$data  = $input->post->get('jform', array(), 'array');
 
 			$targetlangId = $data ['createLangId'];
 			$sourcelangId = $data ['selectSourceLangId'];
@@ -432,5 +433,61 @@ class TranslateController extends AdminController
 
 		return $isNameVerified;
 	}
+
+	public function selectProject ()
+	{
+		Session::checkToken() or die(Text::_('JINVALID_TOKEN'));
+
+		$canCreateFile = true;
+
+		if ( ! $canCreateFile ) {
+
+			$OutTxt = Text::_('COM_LANG4DEV_TRANSLATE_SELECT_PROJECT_INVALID_RIGHTS');
+			$app    = Factory::getApplication();
+			$app->enqueueMessage($OutTxt, 'error');
+		} else {
+
+			$input = Factory::getApplication()->input;
+			$data  = $input->post->get('jform', array(), 'array');
+
+			$prjId       = (int) $data ['selectProject'];
+			$subPrjId    = (int) $data ['selectSubproject'];
+
+			// $prjId, $subPrjId
+
+			$sessionProjectId = new sessionProjectId();
+			$sessionProjectId->setIds($prjId, $subPrjId);
+		}
+
+		$OutTxt = "selectProject for translation has started:";
+		$app = Factory::getApplication();
+		$app->enqueueMessage($OutTxt, 'info');
+
+		$link = 'index.php?option=com_lang4dev&view=translate';
+		$this->setRedirect($link);
+
+		return true;
+	}
+
+	public function resetProject ()
+	{
+		Session::checkToken() or die(Text::_('JINVALID_TOKEN'));
+
+		$sessionProjectId = new sessionProjectId();
+		$sessionProjectId->resetIds();
+
+		$OutTxt = "resetProject for translation has started:";
+		$app = Factory::getApplication();
+		$app->enqueueMessage($OutTxt, 'info');
+
+		$link = 'index.php?option=com_lang4dev&view=translate';
+		$this->setRedirect($link);
+
+		return true;
+	}
+
+
+
+
 }
 

@@ -12,6 +12,8 @@ namespace Finnern\Component\Lang4dev\Administrator\View\Translate;
 \defined('_JEXEC') or die;
 
 require_once(__DIR__ . '/../../Helper/selectProject.php');
+
+use Finnern\Component\Lang4dev\Administrator\Helper\sessionProjectId;
 use Joomla\CMS\Component\ComponentHelper;
 use Joomla\CMS\Helper\ContentHelper;
 use Joomla\CMS\Factory;
@@ -91,6 +93,10 @@ class HtmlView extends BaseHtmlView
 //        }
 
         //--- project --------------------------------------------------------------------
+
+		// ToDo: load project from  db select id and then db data
+
+		//
 
 //		$this->isDoCommentIds = $l4dConfig->get('isDoComment_prepared_missing_ids');
 
@@ -191,13 +197,15 @@ class HtmlView extends BaseHtmlView
                 ToolbarHelper::custom('translate.selectSourceLangId', 'icon-flag', '', 'COM_LANG4DEV_TRANS_SELECT_SOURCE_LANG_ID', false);
                 ToolbarHelper::custom('translate.selectTargetLangId', 'icon-edit', '', 'COM_LANG4DEV_TRANS_SELECT_TARGET_LANG_ID', false);
 
-                ToolbarHelper::custom('translate.createLangId', 'icon-copy', '', 'COM_LANG4DEV_TRANSLATE_ADD_LANG_FILE', false);
-
+				ToolbarHelper::custom('translate.createLangId', 'icon-copy', '', 'COM_LANG4DEV_TRANSLATE_ADD_LANG_FILE', false);
 				ToolbarHelper::custom('translate.saveLangEdits', 'icon-save', '', 'COM_LANG4DEV_TRANSLATE_SAVE_EDITED_LANG_FILES', false); /// ToDo: true);
 
+				//ToolbarHelper::custom('translate.selectProject', 'icon-', '', 'COM_LANG4DEV_TRANSLATE_ADD_LANG_FILE', false);
+				ToolbarHelper::custom('translate.resetProject', 'icon-save', '', 'COM_LANG4DEV_TRANSLATE_SAVE_EDITED_LANG_FILES', false); /// ToDo: true);
 
 
-                break;
+
+				break;
 		}
 
 		// Set the title

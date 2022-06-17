@@ -93,6 +93,7 @@ class subprojectController extends FormController
 
 		// try ...
 
+		// check: does it need $input = ....
 		$data  = $this->input->post->get('jform', array(), 'array');
 
 		// sub project
