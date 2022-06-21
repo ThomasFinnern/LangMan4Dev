@@ -11,6 +11,7 @@ namespace Finnern\Component\Lang4dev\Administrator\Controller;
 
 \defined('_JEXEC') or die;
 
+use Finnern\Component\Lang4dev\Administrator\Helper\sessionProjectId;
 use Joomla\CMS\Application\CMSApplication;
 use Joomla\CMS\Factory;
 use Joomla\CMS\Language\Text;
@@ -23,7 +24,7 @@ use Joomla\CMS\Session\Session;
  *
  * @since __BUMP_VERSION__
  */
-class PrjItemsController extends AdminController
+class PrjTextsController extends AdminController
 {
     /**
      * Constructor.
@@ -54,7 +55,7 @@ class PrjItemsController extends AdminController
 	 *
 	 * @since __BUMP_VERSION__
 	 */
-	public function getModel($name = 'Gallery', $prefix = 'Administrator', $config = array('ignore_request' => true))
+	public function getModel($name = 'PrjTexts', $prefix = 'Administrator', $config = array('ignore_request' => true))
 	{
 		return parent::getModel($name, $prefix, $config);
 	}
@@ -66,11 +67,13 @@ class PrjItemsController extends AdminController
 	 *
 	 * @since __BUMP_VERSION__
 	 */
-	public function Search4PrjItems()
+
+	// ToDo: is needed ?
+	public function Search4PrjTexts()
     {
         $isOk = false;
 
-        $msg = "PrjItemsController.Search4PrjItems: ";
+        $msg = "PrjTextController.Search4PrjTexts: ";
         $msgType = 'notice';
 
         Session::checkToken() or die(Text::_('JINVALID_TOKEN'));
@@ -116,61 +119,39 @@ class PrjItemsController extends AdminController
         return $isOk;
     }
 
-    /**
-     *
-     * @return bool
-     *
-     * @since __BUMP_VERSION__
-     */
-    public function reinitNestedGalleryTable()
-    {
-        $isOk = false;
+	public function selectProject ()
+	{
+		Session::checkToken() or die(Text::_('JINVALID_TOKEN'));
 
-        $msg = "GalleriesController.reinitNestedGalleryTable: ";
-        $msgType = 'notice';
+		$canCreateFile = true;
 
-        Session::checkToken() or die(Text::_('JINVALID_TOKEN'));
+		if ( ! $canCreateFile ) {
 
-        $canAdmin = Factory::getApplication()->getIdentity()->authorise('core.manage', 'com_lang4dev');
-        if (!$canAdmin) {
-            $msg .= Text::_('JERROR_ALERTNOAUTHOR');
-            $msgType = 'warning';
-            // replace newlines with html line breaks.
-            str_replace('\n', '<br>', $msg);
-        } else {
+			$OutTxt = Text::_('COM_LANG4DEV_TRANSLATE_SELECT_PROJECT_INVALID_RIGHTS');
+			$app    = Factory::getApplication();
+			$app->enqueueMessage($OutTxt, 'error');
+		} else {
 
-            try {
-                // Get the model.
-                $model = $this->getModel('GalleryTree');
+			$input = Factory::getApplication()->input;
+			$data  = $input->post->get('jform', array(), 'array');
 
-                // Remove the items.
-                $isOk = $model->reinitNestedGalleryTable();
-                if ($isOk) {
-                    $msg .= Text::_('COM_LANG4DEV_GALLERIES_TABLE_RESET_SUCCESS');
-                } else {
-                    $msg .= Text::_('COM_LANG4DEV_GALLERIES_TABLE_RESET_ERROR') . ': ' . $model->getError();
-                }
+			$prjId       = (int) $data ['selectProject'];
+			$subPrjId    = (int) $data ['selectSubproject'];
 
-            } catch (\RuntimeException $e) {
-                $OutTxt = '';
-                $OutTxt .= 'Error executing reinitNestedGalleryTable: "' . '<br>';
-                $OutTxt .= 'Error: "' . $e->getMessage() . '"' . '<br>';
+			// $prjId, $subPrjId
 
-                $app = Factory::getApplication();
-                $app->enqueueMessage($OutTxt, 'error');
-            }
+			$sessionProjectId = new sessionProjectId();
+			$sessionProjectId->setIds($prjId, $subPrjId);
+		}
 
-        }
+		$OutTxt = "selectProject for translation has started:";
+		$app = Factory::getApplication();
+		$app->enqueueMessage($OutTxt, 'info');
 
-        $link = 'index.php?option=com_lang4dev&view=galleries&layout=galleries_tree';
-        $this->setRedirect($link, $msg, $msgType);
+		$link = 'index.php?option=com_lang4dev&view=prjTexts';
+		$this->setRedirect($link);
 
-        return $isOk;
-    }
-
-    /** @var \Lang4dev\Component\Lang4dev\Administrator\Model\GalleryTreeModel $model */
-
-
-
+		return true;
+	}
 
 }

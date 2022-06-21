@@ -81,12 +81,33 @@ class HtmlView extends BaseHtmlView
 		$oVersion = new lang4devVersion();
 		// $this->extensionVersion = $oVersion->getShortVersion(); // getLongVersion, getVersion
 		$this->extensionVersion = $oVersion->getVersion(); // getLongVersion, getVersion
-		
-		
+
+
+		//--- config --------------------------------------------------------------------
+
 		$l4dConfig = ComponentHelper::getComponent('com_lang4dev')->getParams();
+		$this->isDebugBackend = $l4dConfig->get('isDebugBackend');
 		$this->isDevelop = $l4dConfig->get('isDevelop');
 
-		
+		$this->main_langId = $l4dConfig->get('main_langId');
+		$this->trans_langId = $l4dConfig->get('trans_langId');
+
+		//--- Form --------------------------------------------------------------------
+
+		$this->form = $this->get('Form');
+//        $errors = $this->get('Errors')
+
+//        // Check for errors.
+//        if (count($errors = $this->get('Errors')))
+//        {
+//            throw new GenericDataException(implode("\n", $errors), 500);
+//        }
+
+		//--- project --------------------------------------------------------------------
+
+
+		// ...
+
 		/**
 		$this->items = $this->get('Items');
 

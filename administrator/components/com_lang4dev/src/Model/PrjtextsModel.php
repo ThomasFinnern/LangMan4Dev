@@ -22,7 +22,7 @@ use Joomla\CMS\MVC\Model\BaseModel;
  *
  * @since __BUMP_VERSION__
  */
-class PrjtextModel extends AdminModel
+class PrjTextsModel extends AdminModel
 {
 
 
@@ -44,7 +44,6 @@ class PrjtextModel extends AdminModel
 		{
 			return false;
 		}
-
 
 		return $form;
 	}

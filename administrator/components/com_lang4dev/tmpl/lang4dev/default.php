@@ -136,6 +136,24 @@ function DisplayControlButtons ($cmdButtons){
 
 }
 
+function renderProjectSelection ($form)
+{
+	?>
+	<div class="d-flex flex-row py-0 my-0">
+		<div class="mx-2 py-0 border border-primary">
+			<?php echo $form->renderField('selectProject'); ?>
+		</div>
+
+		<div class="mx-2 py-0 border border-success">
+			<?php echo $form->renderField('selectSubproject'); ?>
+		</div>
+
+	</div>
+	<?php
+
+	return;
+}
+
 
 
 ?>
@@ -169,6 +187,10 @@ function DisplayControlButtons ($cmdButtons){
         <h2>Lang4Dev</h2>
 
         <div style="color:red;">ToDo: select a project input</div>
+
+	    <?php renderProjectSelection ($this->form); ?>
+
+
         <div style="color:red;">ToDo: </div>
 
         <hr>

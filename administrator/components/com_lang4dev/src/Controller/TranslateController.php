@@ -60,7 +60,7 @@ class TranslateController extends AdminController
 	 *
 	 * @since __BUMP_VERSION__
 	 */
-	public function getModel($name = 'Gallery', $prefix = 'Administrator', $config = array('ignore_request' => true))
+	public function getModel($name = 'Translate', $prefix = 'Administrator', $config = array('ignore_request' => true))
 	{
 		return parent::getModel($name, $prefix, $config);
 	}

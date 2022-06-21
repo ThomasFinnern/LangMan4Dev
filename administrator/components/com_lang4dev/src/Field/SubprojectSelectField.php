@@ -56,15 +56,25 @@ class SubprojectSelectField extends ListField
 		/**
 		if ($this->form->getValue('id', 0) == 0)
 		{
-		return '<span class="readonly">' . Text::_('COM_MENUS_ITEM_FIELD_ORDERING_TEXT') . '</span>';
+			return '<span class="readonly">' . Text::_('COM_MENUS_ITEM_FIELD_ORDERING_TEXT') . '</span>';
 		}
 		else
 		{
 		return parent::getInput();
 		}
 		/**/
-
-		return parent::getInput();
+		if($subPrjId > 0)
+		{
+			return parent::getInput();
+		}
+		else {
+			if($subPrjId == 0) {
+				return '<span class="readonly">' . Text::_('All sub projects') . '</span>';
+			} else
+			{
+				return '<span class="readonly">' . Text::_('??? -1 ???') . '</span>';
+			}
+		}
 	}
 
 
