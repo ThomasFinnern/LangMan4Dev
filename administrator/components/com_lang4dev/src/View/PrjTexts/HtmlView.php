@@ -12,6 +12,8 @@ namespace Finnern\Component\Lang4dev\Administrator\View\PrjTexts;
 \defined('_JEXEC') or die;
 
 require_once(__DIR__ . '/../../Helper/selectProject.php');
+
+use Finnern\Component\Lang4dev\Administrator\Helper\sessionTransLangIds;
 use Joomla\CMS\Component\ComponentHelper;
 use Joomla\CMS\Filesystem\File;
 use Joomla\CMS\Filesystem\Path;
@@ -82,9 +84,16 @@ class HtmlView extends BaseHtmlView
 		$project->scanCode4TransIds();
 		$project->scanCode4TransStrings();
 
+		//--- Main and target lang file --------------------------------------------------------------
+
+		$sessionTransLangIds = new sessionTransLangIds ();
+		[$mainLangId, $transLangId] = $sessionTransLangIds->getIds();
+
+		$this->form->setValue('selectSourceLangId', null, $mainLangId);
 
 
-        /**
+
+		/**
 		HTMLHelper::_('sidebar.setAction', 'index.php?option=com_lang4dev&view=config&layout=RawView');
 		/**
 		$Layout = Factory::getApplication()->input->get('layout');

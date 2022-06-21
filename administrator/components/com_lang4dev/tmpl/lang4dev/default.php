@@ -135,6 +135,23 @@ function DisplayControlButtons ($cmdButtons){
     }
 
 }
+function renderLangIdTexts ($form)
+{
+	?>
+	<div class="d-flex flex-row py-0 my-0">
+		<div class="mx-2 py-0 border border-primary">
+			<?php echo $form->renderField('selectSourceLangId'); ?>
+		</div>
+
+		<div class="mx-2 py-0 border border-success">
+			<?php echo $form->renderField('selectTargetLangId'); ?>
+		</div>
+
+	</div>
+	<?php
+
+	return;
+}
 
 function renderProjectSelection ($form)
 {
@@ -190,8 +207,10 @@ function renderProjectSelection ($form)
 
 	    <?php renderProjectSelection ($this->form); ?>
 
+	    <?php renderLangIdTexts ($this->form); ?>
 
-        <div style="color:red;">ToDo: </div>
+
+	    <div style="color:red;">ToDo: </div>
 
         <hr>
 

@@ -164,12 +164,9 @@ function renderLangFileEditText ($langId, $langFile, $subPrjPath,
 ?>
 <form action="<?php echo Route::_('index.php?option=com_lang4dev&view=translate'); ?>" method="post" name="adminForm" id="item-form" class="form-validate">
 
-    <?php
-//    echo 'default.php: ' . realpath(dirname(__FILE__));
-    ?>
-    <?php renderLangIdTexts ($this->form); ?>
+	<?php renderProjectSelection ($this->form); ?>
 
-    <?php renderProjectSelection ($this->form); ?>
+	<?php renderLangIdTexts ($this->form); ?>
 
     <?php renderCheckAll ($this->form); ?>
 

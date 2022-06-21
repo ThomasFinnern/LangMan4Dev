@@ -11,6 +11,7 @@ namespace Finnern\Component\Lang4dev\Administrator\View\Lang4Dev;
 
 \defined('_JEXEC') or die;
 
+use Finnern\Component\Lang4dev\Administrator\Helper\sessionTransLangIds;
 use Joomla\CMS\Component\ComponentHelper;
 use Joomla\CMS\Helper\ContentHelper;
 use Joomla\CMS\Factory;
@@ -105,6 +106,14 @@ class HtmlView extends BaseHtmlView
 
 		//--- project --------------------------------------------------------------------
 
+
+		//--- Main and target lang file --------------------------------------------------------------
+
+		$sessionTransLangIds = new sessionTransLangIds ();
+		[$mainLangId, $transLangId] = $sessionTransLangIds->getIds();
+
+		$this->form->setValue('selectSourceLangId', null, $mainLangId);
+		$this->form->setValue('selectTargetLangId', null, $transLangId);
 
 		// ...
 

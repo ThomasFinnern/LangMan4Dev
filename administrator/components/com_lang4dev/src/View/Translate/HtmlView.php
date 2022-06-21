@@ -14,6 +14,7 @@ namespace Finnern\Component\Lang4dev\Administrator\View\Translate;
 require_once(__DIR__ . '/../../Helper/selectProject.php');
 
 use Finnern\Component\Lang4dev\Administrator\Helper\sessionProjectId;
+use Finnern\Component\Lang4dev\Administrator\Helper\sessionTransLangIds;
 use Joomla\CMS\Component\ComponentHelper;
 use Joomla\CMS\Helper\ContentHelper;
 use Joomla\CMS\Factory;
@@ -127,6 +128,15 @@ class HtmlView extends BaseHtmlView
 		$project->readAllLangFiles();
 
 		$project->alignTranslationsByMain($this->main_langId);
+
+		//--- Main and target lang file --------------------------------------------------------------
+
+		$sessionTransLangIds = new sessionTransLangIds ();
+		[$mainLangId, $transLangId] = $sessionTransLangIds->getIds();
+
+		$this->form->setValue('selectSourceLangId', null, $mainLangId);
+		$this->form->setValue('selectTargetLangId', null, $transLangId);
+
 
 		//---  --------------------------------------------------------------
 		/**

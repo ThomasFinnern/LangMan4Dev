@@ -12,6 +12,7 @@ namespace Finnern\Component\Lang4dev\Administrator\Controller;
 \defined('_JEXEC') or die;
 
 use Finnern\Component\Lang4dev\Administrator\Helper\sessionProjectId;
+use Finnern\Component\Lang4dev\Administrator\Helper\sessionTransLangIds;
 use Joomla\CMS\Application\CMSApplication;
 use Joomla\CMS\Factory;
 use Joomla\CMS\Language\Text;
@@ -144,7 +145,7 @@ class PrjTextsController extends AdminController
 			$sessionProjectId->setIds($prjId, $subPrjId);
 		}
 
-		$OutTxt = "selectProject for translation has started:";
+		$OutTxt = "Project for prjTexts has changed:";
 		$app = Factory::getApplication();
 		$app->enqueueMessage($OutTxt, 'info');
 
@@ -153,5 +154,41 @@ class PrjTextsController extends AdminController
 
 		return true;
 	}
+
+	public function selectLangIds ()
+	{
+		Session::checkToken() or die(Text::_('JINVALID_TOKEN'));
+
+		$canCreateFile = true;
+
+		if ( ! $canCreateFile ) {
+
+			$OutTxt = Text::_('COM_LANG4DEV_TRANSLATE_SELECT_PROJECT_INVALID_RIGHTS');
+			$app    = Factory::getApplication();
+			$app->enqueueMessage($OutTxt, 'error');
+		} else {
+
+			$input = Factory::getApplication()->input;
+			$data  = $input->post->get('jform', array(), 'array');
+
+			$mainLangId  = $data ['selectSourceLangId'];
+			$transLangId = $data ['selectTargetLangId'];
+
+			// $prjId, $subPrjId
+
+			$sessionTransLangIds = new sessionTransLangIds ();
+			$sessionTransLangIds->setIds($mainLangId, $transLangId);
+		}
+
+		$OutTxt = "Lang Id for prjText has changed:";
+		$app = Factory::getApplication();
+		$app->enqueueMessage($OutTxt, 'info');
+
+		$link = 'index.php?option=com_lang4dev&view=prjTexts';
+		$this->setRedirect($link);
+
+		return true;
+	}
+
 
 }

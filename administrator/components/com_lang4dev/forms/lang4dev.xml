@@ -39,4 +39,21 @@
 			onchange="Joomla.submitform('lang4dev.selectProject', this.form)"
 	/>
 
+	<field
+			name="selectSourceLangId"
+			type="text"
+			label="COM_LANG4DEV_TRANS_SOURCE_LANG_ID"
+			description="COM_LANG4DEV_TRANS_SOURCE_LANG_ID_DESC"
+			onchange="Joomla.submitform('lang4dev.selectLangIds', this.form)"
+	/>
+
+	<field
+			name="selectTargetLangId"
+			type="text"
+			label="COM_LANG4DEV_TRANS_TARGET_LANG_ID"
+			description="COM_LANG4DEV_TRANS_TARGET_LANG_ID_DESC"
+			onchange="Joomla.submitform('lang4dev.selectLangIds', this.form)"
+	/>
+
+
 </form>
