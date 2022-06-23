@@ -936,6 +936,97 @@ class SubprojectModel extends AdminModel
 //    }
 //
 
+	//
+	public function mergeSubProject($subProject, $parentId)
+	{
+		//--- make data complete -----------------------------
 
+		// check for prefix
+		$subProject->retrieveMainPrefixId ();
+
+		// ToDo: check for lexisting lang Ids
+
+		$existingId = $this->checkSubPrjDoesExist ($subProject, $parentId);
+
+		if ($existingId > 0) {
+			$this->mergeSubProject_DB ($existingId, $subProject);
+		} else {
+			$this->createSubProject_DB ($subProject, $parentId);
+		}
+
+
+	}
+
+	private function mergeSubProject_DB($existingId, $subProject)
+	{
+		$table      = $this->getTable();
+		$table->load($existingId);
+
+		$data = [];
+
+		// $data ['title'] = $subProject->prjId . '_' . projectType::getPrjTypeText($subProject->prjId);
+		// $data ['alias'] = $subProject->;
+
+		$data ['prjId'] = $subProject->prjId;
+		$data ['subPrjType'] = $subProject->prjType;
+		$data ['root_path'] = $subProject->prjRootPath;
+		$data ['prefix`'] = $subProject->langIdPrefix ;
+		$data ['notes'] = '%';
+		$data ['prjXmlPathFilename'] = $subProject->prjXmlPathFilename;
+		$data ['installPathFilename'] = $subProject->installPathFilename;
+		// already set $data ['parent_id'] = $subProject->;
+		//$data ['twin_id'] = $subProject->;
+		// ToDo: $data ['lang_path_type'] = $subProject->;
+		// ToDo: $data ['lang_ids'] = $subProject->;
+
+	}
+
+	private function createSubProject_DB($subProject, $parentId)
+	{
+		// $table      = $this->getTable();
+
+		$data = [];
+
+		$data ['title'] = $subProject->prjId . '_' . projectType::getPrjTypeText($subProject->prjId);
+		$data ['alias'] = strtolower($data ['title']);
+
+		$data ['prjId'] = $subProject->prjId;
+		$data ['subPrjType'] = $subProject->prjType;
+		$data ['root_path'] = $subProject->prjRootPath;
+		$data ['prefix`'] = $subProject->langIdPrefix ;
+		$data ['notes'] = '%';
+		$data ['prjXmlPathFilename'] = $subProject->prjXmlPathFilename;
+		$data ['installPathFilename'] = $subProject->installPathFilename;
+		$data ['parent_id'] = $parentId;
+		//$data ['twin_id'] = $subProject->;
+		// ToDo: $data ['lang_path_type'] = $subProject->;
+		// ToDo: $data ['lang_ids'] = $subProject->;
+
+
+		return $this->save($data);
+
+	}
+
+	private function checkSubPrjDoesExist($subProject, $parentId)
+	{
+		$existingId = false; // indicates nothing found in DB
+
+		$prjType = $subProject->prjType;
+		$prjId = $subProject->prjId;
+
+
+		$db = Factory::getDbo();
+		$query = $db->getQuery(true)
+			->select('id')
+			->from($db->quoteName('#__lang4dev_subprojects'))
+			->where($db->quoteName('prjId') . ' = ' . $db->quoteName($prjId))
+			->where($db->quoteName('subPrjType') . ' = ' . (int) $prjType)
+			->where($db->quoteName('parent_id') . ' = ' . (int) $parentId)
+		;
+		$db->setQuery($query);
+		$existingId = $db->loadResult();
+
+		return (int) $existingId;
+	}
 
 }

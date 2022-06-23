@@ -23,7 +23,7 @@ use Joomla\Registry\Registry;
 use Joomla\Utilities\ArrayHelper;
 
 use Finnern\Component\Lang4dev\Administrator\Helper\langProject;
-use Finnern\Component\Lang4dev\Administrator\Helper\langSubProject;
+use Finnern\Component\Lang4dev\Administrator\Helper\projectType;
 use Finnern\Component\Lang4dev\Administrator\Helper\subPrjPath;
 
 /**
@@ -122,12 +122,16 @@ class projectController extends FormController
 			$prjId = $data ['name'];
 			$prjRootPath = $data ['root_path'];
 
+			$prjModel = $this->getModel ();
 
+			//--- path to project xml file ---------------------------------
 
 			// detect path by project name or root path is given
 			$oSubPrjPath = new subPrjPath($prjId,$prjRootPath);
 //			[$isRootValid, $isJoomlaPath, $rootPath, $subPrjPath]
 //				= oSubPrjPath->detectRootPath ($prjId,$prjRootPath);
+
+			//--- improve user path (too short, including root ...) ---------------------------------
 
 			$isChanged = false;
 
@@ -140,6 +144,7 @@ class projectController extends FormController
 
 					// write back into input
 					$isChanged = true;
+
 					//$input->set('jform['root_path']', $prjRootPath);
 					$data ['root_path'] = $prjRootPath;
 				}
@@ -151,56 +156,32 @@ class projectController extends FormController
 
 				$this->input->post->set('jform', $data);
 
+				$prjModel->save ($data);
 			}
 
+			// Was first write of this project
+			if ($id == -1) {
 
-			//--- search sub projects ---------------------------------
+				//$id = $prjModel->highestProjectId_DB ();
+				$id = $prjModel->justSavedId ();
+			}
 
-			// List of existing sub projects
+			//--- extract sub projects ---------------------------------
 
-			// search for missing subprojects
-
-				// create if necessary ???
-
-
-
-			$model = $this->getModel ();
-
-			// Test whether the data is valid.
-			//$validData = $model->validate($form, $data);
-
-			// Check for validation errors.
-			//if ($validData === false)
+			$subProjects = $prjModel->subProjectsByPrjId ($oSubPrjPath);
+			// ToDo: add $subProjects = $prjModel->subProjectsByManifest ($oSubPrjPath);
 
 
+			//--- save sub project changes ---------------------------------
 
+			$subPrjModel = $this->getModel ('Subproject');
 
+			foreach ($subProjects as $subProject)
+			{
+				//  includes save
+				$subPrjModel->MergeSubProject ($subProject, $id);
 
-
-
-			$model->save ($data);
-
-			/**
-			 * $prj = new langProject ();
-			 *
-			 * $subPrj = $prj->addSubProject('com_lang4dev',
-			 * langSubProject::PRJ_TYPE_COMP_BACK_SYS,
-			 * JPATH_ADMINISTRATOR . '/components/com_lang4dev',
-			 * );
-			 *
-			 * $subPrj = $prj->addSubProject('com_lang4dev',
-			 * langSubProject::PRJ_TYPE_COMP_BACK,
-			 * JPATH_ADMINISTRATOR. '/components/com_lang4dev'
-			 * );
-			 *
-			 * $subPrj = $prj->addSubProject('com_lang4dev',
-			 * langSubProject::PRJ_TYPE_COMP_SITE,
-			 * JPATH_SITE . '/components/com_lang4dev'
-			 * );
-			 * /**/
-
-			// model =
-			// save
+			}
 
 		}
 

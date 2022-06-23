@@ -25,6 +25,7 @@ use Joomla\Utilities\ArrayHelper;
 // ???? use Symfony\Component\Yaml\Yaml;
 
 use Finnern\Component\Lang4dev\Administrator\Helper\langSubProject;
+use Finnern\Component\Lang4dev\Administrator\Helper\projectType;
 
 
 

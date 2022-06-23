@@ -12,7 +12,7 @@ namespace Finnern\Component\Lang4dev\Administrator\Helper;
 use Joomla\CMS\Factory;
 use Joomla\CMS\Filesystem\Folder;
 
-use Finnern\Component\Lang4dev\Administrator\Helper\langSubProject;
+use Finnern\Component\Lang4dev\Administrator\Helper\projectType;
 
 class sysFilesContent
 {
@@ -25,7 +25,18 @@ class sysFilesContent
 	public $installPathFilename;
 	public $langIdPrefix;
 
-	public function findPrjFiles ($prjId='', $prjType=langSubProject::PRJ_TYPE_NONE,
+	public function __construct($prjId = '',
+		$prjType = projectType::PRJ_TYPE_NONE,
+		$prjRootPath = '',
+		$prjXmlFilePath = '')
+	{
+		$this->prjId       = $prjId;
+		$this->prjType     = $prjType;
+		$this->prjRootPath = $prjRootPath;
+		$this->prjXmlFilePath = $prjXmlFilePath;
+	}
+
+	public function findPrjFiles ($prjId='', $prjType=projectType::PRJ_TYPE_NONE,
                                   $prjRootPath = '', $prjXmlFilePath = '') {
 
         $isFileFound = false;
@@ -37,7 +48,7 @@ class sysFilesContent
 		        $this->prjId = $prjId;
 	        }
 
-	        if ($prjType != langSubProject::PRJ_TYPE_NONE) {
+	        if ($prjType != projectType::PRJ_TYPE_NONE) {
 		        $this->prjType = $prjType;
 	        }
 
@@ -51,7 +62,7 @@ class sysFilesContent
 
             //--- file searches by type  ------------------------------------
 
-	        [$isSearchXml, $isSearchInstall] = $this->enabledByType ($this->prjType);
+	        [$isSearchXml, $isSearchInstall] = projectType::enabledByType ($this->prjType);
 
 	        $isFileFound = false;
 
@@ -246,6 +257,7 @@ class sysFilesContent
 
         try {
 
+			// todo: simplexml_load_file()
             // content of file
             $context = stream_context_create(array('http' => array('header' => 'Accept: application/xml')));
             $xml = file_get_contents($prjXmlPathFileName, false, $context);
@@ -471,34 +483,12 @@ class sysFilesContent
 		return $isBaseNameSet;
 	}
 
-	private function enabledByType($prjType)
-	{
-		$isSearchXml = false;
-		$isSearchInstall = false;
-
-		if (   $prjType == langSubProject::PRJ_TYPE_COMP_BACK_SYS
-			|| $prjType == langSubProject::PRJ_TYPE_MODEL
-			|| $prjType == langSubProject::PRJ_TYPE_PLUGIN
-			) {
-			$isSearchXml = true;
-		}
-
-		if (   $prjType == langSubProject::PRJ_TYPE_COMP_BACK_SYS
-			|| $prjType == langSubProject::PRJ_TYPE_MODEL
-			|| $prjType == langSubProject::PRJ_TYPE_PLUGIN
-			) {
-			$isSearchInstall = true;
-		}
-
-		return [$isSearchXml, $isSearchInstall];
-	}
-
     private function projectFileName()
     {
         $projectFileName = $this->prjId;
 
-        if (   $this->prjType == langSubProject::PRJ_TYPE_COMP_BACK_SYS
-            || $this->prjType == langSubProject::PRJ_TYPE_COMP_BACK)
+        if (   $this->prjType == projectType::PRJ_TYPE_COMP_BACK_SYS
+            || $this->prjType == projectType::PRJ_TYPE_COMP_BACK)
         {
             // $projectFileName = 'com_' . $this->prjId;
             $projectFileName = substr($this->prjId, 4);

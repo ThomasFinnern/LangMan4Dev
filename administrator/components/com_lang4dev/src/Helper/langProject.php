@@ -13,6 +13,7 @@ use Joomla\CMS\Filesystem\File;
 use Joomla\CMS\Filesystem\Folder;
 
 use Finnern\Component\Lang4dev\Administrator\Helper\langSubProject;
+use Finnern\Component\Lang4dev\Administrator\Helper\projectType;
 
 class langProject
 {
@@ -23,7 +24,9 @@ class langProject
 
     public $isSysFileFound = false;
 	public $langIdPrefix = "";
-	public $twinId = "";
+
+	//external
+	//public $twinId = "";
 
 
     /**
@@ -63,8 +66,8 @@ class langProject
 			foreach ($this->subProjects as $subProject)
 			{
 
-				$hasSysFiles = ! ($subProject->prjType == langSubProject::PRJ_TYPE_COMP_BACK
-					|| $subProject->prjType == langSubProject::PRJ_TYPE_COMP_SITE);
+				$hasSysFiles = ! ($subProject->prjType == projectType::PRJ_TYPE_COMP_BACK
+					|| $subProject->prjType == projectType::PRJ_TYPE_COMP_SITE);
 
 				// On sys file receive langIdPrefix
 					$subProject->findPrjFiles();

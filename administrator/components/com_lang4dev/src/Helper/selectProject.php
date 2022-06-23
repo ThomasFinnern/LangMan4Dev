@@ -17,17 +17,17 @@ function createPrj_RSG2 () {
 	$prjLang4dev = new langProject ();
 
 	$subPrj = $prjLang4dev->addSubProject('com_lang4dev',
-		langSubProject::PRJ_TYPE_COMP_BACK_SYS,
+		projectType::PRJ_TYPE_COMP_BACK_SYS,
 		JPATH_ADMINISTRATOR . '/components/com_lang4dev',
 	);
 
 	$subPrj = $prjLang4dev->addSubProject('com_lang4dev',
-		langSubProject::PRJ_TYPE_COMP_BACK,
+		projectType::PRJ_TYPE_COMP_BACK,
 		JPATH_ADMINISTRATOR. '/components/com_lang4dev'
 	);
 
 	$subPrj = $prjLang4dev->addSubProject('com_lang4dev',
-		langSubProject::PRJ_TYPE_COMP_SITE,
+		projectType::PRJ_TYPE_COMP_SITE,
 		JPATH_SITE . '/components/com_lang4dev'
 	);
 
@@ -40,38 +40,38 @@ function createPrj_JoomGallery () {
 	$prjJoomGallery = new langProject ();
 
 	$subPrj = $prjJoomGallery->addSubProject('com_joomgallery',
-		langSubProject::PRJ_TYPE_COMP_BACK_SYS,
+		projectType::PRJ_TYPE_COMP_BACK_SYS,
 		JPATH_ADMINISTRATOR . '/components/com_joomgallery',
 	);
 
 	$subPrj = $prjJoomGallery->addSubProject('com_joomgallery',
-		langSubProject::PRJ_TYPE_COMP_BACK,
+		projectType::PRJ_TYPE_COMP_BACK,
 		JPATH_ADMINISTRATOR. '/components/com_joomgallery'
 	);
 
 	$subPrj = $prjJoomGallery->addSubProject('com_joomgallery',
-		langSubProject::PRJ_TYPE_COMP_SITE,
+		projectType::PRJ_TYPE_COMP_SITE,
 		JPATH_SITE . '/components/com_lang4dev'
 	);
 
 	$subPrj = $prjJoomGallery->addSubProject('joomgallerycategories',
-		langSubProject::PRJ_TYPE_PLUGIN,
+		projectType::PRJ_TYPE_PLUGIN,
 		JPATH_PLUGINS . '/finder/joomgallerycategories'
 	);
 
 	$subPrj = $prjJoomGallery->addSubProject('joomgalleryimages',
-		langSubProject::PRJ_TYPE_PLUGIN,
+		projectType::PRJ_TYPE_PLUGIN,
 		JPATH_PLUGINS . '/finder/joomgalleryimages'
 	);
 
 	$subPrj = $prjJoomGallery->addSubProject('joomgallerycategories',
-		langSubProject::PRJ_TYPE_PLUGIN,
+		projectType::PRJ_TYPE_PLUGIN,
 		JPATH_PLUGINS . '/privacy/joomgalleryimages'
 	);
 
 
 	$subPrj = $prjJoomGallery->addSubProject('web-joomgallery',
-		langSubProject::PRJ_TYPE_PLUGIN,
+		projectType::PRJ_TYPE_PLUGIN,
 		JPATH_PLUGINS . '/webservices/joomgallery'
 	);
 
@@ -85,12 +85,12 @@ function createPrj_Lang4Dev ()
 		$prjLang4dev = new langProject ();
 
 		$subPrj = $prjLang4dev->addSubProject('com_lang4dev',
-			langSubProject::PRJ_TYPE_COMP_BACK_SYS,
+			projectType::PRJ_TYPE_COMP_BACK_SYS,
 			JPATH_ADMINISTRATOR . '/components/com_lang4dev'
 		);
 
 		$subPrj = $prjLang4dev->addSubProject('com_lang4dev',
-			langSubProject::PRJ_TYPE_COMP_BACK,
+			projectType::PRJ_TYPE_COMP_BACK,
 			JPATH_ADMINISTRATOR . '/components/com_lang4dev'
 		);
 

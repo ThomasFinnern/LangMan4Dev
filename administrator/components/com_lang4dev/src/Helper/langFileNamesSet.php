@@ -34,7 +34,7 @@ class langFileNamesSet
     public $langFileNames = [];
 
     protected $useLangSysIni = false;
-    protected $isLangInFolders = false; // lang file are divided in folders instead of containing the name i front
+    protected $isLangInFolders = false; // lang file are divided in folders instead of containing the name in front
     protected $isLangIdPre2Name = false; // ToDo: is this needed ?
 
     public function __construct($basePath = '') {

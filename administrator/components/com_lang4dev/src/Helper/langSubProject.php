@@ -17,16 +17,18 @@ use Finnern\Component\Lang4dev\Administrator\Helper\searchTransIdLocations;
 
 class langSubProject extends langFileNamesSet
 {
-	public $prjId = "";
-	public $prjType = "";
+	public $prjId = '';
+	public $prjType = 0;
 	public $prjRootPath = '';
 	public $prjXmlFilePath = '';
 
-	public $prjXmlPathFilename = "";
-	public $installPathFilename = "";
-    public $langIdPrefix = "";
+	public $prjXmlPathFilename = '';
+	public $installPathFilename = '';
+    public $langIdPrefix = '';
 
-	public $twinId = "";
+	// external
+    // public $parentId = 0;
+	// public $twinId = '';
 
 
     // !!! ToDo: text_prefix !!!
@@ -39,63 +41,24 @@ class langSubProject extends langFileNamesSet
 	protected $transStringsLocations = [];
     protected $transIdsClassified;
 
-
-    // ToDo: MainLangId
-
-	/*   */
-	const PRJ_TYPE_NONE = 0;
-	const PRJ_TYPE_COMP_BACK_SYS = 1;
-	const PRJ_TYPE_COMP_BACK = 2;
-	const PRJ_TYPE_COMP_SITE = 3;
-	const PRJ_TYPE_MODEL = 4;
-	const PRJ_TYPE_PLUGIN = 5;
-	// const PRJ_TYPE_TEMPLATE = 1;
-
-
-	public function __construct($prjId='',
-		$prjType= '', // ToDo: enum from sub ?
-								$prjRootPath = '',
-                                $prjXmlFilePath = '')
-    {
-
-	    $this->prjId = $prjId;
-	    $this->prjRootPath = $prjRootPath;
-	    $this->prjType = $prjType;
-
-	    $this->prjXmlFilePath = $prjXmlFilePath;
+	public function __construct($prjId = '',
+		$prjType = projectType::PRJ_TYPE_NONE,
+		$prjRootPath = '',
+		$prjXmlFilePath = '')
+	{
+		$this->prjType     = $prjType;
+		$this->prjId       = $prjId;
+		$this->prjRootPath = $prjRootPath;
+		$this->prjXmlFilePath = $prjXmlFilePath;
 
 //	    $this->prjXmlFile = $prjXmlFile;
 //	    $this->prjScriptFile = $prjScriptFile;
 
-		if ($this->prjType == langSubProject::PRJ_TYPE_COMP_BACK_SYS)
+		if ($this->prjType == projectType::PRJ_TYPE_COMP_BACK_SYS)
 		{
 			$this->useLangSysIni = true;
 		}
-    }
-
-
-
-
-    private function subPrjHasSysFiles ()
-    {
-	    /* not valid for prjType == ??? *
-	    $hasSysFiles = ! ($this->prjType == langSubProject::PRJ_TYPE_COMP_BACK
-	    || $this->prjType == langSubProject::PRJ_TYPE_COMP_SITE);
-	    /**/
-
-	    $hasSysFiles = true;
-
-		if ($this->prjType == langSubProject::PRJ_TYPE_COMP_BACK) {
-			$hasSysFiles = false;
-		}
-
-		if ($this->prjType == langSubProject::PRJ_TYPE_COMP_SITE) {
-			$hasSysFiles = false;
-		}
-
-		return $hasSysFiles;
-    }
-
+	}
 
     private function checkRootPath ()
     {
@@ -136,6 +99,19 @@ class langSubProject extends langFileNamesSet
 		return $isOk;
     }
 
+	public function retrieveMainPrefixId () {
+
+		// ToDo: create class for maintenance to make public all single variables, then use class for class $prefix ...
+		// ToDo: adjust finder below accordingly
+
+		// ToDo: replace with better solution -> may need mor through search for different palces plugin, modules
+		$finder = new sysFilesContent($this->prjId, $this->prjType, $this->prjRootPath, $this->prjXmlFilePath);
+
+		// ToDo: prjXmlFilePath <-> use prjXmlPathFileName (actually empty so ...
+
+		[$fileName, $langIdPrefix] = $finder->extractPrjVars($this->prjXmlFilePath);
+		$this->langIdPrefix = $langIdPrefix;
+	}
 
     public function findPrjFiles () {
 
@@ -152,14 +128,14 @@ class langSubProject extends langFileNamesSet
 
 				//--- pre check type -----------------
 
-				if ($this->prjType == langSubProject::PRJ_TYPE_COMP_BACK_SYS)
+				if ($this->prjType == projectType::PRJ_TYPE_COMP_BACK_SYS)
 				{
 					$this->useLangSysIni = true;
 				}
 
 				//--- project XML and script file -------------------------------------------------
 
-				$hasSysFiles = $this->subPrjHasSysFiles();
+				$hasSysFiles = projectType::subPrjHasSysFiles($this->prjType);
 				if ($hasSysFiles)
 				{
 
@@ -429,37 +405,9 @@ class langSubProject extends langFileNamesSet
 	}
 
 	public function getPrjTypeText () {
-		$typename = '? type' ;
 
-		switch ($this->prjType){
+		return projectType::getPrjTypeText ($this->prjType);
 
-			case self::PRJ_TYPE_NONE:
-				$typename = 'type-none' ;
-				break;
-
-			case self::PRJ_TYPE_COMP_BACK_SYS:
-				$typename = 'type-backend-sys' ;
-				break;
-
-			case self::PRJ_TYPE_COMP_BACK:
-				$typename = 'type-backend' ;
-				break;
-
-			case self::PRJ_TYPE_COMP_SITE:
-				$typename = 'type-site' ;
-				break;
-
-			case self::PRJ_TYPE_MODEL:
-				$typename = 'type-model' ;
-				break;
-
-			case self::PRJ_TYPE_PLUGIN:
-				$typename = 'type-plugin' ;
-				break;
-
-		}
-
-		return $typename;
 	}
 
     public function detectLangFiles() {

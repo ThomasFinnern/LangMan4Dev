@@ -102,7 +102,7 @@ class sessionProjectId
 			{
 				//--- retrieve last created from DB ---------------------------------
 
-				$prjId = $this->maxPrjId_DB ();
+				$prjId = $this->highestProjectId_DB ();
 				$subPrjId = 0; // view all
 			}
 		}
@@ -116,7 +116,7 @@ class sessionProjectId
 	 *
 	 * @since version
 	 */
-	private function maxPrjId_DB()
+	private function highestProjectId_DB()
 	{
 		$max = 0; // indicates nothing found in DB
 

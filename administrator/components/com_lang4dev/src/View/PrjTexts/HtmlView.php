@@ -30,7 +30,7 @@ use Joomla\CMS\Toolbar\ToolbarHelper;
 use Finnern\Component\Lang4dev\Administrator\Helper\langFile;
 //use Finnern\Component\Lang4dev\Administrator\Helper\langFileNamesSet;
 //use Finnern\Component\Lang4dev\Administrator\Helper\transIdLocationsSearch;
-use Finnern\Component\Lang4dev\Administrator\Helper\langSubProject;
+use Finnern\Component\Lang4dev\Administrator\Helper\projectType;
 use function Finnern\Component\Lang4dev\Administrator\Helper\selectProject;
 
 /**

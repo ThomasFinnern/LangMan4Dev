@@ -1,16 +1,18 @@
 <?php
 /**
- * @package     Joomla.Administrator
- * @subpackage  com_lang4dev
+ * @package       Joomla.Administrator
+ * @subpackage    com_lang4dev
  *
  * @copyright (C) 2022-2022 Lang4dev Team
- * @license     GNU General Public License version 2 or later; see LICENSE.txt
+ * @license       GNU General Public License version 2 or later; see LICENSE.txt
  */
 
 namespace Finnern\Component\Lang4dev\Administrator\Model;
 
 \defined('_JEXEC') or die;
 
+use Finnern\Component\Lang4dev\Administrator\Helper\langSubProject;
+use Finnern\Component\Lang4dev\Administrator\Helper\projectType;
 use Joomla\CMS\Access\Rules;
 use Joomla\CMS\Association\AssociationServiceInterface;
 use Joomla\CMS\Categories\CategoryServiceInterface;
@@ -32,6 +34,7 @@ use Joomla\CMS\Workflow\Workflow;
 use Joomla\Registry\Registry;
 use Joomla\String\StringHelper;
 use Joomla\Utilities\ArrayHelper;
+use Finnern\Component\Lang4dev\Administrator\Helper\subPrjPath;
 
 // associations: use Finnern\Component\Lang4def\Administrator\Helper\Lang4devHelper;
 
@@ -46,7 +49,7 @@ class ProjectModel extends AdminModel
 	 * The prefix to use with controller messages.
 	 *
 	 * @var    string
- * @since __BUMP_VERSION__
+	 * @since __BUMP_VERSION__
 	 */
 	protected $text_prefix = 'COM_LANG4DEV';
 
@@ -73,19 +76,19 @@ class ProjectModel extends AdminModel
 	 * @param   MVCFactoryInterface  $factory  The factory.
 	 *
 	 * @see     \Joomla\CMS\MVC\Model\BaseDatabaseModel
-	 * @since __BUMP_VERSION__
+	 * @since   __BUMP_VERSION__
 	 *
-	public function __construct($config = array(), MVCFactoryInterface $factory = null)
-	{
-		$extension = Factory::getApplication()->input->get('extension', 'com_lang4dev');
-		$this->typeAlias = $extension . '.category';
-
-		// Add a new batch command
-		$this->batch_commands['flip_ordering'] = 'batchFlipordering';
-
-		parent::__construct($config, $factory);
-	}
-	/**/
+	 * public function __construct($config = array(), MVCFactoryInterface $factory = null)
+	 * {
+	 * $extension = Factory::getApplication()->input->get('extension', 'com_lang4dev');
+	 * $this->typeAlias = $extension . '.category';
+	 *
+	 * // Add a new batch command
+	 * $this->batch_commands['flip_ordering'] = 'batchFlipordering';
+	 *
+	 * parent::__construct($config, $factory);
+	 * }
+	 * /**/
 
 	/**
 	 * Method to test whether a record can be deleted.
@@ -117,8 +120,8 @@ class ProjectModel extends AdminModel
 	 */
 	protected function canEditState($record)
 	{
-        $app  = Factory::getApplication();
-        $user = $app->getIdentity();
+		$app  = Factory::getApplication();
+		$user = $app->getIdentity();
 
 		// Check for existing category.
 		if (!empty($record->id))
@@ -230,72 +233,72 @@ class ProjectModel extends AdminModel
 	 *
 	 * @since __BUMP_VERSION__
 	 *
-	public function getItem($pk = null)
-	{
-		if ($result = parent::getItem($pk))
-		{
-			// Prime required properties.
-			if (empty($result->id))
-			{
-				$result->parent_id = $this->getState('category.parent_id');
-				$result->extension = $this->getState('category.extension');
-			}
-
-			// Convert the metadata field to an array.
-			$registry = new Registry($result->metadata);
-			$result->metadata = $registry->toArray();
-
-			// Convert the created and modified dates to local user time for display in the form.
-			$tz = new \DateTimeZone(Factory::getApplication()->get('offset'));
-
-			if ((int) $result->created_time)
-			{
-				$date = new Date($result->created_time);
-				$date->setTimezone($tz);
-				$result->created_time = $date->toSql(true);
-			}
-			else
-			{
-				$result->created_time = null;
-			}
-
-			if ((int) $result->modified_time)
-			{
-				$date = new Date($result->modified_time);
-				$date->setTimezone($tz);
-				$result->modified_time = $date->toSql(true);
-			}
-			else
-			{
-				$result->modified_time = null;
-			}
-
-			if (!empty($result->id))
-			{
-//				$result->tags = new TagsHelper;
-//				$result->tags->getTagIds($result->id, $result->extension . '.category');
-			}
-		}
-
-		/**
-		$assoc = $this->getAssoc();
-
-		if ($assoc)
-		{
-			if ($result->id != null)
-			{
-				$result->associations = ArrayHelper::toInteger(GalleriesHelper::getAssociations($result->id, $result->extension));
-			}
-			else
-			{
-				$result->associations = array();
-			}
-		}
-		/**
-
-		return $result;
-	}
-	/**/
+	 * public function getItem($pk = null)
+	 * {
+	 * if ($result = parent::getItem($pk))
+	 * {
+	 * // Prime required properties.
+	 * if (empty($result->id))
+	 * {
+	 * $result->parent_id = $this->getState('category.parent_id');
+	 * $result->extension = $this->getState('category.extension');
+	 * }
+	 *
+	 * // Convert the metadata field to an array.
+	 * $registry = new Registry($result->metadata);
+	 * $result->metadata = $registry->toArray();
+	 *
+	 * // Convert the created and modified dates to local user time for display in the form.
+	 * $tz = new \DateTimeZone(Factory::getApplication()->get('offset'));
+	 *
+	 * if ((int) $result->created_time)
+	 * {
+	 * $date = new Date($result->created_time);
+	 * $date->setTimezone($tz);
+	 * $result->created_time = $date->toSql(true);
+	 * }
+	 * else
+	 * {
+	 * $result->created_time = null;
+	 * }
+	 *
+	 * if ((int) $result->modified_time)
+	 * {
+	 * $date = new Date($result->modified_time);
+	 * $date->setTimezone($tz);
+	 * $result->modified_time = $date->toSql(true);
+	 * }
+	 * else
+	 * {
+	 * $result->modified_time = null;
+	 * }
+	 *
+	 * if (!empty($result->id))
+	 * {
+	 * //                $result->tags = new TagsHelper;
+	 * //                $result->tags->getTagIds($result->id, $result->extension . '.category');
+	 * }
+	 * }
+	 *
+	 * /**
+	 * $assoc = $this->getAssoc();
+	 *
+	 * if ($assoc)
+	 * {
+	 * if ($result->id != null)
+	 * {
+	 * $result->associations = ArrayHelper::toInteger(GalleriesHelper::getAssociations($result->id, $result->extension));
+	 * }
+	 * else
+	 * {
+	 * $result->associations = array();
+	 * }
+	 * }
+	 * /**
+	 *
+	 * return $result;
+	 * }
+	 * /**/
 
 	/**
 	 * Method to get the row form.
@@ -310,20 +313,20 @@ class ProjectModel extends AdminModel
 	public function getForm($data = array(), $loadData = true)
 	{
 		/**
-		$extension = $this->getState('category.extension');
-		$jinput = Factory::getApplication()->input;
-
-		// A workaround to get the extension into the model for save requests.
-		if (empty($extension) && isset($data['extension']))
-		{
-			$extension = $data['extension'];
-			$parts = explode('.', $extension);
-
-			$this->setState('category.extension', $extension);
-			$this->setState('category.component', $parts[0]);
-			$this->setState('category.section', @$parts[1]);
-		}
-		/**/
+		 * $extension = $this->getState('category.extension');
+		 * $jinput = Factory::getApplication()->input;
+		 *
+		 * // A workaround to get the extension into the model for save requests.
+		 * if (empty($extension) && isset($data['extension']))
+		 * {
+		 * $extension = $data['extension'];
+		 * $parts = explode('.', $extension);
+		 *
+		 * $this->setState('category.extension', $extension);
+		 * $this->setState('category.component', $parts[0]);
+		 * $this->setState('category.section', @$parts[1]);
+		 * }
+		 * /**/
 		// Get the form.
 //		$form = $this->loadForm('com_lang4dev.category' . $extension, 'category', array('control' => 'jform', 'load_data' => $loadData));
 		$form = $this->loadForm('com_lang4dev.project', 'project', array('control' => 'jform', 'load_data' => $loadData));
@@ -334,28 +337,28 @@ class ProjectModel extends AdminModel
 		}
 
 		/**
-		// Modify the form based on Edit State access controls.
-		if (empty($data['extension']))
-		{
-			$data['extension'] = $extension;
-		}
-
-		$categoryId = $jinput->get('id');
-		$parts      = explode('.', $extension);
-		$assetKey   = $categoryId ? $extension . '.category.' . $categoryId : $parts[0];
-
-		if (!Factory::getApplication()->getIdentity()->authorise('core.edit.state', $assetKey))
-		{
-			// Disable fields for display.
-			$form->setFieldAttribute('ordering', 'disabled', 'true');
-			$form->setFieldAttribute('published', 'disabled', 'true');
-
-			// Disable fields while saving.
-			// The controller has already verified this is a record you can edit.
-			$form->setFieldAttribute('ordering', 'filter', 'unset');
-			$form->setFieldAttribute('published', 'filter', 'unset');
-		}
-		/**/
+		 * // Modify the form based on Edit State access controls.
+		 * if (empty($data['extension']))
+		 * {
+		 * $data['extension'] = $extension;
+		 * }
+		 *
+		 * $categoryId = $jinput->get('id');
+		 * $parts      = explode('.', $extension);
+		 * $assetKey   = $categoryId ? $extension . '.category.' . $categoryId : $parts[0];
+		 *
+		 * if (!Factory::getApplication()->getIdentity()->authorise('core.edit.state', $assetKey))
+		 * {
+		 * // Disable fields for display.
+		 * $form->setFieldAttribute('ordering', 'disabled', 'true');
+		 * $form->setFieldAttribute('published', 'disabled', 'true');
+		 *
+		 * // Disable fields while saving.
+		 * // The controller has already verified this is a record you can edit.
+		 * $form->setFieldAttribute('ordering', 'filter', 'unset');
+		 * $form->setFieldAttribute('published', 'filter', 'unset');
+		 * }
+		 * /**/
 		return $form;
 	}
 
@@ -386,7 +389,7 @@ class ProjectModel extends AdminModel
 	protected function loadFormData()
 	{
 		// Check the session for previously entered form data.
-		$app = Factory::getApplication();
+		$app  = Factory::getApplication();
 		$data = $app->getUserState('com_lang4dev.edit.' . $this->getName() . '.data', array());
 
 		if (empty($data))
@@ -398,7 +401,7 @@ class ProjectModel extends AdminModel
 			{
 				// Check for which extension the Category Manager is used and get selected fields
 				$extension = substr($app->getUserState('com_lang4dev.galleries.filter.extension'), 4);
-				$filters = (array) $app->getUserState('com_lang4dev.galleries.' . $extension . '.filter');
+				$filters   = (array) $app->getUserState('com_lang4dev.galleries.' . $extension . '.filter');
 
 				$data->set(
 					'published',
@@ -430,192 +433,190 @@ class ProjectModel extends AdminModel
 	 *
 	 * @return  void
 	 *
-	 * @see     \JFormField
-	 * @since __BUMP_VERSION__
 	 * @throws  \Exception if there is an error in the form event.
 	 *
-	protected function preprocessForm(\JForm $form, $data, $group = 'content')
+	 * protected function preprocessForm(\JForm $form, $data, $group = 'content')
+	 * {
+	 * $lang = Factory::getLanguage();
+	 * $component = $this->getState('category.component');
+	 * $section = $this->getState('category.section');
+	 * $extension = Factory::getApplication()->input->get('extension', null);
+	 *
+	 * // Get the component form if it exists
+	 * $name = 'category' . ($section ? ('.' . $section) : '');
+	 *
+	 * // Looking first in the component forms folder
+	 * $path = Path::clean(JPATH_ADMINISTRATOR . "/components/$component/forms/$name.xml");
+	 *
+	 * // Looking in the component models/forms folder (J! 3)
+	 * if (!file_exists($path))
+	 * {
+	 * $path = Path::clean(JPATH_ADMINISTRATOR . "/components/$component/models/forms/$name.xml");
+	 * }
+	 *
+	 * // Old way: looking in the component folder
+	 * if (!file_exists($path))
+	 * {
+	 * $path = Path::clean(JPATH_ADMINISTRATOR . "/components/$component/$name.xml");
+	 * }
+	 *
+	 * if (file_exists($path))
+	 * {
+	 * $lang->load($component, JPATH_BASE, null, false, true);
+	 * $lang->load($component, JPATH_BASE . '/components/' . $component, null, false, true);
+	 *
+	 * if (!$form->loadFile($path, false))
+	 * {
+	 * throw new \Exception(Text::_('JERROR_LOADFILE_FAILED'));
+	 * }
+	 * }
+	 *
+	 * $componentInterface = Factory::getApplication()->bootComponent($component);
+	 *
+	 * if ($componentInterface instanceof CategoryServiceInterface)
+	 * {
+	 * $componentInterface->prepareForm($form, $data);
+	 * }
+	 * else
+	 * {
+	 * // Try to find the component helper.
+	 * $eName = str_replace('com_', '', $component);
+	 * $path = Path::clean(JPATH_ADMINISTRATOR . "/components/$component/helpers/category.php");
+	 *
+	 * if (file_exists($path))
+	 * {
+	 * $cName = ucfirst($eName) . ucfirst($section) . 'HelperCategory';
+	 *
+	 * \JLoader::register($cName, $path);
+	 *
+	 * if (class_exists($cName) && is_callable(array($cName, 'onPrepareForm')))
+	 * {
+	 * $lang->load($component, JPATH_BASE, null, false, false)
+	 * || $lang->load($component, JPATH_BASE . '/components/' . $component, null, false, false)
+	 * || $lang->load($component, JPATH_BASE, $lang->getDefault(), false, false)
+	 * || $lang->load($component, JPATH_BASE . '/components/' . $component, $lang->getDefault(), false, false);
+	 * call_user_func_array(array($cName, 'onPrepareForm'), array(&$form));
+	 *
+	 * // Check for an error.
+	 * if ($form instanceof \Exception)
+	 * {
+	 * $this->setError($form->getMessage());
+	 *
+	 * return false;
+	 * }
+	 * }
+	 * }
+	 * }
+	 *
+	 * // Set the access control rules field component value.
+	 * $form->setFieldAttribute('rules', 'component', $component);
+	 * $form->setFieldAttribute('rules', 'section', $name);
+	 *
+	 * // Association category items
+	 * if ($this->getAssoc())
+	 * {
+	 * $languages = LanguageHelper::getContentLanguages(false, true, null, 'ordering', 'asc');
+	 *
+	 * if (count($languages) > 1)
+	 * {
+	 * $addform = new \SimpleXMLElement('<form />');
+	 * $fields = $addform->addChild('fields');
+	 * $fields->addAttribute('name', 'associations');
+	 * $fieldset = $fields->addChild('fieldset');
+	 * $fieldset->addAttribute('name', 'item_associations');
+	 *
+	 * foreach ($languages as $language)
+	 * {
+	 * $field = $fieldset->addChild('field');
+	 * $field->addAttribute('name', $language->lang_code);
+	 * $field->addAttribute('type', 'modal_category');
+	 * $field->addAttribute('language', $language->lang_code);
+	 * $field->addAttribute('label', $language->title);
+	 * $field->addAttribute('translate_label', 'false');
+	 * $field->addAttribute('extension', $extension);
+	 * $field->addAttribute('select', 'true');
+	 * $field->addAttribute('new', 'true');
+	 * $field->addAttribute('edit', 'true');
+	 * $field->addAttribute('clear', 'true');
+	 * }
+	 *
+	 * $form->load($addform, false);
+	 * }
+	 * }
+	 *
+	 * // Trigger the default form events.
+	 * parent::preprocessForm($form, $data, $group);
+	 * }
+	 * /**@since __BUMP_VERSION__
+	 * @see     \JFormField
+	 */
+
+	/**
+	 * Transform some data before it is displayed ? Saved ?
+	 * extension development 129 bottom
+	 *
+	 * @param   JTable  $table
+	 *
+	 * @since __BUMP_VERSION__
+	 */
+	/**/
+	protected function prepareTable($table)
 	{
-		$lang = Factory::getLanguage();
-		$component = $this->getState('category.component');
-		$section = $this->getState('category.section');
-		$extension = Factory::getApplication()->input->get('extension', null);
+		$date        = Factory::getDate()->toSql();
+		$table->name = htmlspecialchars_decode($table->name, ENT_QUOTES);
 
-		// Get the component form if it exists
-		$name = 'category' . ($section ? ('.' . $section) : '');
-
-		// Looking first in the component forms folder
-		$path = Path::clean(JPATH_ADMINISTRATOR . "/components/$component/forms/$name.xml");
-
-		// Looking in the component models/forms folder (J! 3)
-		if (!file_exists($path))
+		if (empty($table->id))
 		{
-			$path = Path::clean(JPATH_ADMINISTRATOR . "/components/$component/models/forms/$name.xml");
-		}
+			// $table->generateAlias ();
 
-		// Old way: looking in the component folder
-		if (!file_exists($path))
-		{
-			$path = Path::clean(JPATH_ADMINISTRATOR . "/components/$component/$name.xml");
-		}
-
-		if (file_exists($path))
-		{
-			$lang->load($component, JPATH_BASE, null, false, true);
-			$lang->load($component, JPATH_BASE . '/components/' . $component, null, false, true);
-
-			if (!$form->loadFile($path, false))
+			// Set ordering to the last item if not set
+			if (empty($table->ordering))
 			{
-				throw new \Exception(Text::_('JERROR_LOADFILE_FAILED'));
+				$db    = $this->getDbo();
+				$query = $db->getQuery(true)
+					->select('MAX(ordering)')
+					->from($db->quoteName('#__lang4dev_projects'));
+				$db->setQuery($query);
+				$max = $db->loadResult();
+
+				$table->ordering = $max + 1;
+
+				// Set the values
+				$table->date   = $date;
+				$table->userid = Factory::getApplication()->getIdentity()->id;
 			}
-		}
 
-		$componentInterface = Factory::getApplication()->bootComponent($component);
+			//$table->ordering = $table->getNextOrder('gallery_id = ' . (int) $table->gallery_id); // . ' AND state >= 0');
 
-		if ($componentInterface instanceof CategoryServiceInterface)
-		{
-			$componentInterface->prepareForm($form, $data);
+			// Set the values
+			$table->created    = $date;
+			$table->created_by = Factory::getApplication()->getIdentity()->id;
 		}
 		else
 		{
-			// Try to find the component helper.
-			$eName = str_replace('com_', '', $component);
-			$path = Path::clean(JPATH_ADMINISTRATOR . "/components/$component/helpers/category.php");
-
-			if (file_exists($path))
-			{
-				$cName = ucfirst($eName) . ucfirst($section) . 'HelperCategory';
-
-				\JLoader::register($cName, $path);
-
-				if (class_exists($cName) && is_callable(array($cName, 'onPrepareForm')))
-				{
-					$lang->load($component, JPATH_BASE, null, false, false)
-						|| $lang->load($component, JPATH_BASE . '/components/' . $component, null, false, false)
-						|| $lang->load($component, JPATH_BASE, $lang->getDefault(), false, false)
-						|| $lang->load($component, JPATH_BASE . '/components/' . $component, $lang->getDefault(), false, false);
-					call_user_func_array(array($cName, 'onPrepareForm'), array(&$form));
-
-					// Check for an error.
-					if ($form instanceof \Exception)
-					{
-						$this->setError($form->getMessage());
-
-						return false;
-					}
-				}
-			}
+			// Set the values
+			$table->modified    = $date;
+			$table->modified_by = Factory::getApplication()->getIdentity()->id;
 		}
 
-		// Set the access control rules field component value.
-		$form->setFieldAttribute('rules', 'component', $component);
-		$form->setFieldAttribute('rules', 'section', $name);
-
-		// Association category items
-		if ($this->getAssoc())
-		{
-			$languages = LanguageHelper::getContentLanguages(false, true, null, 'ordering', 'asc');
-
-			if (count($languages) > 1)
-			{
-				$addform = new \SimpleXMLElement('<form />');
-				$fields = $addform->addChild('fields');
-				$fields->addAttribute('name', 'associations');
-				$fieldset = $fields->addChild('fieldset');
-				$fieldset->addAttribute('name', 'item_associations');
-
-				foreach ($languages as $language)
-				{
-					$field = $fieldset->addChild('field');
-					$field->addAttribute('name', $language->lang_code);
-					$field->addAttribute('type', 'modal_category');
-					$field->addAttribute('language', $language->lang_code);
-					$field->addAttribute('label', $language->title);
-					$field->addAttribute('translate_label', 'false');
-					$field->addAttribute('extension', $extension);
-					$field->addAttribute('select', 'true');
-					$field->addAttribute('new', 'true');
-					$field->addAttribute('edit', 'true');
-					$field->addAttribute('clear', 'true');
-				}
-
-				$form->load($addform, false);
-			}
-		}
-
-		// Trigger the default form events.
-		parent::preprocessForm($form, $data, $group);
+		/**
+		 * // Set the publish date to now
+		 * if ($table->published == Workflow::CONDITION_PUBLISHED && (int) $table->publish_up == 0)
+		 * {
+		 * $table->publish_up = Factory::getDate()->toSql();
+		 * }
+		 *
+		 * if ($table->published == Workflow::CONDITION_PUBLISHED && intval($table->publish_down) == 0)
+		 * {
+		 * $table->publish_down = null;
+		 * }
+		 *
+		 * // Increment the content version number.
+		 * // $table->version++;
+		 * /**/
 	}
-	/**/
 
-
-    /**
-     * Transform some data before it is displayed ? Saved ?
-     * extension development 129 bottom
-     *
-     * @param JTable $table
-     *
-     * @since __BUMP_VERSION__
-     */
-    /**/
-    protected function prepareTable($table)
-    {
-        $date = Factory::getDate()->toSql();
-        $table->name = htmlspecialchars_decode($table->name, ENT_QUOTES);
-
-        if (empty($table->id))
-        {
-            // $table->generateAlias ();
-
-            // Set ordering to the last item if not set
-            if (empty($table->ordering))
-            {
-	            $db = $this->getDbo();
-                $query = $db->getQuery(true)
-                    ->select('MAX(ordering)')
-                    ->from($db->quoteName('#__lang4dev_projects'));
-                $db->setQuery($query);
-                $max = $db->loadResult();
-
-                $table->ordering = $max + 1;
-
-                // Set the values
-                $table->date = $date;
-                $table->userid = Factory::getApplication()->getIdentity()->id;
-            }
-
-            //$table->ordering = $table->getNextOrder('gallery_id = ' . (int) $table->gallery_id); // . ' AND state >= 0');
-
-            // Set the values
-            $table->created = $date;
-            $table->created_by  = Factory::getApplication()->getIdentity()->id;
-        }
-        else
-        {
-            // Set the values
-            $table->modified   = $date;
-            $table->modified_by = Factory::getApplication()->getIdentity()->id;
-        }
-
-        /**
-        // Set the publish date to now
-        if ($table->published == Workflow::CONDITION_PUBLISHED && (int) $table->publish_up == 0)
-        {
-            $table->publish_up = Factory::getDate()->toSql();
-        }
-
-        if ($table->published == Workflow::CONDITION_PUBLISHED && intval($table->publish_down) == 0)
-        {
-            $table->publish_down = null;
-        }
-
-        // Increment the content version number.
-        // $table->version++;
-        /**/
-    }
-
-
-    /**
+	/**
 	 * Method to save the form data.
 	 *
 	 * @param   array  $data  The form data.
@@ -626,11 +627,11 @@ class ProjectModel extends AdminModel
 	 */
 	public function save($data)
 	{
-		$table      = $this->getTable();
-		$pk         = (!empty($data['id'])) ? $data['id'] : (int) $this->getState($this->getName() . '.id');
+		$table = $this->getTable();
+		$pk    = (!empty($data['id'])) ? $data['id'] : (int) $this->getState($this->getName() . '.id');
 		//$isNew      = true;
-		$context    = $this->option . '.' . $this->name;
-        $input      = Factory::getApplication()->input;
+		$context = $this->option . '.' . $this->name;
+		$input   = Factory::getApplication()->input;
 
 		if (!empty($data['tags']) && $data['tags'][0] != '')
 		{
@@ -638,18 +639,18 @@ class ProjectModel extends AdminModel
 		}
 
 		/** -> table *
-		// no default value
-		if (empty($data['description']))
-		{
-			$data['description'] = '';
-		}
-
-		// no default value
-		if (empty($data['params']))
-		{
-			$data['params'] = '';
-		}
-		/**/
+		 * // no default value
+		 * if (empty($data['description']))
+		 * {
+		 * $data['description'] = '';
+		 * }
+		 *
+		 * // no default value
+		 * if (empty($data['params']))
+		 * {
+		 * $data['params'] = '';
+		 * }
+		 * /**/
 
 		// Include the plugins for the save events.
 		PluginHelper::importPlugin($this->events_map['save']);
@@ -764,106 +765,107 @@ class ProjectModel extends AdminModel
 //			return false;
 //		}
 
-        if (parent::save($data)) {
+		if (parent::save($data))
+		{
 
-            /**
-             * $assoc = $this->getAssoc();
-             *
-             * if ($assoc)
-             * {
-             * // Adding self to the association
-             * $associations = $data['associations'] ?? array();
-             *
-             * // Unset any invalid associations
-             * $associations = ArrayHelper::toInteger($associations);
-             *
-             * foreach ($associations as $tag => $id)
-             * {
-             * if (!$id)
-             * {
-             * unset($associations[$tag]);
-             * }
-             * }
-             *
-             * // Detecting all item menus
-             * $allLanguage = $table->language == '*';
-             *
-             * if ($allLanguage && !empty($associations))
-             * {
-             * Factory::getApplication()->enqueueMessage(Text::_('com_lang4dev_ERROR_ALL_LANGUAGE_ASSOCIATED'), 'notice');
-             * }
-             *
-             * // Get associationskey for edited item
-             * $db    = $this->getDbo();
-             * $query = $db->getQuery(true)
-             * ->select($db->quoteName('key'))
-             * ->from($db->quoteName('#__associations'))
-             * ->where($db->quoteName('context') . ' = ' . $db->quote($this->associationsContext))
-             * ->where($db->quoteName('id') . ' = ' . (int) $table->id);
-             * $db->setQuery($query);
-             * $oldKey = $db->loadResult();
-             *
-             * // Deleting old associations for the associated items
-             * $query = $db->getQuery(true)
-             * ->delete($db->quoteName('#__associations'))
-             * ->where($db->quoteName('context') . ' = ' . $db->quote($this->associationsContext));
-             *
-             * if ($associations)
-             * {
-             * $query->where('(' . $db->quoteName('id') . ' IN (' . implode(',', $associations) . ') OR '
-             * . $db->quoteName('key') . ' = ' . $db->quote($oldKey) . ')');
-             * }
-             * else
-             * {
-             * $query->where($db->quoteName('key') . ' = ' . $db->quote($oldKey));
-             * }
-             *
-             * $db->setQuery($query);
-             *
-             * try
-             * {
-             * $db->execute();
-             * }
-             * catch (\RuntimeException $e)
-             * {
-             * $this->setError($e->getMessage());
-             *
-             * return false;
-             * }
-             *
-             * // Adding self to the association
-             * if (!$allLanguage)
-             * {
-             * $associations[$table->language] = (int) $table->id;
-             * }
-             *
-             * if (count($associations) > 1)
-             * {
-             * // Adding new association for these items
-             * $key = md5(json_encode($associations));
-             * $query->clear()
-             * ->insert('#__associations');
-             *
-             * foreach ($associations as $id)
-             * {
-             * $query->values(((int) $id) . ',' . $db->quote($this->associationsContext) . ',' . $db->quote($key));
-             * }
-             *
-             * $db->setQuery($query);
-             *
-             * try
-             * {
-             * $db->execute();
-             * }
-             * catch (\RuntimeException $e)
-             * {
-             * $this->setError($e->getMessage());
-             *
-             * return false;
-             * }
-             * }
-             * }
-             * /**/
+			/**
+			 * $assoc = $this->getAssoc();
+			 *
+			 * if ($assoc)
+			 * {
+			 * // Adding self to the association
+			 * $associations = $data['associations'] ?? array();
+			 *
+			 * // Unset any invalid associations
+			 * $associations = ArrayHelper::toInteger($associations);
+			 *
+			 * foreach ($associations as $tag => $id)
+			 * {
+			 * if (!$id)
+			 * {
+			 * unset($associations[$tag]);
+			 * }
+			 * }
+			 *
+			 * // Detecting all item menus
+			 * $allLanguage = $table->language == '*';
+			 *
+			 * if ($allLanguage && !empty($associations))
+			 * {
+			 * Factory::getApplication()->enqueueMessage(Text::_('com_lang4dev_ERROR_ALL_LANGUAGE_ASSOCIATED'), 'notice');
+			 * }
+			 *
+			 * // Get associationskey for edited item
+			 * $db    = $this->getDbo();
+			 * $query = $db->getQuery(true)
+			 * ->select($db->quoteName('key'))
+			 * ->from($db->quoteName('#__associations'))
+			 * ->where($db->quoteName('context') . ' = ' . $db->quote($this->associationsContext))
+			 * ->where($db->quoteName('id') . ' = ' . (int) $table->id);
+			 * $db->setQuery($query);
+			 * $oldKey = $db->loadResult();
+			 *
+			 * // Deleting old associations for the associated items
+			 * $query = $db->getQuery(true)
+			 * ->delete($db->quoteName('#__associations'))
+			 * ->where($db->quoteName('context') . ' = ' . $db->quote($this->associationsContext));
+			 *
+			 * if ($associations)
+			 * {
+			 * $query->where('(' . $db->quoteName('id') . ' IN (' . implode(',', $associations) . ') OR '
+			 * . $db->quoteName('key') . ' = ' . $db->quote($oldKey) . ')');
+			 * }
+			 * else
+			 * {
+			 * $query->where($db->quoteName('key') . ' = ' . $db->quote($oldKey));
+			 * }
+			 *
+			 * $db->setQuery($query);
+			 *
+			 * try
+			 * {
+			 * $db->execute();
+			 * }
+			 * catch (\RuntimeException $e)
+			 * {
+			 * $this->setError($e->getMessage());
+			 *
+			 * return false;
+			 * }
+			 *
+			 * // Adding self to the association
+			 * if (!$allLanguage)
+			 * {
+			 * $associations[$table->language] = (int) $table->id;
+			 * }
+			 *
+			 * if (count($associations) > 1)
+			 * {
+			 * // Adding new association for these items
+			 * $key = md5(json_encode($associations));
+			 * $query->clear()
+			 * ->insert('#__associations');
+			 *
+			 * foreach ($associations as $id)
+			 * {
+			 * $query->values(((int) $id) . ',' . $db->quote($this->associationsContext) . ',' . $db->quote($key));
+			 * }
+			 *
+			 * $db->setQuery($query);
+			 *
+			 * try
+			 * {
+			 * $db->execute();
+			 * }
+			 * catch (\RuntimeException $e)
+			 * {
+			 * $this->setError($e->getMessage());
+			 *
+			 * return false;
+			 * }
+			 * }
+			 * }
+			 * /**/
 
 //            // Trigger the after save event.
 //            Factory::getApplication()->triggerEvent($this->event_after_save, array($context, &$table, $isNew, $data));
@@ -887,55 +889,104 @@ class ProjectModel extends AdminModel
 //            // Clear the cache
 //            $this->cleanCache();
 
-            return true;
-        }
-        else {
-            return false;
-        }
+			return true;
+		}
+		else
+		{
+			return false;
+		}
 
 	}
 
-//	// expected name/alias  is unique
-//	public function createProject ($galleryName, $parentId=1, $description='')
-//    {
-//        $isCreated = false;
-//
-//        try {
-//
-//            $data = [];
-//
-//            $data ['name'] = $galleryName;
-//            $data ['alias'] = $galleryName;
-//            $data ['parent_id'] = $parentId;
-//            $data ['description'] = $description;
-//
-//            $data ['note'] = '';
-//
-//
-//            $isCreated = $this->save ($data);
-//            // $isCreated = true;
-//
-//
-//            // Check for errors.
-//            if (count($errors = $this->get('_errors')))
-//            {
-//                throw new GenericDataException(implode("\n", $errors), 500);
-//            }
-//
-//
-//
-//
-//        } catch (\RuntimeException $e) {
-//            Factory::getApplication()->enqueueMessage($e->getMessage(), 'error');
-//        }
-//
-//
-//
-//
-//        return $isCreated;
-//    }
-//
+	/**
+	 *
+	 * @return integer highest ID of created projects
+	 *
+	 * @since version
+	 */
+	public function highestProjectId_DB()
+	{
+		$max = 0; // indicates nothing found in DB
+
+		$db    = Factory::getDbo();
+		$query = $db->getQuery(true)
+			->select('MAX(id)')
+			->from($db->quoteName('#__lang4dev_projects'));
+		$db->setQuery($query);
+		$max = $db->loadResult();
+
+		return (int) $max;
+	}
+
+	public function justSavedId()
+	{
+		// On save the id is kept in session state
+		$newId = (int) $this->getState($this->getName() . '.id');
+
+		return $newId;
+	}
 
 
+
+
+	public function subProjectsByPrjId($oSubPrjPath)
+	{
+		$subProjects = [];
+
+		// List of integers (com has an array of three)
+		$prjTypes = projectType::prjTypesByProjectId($oSubPrjPath->prjId);
+
+		foreach ($prjTypes as $prjType)
+		{
+			$subProjects[] = new langSubProject (
+				$oSubPrjPath->prjId,
+				$prjType,
+				$oSubPrjPath->getRootPath(),
+				$oSubPrjPath->getRootManifestPath()
+			);
+
+		}
+
+		return $subProjects;
+	}
+
+	/**
+	 * public function subProjectsByManifest ($oSubPrjPath){
+	 *
+	 * $subProjects = [];
+	 *
+	 * // ToDo: create small manifest class and extract all necessary infos
+	 *
+	 *
+	 * //---
+	 * $manifestPath = $oSubPrjPath->getRootManifestPath ();
+	 * if (file_exists ($manifestPath))
+	 * {
+	 *
+	 * // content of file
+	 * $context = stream_context_create(array('http' => array('header' => 'Accept: application/xml')));
+	 * $xml     = file_get_contents($manifestPath, false, $context);
+	 *
+	 * // Data is valid
+	 * if ($xml)
+	 * {
+	 * //--- read xml to json ---------------------------------------------------
+	 *
+	 * $manifestByXml = simplexml_load_string($xml);
+	 *
+	 * if (!empty ($manifestByXml))
+	 * {
+	 * //Encode the SimpleXMLElement object into a JSON string.
+	 * $jsonString = json_encode($manifestByXml);
+	 * //Convert it back into an associative array
+	 * $jsonArray = json_decode($jsonString, true);
+	 *
+	 * }
+	 * }
+	 * }
+	 *
+	 * return $subProjects;
+	 * }
+	 * /**/
 
 }

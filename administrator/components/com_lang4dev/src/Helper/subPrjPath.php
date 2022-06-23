@@ -16,8 +16,9 @@ use Joomla\CMS\Filesystem\Folder;
 class subPrjPath
 {
 	protected $rootPath = '';   // complete from path origin on
+	// protected $rootManifestPath = '';   // complete from path origin on
 	protected $subPrjPath = ''; // user known path, behind JPATH_ROOT on server
-	protected $prjId = ''; // helper for detecting the path
+	public $prjId = ''; // helper for detecting the path
 
 	public $isRootValid;
 	public $isJoomlaPath;
@@ -44,6 +45,9 @@ class subPrjPath
 
 	public function getRootPath () {return $this->rootPath;}
 	public function getSubPrjPath () {return $this->subPrjPath;}
+	public function getRootManifestPath () {
+		return $this->rootPath . '/' . strtolower(substr($this->prjId,4)) . '.xml';
+	}
 
 
 	private function detectRootPath($prjId='', $subPrjPath='')
@@ -65,17 +69,15 @@ class subPrjPath
 		//--- path already valid -------------------------
 
 		$rootPath = $subPrjPath;
-		if ($rootPath != '' && Folder::exists($rootPath))
+		if ($rootPath != '')
 		{
-			$isRootFound = true;
-		}
-
-		//--- fast lane for sources in joomla installation -------------------------
-
-		if ( ! $isRootFound)
-		{
-			if ($subPrjPath != '')
+			if (Folder::exists($rootPath))
 			{
+				$isRootFound = true;
+			} else
+			{
+				//--- fast lane for sources in joomla installation -------------------------
+
 				// path already defined and within joomla
 				$rootPath = JPATH_ROOT . '/' . $subPrjPath;
 				if (Folder::exists($rootPath))
