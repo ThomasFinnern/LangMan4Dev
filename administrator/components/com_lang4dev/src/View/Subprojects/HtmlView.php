@@ -22,9 +22,9 @@ use Joomla\CMS\Router\Route;
 use Joomla\CMS\Toolbar\Toolbar;
 use Joomla\CMS\Toolbar\ToolbarHelper;
 
-use Finnern\Component\Lang4dev\Administrator\Helper\Lang4devHelper;
 use Joomla\Component\Content\Administrator\Extension\ContentComponent;
 
+use Finnern\Component\Lang4dev\Administrator\Helper\Lang4devHelper;
 /**
  * View class for a list of lang4dev.
  *
@@ -218,8 +218,11 @@ class HtmlView extends BaseHtmlView
 		            $toolbar->delete('subprojects.delete')
 			            ->text('JTOOLBAR_EMPTY_TRASH')
 			            ->message('JGLOBAL_CONFIRM_DELETE')
-			            ->listCheck(true);
+			            ->listCheck(true)
+		            ;
 	            }
+
+//icon-ellipsis-h
 
                 ToolBarHelper::cancel('lang4dev.cancel', 'JTOOLBAR_CLOSE');
 

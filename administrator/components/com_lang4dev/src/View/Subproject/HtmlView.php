@@ -171,9 +171,9 @@ class HtmlView extends BaseHtmlView
                     ->text('JTOOLBAR_DELETE')
                     ->message('JGLOBAL_CONFIRM_DELETE')
                     ->listCheck(true);
-
 //				ToolbarHelper::custom('mycontroller.processData', 'process', 'process_f2.png', 'COM_MYCOMPONENT_PROCESS_DATA', false);
-				ToolbarHelper::custom('subproject.detectDetails', 'refresh', 'home', 'COM_LANG4DEV_SUB_DETECT_DETAILS', false);
+				ToolbarHelper::custom('subproject.detectDetails', 'refresh', 'home',
+					'COM_LANG4DEV_SUB_DETECT_DETAILS', false);
 				
                 //ToolBarHelper::save2new('subproject.save2new');
 				

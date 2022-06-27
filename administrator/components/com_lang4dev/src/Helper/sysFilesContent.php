@@ -249,7 +249,7 @@ class sysFilesContent
     }
 
 
-    // Expects it parallel to project xml file
+    // Extracts it from project xml file
     public function extractPrjVars ($prjXmlPathFileName)
     {
         $installFileName = '';
@@ -286,7 +286,7 @@ class sysFilesContent
                     // standard : change log for each version are sub items
                     if (array_key_exists('name', $prjArray)) {
 
-	                    $langIdPrefix = $prjArray ['name'];
+	                    $langIdPrefix = strtoupper($prjArray ['name']);
 
                     }
                 }

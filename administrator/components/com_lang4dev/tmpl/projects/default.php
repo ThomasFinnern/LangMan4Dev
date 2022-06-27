@@ -9,6 +9,12 @@ use Joomla\CMS\Layout\LayoutHelper;
 use Joomla\CMS\Router\Route;
 use Joomla\String\Inflector;
 
+HTMLHelper::_('behavior.multiselect');
+// HTMLHelper::_('bootstrap.framework');
+
+//HTMLHelper::_('stylesheet', 'com_rsgallery2/backend/images.css', array('version' => 'auto', 'relative' => true));
+//HTMLHelper::_('script', 'com_rsgallery2/backend/images.js', ['version' => 'auto', 'relative' => true]);
+
 $user      = Factory::getApplication()->getIdentity();
 $userId    = $user->get('id');
 $extension = $this->escape($this->state->get('filter.extension'));
@@ -60,7 +66,7 @@ if ($saveOrder && !empty($this->items))
 
 ?>
 <form action="<?php echo Route::_('index.php?option=com_lang4dev&view=projects'); ?>"
-      method="post" name="adminForm" id="item-form" class="form-validate">
+      method="post" name="adminForm" id="adminForm">
 
 	<div>
 		<?php

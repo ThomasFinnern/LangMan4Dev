@@ -11,6 +11,7 @@ namespace Finnern\Component\Lang4dev\Administrator\Model;
 
 \defined('_JEXEC') or die;
 
+use Finnern\Component\Lang4dev\Administrator\Helper\projectType;
 use Joomla\CMS\Access\Rules;
 use Joomla\CMS\Association\AssociationServiceInterface;
 use Joomla\CMS\Categories\CategoryServiceInterface;
@@ -986,8 +987,9 @@ class SubprojectModel extends AdminModel
 		// $table      = $this->getTable();
 
 		$data = [];
+		$data ['id'] = 0;
 
-		$data ['title'] = $subProject->prjId . '_' . projectType::getPrjTypeText($subProject->prjId);
+		$data ['title'] = $subProject->prjId . '_' . projectType::getPrjTypeText($subProject->prjType);
 		$data ['alias'] = strtolower($data ['title']);
 
 		$data ['prjId'] = $subProject->prjId;
@@ -1019,12 +1021,13 @@ class SubprojectModel extends AdminModel
 		$query = $db->getQuery(true)
 			->select('id')
 			->from($db->quoteName('#__lang4dev_subprojects'))
-			->where($db->quoteName('prjId') . ' = ' . $db->quoteName($prjId))
+			->where($db->quoteName('prjId') . ' = ' . $db->quote($prjId))
 			->where($db->quoteName('subPrjType') . ' = ' . (int) $prjType)
 			->where($db->quoteName('parent_id') . ' = ' . (int) $parentId)
 		;
 		$db->setQuery($query);
 		$existingId = $db->loadResult();
+		// wrong ? $existingId = $db->loadObject();
 
 		return (int) $existingId;
 	}

@@ -219,7 +219,8 @@ if ($this->isDoCommentIds) {
 }
 
 ?>
-<form action="<?php echo Route::_('index.php?option=com_lang4dev&view=prjtexts'); ?>" method="post" name="adminForm" id="item-form" class="form-validate">
+<form action="<?php echo Route::_('index.php?option=com_lang4dev&view=prjtexts'); ?>"
+      method="post" name="adminForm" id="adminForm">
 
 	<?php
 
