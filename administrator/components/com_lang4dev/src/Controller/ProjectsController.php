@@ -78,4 +78,61 @@ class projectsController extends FormController
 		return parent::getModel($name, $prefix, $config);
 	}
 
+	public function delete()
+	{
+		// Check for request forgeries
+		$this->checkToken();
+
+		$user = $this->app->getIdentity();
+		$ids  = $this->input->get('cid', array(), 'array');
+
+		/**
+		// Access checks.
+		foreach ($ids as $i => $id)
+		{
+		if (!$user->authorise('core.delete', 'com_lang4dev.????.' . (int) $id))
+		{
+		// Prune items that you can't delete.
+		unset($ids[$i]);
+		$this->app->enqueueMessage(Text::_('JERROR_CORE_DELETE_NOT_PERMITTED'), 'notice');
+		}
+		}
+		/**/
+		$canDelete = true;
+
+		if ( ! $canDelete ) {
+
+			$OutTxt = Text::_('COM_LANG4DEV_DELETE_INVALID_RIGHTS');
+			$app    = Factory::getApplication();
+			$app->enqueueMessage($OutTxt, 'error');
+		} else
+		{
+			if (empty($ids))
+			{
+				$this->app->enqueueMessage(Text::_('JERROR_NO_ITEMS_SELECTED'), 'error');
+			}
+			else
+			{
+				$model = $this->getModel('project');
+
+				// Make sure the item ids are integers
+				$cids = ArrayHelper::toInteger($ids);
+
+				// Remove the items.
+				if (!$model->delete($cids))
+				{
+					$this->setMessage($model->getError(), 'error');
+				}
+				else
+				{
+					$this->setMessage(Text::plural('COM_LANG4DEV_N_MENUS_DELETED', count($cids)));
+				}
+			}
+		}
+
+		$link = 'index.php?option=com_lang4dev&view=projects';
+		$this->setRedirect($link);
+	}
+
+
 }

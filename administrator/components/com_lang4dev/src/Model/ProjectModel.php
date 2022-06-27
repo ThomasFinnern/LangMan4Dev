@@ -101,7 +101,8 @@ class ProjectModel extends AdminModel
 	 */
 	protected function canDelete($record)
 	{
-		if (empty($record->id) || $record->published != -2)
+//		if (empty($record->id) || $record->published != -2)
+		if (empty($record->id))
 		{
 			return false;
 		}
@@ -989,4 +990,38 @@ class ProjectModel extends AdminModel
 	 * }
 	 * /**/
 
-}
+
+
+	/**
+	 * Delete #__content_frontpage items if the deleted articles was featured
+	 *
+	 * @param   object  $pks  The primary key related to the contents that was deleted.
+	 *
+	 * @return  boolean
+	 *
+	 * @since   3.7.0
+	 */
+	public function delete(&$pks)
+	{
+		$return = parent::delete($pks);
+
+		if ($return)
+		{
+			// delete sub project by parent id
+			$db = $this->getDbo();
+			$query = $db->getQuery(true)
+				->delete($db->quoteName('#__lang4dev_subprojects'))
+				->whereIn($db->quoteName('parent_id'), $pks);
+			$db->setQuery($query);
+			$db->execute();
+
+			// Clear the cache
+			$this->cleanCache();
+		}
+
+		return $return;
+	}
+
+
+
+} // class

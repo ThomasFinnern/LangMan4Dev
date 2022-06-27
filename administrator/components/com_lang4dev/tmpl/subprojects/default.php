@@ -60,7 +60,7 @@ if (count($parts) > 1)
 
 if ($saveOrder && !empty($this->items))
 {
-	$saveOrderingUrl = 'index.php?option=com_lang4dev&task=images.saveOrderAjax&tmpl=component&' . Session::getFormToken() . '=1';
+//	$saveOrderingUrl = 'index.php?option=com_lang4dev&task=images.saveOrderAjax&tmpl=component&' . Session::getFormToken() . '=1';
 	HTMLHelper::_('draggablelist.draggable');
 }
 
@@ -104,11 +104,24 @@ if ($saveOrder && !empty($this->items))
 					</th>
 
 					<th scope="col" style="width:3%" class="text-center d-none d-md-table-cell">
-	                                        <span class="small"
-	                                              title="<?php echo $this->escape("Remove when order is fixed"); ?>">
-	                                            <?php echo Text::_('JGRID_HEADING_ORDERING'); ?>
-	                                        </span>
+	                    <span class="small"
+	                          title="<?php echo $this->escape("Remove when order is fixed"); ?>">
+	                        <?php echo Text::_('JGRID_HEADING_ORDERING'); ?>
+	                    </span>
 					</th>
+
+
+
+					<th scope="col" style="width:3%" class="text-center d-none d-md-table-cell">
+                        <span class="small"
+                              title="<?php echo $this->escape("Remove when order is fixed"); ?>">
+                            <?php echo Text::_('COM_LANG4DEV_SUBPROJECT_PARENT'); ?>
+                        </span>
+					</th>
+
+
+
+
 
 					<th>
 						<?php echo Text::_('JGLOBAL_TITLE'); ?>
@@ -179,12 +192,16 @@ if ($saveOrder && !empty($this->items))
 					</td>
 
 					<td class="small d-none d-md-table-cell">
+						<?php echo $item->parent_id; ?>
+					</td>
+
+					<td class="small d-none d-md-table-cell">
 						<?php echo $i . ': ' . $item->title; ?>
 					</td>
 
 					<th scope="row">
 						<?php if ($item->checked_out) : ?>
-							<?php echo HTMLHelper::_('jgrid.checkedout', $i, $item->editor, $item->checked_out_time, 'images.', $canCheckin); ?>
+							<?php echo HTMLHelper::_('jgrid.checkedout', $i, $item->editor, $item->checked_out_time, 'subprojects.', $canCheckin); ?>
 						<?php endif; ?>
 						<?php if ($canEdit || $canEditOwn) : ?>
 							<?php $editIcon = $item->checked_out ? '' : '<span class="fa fa-pencil-square mr-2" aria-hidden="true"></span>'; ?>
@@ -205,6 +222,10 @@ if ($saveOrder && !empty($this->items))
 										</span>
 					</th>
 
+
+					<td class="small d-none d-md-table-cell">
+						<?php echo $item->root_path; ?>
+					</td>
 
 				</tr>
 

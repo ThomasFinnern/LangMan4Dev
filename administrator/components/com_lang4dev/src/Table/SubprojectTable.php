@@ -227,7 +227,6 @@ class SubprojectTable extends Table
         return parent::store($updateNulls);
 	}
 
-
     /**
      * Method to delete a node and, optionally, its child nodes from the table.
      *

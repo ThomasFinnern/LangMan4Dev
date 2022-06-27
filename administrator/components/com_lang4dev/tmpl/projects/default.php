@@ -60,7 +60,7 @@ if (count($parts) > 1)
 
 if ($saveOrder && !empty($this->items))
 {
-	$saveOrderingUrl = 'index.php?option=com_lang4dev&task=images.saveOrderAjax&tmpl=component&' . Session::getFormToken() . '=1';
+	//$saveOrderingUrl = 'index.php?option=com_lang4dev&task=images.saveOrderAjax&tmpl=component&' . Session::getFormToken() . '=1';
 	HTMLHelper::_('draggablelist.draggable');
 }
 
@@ -183,7 +183,7 @@ if ($saveOrder && !empty($this->items))
 
 					<th scope="row">
 						<?php if ($item->checked_out) : ?>
-							<?php echo HTMLHelper::_('jgrid.checkedout', $i, $item->editor, $item->checked_out_time, 'images.', $canCheckin); ?>
+							<?php echo HTMLHelper::_('jgrid.checkedout', $i, $item->editor, $item->checked_out_time, 'projects.', $canCheckin); ?>
 						<?php endif; ?>
 						<?php if ($canEdit || $canEditOwn) : ?>
 							<?php $editIcon = $item->checked_out ? '' : '<span class="fa fa-pencil-square mr-2" aria-hidden="true"></span>'; ?>
