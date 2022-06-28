@@ -27,14 +27,14 @@ use Joomla\CMS\Factory;
 class sessionProjectId
 {
 	protected $prjId = '-1';
-	protected $subPrjId = '0';
+	protected $subPrjActive = '0';
 
 
 
 	public function clear() {
 
 		$prjId = '-1';
-		$subPrjId = '0';
+		$subPrjActive = '0';
 
 		return;
 	}
@@ -45,15 +45,15 @@ class sessionProjectId
 	 * @return
 	 * @since __BUMP_VERSION__
 	 */
-	public function setIds($prjId = '-1', $subPrjId = '0')
+	public function setIds($prjId = '-1', $subPrjActive = '0')
 	{
 
 		$this->prjId = $prjId;
-		$this->subPrjId = $subPrjId;
+		$this->subPrjActive = $subPrjActive;
 
 		$session = Factory::getSession();
 		$data = $session->set('_lang4dev.prjId', $prjId);
-		$data = $session->set('_lang4dev.subPrjId', $subPrjId);
+		$data = $session->set('_lang4dev.subPrjActive', $subPrjActive);
 
 		return;
 	}
@@ -67,7 +67,7 @@ class sessionProjectId
 
 		$session = Factory::getSession();
 		$session->clear('_lang4dev.prjId');
-		$session->clear('_lang4dev.subPrjId');
+		$session->clear('_lang4dev.subPrjActive');
 
 		return;
 	}
@@ -83,7 +83,7 @@ class sessionProjectId
 		//--- already set in class ? ---------------------
 
 		$prjId = $this->prjId;
-		$subPrjId = $this->subPrjId;
+		$subPrjActive = $this->subPrjActive;
 
 		// Is not set
 		if ($prjId < 0)
@@ -94,7 +94,7 @@ class sessionProjectId
 			$prjId   = (int) $session->get('_lang4dev.prjId', '-1');
 			if ($prjId > 0)
 			{
-				$subPrjId = (int) $session->get('_lang4dev.subPrjId', '0');
+				$subPrjActive = (int) $session->get('_lang4dev.subPrjActive', '0');
 			}
 
 			// Is not set (in control) => use latest
@@ -103,11 +103,11 @@ class sessionProjectId
 				//--- retrieve last created from DB ---------------------------------
 
 				$prjId = $this->highestProjectId_DB ();
-				$subPrjId = 0; // view all
+				$subPrjActive = 0; // view all
 			}
 		}
 
-		return [$prjId, $subPrjId];
+		return [$prjId, $subPrjActive];
 	}
 
 	/**

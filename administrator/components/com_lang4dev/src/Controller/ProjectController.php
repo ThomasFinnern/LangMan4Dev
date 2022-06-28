@@ -149,6 +149,23 @@ class projectController extends FormController
 					$data ['root_path'] = $prjRootPath;
 				}
 
+				/**  ??? 'prjXmlPathFilename'
+				$subPrjXmlPathFile = $oSubPrjPath->getRootManifestPath();
+				if ($prjRootPath != $subPrjXmlPathFile)
+				{
+					$prjRootPath = $subPrjXmlPathFile;
+
+					// write back into input
+					$isChanged = true;
+
+					//$input->set('jform['root_path']', $prjRootPath);
+					$data ['prjXmlPathFilename'] = $prjRootPath;
+				}
+				/**/
+
+
+
+
 			}
 
 			// write back into input
@@ -186,7 +203,7 @@ class projectController extends FormController
 		}
 
 
-		$OutTxt = "detectDetails for project has started:";
+		$OutTxt = "detectDetails for project has finished:";
 		$app = Factory::getApplication();
 		$app->enqueueMessage($OutTxt, 'warning');
 

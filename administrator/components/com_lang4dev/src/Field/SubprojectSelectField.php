@@ -48,9 +48,9 @@ class SubprojectSelectField extends ListField
 		//--- Set selection of project and sub project --------------------
 
 		$sessionProjectId = new sessionProjectId();
-		[$prjId, $subPrjId] = $sessionProjectId->getIds();
+		[$prjId, $subPrjActive] = $sessionProjectId->getIds();
 
-		$this->setValue ($subPrjId);
+		$this->setValue ($subPrjActive);
 		$this->prjId = $prjId;
 
 		/**
@@ -63,12 +63,12 @@ class SubprojectSelectField extends ListField
 		return parent::getInput();
 		}
 		/**/
-		if($subPrjId > 0)
+		if($subPrjActive > 0)
 		{
 			return parent::getInput();
 		}
 		else {
-			if($subPrjId == 0) {
+			if($subPrjActive == 0) {
 				return '<span class="readonly">' . Text::_('All sub projects') . '</span>';
 			} else
 			{
@@ -111,9 +111,9 @@ class SubprojectSelectField extends ListField
 			//--- Set selection of project and sub project --------------------
 
 			$sessionProjectId = new sessionProjectId();
-			[$prjId, $subPrjId] = $sessionProjectId->getIds();
+			[$prjId, $subPrjActive] = $sessionProjectId->getIds();
 
-			$this->value = $subPrjId;
+			$this->value = $subPrjActive;
 
 		}
 		catch (\RuntimeException $e)

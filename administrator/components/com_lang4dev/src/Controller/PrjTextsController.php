@@ -137,12 +137,12 @@ class PrjTextsController extends AdminController
 			$data  = $input->post->get('jform', array(), 'array');
 
 			$prjId       = (int) $data ['selectProject'];
-			$subPrjId    = (int) $data ['selectSubproject'];
+			$subPrjActive    = (int) $data ['selectSubproject'];
 
-			// $prjId, $subPrjId
+			// $prjId, $subPrjActive
 
 			$sessionProjectId = new sessionProjectId();
-			$sessionProjectId->setIds($prjId, $subPrjId);
+			$sessionProjectId->setIds($prjId, $subPrjActive);
 		}
 
 		$OutTxt = "Project for prjTexts has changed:";
@@ -174,7 +174,7 @@ class PrjTextsController extends AdminController
 			$mainLangId  = $data ['selectSourceLangId'];
 			$transLangId = $data ['selectTargetLangId'];
 
-			// $prjId, $subPrjId
+			// $prjId, $subPrjActive
 
 			$sessionTransLangIds = new sessionTransLangIds ();
 			$sessionTransLangIds->setIds($mainLangId, $transLangId);

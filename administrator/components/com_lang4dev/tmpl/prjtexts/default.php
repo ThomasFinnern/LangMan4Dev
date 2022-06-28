@@ -206,13 +206,6 @@ function renderSubProjectStatistic ($missing, $same, $notUsed, $doubles) {
 
 }
 
-$prjFiles  = $this->project->subProjects[0]; // ToDo: remove
-$langFile     = $prjFiles->getLangFile('en-GB');  // ToDo: remove
-$translations = $langFile->translations;
-$transIdLocations = $prjFiles->getTransIdLocations();
-$transStringLocations = $this->project->subProjects[1]->getTransStringsLocations();
-$transIdsClassified = $prjFiles->getTransIdsClassified();
-
 $comment = '';
 if ($this->isDoCommentIds) {
 	$comment = ';';
@@ -232,6 +225,8 @@ if ($this->isDoCommentIds) {
 
 	$subProjects = $this->project->subProjects;
 
+	if(count ($subProjects) > 0)
+	{
 	foreach ($subProjects as $subProject) {
 
 		$title = $subProject->prjId . ': ' . $subProject->getPrjTypeText();
@@ -274,103 +269,15 @@ if ($this->isDoCommentIds) {
 		<?php
 
 	}
+	} else {
 
+		// ToDo: use bootstrap card
+		echo '<br>';
+		echo '<h2>' . Text::_('COM_LANG4DEV_NO_SUB_PROJECTS_DEFINED_FOR_PROJECT'). '</h2>';
+		echo '' . Text::_('COM_LANG4DEV_NO_SUB_PROJECTS_DEFINED_FOR_PROJECT_DESC'). '';
+	}
 	?>
 
-
-	<hr>
-	<h3>COM_LANG4DEV_TRANSLATIONS</h3><br>
-	<?php
-		$newItemLines = implode("<br>", $prjFiles->__toText());
-
-		echo $newItemLines;
-    ?>
-	<hr>
-<!-- ToDo: header -->
-	<table>
-		<tr>
-			<th><?php echo Text::_('*Line Number') ?></th>
-			<th><?php echo Text::_('COM_LANG4DEV_LINE_NR') ?></th>
-			<th><?php echo Text::_('COM_LANG4DEV_NAME') ?></th>
-			<th><?php echo Text::_('COM_LANG4DEV_TRANSLATION') ?></th>
-			<th><?php echo Text::_('COM_LANG4DEV_COMMENT_LINES_BEFORE') ?></th>
-			<th><?php echo Text::_('COM_LANG4DEV_COMMENT_BEHIND') ?></th>
-		</tr>
-		<?php
-		// remove : $transIdLocation may have index as name -> [multiple locations]
-		?>
-		<?php foreach ($translations as $i => $item) : ?>
-			<tr>
-				<td><?php echo $item->lineNr; ?></td>
-				<td><?php echo $item->transId; ?></td>
-				<td><?php echo $item->translationText; ?></td>
-				<td><?php echo implode("<br>", $item->commentsBefore); ?></td>
-				<td><?php echo $item->commentBehind; ?></td>
-			</tr>
-		<?php endforeach; ?>
-	</table>
-<!-- ToDo: trailer -->
-
-	<hr>
-	<h3>COM_LANG4DEV_ID_LOCATIONS</h3><br>
-	<table>
-		<tr>
-			<th><?php echo Text::_('COM_LANG4DEV_INDEX') ?></th>
-			<th><?php echo Text::_('COM_LANG4DEV_NAME') ?></th>
-			<th><?php echo Text::_('COM_LANG4DEV_LINE_NR') ?></th>
-			<th><?php echo Text::_('COM_LANG4DEV_COLUMN') ?></th>
-			<th><?php echo Text::_('COM_LANG4DEV_FILE_NAME') ?></th>
-			<th><?php echo Text::_('COM_LANG4DEV_FILE_PATH') ?></th>
-		</tr>
-		<?php
-		// remove : $transIdLocation may have index as name -> [multiple locations]
-		//$prjSysFiles = $this->prjFiles;
-
-		?>
-		<?php
-		$idx = 1;
-		foreach ($transIdLocations as $transIdLocation) : ?>
-			<?php foreach ($transIdLocation as $item) : ?>
-				<tr>
-					<td><?php echo $idx; ?></td>
-
-					<td><?php echo $item->name; ?></td>
-					<td><?php echo $item->lineNr; ?></td>
-					<td><?php echo $item->colIdx; ?></td>
-					<td><?php echo $item->file; ?></td>
-					<td><?php echo $item->path; ?></td>
-				</tr>
-			<?php endforeach; ?>
-
-			<?php $idx++; ?>
-		<?php endforeach; ?>
-
-	</table>
-
-<hr>
-	<h5>Test translation string locations </h5>
-	<?php
-	$idx = 1;
-	foreach ($transStringLocations as $transIdLocation) : ?>
-		<?php foreach ($transIdLocation as $item) : ?>
-			<tr>
-				<td><?php echo $idx; ?></td>
-
-				<td><?php echo $item->name; ?></td>
-				<td><?php echo $item->string; ?></td>
-				<td><?php echo $item->lineNr; ?></td>
-				<td><?php echo $item->colIdx; ?></td>
-				<td><?php echo $item->file; ?></td>
-				<td><?php echo $item->path; ?></td>
-			</tr>
-			<br>
-		<?php endforeach; ?>
-
-		<?php $idx++; ?>
-	<?php endforeach; ?>
-
-
-	<hr>
 
 	<input type="hidden" name="task" value="" />
     <?php echo HTMLHelper::_('form.token'); ?>

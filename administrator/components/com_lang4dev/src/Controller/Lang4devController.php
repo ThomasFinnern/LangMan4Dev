@@ -93,12 +93,12 @@ class Lang4devController extends AdminController // FormController
 			$data  = $input->post->get('jform', array(), 'array');
 
 			$prjId       = (int) $data ['selectProject'];
-			$subPrjId    = (int) $data ['selectSubproject'];
+			$subPrjActive    = (int) $data ['selectSubproject'];
 
-			// $prjId, $subPrjId
+			// $prjId, $subPrjActive
 
 			$sessionProjectId = new sessionProjectId();
-			$sessionProjectId->setIds($prjId, $subPrjId);
+			$sessionProjectId->setIds($prjId, $subPrjActive);
 		}
 
 		$OutTxt = "Project for prjTexts has changed:";
@@ -130,7 +130,7 @@ class Lang4devController extends AdminController // FormController
 			$mainLangId  = $data ['selectSourceLangId'];
 			$transLangId = $data ['selectTargetLangId'];
 
-			// $prjId, $subPrjId
+			// $mainLangId, $transLangId
 
 			$sessionTransLangIds = new sessionTransLangIds ();
 			$sessionTransLangIds->setIds($mainLangId, $transLangId);

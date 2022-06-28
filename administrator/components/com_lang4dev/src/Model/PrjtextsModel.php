@@ -11,6 +11,9 @@ namespace Finnern\Component\Lang4dev\Administrator\Model;
 
 \defined('_JEXEC') or die;
 
+use Finnern\Component\Lang4dev\Administrator\Helper\langProject;
+use Finnern\Component\Lang4dev\Administrator\Helper\projectType;
+use Finnern\Component\Lang4dev\Administrator\Helper\sessionProjectId;
 use Joomla\CMS\Factory;
 use Joomla\CMS\MVC\Model\AdminModel;
 use Joomla\CMS\MVC\Model\BaseModel;
@@ -46,6 +49,80 @@ class PrjTextsModel extends AdminModel
 		}
 
 		return $form;
+	}
+
+	public function getProject($prjId, $subPrjActive)
+	{
+		$project = new langProject ();
+
+		//--- collect parent project ----------------------------------
+
+		// ?? id is enough for now ($prjId)
+
+		//--- all sub ids ----------------------------------------------
+
+		$subIds = $this->collectSubProjectIdsData ($prjId);
+
+		//--- add sub projects ------------------------------------
+
+		foreach ($subIds as $subId) {
+
+			//---  ----------------------------------------
+			;
+
+			/**
+			$subPrj = $project->addSubProject('com_lang4dev',
+				projectType::PRJ_TYPE_COMP_BACK_SYS,
+				JPATH_ADMINISTRATOR . '/components/com_lang4dev'
+			);
+			/**/
+
+			$subPrj = $project->addSubProject($subId->prjId,
+				$subId->subPrjType,
+				$subId->root_path,
+				$subId->prjXmlPathFilename,
+			);
+
+
+		}
+
+		return $project;
+	}
+
+	private function collectSubProjectIdsData($prjId)
+	{
+		$subIds = [];
+
+		try {
+
+			//--- collect data from manifest -----------------
+			$db = Factory::getDbo();
+
+			$query = $db->getQuery(true)
+				->select($db->quoteName('id'))
+				->select($db->quoteName('prjId'))
+				->select($db->quoteName('subPrjType'))
+				->select($db->quoteName('root_path'))
+				->select($db->quoteName('prjXmlPathFilename'))
+
+				->where($db->quoteName('parent_id') . ' = ' . (int) $prjId)
+				->from($db->quoteName('#__lang4dev_subprojects'))
+				->order($db->quoteName('subPrjType') . ' ASC')
+			;
+
+			// Get the options.
+			$subIds = $db->setQuery($query)->loadObjectList();
+
+		} catch (\RuntimeException $e) {
+			$OutTxt = '';
+			$OutTxt .= 'Error executing collectSubProjectIds: ' . '<br>';
+			$OutTxt .= 'Error: "' . $e->getMessage() . '"' . '<br>';
+
+			$app = Factory::getApplication();
+			$app->enqueueMessage($OutTxt, 'error');
+		}
+
+		return $subIds;
 	}
 
 }

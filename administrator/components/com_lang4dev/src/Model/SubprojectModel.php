@@ -974,7 +974,8 @@ class SubprojectModel extends AdminModel
 		$data ['root_path'] = $subProject->prjRootPath;
 		$data ['prefix`'] = $subProject->langIdPrefix ;
 		$data ['notes'] = '%';
-		$data ['prjXmlPathFilename'] = $subProject->prjXmlPathFilename;
+		// ToDo: activae or check as actual is empty $data ['prjXmlPathFilename'] = $subProject->prjXmlPathFilename;
+		$data ['prjXmlPathFilename'] = $subProject->prjXmlFilePath;
 		$data ['installPathFilename'] = $subProject->installPathFilename;
 		// already set $data ['parent_id'] = $subProject->;
 		//$data ['twin_id'] = $subProject->;
@@ -998,7 +999,8 @@ class SubprojectModel extends AdminModel
 		$data ['root_path'] = $subProject->prjRootPath;
 		$data ['prefix`'] = $subProject->langIdPrefix ;
 		$data ['notes'] = '%';
-		$data ['prjXmlPathFilename'] = $subProject->prjXmlPathFilename;
+		// ToDo: activae or check as actual is empty $data ['prjXmlPathFilename'] = $subProject->prjXmlPathFilename;
+		$data ['prjXmlPathFilename'] = $subProject->prjXmlFilePath;
 		$data ['installPathFilename'] = $subProject->installPathFilename;
 		$data ['parent_id'] = $parentId;
 		//$data ['twin_id'] = $subProject->;

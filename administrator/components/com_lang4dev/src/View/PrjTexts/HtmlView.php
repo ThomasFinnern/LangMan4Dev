@@ -13,6 +13,7 @@ namespace Finnern\Component\Lang4dev\Administrator\View\PrjTexts;
 
 require_once(__DIR__ . '/../../Helper/selectProject.php');
 
+use Finnern\Component\Lang4dev\Administrator\Helper\sessionProjectId;
 use Finnern\Component\Lang4dev\Administrator\Helper\sessionTransLangIds;
 use Joomla\CMS\Component\ComponentHelper;
 use Joomla\CMS\Filesystem\File;
@@ -59,9 +60,9 @@ class HtmlView extends BaseHtmlView
 	{
 		//--- config --------------------------------------------------------------------
 
-		$l4dConfig = ComponentHelper::getComponent('com_lang4dev')->getParams();
+		$l4dConfig            = ComponentHelper::getComponent('com_lang4dev')->getParams();
 		$this->isDebugBackend = $l4dConfig->get('isDebugBackend');
-		$this->isDevelop = $l4dConfig->get('isDevelop');
+		$this->isDevelop      = $l4dConfig->get('isDevelop');
 
 		$this->isDoCommentIds = $l4dConfig->get('isDoComment_prepared_missing_ids');
 
@@ -69,20 +70,38 @@ class HtmlView extends BaseHtmlView
 
 		$this->form = $this->get('Form');
 
-        //--- project --------------------------------------------------------------------
+		//--- project --------------------------------------------------------------------
 
-        $project =
+		//--- Set selection of project and sub project --------------------
+
+		$sessionProjectId = new sessionProjectId();
+		[$prjId, $subPrjActive] = $sessionProjectId->getIds();
+
+		$model         = $this->getModel();
+		$this->project =
+		$project = $model->getProject($prjId, $subPrjActive);
+
+		$project->findPrjFiles()
+			->detectLangFiles()
+			->readSubsLangFile()
+
+			->scanCode4TransIds()
+			->scanCode4TransStrings();
+
+		/**
+		$project =
 		$this->project = selectProject('lang4dev');
-//		$this->project = selectProject('lang4dev');
-//		$this->project = selectProject('joomgallery');
-////		$this->project = selectProject('joomla4x');
+		//        $this->project = selectProject('lang4dev');
+		//        $this->project = selectProject('joomgallery');
+		////        $this->project = selectProject('joomla4x');
 
-		$project->findPrjFiles();
-		$project->detectLangFiles();
-		$project->readSubsLangFile();
+		$project->findPrjFiles()
+		->detectLangFiles()
+		->readSubsLangFile()
 
-		$project->scanCode4TransIds();
-		$project->scanCode4TransStrings();
+		->scanCode4TransIds()
+		->scanCode4TransStrings();
+		/**/
 
 		//--- Main and target lang file --------------------------------------------------------------
 
@@ -91,21 +110,16 @@ class HtmlView extends BaseHtmlView
 
 		$this->form->setValue('selectSourceLangId', null, $mainLangId);
 
-
-
 		/**
-		HTMLHelper::_('sidebar.setAction', 'index.php?option=com_lang4dev&view=config&layout=RawView');
-		/**
-		$Layout = Factory::getApplication()->input->get('layout');
-		Lang4devHelper::addSubmenu('config');
-		$this->sidebar = \JHtmlSidebar::render();
-		**/
+		 * $Layout = Factory::getApplication()->input->get('layout');
+		 * Lang4devHelper::addSubmenu('config');
+		 * $this->sidebar = \JHtmlSidebar::render();
+		 **/
 
 		$Layout = Factory::getApplication()->input->get('layout');
 		//echo '$Layout: ' . $Layout . '<br>';
 
 		$this->addToolbar($Layout);
-		/**/
 
 		return parent::display($tpl);
 	}

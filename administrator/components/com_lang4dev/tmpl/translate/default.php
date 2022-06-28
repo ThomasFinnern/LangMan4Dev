@@ -63,7 +63,7 @@ function renderCheckAll ($form)
 }
 
 
-function renderCheckLangEdited ($subPrjId, $idx, $checked=false)
+function renderCheckLangEdited ($subPrjActive, $idx, $checked=false)
 {
 	?>
 	<div class="d-flex flex-row">
@@ -71,10 +71,10 @@ function renderCheckLangEdited ($subPrjId, $idx, $checked=false)
 
 			<?php // public static function id($rowNum, $recId, $checkedOut = false, $name = 'cid', $stub = 'cb', $title = '', $formId = null) ?>
 
-			<?php echo HTMLHelper::_('grid.id', $idx, $subPrjId, false, 'cid', 'cb', $subPrjId); ?>
+			<?php echo HTMLHelper::_('grid.id', $idx, $subPrjActive, false, 'cid', 'cb', $subPrjActive); ?>
 
 		<!--input class="form-check-input cache-entry" type="checkbox"
-		       id="cb<?php echo $idx; ?>" name="cid[]" value="<?php echo $subPrjId; ?>"-->
+		       id="cb<?php echo $idx; ?>" name="cid[]" value="<?php echo $subPrjActive; ?>"-->
 		<label class="form-check-label" for="cb<?php echo $idx; ?>">
 			<?php echo Text::_('COM_LANG4DEV_CHECK_FOR_SAVE_OF_EDIT_FILE'); ?>
 		</label>
@@ -108,8 +108,8 @@ function renderLangFileEditText ($langId, $langFile, $subPrjPath,
 				// ToDo: enable edit of main language by config
 				if( ! $isMain || $isEditAndSaveMainTranslationFile)
 				{
-					$subPrjId = $langId;
-					renderCheckLangEdited($subPrjId, $editIdx, $checked = false);
+					$subPrjActive = $langId;
+					renderCheckLangEdited($subPrjActive, $editIdx, $checked = false);
 				}
 
 				$linesArray = $langFile->translationLinesArray();

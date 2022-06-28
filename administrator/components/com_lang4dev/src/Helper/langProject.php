@@ -105,7 +105,7 @@ class langProject
 			$app->enqueueMessage($OutTxt, 'error');
 		}
 
-		return; // $isFilesFound;
+		return $this;
 	}
 
     // one file each sub (used mostly for eng_GB)
@@ -132,7 +132,9 @@ class langProject
             $app->enqueueMessage($OutTxt, 'error');
         }
 
-        return $isFilesRead;
+        // return $isFilesRead;
+	    return $this;
+
     }
 
     // one file each sub (used mostly for eng_GB)
@@ -191,7 +193,8 @@ class langProject
             $app->enqueueMessage($OutTxt, 'error');
         }
 
-        return $isFilesFound;
+        //return $isFilesFound;
+	    return $this;
     }
 
     public function scanCode4TransStrings()
@@ -217,7 +220,8 @@ class langProject
             $app->enqueueMessage($OutTxt, 'error');
         }
 
-        return $isFilesFound;
+        // return $isFilesFound;
+	    return $this;
     }
 
 	public function detectLangFiles() {
@@ -240,7 +244,7 @@ class langProject
 			$app->enqueueMessage($OutTxt, 'error');
 		}
 
-		return; // $isFilesFound;
+		return $this;
 	}
 
 	public function alignTranslationsByMain($mainLangId)

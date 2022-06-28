@@ -69,7 +69,7 @@ class ProjectSelectField extends ListField
 		//--- Set selection of project and sub project --------------------
 
 		$sessionProjectId = new sessionProjectId();
-		[$prjId, $subPrjId] = $sessionProjectId->getIds();
+		[$prjId, $subPrjActive] = $sessionProjectId->getIds();
 
 		$this->setValue ($prjId);
 
