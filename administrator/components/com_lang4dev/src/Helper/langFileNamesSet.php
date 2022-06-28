@@ -61,7 +61,7 @@ class langFileNamesSet
 		    $basePath = $this->langBasePath;
 	    } else {
 
-		    $this->$basePath = $basePath;
+		    $this->langBasePath = $basePath;
 	    }
 
         if ($basePath == '' or $basePath == '/' or $basePath == '\\')

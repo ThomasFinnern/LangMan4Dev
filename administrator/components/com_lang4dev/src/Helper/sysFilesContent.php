@@ -310,10 +310,10 @@ class sysFilesContent
 
 		if ($basePath == '') {
 
-			$basePath = $this->$basePath;
+			$basePath = $this->basePath;
 		} else {
 
-			$this->$basePath = $basePath;
+			$this->basePath = $basePath;
 		}
 
 		if (!is_dir($basePath))

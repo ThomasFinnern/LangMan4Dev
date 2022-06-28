@@ -80,6 +80,7 @@ class PrjTextsModel extends AdminModel
 			$subPrj = $project->addSubProject($subId->prjId,
 				$subId->subPrjType,
 				$subId->root_path,
+				//$subId->prjXmlPathFilename,
 				$subId->prjXmlPathFilename,
 			);
 
@@ -104,6 +105,7 @@ class PrjTextsModel extends AdminModel
 				->select($db->quoteName('subPrjType'))
 				->select($db->quoteName('root_path'))
 				->select($db->quoteName('prjXmlPathFilename'))
+				->select($db->quoteName('installPathFilename'))
 
 				->where($db->quoteName('parent_id') . ' = ' . (int) $prjId)
 				->from($db->quoteName('#__lang4dev_subprojects'))

@@ -203,7 +203,7 @@ class projectController extends FormController
 		}
 
 
-		$OutTxt = "detectDetails for project has finished:";
+		$OutTxt = "detectDetails for project has finished successful:";
 		$app = Factory::getApplication();
 		$app->enqueueMessage($OutTxt, 'warning');
 

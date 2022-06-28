@@ -941,7 +941,9 @@ class SubprojectModel extends AdminModel
 	//
 	public function mergeSubProject($subProject, $parentId)
 	{
-		//--- make data complete -----------------------------
+		$isSaved = false;
+
+			//--- make data complete -----------------------------
 
 		// check for prefix
 		$subProject->retrieveMainPrefixId ();
@@ -951,30 +953,35 @@ class SubprojectModel extends AdminModel
 		$existingId = $this->checkSubPrjDoesExist ($subProject, $parentId);
 
 		if ($existingId > 0) {
-			$this->mergeSubProject_DB ($existingId, $subProject);
+			$isSaved = $this->mergeSubProject_DB ($existingId, $subProject);
 		} else {
 			$this->createSubProject_DB ($subProject, $parentId);
 		}
 
-
+		return $isSaved;
 	}
 
 	private function mergeSubProject_DB($existingId, $subProject)
 	{
+		$isSaved = false;
+
 		$table      = $this->getTable();
-		$table->load($existingId);
+		//$table->load($existingId);
+
 
 		$data = [];
 
+		/**/
 		// $data ['title'] = $subProject->prjId . '_' . projectType::getPrjTypeText($subProject->prjId);
 		// $data ['alias'] = $subProject->;
 
+		$data ['id'] = $existingId;
 		$data ['prjId'] = $subProject->prjId;
 		$data ['subPrjType'] = $subProject->prjType;
 		$data ['root_path'] = $subProject->prjRootPath;
 		$data ['prefix`'] = $subProject->langIdPrefix ;
 		$data ['notes'] = '%';
-		// ToDo: activae or check as actual is empty $data ['prjXmlPathFilename'] = $subProject->prjXmlPathFilename;
+		// ToDo: activate or check as actual is empty $data ['prjXmlPathFilename'] = $subProject->prjXmlPathFilename;
 		$data ['prjXmlPathFilename'] = $subProject->prjXmlFilePath;
 		$data ['installPathFilename'] = $subProject->installPathFilename;
 		// already set $data ['parent_id'] = $subProject->;
@@ -982,6 +989,24 @@ class SubprojectModel extends AdminModel
 		// ToDo: $data ['lang_path_type'] = $subProject->;
 		// ToDo: $data ['lang_ids'] = $subProject->;
 
+		$isSaved = $this->save($data);
+		/**/
+
+		/**
+		$table->prjId = $subProject->prjId;
+		$table->subPrjType = $subProject->prjType;
+		$table->root_path = $subProject->prjRootPath;
+		$table->prefix = $subProject->langIdPrefix ;
+		$table->notes = '%';
+		// ToDo: activate or check as actual is empty $data ['prjXmlPathFilename'] = $subProject->prjXmlPathFilename;
+		$table->prjXmlPathFilename = $subProject->prjXmlFilePath;
+		$table->installPathFilename = $subProject->installPathFilename;
+		// ToDo: $table->iang_path_type = $subProject->;
+		// ToDo: $table->lang_ids = $subProject->;
+
+		$isSaved = $table->save();
+		/**/
+		return $isSaved;
 	}
 
 	private function createSubProject_DB($subProject, $parentId)
@@ -1007,9 +1032,7 @@ class SubprojectModel extends AdminModel
 		// ToDo: $data ['lang_path_type'] = $subProject->;
 		// ToDo: $data ['lang_ids'] = $subProject->;
 
-
 		return $this->save($data);
-
 	}
 
 	private function checkSubPrjDoesExist($subProject, $parentId)
