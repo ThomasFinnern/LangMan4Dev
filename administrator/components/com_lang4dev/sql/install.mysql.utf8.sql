@@ -42,12 +42,12 @@ CREATE TABLE IF NOT EXISTS `#__lang4dev_projects` (
 ALTER TABLE `#__lang4dev_projects` ADD COLUMN  `title` varchar(255) NOT NULL DEFAULT '' AFTER `id`;
 
 -- INSERT INTO `#__lang4dev_projects` (`name`,`alias`,`note`, `base_path`) VALUES
--- ('com_lang4dev','com_lang4dev','Test data pointing to this component pathes',
+-- ('com_lang4dev','com_lang4dev','Test data pointing to this component paths',
 -- 'administrator/components/com_lang4dev');
 
 
 --
--- sub projects
+-- subprojects
 --
 
 CREATE TABLE IF NOT EXISTS `#__lang4dev_subprojects` (
@@ -68,7 +68,7 @@ CREATE TABLE IF NOT EXISTS `#__lang4dev_subprojects` (
 	`parent_id` int NOT NULL DEFAULT 0,
 	`twin_id` int NOT NULL DEFAULT 0,
 
---    `lang_path_type` en_GB subfolder or not  '',
+--    `lang_path_type` en_GB sub folder or not  '',
     `lang_path_type` varchar(255) NOT NULL DEFAULT '',
     `lang_ids` text NOT NULL DEFAULT '',
 
@@ -98,8 +98,8 @@ CREATE TABLE IF NOT EXISTS `#__lang4dev_subprojects` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 DEFAULT COLLATE=utf8mb4_unicode_ci;
 
 -- INSERT INTO `#__lang4dev_subprojects` (`name`,`alias`,`note`, `base_path`) VALUES
--- ('com_lang4dev','com_lang4dev','Test data pointing to this component pathes',
+-- ('com_lang4dev','com_lang4dev','Test data pointing to this component paths',
 -- 'administrator/components/com_lang4dev'),
--- ('com_lang4dev','com_lang4dev','Test data pointing to this component pathes',
+-- ('com_lang4dev','com_lang4dev','Test data pointing to this component paths',
 -- 'administrator/components/com_lang4dev');
 

@@ -20,7 +20,7 @@ use Finnern\Component\Lang4dev\Administrator\Helper\transIdLocations;
 
 /**
  * Search language constants (Items) in given folders
- * The files uses is limitet as *.ini are not useful
+ * The files uses is limited as *.ini are not useful
  *
  * @package Lang4dev
  */
@@ -88,6 +88,7 @@ class searchTransIdLocations
 				}
 				else
 				{
+					// ??? ToDo: ????
 				}
 			}
 

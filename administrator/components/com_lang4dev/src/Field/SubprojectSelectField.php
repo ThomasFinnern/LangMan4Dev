@@ -45,7 +45,7 @@ class SubprojectSelectField extends ListField
 
 	protected function getInput()
 	{
-		//--- Set selection of project and sub project --------------------
+		//--- Set selection of project and subproject --------------------
 
 		$sessionProjectId = new sessionProjectId();
 		[$prjId, $subPrjActive] = $sessionProjectId->getIds();
@@ -69,7 +69,7 @@ class SubprojectSelectField extends ListField
 		}
 		else {
 			if($subPrjActive == 0) {
-				return '<span class="readonly">' . Text::_('All sub projects') . '</span>';
+				return '<span class="readonly">' . Text::_('All subprojects') . '</span>';
 			} else
 			{
 				return '<span class="readonly">' . Text::_('??? -1 ???') . '</span>';
@@ -81,7 +81,7 @@ class SubprojectSelectField extends ListField
 	/**
 	 * Method to get a list of options for a list input.
 	 *
-	 * @return  string array  The field option objects.
+	 * @return  string []  The field option objects.
      *
      * @since __BUMP_VERSION__
 	 */
@@ -108,7 +108,7 @@ class SubprojectSelectField extends ListField
 			// Get the options.
 			$subprojects = $db->setQuery($query)->loadObjectList();
 
-			//--- Set selection of project and sub project --------------------
+			//--- Set selection of project and subproject --------------------
 
 			$sessionProjectId = new sessionProjectId();
 			[$prjId, $subPrjActive] = $sessionProjectId->getIds();

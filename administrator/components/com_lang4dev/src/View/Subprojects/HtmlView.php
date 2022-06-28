@@ -24,7 +24,7 @@ use Joomla\CMS\Toolbar\ToolbarHelper;
 
 use Joomla\Component\Content\Administrator\Extension\ContentComponent;
 
-use Finnern\Component\Lang4dev\Administrator\Helper\Lang4devHelper;
+//use Finnern\Component\Lang4dev\Administrator\Helper\Lang4devHelper;
 /**
  * View class for a list of lang4dev.
  *
@@ -49,7 +49,7 @@ class HtmlView extends BaseHtmlView
     /**
      * The pagination object
      *
-     * @var    Pagination
+     * @var
      * @since __BUMP_VERSION__
      */
     protected $pagination;
@@ -68,7 +68,7 @@ class HtmlView extends BaseHtmlView
     public $activeFilters;
 
 
-//    protected $isDebugBackend;
+    protected $isDebugBackend;
     protected $isDevelop;
 
 
@@ -87,6 +87,7 @@ class HtmlView extends BaseHtmlView
 		//echo '$Layout: ' . $Layout . '<br>';
 
 		$l4dConfig = ComponentHelper::getComponent('com_lang4dev')->getParams();
+		$this->isDebugBackend = $l4dConfig->get('isDebugBackend');
 		$this->isDevelop = $l4dConfig->get('isDevelop');
 
         $this->items         = $this->get('Items');

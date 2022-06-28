@@ -13,6 +13,7 @@ namespace Finnern\Component\Lang4dev\Administrator\View\Lang4Dev;
 
 use Finnern\Component\Lang4dev\Administrator\Helper\sessionTransLangIds;
 use Joomla\CMS\Component\ComponentHelper;
+use Joomla\CMS\Form\Form;
 use Joomla\CMS\Helper\ContentHelper;
 use Joomla\CMS\Factory;
 use Joomla\CMS\Language\Text;
@@ -31,6 +32,13 @@ use Finnern\Component\Lang4dev\Administrator\Helper\lang4devVersion;
  */
 class HtmlView extends BaseHtmlView
 {
+	/**
+	 * The \Form object
+	 *
+	 * @var  Form
+	 */
+	protected mixed $form;
+
 	/**
 	 * An array of items
 	 *
@@ -67,6 +75,9 @@ class HtmlView extends BaseHtmlView
 	public $activeFilters;
 	
 	protected $extensionVersion;
+
+	protected $isDebugBackend;
+	protected $isDevelop;
 
 	/**
 	 * Method to display the view.

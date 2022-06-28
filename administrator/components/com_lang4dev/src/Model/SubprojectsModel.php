@@ -154,7 +154,7 @@ class SubprojectsModel extends ListModel
 	}
 
 	/**
-	 * Method to get a database query to list sub projects.
+	 * Method to get a database query to list subprojects.
 	 *
 	 * @return  \DatabaseQuery object.
 	 *
@@ -412,7 +412,7 @@ class SubprojectsModel extends ListModel
 		}
 
 		// Increment the content version number.
-		$table->version++;
+		//$table->version++;
 	}
 
 	/**

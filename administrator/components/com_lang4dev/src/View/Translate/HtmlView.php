@@ -16,6 +16,7 @@ require_once(__DIR__ . '/../../Helper/selectProject.php');
 use Finnern\Component\Lang4dev\Administrator\Helper\sessionProjectId;
 use Finnern\Component\Lang4dev\Administrator\Helper\sessionTransLangIds;
 use Joomla\CMS\Component\ComponentHelper;
+use Joomla\CMS\Form\Form;
 use Joomla\CMS\Helper\ContentHelper;
 use Joomla\CMS\Factory;
 use Joomla\CMS\HTML\HTMLHelper;
@@ -26,7 +27,7 @@ use Joomla\CMS\Router\Route;
 use Joomla\CMS\Toolbar\Toolbar;
 use Joomla\CMS\Toolbar\ToolbarHelper;
 
-use Finnern\Component\Lang4dev\Administrator\Helper\Lang4devHelper;
+//use Finnern\Component\Lang4dev\Administrator\Helper\Lang4devHelper;
 use function Finnern\Component\Lang4dev\Administrator\Helper\selectProject;
 
 
@@ -37,13 +38,20 @@ use function Finnern\Component\Lang4dev\Administrator\Helper\selectProject;
  */
 class HtmlView extends BaseHtmlView
 {
+	/**
+	 * The \Form object
+	 *
+	 * @var  Form
+	 */
+	protected mixed $form;
+
 	protected $project;
 
 	protected $isDebugBackend;
 	protected $isDevelop;
 	protected $isDoCommentIds;
 
-	protected $langfiles = [];
+	//protected $langFiles = [];
 
 	protected $main_langId;
 	protected $trans_langId;
@@ -104,6 +112,7 @@ class HtmlView extends BaseHtmlView
 		$project =
 		$this->project = selectProject('lang4dev');
 //		$this->project = selectProject('lang4dev');
+//		$this->project = selectProject('rsgallery2');
 //		$this->project = selectProject('joomgallery');
 ////		$this->project = selectProject('joomla4x');
 

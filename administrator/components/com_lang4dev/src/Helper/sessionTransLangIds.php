@@ -23,10 +23,10 @@ use Joomla\CMS\Factory;
  *
  *
  *
- * id and sub project id from / to session
+ * id and subproject id from / to session
  *
  * The initial ID is the highest project id in db and zero for the sub id
- * Zero on sub id tells that all sub projects are displayed to the user
+ * Zero on sub id tells that all subprojects are displayed to the user
  *
  * @package Lang4dev
  */
@@ -100,7 +100,7 @@ class sessionTransLangIds
 	/**
 	 * getIds
 	 *
-	 * @return string [] project id, sub project id
+	 * @return string [] project id, subproject id
 	 * @since __BUMP_VERSION__
 	 */
 	public function getIds()

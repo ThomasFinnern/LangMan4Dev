@@ -63,7 +63,7 @@ class PrjTextsModel extends AdminModel
 
 		$subIds = $this->collectSubProjectIdsData ($prjId);
 
-		//--- add sub projects ------------------------------------
+		//--- add subprojects ------------------------------------
 
 		foreach ($subIds as $subId) {
 

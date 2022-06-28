@@ -42,7 +42,7 @@ class Lang4devComponent extends MVCComponent implements BootableExtensionInterfa
 	 * Booting the extension. This is the function to set up the environment of the extension like
 	 * registering new class loaders, etc.
 	 *
-	 * If required, some initial set up can be done from services of the container, eg.
+	 * If required, some initial set up can be done from services of the container, e.g.
 	 * registering HTML services.
 	 *
 	 * @param   ContainerInterface  $container  The container

@@ -22,7 +22,7 @@ use Joomla\CMS\Router\Route;
 use Joomla\CMS\Toolbar\Toolbar;
 use Joomla\CMS\Toolbar\ToolbarHelper;
 
-use Finnern\Component\Lang4dev\Administrator\Helper\Lang4devHelper;
+//use Finnern\Component\Lang4dev\Administrator\Helper\Lang4devHelper;
 
 /**
  * View class for a list of lang4dev.
@@ -31,7 +31,8 @@ use Finnern\Component\Lang4dev\Administrator\Helper\Lang4devHelper;
  */
 class HtmlView extends BaseHtmlView
 {
-	//protected $configVars;
+	protected $isDebugBackend;
+	protected $isDevelop;
 
 	/**
 	 * Method to display the view.
@@ -48,6 +49,7 @@ class HtmlView extends BaseHtmlView
 		//echo '$Layout: ' . $Layout . '<br>';
 
 		$l4dConfig = ComponentHelper::getComponent('com_lang4dev')->getParams();
+		$this->isDebugBackend = $l4dConfig->get('isDebugBackend');
 		$this->isDevelop = $l4dConfig->get('isDevelop');
 
 
@@ -63,7 +65,8 @@ class HtmlView extends BaseHtmlView
 		$this->addToolbar($Layout);
 		/**/
 
-		return parent::display($tpl);
+		parent::display($tpl);
+		return;
 	}
 
 	/**

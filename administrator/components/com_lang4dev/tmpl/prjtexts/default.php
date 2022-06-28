@@ -274,7 +274,7 @@ if ($this->isDoCommentIds) {
 		// ToDo: use bootstrap card
 		echo '<br>';
 		echo '<h2>' . Text::_('COM_LANG4DEV_NO_SUB_PROJECTS_DEFINED_FOR_PROJECT'). '</h2>';
-		echo '' . Text::_('COM_LANG4DEV_NO_SUB_PROJECTS_DEFINED_FOR_PROJECT_DESC'). '';
+		echo ' ' . Text::_('COM_LANG4DEV_NO_SUB_PROJECTS_DEFINED_FOR_PROJECT_DESC') . ' ';
 	}
 	?>
 

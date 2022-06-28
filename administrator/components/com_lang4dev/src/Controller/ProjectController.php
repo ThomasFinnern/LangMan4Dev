@@ -183,13 +183,13 @@ class projectController extends FormController
 				$id = $prjModel->justSavedId ();
 			}
 
-			//--- extract sub projects ---------------------------------
+			//--- extract subprojects ---------------------------------
 
 			$subProjects = $prjModel->subProjectsByPrjId ($oSubPrjPath);
 			// ToDo: add $subProjects = $prjModel->subProjectsByManifest ($oSubPrjPath);
 
 
-			//--- save sub project changes ---------------------------------
+			//--- save subproject changes ---------------------------------
 
 			$subPrjModel = $this->getModel ('Subproject');
 

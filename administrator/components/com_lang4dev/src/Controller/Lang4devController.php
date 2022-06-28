@@ -23,19 +23,6 @@ use Joomla\CMS\Session\Session;
 use Joomla\CMS\Language\Text;
 use Joomla\CMS\Router\Route;
 
-/**
-global $Rsg2DebugActive;
-
-if ($Rsg2DebugActive)
-{
-	// Include the JLog class.
-//	jimport('joomla.log.log');
-
-	// identify active file
-	JLog::add('==> ctrl.config.php ');
-}
-/**/
-
 class Lang4devController extends AdminController // FormController
 {
     /**

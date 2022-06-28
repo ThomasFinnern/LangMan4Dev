@@ -18,6 +18,7 @@ use Finnern\Component\Lang4dev\Administrator\Helper\sessionTransLangIds;
 use Joomla\CMS\Component\ComponentHelper;
 use Joomla\CMS\Filesystem\File;
 use Joomla\CMS\Filesystem\Path;
+use Joomla\CMS\Form\Form;
 use Joomla\CMS\Helper\ContentHelper;
 use Joomla\CMS\Factory;
 use Joomla\CMS\HTML\HTMLHelper;
@@ -41,6 +42,13 @@ use function Finnern\Component\Lang4dev\Administrator\Helper\selectProject;
  */
 class HtmlView extends BaseHtmlView
 {
+	/**
+	 * The \Form object
+	 *
+	 * @var  Form
+	 */
+	protected mixed $form;
+
 	protected $project;
 
 	protected $isDebugBackend;
@@ -72,7 +80,7 @@ class HtmlView extends BaseHtmlView
 
 		//--- project --------------------------------------------------------------------
 
-		//--- Set selection of project and sub project --------------------
+		//--- Set selection of project and subproject --------------------
 
 		$sessionProjectId = new sessionProjectId();
 		[$prjId, $subPrjActive] = $sessionProjectId->getIds();
@@ -121,7 +129,8 @@ class HtmlView extends BaseHtmlView
 
 		$this->addToolbar($Layout);
 
-		return parent::display($tpl);
+		parent::display($tpl);
+		return;
 	}
 
 	/**

@@ -155,7 +155,7 @@ class SubprojectModel extends AdminModel
 	}
 
 	/**
-	 * Auto-populate the model state.
+	 * Auto populate the model state.
 	 *
 	 * Note. Calling getState in this method will result in recursion.
 	 *
@@ -211,7 +211,7 @@ class SubprojectModel extends AdminModel
 
 			if ($item->id != null)
 			{
-				$associations = Associations::getAssociations('com_foos', '#__foos_details', 'com_foos.item', $item->id, 'id', null);
+				$associations = Associations::getAssociations('com_lang4dev', '#__foos_subproject', 'com_lang4dev.item', $item->id, 'id', null);
 
 				foreach ($associations as $tag => $association)
 				{
@@ -948,7 +948,7 @@ class SubprojectModel extends AdminModel
 		// check for prefix
 		$subProject->retrieveMainPrefixId ();
 
-		// ToDo: check for lexisting lang Ids
+		// ToDo: check for existing lang Ids
 
 		$existingId = $this->checkSubPrjDoesExist ($subProject, $parentId);
 
@@ -1001,7 +1001,7 @@ class SubprojectModel extends AdminModel
 		// ToDo: activate or check as actual is empty $data ['prjXmlPathFilename'] = $subProject->prjXmlPathFilename;
 		$table->prjXmlPathFilename = $subProject->prjXmlFilePath;
 		$table->installPathFilename = $subProject->installPathFilename;
-		// ToDo: $table->iang_path_type = $subProject->;
+		// ToDo: $table->lang_path_type = $subProject->;
 		// ToDo: $table->lang_ids = $subProject->;
 
 		$isSaved = $table->save();
@@ -1024,7 +1024,7 @@ class SubprojectModel extends AdminModel
 		$data ['root_path'] = $subProject->prjRootPath;
 		$data ['prefix`'] = $subProject->langIdPrefix ;
 		$data ['notes'] = '%';
-		// ToDo: activae or check as actual is empty $data ['prjXmlPathFilename'] = $subProject->prjXmlPathFilename;
+		// ToDo: activate or check as actual is empty $data ['prjXmlPathFilename'] = $subProject->prjXmlPathFilename;
 		$data ['prjXmlPathFilename'] = $subProject->prjXmlFilePath;
 		$data ['installPathFilename'] = $subProject->installPathFilename;
 		$data ['parent_id'] = $parentId;

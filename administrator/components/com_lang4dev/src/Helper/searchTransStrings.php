@@ -21,7 +21,7 @@ use Joomla\String\Normalise;
 
 /**
  * Search language constants (Items) in given folders
- * The files uses is limitet as *.ini are not useful
+ * The files uses is limited as *.ini are not useful
  *
  * @package Lang4dev
  */
@@ -34,7 +34,7 @@ class searchTransStrings
 //
 //	public $useLangSysIni = false;
 //	public $prjXmlPathFilename = "";
-//	public $installPathFilename = "";
+	public $installPathFilename = "";
 //
 //	protected $name = 'Lang4dev';
 
@@ -90,6 +90,7 @@ class searchTransStrings
 				}
 				else
 				{
+					// ToDo: ????
 				}
 			}
 
@@ -120,6 +121,7 @@ class searchTransStrings
 
                 //--- prevent project sys files -----------------------------------
 
+				// ToDo: installPathFilename Is it set ? construct ND PROPERTY
                 if ($ext == 'php' && $filePath == $this->installPathFilename)
                 {
                     continue;
@@ -168,7 +170,7 @@ class searchTransStrings
 		{
 			$OutTxt = '';
 			$OutTxt .= 'Error executing filesInDir: "' . '<br>';
-			$OutTxt .= 'Error: "' . $e->getMessaxge() . '"' . '<br>';
+			$OutTxt .= 'Error: "' . $e->getMessage() . '"' . '<br>';
 
 			$app = Factory::getApplication();
 			$app->enqueueMessage($OutTxt, 'error');

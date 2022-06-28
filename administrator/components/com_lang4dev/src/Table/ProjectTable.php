@@ -240,7 +240,8 @@ class ProjectTable extends Table
      */
     public function delete($pk = null, $children = false)
     {
-        $return = parent::delete($pk, $children);
+        //$return = parent::delete($pk, $children);
+        $return = parent::delete($pk);
 
         if ($return)
         {

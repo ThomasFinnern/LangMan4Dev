@@ -31,7 +31,7 @@ $this->ignore_fieldsets = array('jmetadata', 'item_associations');
 $this->useCoreUI = true;
 
 // In case of modal
-$isModal = $input->get('layout') == 'modal' ? true : false;
+$isModal = $input->get('layout') == 'modal';
 $layout  = $isModal ? 'modal' : 'edit';
 $tmpl    = $isModal || $input->get('tmpl', '', 'cmd') === 'component' ? '&tmpl=component' : '';
 
@@ -52,7 +52,7 @@ $assoc = false; // ToDo: check how it is used
                 <?php // echo'-------------- lg-9.start: ><br>'; ?>
 	            <div class="card">
                     <div class="card-body">
-	                    <div class="card-header"  style="background-color: lightgrey";>
+	                    <div class="card-header"  style="background-color: lightgrey;">
 		                    <?php echo Text::_('COM_LANG4DEV_SUBPROJECT_BASE'); ?>
 	                    </div>
 	                    <br>
@@ -75,7 +75,7 @@ $assoc = false; // ToDo: check how it is used
                             ?>
 
 	                        <!--div class="card  text-dark bg-light mb-3  border-success"-->
-		                        <div class="card-header"  style="background-color: lightgrey";>
+		                        <div class="card-header"  style="background-color: lightgrey;">
 			                        <?php echo Text::_('JDETAILS'); ?>
 		                        </div>
 								<br>

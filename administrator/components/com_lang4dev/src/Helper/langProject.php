@@ -144,7 +144,7 @@ class langProject
 
         try
         {
-            // all sub projects
+            // all subprojects
             foreach ($this->subProjects as $subProject)
             {
                 // all existing

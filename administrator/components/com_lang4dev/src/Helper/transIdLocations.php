@@ -126,7 +126,7 @@ class transIdLocations
 		return $text;
 	}
 
-	public function _toTextNames ($seperator = ', ') // $seperator ='/n'
+	public function _toTextNames ($separator = ', ') // $separator ='/n'
 	{
 		$text = '';
 
@@ -134,7 +134,7 @@ class transIdLocations
 
 			$names = $this->getItemNames ();
 
-			$text = join ($seperator, $names);
+			$text = join ($separator, $names);
 
 		}
 		catch (\RuntimeException $e)

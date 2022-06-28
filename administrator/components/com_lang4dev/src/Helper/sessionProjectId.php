@@ -16,10 +16,10 @@ use Joomla\CMS\Factory;
 \defined('_JEXEC') or die;
 
 /**
- * Reads and writes user selected project id and sub project id from / to session
+ * Reads and writes user selected project id and subproject id from / to session
  *
  * The initial ID is the highest project id in db and zero for the sub id
- * Zero on sub id tells that all sub projects are displayed to the user
+ * Zero on sub id tells that all subprojects are displayed to the user
  *
  * @package Lang4dev
  */
@@ -75,7 +75,7 @@ class sessionProjectId
 	/**
 	 * getIds
 	 *
-	 * @return integer [] project id, sub project id
+	 * @return integer [] project id, subproject id
 	 * @since __BUMP_VERSION__
 	 */
 	public function getIds()

@@ -97,7 +97,7 @@ class subprojectController extends FormController
 		// check: does it need $input = ....
 		$data  = $this->input->post->get('jform', array(), 'array');
 
-		// sub project
+		// subproject
 		/**/
 		$prjId = $data ['prjId'];
 		$prjType = (int) $data ['subPrjType'];
@@ -189,7 +189,7 @@ class subprojectController extends FormController
                 {
                     // Delete image files physically
 
-                    /** ToDo: folowing
+                    /** ToDo: following
                     $IsDeleted = false;
 
                     try

@@ -5,8 +5,9 @@ defined('_JEXEC') or die;
 use Joomla\CMS\Factory;
 use Joomla\CMS\HTML\HTMLHelper;
 use Joomla\CMS\Language\Text;
-use Joomla\CMS\Layout\LayoutHelper;
+//use Joomla\CMS\Layout\LayoutHelper;
 use Joomla\CMS\Router\Route;
+use Joomla\CMS\Session\Session;
 use Joomla\String\Inflector;
 
 HTMLHelper::_('behavior.multiselect');
@@ -60,7 +61,7 @@ if (count($parts) > 1)
 
 if ($saveOrder && !empty($this->items))
 {
-//	$saveOrderingUrl = 'index.php?option=com_lang4dev&task=images.saveOrderAjax&tmpl=component&' . Session::getFormToken() . '=1';
+	$saveOrderingUrl = 'index.php?option=com_lang4dev&task=subprojects.saveOrderAjax&tmpl=component&' . Session::getFormToken() . '=1';
 	HTMLHelper::_('draggablelist.draggable');
 }
 

@@ -153,15 +153,15 @@ class TranslateController extends AdminController
 			$input = Factory::getApplication()->input;
 			$data  = $input->post->get('jform', array(), 'array');
 
-			$targetlangId = $data ['createLangId'];
-			$sourcelangId = $data ['selectSourceLangId'];
+			$targetLangId = $data ['createLangId'];
+			$sourceLangId = $data ['selectSourceLangId'];
 
 			// form lang file names (wrong lang ID)
 			$langPathFileNames = $input->get('langPathFileNames', array(), 'ARRAY');
 
 			// check for valid form ?
-			$isTargetVerified = $this->isValidLangIdName ($targetlangId);
-			$isSourceVerified = $this->isValidLangIdName($sourcelangId);
+			$isTargetVerified = $this->isValidLangIdName ($targetLangId);
+			$isSourceVerified = $this->isValidLangIdName($sourceLangId);
 
 			if ($isTargetVerified && $isSourceVerified)
 			{
@@ -175,7 +175,7 @@ class TranslateController extends AdminController
 					$langFile->setLangPathFileName ($langPathFileName);
 
 					// Exchange lang ID with source lang ID
-					$langFile->setLangID ($sourcelangId);
+					$langFile->setLangID ($sourceLangId);
 
 					// Read main translations
 					$isRead = $langFile->readFileContent();
@@ -186,7 +186,7 @@ class TranslateController extends AdminController
 						//--- create new lang file ---------------------------------------
 
 						// change name
-						$langFile->setLangID ($targetlangId);
+						$langFile->setLangID ($targetLangId);
 
 						// remove translations (attention comments may still be old language)
 						$langFile->resetToPreparedTranslations();
@@ -231,7 +231,7 @@ class TranslateController extends AdminController
 				if (! $isTargetVerified)
 				{
 					$OutTxt = Text::_('COM_LANG4DEV_TRANSLATE_WRONG_LANG_ID')
-						. ': "' . $targetlangId .'"';
+						. ': "' . $targetLangId .'"';
 					$app    = Factory::getApplication();
 					$app->enqueueMessage($OutTxt, 'error');
 				}
@@ -239,7 +239,7 @@ class TranslateController extends AdminController
 				if (! $isSourceVerified)
 				{
 					$OutTxt = Text::_('COM_LANG4DEV_TRANSLATE_WRONG_LANG_ID')
-						. ': "' . $sourcelangId .'"';
+						. ': "' . $sourceLangId .'"';
 					$app    = Factory::getApplication();
 					$app->enqueueMessage($OutTxt, 'error');
 				}
@@ -377,7 +377,7 @@ class TranslateController extends AdminController
 
 
 
-	// ToDo: part of langFile / langFielNames class ?
+	// ToDo: part of langFile / langFileNames class ?
 	// ends on ini and does exist
 	private function verifyLangFileName(string $langPathFileName = '')
 	{
@@ -396,7 +396,7 @@ class TranslateController extends AdminController
 
 
 
-			// ToDo: flag if it maust exist
+			// ToDo: flag if it must exist
 			if ( ! File::exists ($langPathFileName)) {
 
 				$isNameVerified = false;

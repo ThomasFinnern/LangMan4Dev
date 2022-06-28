@@ -23,7 +23,7 @@ use Joomla\CMS\Router\Route;
 use Joomla\CMS\Toolbar\Toolbar;
 use Joomla\CMS\Toolbar\ToolbarHelper;
 
-use Finnern\Component\Lang4dev\Administrator\Helper\Lang4devHelper;
+//use Finnern\Component\Lang4dev\Administrator\Helper\Lang4devHelper;
 use Joomla\Component\Content\Administrator\Extension\ContentComponent;
 
 /**
@@ -70,7 +70,7 @@ class HtmlView extends BaseHtmlView
     protected $canDo;
 
     /**
-     * Is there a content type associated with this gallery aias
+     * Is there a content type associated with this gallery alias
      *
      * @var    boolean
      * @since __BUMP_VERSION__

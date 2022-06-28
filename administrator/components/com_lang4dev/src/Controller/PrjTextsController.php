@@ -90,11 +90,16 @@ class PrjTextsController extends AdminController
             try {
 				
 				
-				// yyyy
+				// Message when used  ....
+
+	            $OutTxt = '';
+	            $OutTxt .= 'Error executing rebuild: "' . '<br>';
+	            //$OutTxt .= 'Error: "' . $e->getMessage() . '"' . '<br>';
+
+	            $app = Factory::getApplication();
+	            $app->enqueueMessage($OutTxt, 'error');
+
 				
-				
-				
-                /** @var \Lang4dev\Component\Lang4dev\Administrator\Model\GalleryModel $model */
                 $model = $this->getModel();
 
                 $isOk = $model->rebuild();

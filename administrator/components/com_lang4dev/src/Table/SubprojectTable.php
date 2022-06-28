@@ -92,7 +92,7 @@ class SubprojectTable extends Table
 
         // //--- alias -------------------------------------------------------------
 
-        // // ToDo: aliase must be singular see below store ?
+        // // ToDo: aliases must be singular see below store ?
         // if (empty($this->alias)) {
             // $this->alias = $this->name;
         // }

@@ -66,7 +66,7 @@ class ProjectSelectField extends ListField
 	 */
 	protected function getInput()
 	{
-		//--- Set selection of project and sub project --------------------
+		//--- Set selection of project and subproject --------------------
 
 		$sessionProjectId = new sessionProjectId();
 		[$prjId, $subPrjActive] = $sessionProjectId->getIds();

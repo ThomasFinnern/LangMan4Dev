@@ -87,7 +87,7 @@ class langPathFileName
 			self::extractNameParts($this->langPathFileName);
 		// 2022.06.07 $langId = $this->langId;
 
-		// reformat sub project path
+		// reformat subproject path
 		$fullPath = self::createLangPathFileName ($fileName, $prjPath, $langId, $isIdPreceded, $isSysFile);
 
 		$subPrjPath = substr ($fullPath, strlen ($prjPath) + 1);

@@ -213,7 +213,7 @@ class ProjectModel extends AdminModel
 
 			if ($item->id != null)
 			{
-				$associations = Associations::getAssociations('com_foos', '#__foos_details', 'com_foos.item', $item->id, 'id', null);
+				$associations = Associations::getAssociations('com_lang4dev', '#__com_lang4dev_project', 'com_lang4dev.item', $item->id, 'id', null);
 
 				foreach ($associations as $tag => $association)
 				{
@@ -1007,7 +1007,7 @@ class ProjectModel extends AdminModel
 
 		if ($return)
 		{
-			// delete sub project by parent id
+			// delete subproject by parent id
 			$db = $this->getDbo();
 			$query = $db->getQuery(true)
 				->delete($db->quoteName('#__lang4dev_subprojects'))

@@ -118,7 +118,7 @@ function createPrj_Joomla4x ()
 			$langProject = createPrj_Lang4Dev();
 		break;
 
-		case 'lang4dev':
+		case 'rsgallery2':
 			$langProject = createPrj_RSG2();
 		break;
 
