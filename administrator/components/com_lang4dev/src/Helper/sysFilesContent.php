@@ -203,11 +203,13 @@ class sysFilesContent
 
             $installFile = $this->prjXmlFilePath . '/' . 'script.php';
 
+			/** shortcut leaves out $langIdPrefix
             if (is_file ($installFile)) {
                 $isFileFound = true;
             }
             else
             {
+			/**/
                 //--- extract from project xml file --------------------------
 
                 $prjXmlPathFilename = $this->prjXmlPathFilename;
@@ -232,7 +234,9 @@ class sysFilesContent
 
 		            $this->langIdPrefix = $langIdPrefix;
 	            }
+	        /**
             }
+			/**/
 
         }
         catch (\RuntimeException $e)

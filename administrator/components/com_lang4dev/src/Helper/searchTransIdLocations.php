@@ -188,6 +188,7 @@ class searchTransIdLocations
 	public function searchTransIds_in_PHP_file($fileName, $path)
 	{
 		$isInComment = false;
+		$lines = [];
 
 		try
 		{

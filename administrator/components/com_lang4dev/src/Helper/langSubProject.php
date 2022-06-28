@@ -46,6 +46,8 @@ class langSubProject extends langFileNamesSet
 		$prjRootPath = '',
 		$prjXmlFilePath = '')
 	{
+		parent::__construct();
+
 		$this->prjType     = $prjType;
 		$this->prjId       = $prjId;
 		$this->prjRootPath = $prjRootPath;
@@ -141,26 +143,25 @@ class langSubProject extends langFileNamesSet
 
 					//--- Assign from variables function call ------------------------------------
 
-					$finder = new sysFilesContent();
+					$sysXmlData = new sysFilesContent();
 
-					$finder->prjId       = $this->prjId;
-					$finder->prjType     = $this->prjType;
-					$finder->prjRootPath = $this->prjRootPath;
+					$sysXmlData->prjId       = $this->prjId;
+					$sysXmlData->prjType     = $this->prjType;
+					$sysXmlData->prjRootPath = $this->prjRootPath;
 
 					// use sysFilesContent
 					// new ...;
 
-					$isFilesFound = $finder->findPrjFiles();
+					$isFilesFound = $sysXmlData->findPrjFiles();
 
 					// take results
 					if ($isFilesFound)
 					{
-						$this->prjXmlFilePath = $finder->prjXmlFilePath;
+						$this->prjXmlFilePath = $sysXmlData->prjXmlFilePath;
 
-						$this->prjXmlFilePath = $finder->prjXmlFilePath;
-						$this->prjXmlPathFilename  = $finder->prjXmlPathFilename;
-						$this->installPathFilename = $finder->installPathFilename;
-						$this->langIdPrefix        = $finder->langIdPrefix;
+						$this->prjXmlPathFilename  = $sysXmlData->prjXmlPathFilename;
+						$this->installPathFilename = $sysXmlData->installPathFilename;
+						$this->langIdPrefix        = $sysXmlData->langIdPrefix;
 					}
 
 					$this->detectLangBasePath($this->prjXmlFilePath, $this->useLangSysIni);

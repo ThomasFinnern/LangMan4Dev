@@ -58,7 +58,6 @@ class langProject
 
 	public function findPrjFiles()
 	{
-		//$isFilesFound = false;
 
 		try
 		{
@@ -70,8 +69,9 @@ class langProject
 					|| $subProject->prjType == projectType::PRJ_TYPE_COMP_SITE);
 
 				// On sys file receive langIdPrefix
-					$subProject->findPrjFiles();
-				if($hasSysFiles)
+				$isFilesFound = $subProject->findPrjFiles();
+
+				if($hasSysFiles && $isFilesFound)
 				{
 					$this->langIdPrefix = $subProject->langIdPrefix;
 				}
