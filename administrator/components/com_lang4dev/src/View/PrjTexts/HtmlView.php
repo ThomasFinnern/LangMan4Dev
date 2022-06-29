@@ -113,10 +113,10 @@ class HtmlView extends BaseHtmlView
 
 		//--- Main and target lang file --------------------------------------------------------------
 
-		$sessionTransLangIds = new sessionTransLangIds ();
-		[$mainLangId, $transLangId] = $sessionTransLangIds->getIds();
+		//$sessionTransLangIds = new sessionTransLangIds ();
+		//[$mainLangId, $transLangId] = $sessionTransLangIds->getIds();
 
-		$this->form->setValue('selectSourceLangId', null, $mainLangId);
+		//$this->form->setValue('selectSourceLangId', null, $mainLangId);
 
 		/**
 		 * $Layout = Factory::getApplication()->input->get('layout');

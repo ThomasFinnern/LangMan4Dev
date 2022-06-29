@@ -43,6 +43,7 @@ class SubprojectSelectField extends ListField
      */
 	protected $type = 'SubprojectSelect';
 
+	/**/
 	protected function getInput()
 	{
 		//--- Set selection of project and subproject --------------------
@@ -51,9 +52,9 @@ class SubprojectSelectField extends ListField
 		[$prjId, $subPrjActive] = $sessionProjectId->getIds();
 
 		$this->setValue ($subPrjActive);
+		/**
 		$this->prjId = $prjId;
 
-		/**
 		if ($this->form->getValue('id', 0) == 0)
 		{
 			return '<span class="readonly">' . Text::_('COM_MENUS_ITEM_FIELD_ORDERING_TEXT') . '</span>';
@@ -63,6 +64,7 @@ class SubprojectSelectField extends ListField
 		return parent::getInput();
 		}
 		/**/
+		/**
 		if($subPrjActive > 0)
 		{
 			return parent::getInput();
@@ -75,7 +77,11 @@ class SubprojectSelectField extends ListField
 				return '<span class="readonly">' . Text::_('??? -1 ???') . '</span>';
 			}
 		}
+		/**/
+		
+		return parent::getInput();
 	}
+	/**/
 
 
 	/**
@@ -91,6 +97,13 @@ class SubprojectSelectField extends ListField
 
 		try
 		{
+			//--- Set selection of project and subproject --------------------
+
+			$sessionProjectId = new sessionProjectId();
+			[$prjId, $subPrjActive] = $sessionProjectId->getIds();
+
+			$this->value = $subPrjActive;
+
 			// $user = Factory::getApplication()->getIdentity(); // Todo: Restrict to accessible subprojects
 			$db    = Factory::getDbo();
 
@@ -98,7 +111,7 @@ class SubprojectSelectField extends ListField
 				->select($db->quoteName('id', 'value'))
 				->select($db->quoteName('title', 'text'))
 
-				->where($db->quoteName('parent_id') . ' = ' . (int) $this->prjId)
+				->where($db->quoteName('parent_id') . ' = ' . (int) $prjId)
 
                 ->from($db->quoteName('#__lang4dev_subprojects'))
 				// ToDo: Use option in XML to select ASC/DESC
@@ -107,13 +120,6 @@ class SubprojectSelectField extends ListField
 
 			// Get the options.
 			$subprojects = $db->setQuery($query)->loadObjectList();
-
-			//--- Set selection of project and subproject --------------------
-
-			$sessionProjectId = new sessionProjectId();
-			[$prjId, $subPrjActive] = $sessionProjectId->getIds();
-
-			$this->value = $subPrjActive;
 
 		}
 		catch (\RuntimeException $e)
