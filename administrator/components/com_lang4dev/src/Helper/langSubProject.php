@@ -51,7 +51,8 @@ class langSubProject extends langFileNamesSet
 		$this->prjType     = $prjType;
 		$this->prjId       = $prjId;
 		$this->prjRootPath = $prjRootPath;
-		$this->prjXmlFilePath = $prjXmlFilePath;
+		$this->prjXmlPathFilename = $prjXmlFilePath;
+		$this->prjXmlFilePath = dirname($prjXmlFilePath);
 
 //	    $this->prjXmlFile = $prjXmlFile;
 //	    $this->prjScriptFile = $prjScriptFile;
@@ -111,8 +112,11 @@ class langSubProject extends langFileNamesSet
 
 		// ToDo: prjXmlFilePath <-> use prjXmlPathFileName (actually empty so ...
 
-		[$fileName, $langIdPrefix] = $finder->extractPrjVars($this->prjXmlFilePath);
+		[$installFileName, $langIdPrefix] = $finder->extractPrjVars($this->prjXmlPathFilename);
 		$this->langIdPrefix = $langIdPrefix;
+		$this->installPathFilename = $installFileName;
+
+		return;
 	}
 
     public function findPrjFiles () {

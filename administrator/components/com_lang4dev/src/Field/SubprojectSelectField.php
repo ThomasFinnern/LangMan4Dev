@@ -78,7 +78,7 @@ class SubprojectSelectField extends ListField
 			}
 		}
 		/**/
-		
+
 		return parent::getInput();
 	}
 	/**/

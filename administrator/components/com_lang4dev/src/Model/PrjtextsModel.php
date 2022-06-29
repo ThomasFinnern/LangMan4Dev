@@ -55,9 +55,9 @@ class PrjTextsModel extends AdminModel
 	{
 		$project = new langProject ();
 
-		//--- collect parent project ----------------------------------
+		//--- get parent project ----------------------------------
 
-		// ?? id is enough for now ($prjId)
+		$this->AddDbData($project, $prjId);
 
 		//--- all sub ids ----------------------------------------------
 
@@ -67,23 +67,28 @@ class PrjTextsModel extends AdminModel
 
 		foreach ($subIds as $subId) {
 
-			//---  ----------------------------------------
-			;
+			//--- regard user selection ----------------------------------------
 
-			/**
-			$subPrj = $project->addSubProject('com_lang4dev',
-				projectType::PRJ_TYPE_COMP_BACK_SYS,
-				JPATH_ADMINISTRATOR . '/components/com_lang4dev'
-			);
-			/**/
+			// special selection
+			if ($subPrjActive != 0) {
+
+				//  not the one the user selected
+				if ($subPrjActive != $subId->id) {
+
+					continue;
+				}
+			}
+
+			//--- load data of valid sub project ----------------------------------------
 
 			$subPrj = $project->addSubProject($subId->prjId,
 				$subId->subPrjType,
 				$subId->root_path,
-				//$subId->prjXmlPathFilename,
-				$subId->prjXmlPathFilename,
+				$subId->prjXmlPathFilename
 			);
 
+			$subPrj->installPathFilename = $subId->installPathFilename;
+			$subPrj->prlangIdPrefixefix = $subId->prefix;
 
 		}
 
@@ -103,6 +108,7 @@ class PrjTextsModel extends AdminModel
 				->select($db->quoteName('id'))
 				->select($db->quoteName('prjId'))
 				->select($db->quoteName('subPrjType'))
+				->select($db->quoteName('prefix'))
 				->select($db->quoteName('root_path'))
 				->select($db->quoteName('prjXmlPathFilename'))
 				->select($db->quoteName('installPathFilename'))
@@ -125,6 +131,53 @@ class PrjTextsModel extends AdminModel
 		}
 
 		return $subIds;
+	}
+
+	private function AddDbData(langProject $project, $prjId)
+	{
+		$project->dbId = $prjId;
+
+		try {
+
+			//--- collect data from manifest -----------------
+			$db = Factory::getDbo();
+
+			$query = $db->getQuery(true)
+				->select($db->quoteName('name'))
+				->select($db->quoteName('title'))
+				->select($db->quoteName('root_path'))
+
+				->where($db->quoteName('id') . ' = ' . (int) $prjId)
+				->from($db->quoteName('#__lang4dev_projects'))
+//				->order($db->quoteName('subPrjType') . ' ASC')
+			;
+
+			// Get the options.
+			$prjDb = $db->setQuery($query)->loadObject();
+
+			// $project->prjName = $prjDb->name;
+			$project->prjName = $prjDb->title;
+			$project->prjRootPath = $prjDb->root_path;
+
+			$project->prjRootPath = $prjDb->prjXmlPathFilename;
+			$project->prjRootPath = $prjDb->installPathFilename;
+			$project->prjRootPath = $prjDb->prefix;
+			$project->prjRootPath = $prjDb->subPrjType;
+
+			// = prjType ???
+			// Not in DB actually: $project->langIdPrefix = $prjDb->;
+			// $project->isSysFileFound = $prjDb->;
+
+		} catch (\RuntimeException $e) {
+			$OutTxt = '';
+			$OutTxt .= 'Error executing collectSubProjectIds: ' . '<br>';
+			$OutTxt .= 'Error: "' . $e->getMessage() . '"' . '<br>';
+
+			$app = Factory::getApplication();
+			$app->enqueueMessage($OutTxt, 'error');
+		}
+
+		return;
 	}
 
 }

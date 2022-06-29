@@ -62,15 +62,53 @@ class searchTransIdLocations
 
 		try
 		{
+			$hasErr = false;
+
 			/*--------------------------------------------------------------
 			checks
 			--------------------------------------------------------------*/
 
 			//--- prefix --------------------------------------------------
 
-			//--- paths given --------------------------------------------------
+			if (strlen($this->langIdPrefix) < 5) {
+				$hasErr = true;
 
-			//--- paths exist --------------------------------------------------
+				$OutTxt = 'findAllTranslationIds: langIdPrefix is not set or too smalll: "' . $this->langIdPrefix . '"';
+
+				$app = Factory::getApplication();
+				$app->enqueueMessage($OutTxt, 'error');
+			}
+
+			//--- search paths given --------------------------------------------------
+
+			if (count($this->searchPaths) < 1) {
+				$hasErr = true;
+
+				$OutTxt = 'findAllTranslationIds: search paths not given' ;
+
+				$app = Factory::getApplication();
+				$app->enqueueMessage($OutTxt, 'error');
+			}
+
+			/**
+			//--- ???? --------------------------------------------------
+
+			if (strlen($this->langIdPrefix) < 5) {
+				$hasErr = true;
+
+				$OutTxt = 'findAllTranslationIds: langIdPrefix is not set or too small: "' . $this->langIdPrefix . '"';
+
+				$app = Factory::getApplication();
+				$app->enqueueMessage($OutTxt, 'error');
+			}
+			/**/
+
+			//--- exit on error -----------------------------------------
+
+			if ($hasErr == true)
+			{
+				return;
+			}
 
 			//--- All paths --------------------------------------------------
 
@@ -88,7 +126,12 @@ class searchTransIdLocations
 				}
 				else
 				{
-					// ??? ToDo: ????
+					$hasErr = true;
+
+					$OutTxt = 'findAllTranslationIds: search path does not exist: "' . $searchPath . '"';
+
+					$app = Factory::getApplication();
+					$app->enqueueMessage($OutTxt, 'error');
 				}
 			}
 

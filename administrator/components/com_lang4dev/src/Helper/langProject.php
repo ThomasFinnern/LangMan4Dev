@@ -27,6 +27,7 @@ class langProject
 
 	//external
 	//public $twinId = "";
+	public $dbId = 0;
 
 
     /**
@@ -44,6 +45,8 @@ class langProject
 		$prjRootPath = '',
 		$prjXmlFilePath = '')
 	{
+
+
 		$subPrj = new langSubProject (
 			$prjId,
 			$prjType,

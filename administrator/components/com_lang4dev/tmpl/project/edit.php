@@ -57,7 +57,8 @@ $tmpl    = $isModal || $input->get('tmpl', '', 'cmd') === 'component' ? '&tmpl=c
                             //echo'-------------- start: ><br>';
 
                             echo $this->form->renderField('root_path');
-                            echo $this->form->renderField('root_path2');
+
+                            echo $this->form->renderField('prjId');
 
                             echo $this->form->renderField('twin_id');
 

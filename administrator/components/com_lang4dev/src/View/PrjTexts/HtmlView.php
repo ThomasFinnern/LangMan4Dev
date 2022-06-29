@@ -89,12 +89,12 @@ class HtmlView extends BaseHtmlView
 		$this->project =
 		$project = $model->getProject($prjId, $subPrjActive);
 
-		$project->findPrjFiles()
-			->detectLangFiles()
-			->readSubsLangFile()
+		$project->findPrjFiles();
+		$project->detectLangFiles();
+		$project->readSubsLangFile();
 
-			->scanCode4TransIds()
-			->scanCode4TransStrings();
+		$project->scanCode4TransIds();
+		$project->scanCode4TransStrings();
 
 		/**
 		$project =

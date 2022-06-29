@@ -946,7 +946,7 @@ class SubprojectModel extends AdminModel
 			//--- make data complete -----------------------------
 
 		// check for prefix
-		$subProject->retrieveMainPrefixId ();
+		// already done $subProject->retrieveMainPrefixId ();
 
 		// ToDo: check for existing lang Ids
 
@@ -955,7 +955,7 @@ class SubprojectModel extends AdminModel
 		if ($existingId > 0) {
 			$isSaved = $this->mergeSubProject_DB ($existingId, $subProject);
 		} else {
-			$this->createSubProject_DB ($subProject, $parentId);
+			$isSaved = $this->createSubProject_DB ($subProject, $parentId);
 		}
 
 		return $isSaved;
@@ -979,7 +979,7 @@ class SubprojectModel extends AdminModel
 		$data ['prjId'] = $subProject->prjId;
 		$data ['subPrjType'] = $subProject->prjType;
 		$data ['root_path'] = $subProject->prjRootPath;
-		$data ['prefix`'] = $subProject->langIdPrefix ;
+		$data ['prefix'] = $subProject->langIdPrefix ;
 		$data ['notes'] = '%';
 		// ToDo: activate or check as actual is empty $data ['prjXmlPathFilename'] = $subProject->prjXmlPathFilename;
 		$data ['prjXmlPathFilename'] = $subProject->prjXmlFilePath;

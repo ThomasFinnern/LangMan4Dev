@@ -939,12 +939,17 @@ class ProjectModel extends AdminModel
 
 		foreach ($prjTypes as $prjType)
 		{
-			$subProjects[] = new langSubProject (
+			$langSubProject = new langSubProject (
 				$oSubPrjPath->prjId,
 				$prjType,
 				$oSubPrjPath->getRootPath(),
 				$oSubPrjPath->getRootManifestPath()
 			);
+
+			// $langIdPrefix and $installFileName
+			$langSubProject->retrieveMainPrefixId();
+
+			$subProjects[]  = $langSubProject;
 
 		}
 
