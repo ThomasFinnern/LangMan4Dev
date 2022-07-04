@@ -119,8 +119,8 @@ class projectController extends FormController
 			$data  = $input->post->get('jform', array(), 'array');
 
 			$id = (int)$data ['id'];
-			$prjId = $data ['name'];
-			$prjRootPath = $data ['root_path'];
+			$prjId = trim($data ['name']);
+			$prjRootPath = trim($data ['root_path']);
 
 			$prjModel = $this->getModel ();
 

@@ -979,7 +979,7 @@ class SubprojectModel extends AdminModel
 		$data ['prjId'] = $subProject->prjId;
 		$data ['subPrjType'] = $subProject->prjType;
 		$data ['root_path'] = $subProject->prjRootPath;
-		$data ['prefix'] = $subProject->langIdPrefix ;
+		$data ['prefix'] = $subProject->langIdPrefix;
 		$data ['notes'] = '%';
 		// ToDo: activate or check as actual is empty $data ['prjXmlPathFilename'] = $subProject->prjXmlPathFilename;
 		$data ['prjXmlPathFilename'] = $subProject->prjXmlFilePath;

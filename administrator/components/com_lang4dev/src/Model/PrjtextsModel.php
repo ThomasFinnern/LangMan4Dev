@@ -159,10 +159,12 @@ class PrjTextsModel extends AdminModel
 			$project->prjName = $prjDb->title;
 			$project->prjRootPath = $prjDb->root_path;
 
-			$project->prjRootPath = $prjDb->prjXmlPathFilename;
-			$project->prjRootPath = $prjDb->installPathFilename;
-			$project->prjRootPath = $prjDb->prefix;
-			$project->prjRootPath = $prjDb->subPrjType;
+			/** doesn't have these ... *
+			$project->prjXmlPathFilename = $prjDb->prjXmlPathFilename;
+			$project->installPathFilename = $prjDb->installPathFilename;
+			$project->prefix = $prjDb->prefix;
+			$project->subPrjType = $prjDb->subPrjType;
+			/**/
 
 			// = prjType ???
 			// Not in DB actually: $project->langIdPrefix = $prjDb->;
