@@ -171,8 +171,6 @@ function renderProjectSelection ($form)
 	return;
 }
 
-
-
 ?>
 
     <form action="<?php echo Route::_('index.php?option=com_lang4dev'); ?>"
@@ -199,29 +197,11 @@ function renderProjectSelection ($form)
 				</div>
             </div>
         </div>
-        <hr>
 
-        <h2>Lang4Dev</h2>
-
-        <div style="color:red;">ToDo: select a project input</div>
+        <h2>Lang4Dev<?php echo '&nbsp;V' . $this->extensionVersion; ?></h2>
 
 	    <?php renderProjectSelection ($this->form); ?>
-
 	    <?php renderLangIdTexts ($this->form); ?>
-
-
-	    <div style="color:red;">ToDo: </div>
-
-        <hr>
-
-		<?php
-		$test = $this->extensionVersion;
-		echo '<h4>' . $test . '<h4>';
-		    $title = Text::_('COM_LANG4DEV_ABOUT') . ' ' . $this->extensionVersion;
-			echo '<h4>' . $title . '<h4>';
-		?>
-
-
 
 	    <input type="hidden" name="task" value="" />
 	    <?php echo HTMLHelper::_('form.token'); ?>

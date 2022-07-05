@@ -196,7 +196,10 @@ class HtmlView extends BaseHtmlView
         {
             echo '<span style="color:red">'
                 . '* Check J4x for exception handling try ...  catch ??? <br>'
-                . '* <br>'
+                . '* Other background (white ?)<br>'
+				. '* styling To SCSS file<br>'
+				. '* hide Translations <br>'
+//				. '* <br>'
 //				. '* <br>'
 //				. '* <br>'
 //				. '* <br>'

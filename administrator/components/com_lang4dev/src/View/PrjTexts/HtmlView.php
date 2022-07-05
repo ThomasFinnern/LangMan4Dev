@@ -73,10 +73,19 @@ class HtmlView extends BaseHtmlView
 		$this->isDevelop      = $l4dConfig->get('isDevelop');
 
 		$this->isDoCommentIds = $l4dConfig->get('isDoComment_prepared_missing_ids');
+		$this->main_langId = $l4dConfig->get('main_langId');
 
 		//--- Form --------------------------------------------------------------------
 
 		$this->form = $this->get('Form');
+
+		$errors = $this->get('Errors');
+
+//        // Check for errors.
+//        if (count($errors = $this->get('Errors')))
+//        {
+//            throw new GenericDataException(implode("\n", $errors), 500);
+//        }
 
 		//--- project --------------------------------------------------------------------
 
@@ -85,7 +94,7 @@ class HtmlView extends BaseHtmlView
 		$sessionProjectId = new sessionProjectId();
 		[$prjId, $subPrjActive] = $sessionProjectId->getIds();
 
-		$model         = $this->getModel();
+		$model = $this->getModel();
 		$this->project =
 		$project = $model->getProject($prjId, $subPrjActive);
 
@@ -113,10 +122,10 @@ class HtmlView extends BaseHtmlView
 
 		//--- Main and target lang file --------------------------------------------------------------
 
-		//$sessionTransLangIds = new sessionTransLangIds ();
-		//[$mainLangId, $transLangId] = $sessionTransLangIds->getIds();
+		$sessionTransLangIds = new sessionTransLangIds ();
+		[$mainLangId, $transLangId] = $sessionTransLangIds->getIds();
 
-		//$this->form->setValue('selectSourceLangId', null, $mainLangId);
+		$this->form->setValue('selectSourceLangId', null, $mainLangId);
 
 		/**
 		 * $Layout = Factory::getApplication()->input->get('layout');
@@ -150,7 +159,8 @@ class HtmlView extends BaseHtmlView
 		{
 			echo '<span style="color:red">'
 				. 'Tasks: <br>'
-				. '* <br>'
+				. '* Fix: <br>'
+				. '* use main_langId config / session <br>'
 				. '* <br>'
 //				. '* <br>'
 //				. '* <br>'

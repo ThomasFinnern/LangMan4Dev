@@ -27,6 +27,21 @@ use Joomla\CMS\MVC\Model\BaseModel;
  */
 class PrjTextsModel extends AdminModel
 {
+	/**
+	 * The prefix to use with controller messages.
+	 *
+	 * @var    string
+	 * @since __BUMP_VERSION__
+	 */
+	protected $text_prefix = 'COM_LANG4DEV';
+
+	/**
+	 * The type alias for this content type. Used for content version history.
+	 *
+	 * @var      string
+	 * @since __BUMP_VERSION__
+	 */
+	public $typeAlias = 'com_lang4dev.prjtexts';
 
 
 	/**
@@ -51,53 +66,52 @@ class PrjTextsModel extends AdminModel
 		return $form;
 	}
 
-	public function getProject($prjId, $subPrjActive)
+	public function getProject($prjDbId, $subPrjActive)
 	{
 		$project = new langProject ();
 
 		//--- get parent project ----------------------------------
 
-		$this->AddDbData($project, $prjId);
+		$this->addPrjDbData($project, $prjDbId);
 
 		//--- all sub ids ----------------------------------------------
 
-		$subIds = $this->collectSubProjectIdsData ($prjId);
+		$dbSubProjects = $this->subPrjsDbData ($prjDbId);
 
 		//--- add subprojects ------------------------------------
 
-		foreach ($subIds as $subId) {
+		foreach ($dbSubProjects as $dbSub) {
 
 			//--- regard user selection ----------------------------------------
 
-			// special selection
+			// restrict not selected
 			if ($subPrjActive != 0) {
 
 				//  not the one the user selected
-				if ($subPrjActive != $subId->id) {
+				if ($subPrjActive != $dbSub->id) {
 
 					continue;
 				}
 			}
 
-			//--- load data of valid sub project ----------------------------------------
+			//--- create subproject with DB data ------------------------
 
-			$subPrj = $project->addSubProject($subId->prjId,
-				$subId->subPrjType,
-				$subId->root_path,
-				$subId->prjXmlPathFilename
+			$subPrj = $project->addSubProject($dbSub->prjId,
+				$dbSub->subPrjType,
+				$dbSub->root_path,
+				$dbSub->prjXmlPathFilename
 			);
 
-			$subPrj->installPathFilename = $subId->installPathFilename;
-			$subPrj->prlangIdPrefixefix = $subId->prefix;
-
+			$subPrj->installPathFilename = $dbSub->installPathFilename;
+			$subPrj->langIdPrefix = $dbSub->prefix;
 		}
 
 		return $project;
 	}
 
-	private function collectSubProjectIdsData($prjId)
+	private function subPrjsDbData($parent_id)
 	{
-		$subIds = [];
+		$dbSubProjects = [];
 
 		try {
 
@@ -113,13 +127,13 @@ class PrjTextsModel extends AdminModel
 				->select($db->quoteName('prjXmlPathFilename'))
 				->select($db->quoteName('installPathFilename'))
 
-				->where($db->quoteName('parent_id') . ' = ' . (int) $prjId)
+				->where($db->quoteName('parent_id') . ' = ' . (int) $parent_id)
 				->from($db->quoteName('#__lang4dev_subprojects'))
 				->order($db->quoteName('subPrjType') . ' ASC')
 			;
 
 			// Get the options.
-			$subIds = $db->setQuery($query)->loadObjectList();
+			$dbSubProjects = $db->setQuery($query)->loadObjectList();
 
 		} catch (\RuntimeException $e) {
 			$OutTxt = '';
@@ -130,10 +144,10 @@ class PrjTextsModel extends AdminModel
 			$app->enqueueMessage($OutTxt, 'error');
 		}
 
-		return $subIds;
+		return $dbSubProjects;
 	}
 
-	private function AddDbData(langProject $project, $prjId)
+	private function addPrjDbData(langProject $project, $prjId)
 	{
 		$project->dbId = $prjId;
 
@@ -181,6 +195,7 @@ class PrjTextsModel extends AdminModel
 
 		return;
 	}
+
 
 }
 

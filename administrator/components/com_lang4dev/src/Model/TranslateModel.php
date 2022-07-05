@@ -11,6 +11,7 @@ namespace Finnern\Component\Lang4dev\Administrator\Model;
 
 \defined('_JEXEC') or die;
 
+use Finnern\Component\Lang4dev\Administrator\Helper\langProject;
 use Finnern\Component\Lang4dev\Administrator\Helper\sessionProjectId;
 use Joomla\CMS\Access\Rules;
 use Joomla\CMS\Association\AssociationServiceInterface;
@@ -47,7 +48,7 @@ class TranslateModel extends AdminModel
 	 * The prefix to use with controller messages.
 	 *
 	 * @var    string
- * @since __BUMP_VERSION__
+	 * @since __BUMP_VERSION__
 	 */
 	protected $text_prefix = 'COM_LANG4DEV';
 
@@ -79,8 +80,137 @@ class TranslateModel extends AdminModel
 			return false;
 		}
 
-
 		return $form;
+	}
+
+	public function getProject($prjDbId, $subPrjActive)
+	{
+		$project = new langProject ();
+
+		//--- get parent project ----------------------------------
+
+		$this->addPrjDbData($project, $prjDbId);
+
+		//--- all sub ids ----------------------------------------------
+
+		$dbSubProjects = $this->subPrjsDbData ($prjDbId);
+
+		//--- add subprojects ------------------------------------
+
+		foreach ($dbSubProjects as $dbSub) {
+
+			//--- regard user selection ----------------------------------------
+
+			// restrict not selected
+			if ($subPrjActive != 0) {
+
+				//  not the one the user selected
+				if ($subPrjActive != $dbSub->id) {
+
+					continue;
+				}
+			}
+
+			//--- create subproject with DB data ------------------------
+
+			$subPrj = $project->addSubProject($dbSub->prjId,
+				$dbSub->subPrjType,
+				$dbSub->root_path,
+				$dbSub->prjXmlPathFilename
+			);
+
+			$subPrj->installPathFilename = $dbSub->installPathFilename;
+			$subPrj->langIdPrefix = $dbSub->prefix;
+		}
+
+		return $project;
+	}
+
+	private function subPrjsDbData($parent_id)
+	{
+		$dbSubProjects = [];
+
+		try {
+
+			//--- collect data from manifest -----------------
+			$db = Factory::getDbo();
+
+			$query = $db->getQuery(true)
+				->select($db->quoteName('id'))
+				->select($db->quoteName('prjId'))
+				->select($db->quoteName('subPrjType'))
+				->select($db->quoteName('prefix'))
+				->select($db->quoteName('root_path'))
+				->select($db->quoteName('prjXmlPathFilename'))
+				->select($db->quoteName('installPathFilename'))
+
+				->where($db->quoteName('parent_id') . ' = ' . (int) $parent_id)
+				->from($db->quoteName('#__lang4dev_subprojects'))
+				->order($db->quoteName('subPrjType') . ' ASC')
+			;
+
+			// Get the options.
+			$dbSubProjects = $db->setQuery($query)->loadObjectList();
+
+		} catch (\RuntimeException $e) {
+			$OutTxt = '';
+			$OutTxt .= 'Error executing collectSubProjectIds: ' . '<br>';
+			$OutTxt .= 'Error: "' . $e->getMessage() . '"' . '<br>';
+
+			$app = Factory::getApplication();
+			$app->enqueueMessage($OutTxt, 'error');
+		}
+
+		return $dbSubProjects;
+	}
+
+	private function addPrjDbData(langProject $project, $prjId)
+	{
+		$project->dbId = $prjId;
+
+		try {
+
+			//--- collect data from manifest -----------------
+			$db = Factory::getDbo();
+
+			$query = $db->getQuery(true)
+				->select($db->quoteName('name'))
+				->select($db->quoteName('title'))
+				->select($db->quoteName('root_path'))
+
+				->where($db->quoteName('id') . ' = ' . (int) $prjId)
+				->from($db->quoteName('#__lang4dev_projects'))
+//				->order($db->quoteName('subPrjType') . ' ASC')
+			;
+
+			// Get the options.
+			$prjDb = $db->setQuery($query)->loadObject();
+
+			// $project->prjName = $prjDb->name;
+			$project->prjName = $prjDb->title;
+			$project->prjRootPath = $prjDb->root_path;
+
+			/** doesn't have these ... *
+			$project->prjXmlPathFilename = $prjDb->prjXmlPathFilename;
+			$project->installPathFilename = $prjDb->installPathFilename;
+			$project->prefix = $prjDb->prefix;
+			$project->subPrjType = $prjDb->subPrjType;
+			/**/
+
+			// = prjType ???
+			// Not in DB actually: $project->langIdPrefix = $prjDb->;
+			// $project->isSysFileFound = $prjDb->;
+
+		} catch (\RuntimeException $e) {
+			$OutTxt = '';
+			$OutTxt .= 'Error executing collectSubProjectIds: ' . '<br>';
+			$OutTxt .= 'Error: "' . $e->getMessage() . '"' . '<br>';
+
+			$app = Factory::getApplication();
+			$app->enqueueMessage($OutTxt, 'error');
+		}
+
+		return;
 	}
 
 }

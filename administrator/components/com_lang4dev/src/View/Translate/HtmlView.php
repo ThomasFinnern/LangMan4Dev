@@ -84,14 +84,6 @@ class HtmlView extends BaseHtmlView
         //--- Form --------------------------------------------------------------------
 
         $this->form = $this->get('Form');
-//        $errors = $this->get('Errors')
-//        $this->item = $this->get('Item');
-//        $this->state = $this->get('State');
-
-        //$section = $this->state->get('gallery.section') ? $this->state->get('gallery.section') . '.' : '';
-        //$this->canDo = ContentHelper::getActions($this->state->get('gallery.component'), $section . 'gallery', $this->item->id);
-//        $this->canDo = ContentHelper::getActions('com_lang4dev', 'project', $this->item->id);
-//        $this->assoc = $this->get('Assoc');
 
         $errors = $this->get('Errors');
 
@@ -103,12 +95,24 @@ class HtmlView extends BaseHtmlView
 
         //--- project --------------------------------------------------------------------
 
-		// ToDo: load project from  db select id and then db data
+		//--- Set selection of project and subproject --------------------
 
-		//
+		$sessionProjectId = new sessionProjectId();
+		[$prjId, $subPrjActive] = $sessionProjectId->getIds();
 
-//		$this->isDoCommentIds = $l4dConfig->get('isDoComment_prepared_missing_ids');
+		$model = $this->getModel();
+		$this->project =
+		$project = $model->getProject($prjId, $subPrjActive);
 
+		$project->findPrjFiles();
+		$project->detectLangFiles();
+		//$project->readSubsLangFile();
+
+		// collect content
+		$project->readAllLangFiles();
+		$project->alignTranslationsByMain($this->main_langId);
+
+		/**
 		$project =
 		$this->project = selectProject('lang4dev');
 //		$this->project = selectProject('lang4dev');
@@ -120,15 +124,6 @@ class HtmlView extends BaseHtmlView
 		// ? use config lang ids or found ids
 		
 		// init required langIds 
-		/**
-		foreach ($project->subProjects as $subProject)
-		{
-			
-			$this->subProjects->langIds = config;
-			
-		}
-		/**/
-
         $project->findPrjFiles();
 
 		$project->detectLangFiles();
@@ -137,6 +132,17 @@ class HtmlView extends BaseHtmlView
 		$project->readAllLangFiles();
 
 		$project->alignTranslationsByMain($this->main_langId);
+		/**/
+
+		//-----------------------
+		/**
+		foreach ($project->subProjects as $subProject)
+		{
+
+		$this->subProjects->langIds = config;
+
+		}
+		/**/
 
 		//--- Main and target lang file --------------------------------------------------------------
 
@@ -182,8 +188,10 @@ class HtmlView extends BaseHtmlView
 		{
 			echo '<span style="color:red">'
 				. 'Tasks: <br>'
-				. '* <br>'
-				. '* <br>'
+				. '* use main_langId config / session <br>'
+				. '* use trans_langId config / session <br>'
+				. '* lang_ids by sub project ->existing <br>'
+				. '* function getProject is double in prjText and more  model ? own class<br>'
 //				. '* <br>'
 //				. '* <br>'
 //				. '* <br>'

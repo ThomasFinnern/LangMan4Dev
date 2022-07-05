@@ -74,6 +74,7 @@ class langProject
 				// On sys file receive langIdPrefix
 				$isFilesFound = $subProject->findPrjFiles();
 
+				/**  see below
 				if($hasSysFiles && $isFilesFound)
 				{
 					$this->langIdPrefix = $subProject->langIdPrefix;
@@ -84,6 +85,10 @@ class langProject
 					$subProject->langIdPrefix = $this->langIdPrefix;
 					// $subProject->findPrjFiles();
 				}
+				/**/
+
+				// It is expected that function detectDetails defines the sub project langIdPrefix
+				$this->langIdPrefix = $subProject->langIdPrefix;
 
                 /**
                 if ($subProject->useLangSysIni) {

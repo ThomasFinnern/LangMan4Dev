@@ -186,9 +186,6 @@ class subPrjPath
 
 		}
 
-
-
-
 		return [$isRootFound, $isJoomlaPath, $rootPath, $subPrjPath];
 	}
 
