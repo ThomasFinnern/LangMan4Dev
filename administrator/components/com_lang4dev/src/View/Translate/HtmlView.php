@@ -192,6 +192,9 @@ class HtmlView extends BaseHtmlView
 				. '* use trans_langId config / session <br>'
 				. '* lang_ids by sub project ->existing <br>'
 				. '* function getProject is double in prjText and more  model ? own class<br>'
+				. '* source lang ID as list field of availables ? config ? project ... ? <br>'
+				. '* Target lang id as list field of ISO 639 list<br>'
+				. '* New lang id as list field of ISO 639 list<br>'
 //				. '* <br>'
 //				. '* <br>'
 //				. '* <br>'
@@ -226,11 +229,6 @@ class HtmlView extends BaseHtmlView
 
 				ToolbarHelper::custom('translate.createLangId', 'icon-copy', '', 'COM_LANG4DEV_TRANSLATE_ADD_LANG_FILE', false);
 				ToolbarHelper::custom('translate.saveLangEdits', 'icon-save', '', 'COM_LANG4DEV_TRANSLATE_SAVE_EDITED_LANG_FILES', false); /// ToDo: true);
-
-				//ToolbarHelper::custom('translate.selectProject', 'icon-', '', 'COM_LANG4DEV_TRANSLATE_ADD_LANG_FILE', false);
-				ToolbarHelper::custom('translate.resetProject', 'icon-save', '', 'COM_LANG4DEV_TRANSLATE_SAVE_EDITED_LANG_FILES', false); /// ToDo: true);
-
-
 
 				break;
 		}

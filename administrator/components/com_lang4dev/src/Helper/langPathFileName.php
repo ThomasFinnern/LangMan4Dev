@@ -53,7 +53,7 @@ class langPathFileName
 	public $isSysFile = false;  # lang file type (normal/sys)
 
 	// ToDo: base path variable 
-	// ToDo: get without base path ? base path as parmeter ? 
+	// ToDo: get without base path ? base path as parameter ?
 	
 	/**
 	 * @since __BUMP_VERSION__

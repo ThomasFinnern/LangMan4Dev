@@ -470,23 +470,6 @@ class TranslateController extends AdminController
 		return true;
 	}
 
-	public function resetProject ()
-	{
-		Session::checkToken() or die(Text::_('JINVALID_TOKEN'));
-
-		$sessionProjectId = new sessionProjectId();
-		$sessionProjectId->resetIds();
-
-		$OutTxt = "resetProject for translation has started:";
-		$app = Factory::getApplication();
-		$app->enqueueMessage($OutTxt, 'info');
-
-		$link = 'index.php?option=com_lang4dev&view=translate';
-		$this->setRedirect($link);
-
-		return true;
-	}
-
 	public function selectLangIds ()
 	{
 		Session::checkToken() or die(Text::_('JINVALID_TOKEN'));

@@ -261,6 +261,8 @@ class sysFilesContent
 
         try {
 
+
+
 			// todo: simplexml_load_file()
             // content of file
             $context = stream_context_create(array('http' => array('header' => 'Accept: application/xml')));

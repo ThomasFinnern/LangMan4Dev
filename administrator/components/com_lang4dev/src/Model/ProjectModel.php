@@ -956,46 +956,6 @@ class ProjectModel extends AdminModel
 		return $subProjects;
 	}
 
-	/**
-	 * public function subProjectsByManifest ($oSubPrjPath){
-	 *
-	 * $subProjects = [];
-	 *
-	 * // ToDo: create small manifest class and extract all necessary infos
-	 *
-	 *
-	 * //---
-	 * $manifestPath = $oSubPrjPath->getRootManifestPath ();
-	 * if (file_exists ($manifestPath))
-	 * {
-	 *
-	 * // content of file
-	 * $context = stream_context_create(array('http' => array('header' => 'Accept: application/xml')));
-	 * $xml     = file_get_contents($manifestPath, false, $context);
-	 *
-	 * // Data is valid
-	 * if ($xml)
-	 * {
-	 * //--- read xml to json ---------------------------------------------------
-	 *
-	 * $manifestByXml = simplexml_load_string($xml);
-	 *
-	 * if (!empty ($manifestByXml))
-	 * {
-	 * //Encode the SimpleXMLElement object into a JSON string.
-	 * $jsonString = json_encode($manifestByXml);
-	 * //Convert it back into an associative array
-	 * $jsonArray = json_decode($jsonString, true);
-	 *
-	 * }
-	 * }
-	 * }
-	 *
-	 * return $subProjects;
-	 * }
-	 * /**/
-
-
 
 	/**
 	 * Delete #__content_frontpage items if the deleted articles was featured

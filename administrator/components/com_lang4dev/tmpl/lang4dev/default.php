@@ -78,6 +78,7 @@ $cmdButtons[] = new cmdButton(
     'viewTranslate'
 );
 
+/** ToDo: all in one joomla (german) translation
 // translations
 $cmdButtons[] = new cmdButton(
     Route::_('index.php?option=com_lang4dev&view=translations'),
@@ -86,6 +87,7 @@ $cmdButtons[] = new cmdButton(
     array('icon-flag', 'icon-book'),
     'viewTranslations'
 );
+/**/
 
 // translations
 $cmdButtons[] = new cmdButton(

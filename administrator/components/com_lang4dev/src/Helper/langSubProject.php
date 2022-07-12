@@ -44,15 +44,15 @@ class langSubProject extends langFileNamesSet
 	public function __construct($prjId = '',
 		$prjType = projectType::PRJ_TYPE_NONE,
 		$prjRootPath = '',
-		$prjXmlFilePath = '')
+		$prjXmlPathFilename = '')
 	{
 		parent::__construct();
 
 		$this->prjType     = $prjType;
 		$this->prjId       = $prjId;
 		$this->prjRootPath = $prjRootPath;
-		$this->prjXmlPathFilename = $prjXmlFilePath;
-		$this->prjXmlFilePath = dirname($prjXmlFilePath);
+		$this->prjXmlPathFilename = $prjXmlPathFilename;
+		$this->prjXmlFilePath = dirname($prjXmlPathFilename);
 
 //	    $this->prjXmlFile = $prjXmlFile;
 //	    $this->prjScriptFile = $prjScriptFile;
@@ -188,7 +188,6 @@ class langSubProject extends langFileNamesSet
             $app->enqueueMessage($OutTxt, 'error');
         }
 
-
         return $isFilesFound;
     }
 
@@ -223,7 +222,6 @@ class langSubProject extends langFileNamesSet
 
     // read content of language file  ==> get translation in langFiles
     public function readLangFile ($langId='en-GB') {
-
 
         $langFileName =  $this->langFileNames [$langId];
 

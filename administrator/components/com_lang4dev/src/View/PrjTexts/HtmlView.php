@@ -13,6 +13,7 @@ namespace Finnern\Component\Lang4dev\Administrator\View\PrjTexts;
 
 require_once(__DIR__ . '/../../Helper/selectProject.php');
 
+use Finnern\Component\Lang4dev\Administrator\Helper\manifestData;
 use Finnern\Component\Lang4dev\Administrator\Helper\sessionProjectId;
 use Finnern\Component\Lang4dev\Administrator\Helper\sessionTransLangIds;
 use Joomla\CMS\Component\ComponentHelper;
@@ -119,6 +120,20 @@ class HtmlView extends BaseHtmlView
 		->scanCode4TransIds()
 		->scanCode4TransStrings();
 		/**/
+		//--- test manifest file ----------------------------------------
+
+		$prjXmlPathFilename = $project->subProjects[0]->prjXmlPathFilename; // . '/lang4dev.xml';
+
+		$manifestData = new manifestData ($prjXmlPathFilename);
+		//$manifestText = implode("\n", $manifestData->__toText());
+		$manifestText = implode("<br>", $manifestData->__toText());
+
+		echo '<hr>';
+		echo $manifestText . '<br>';
+		echo '<hr><br>';
+		echo '<br><br>';
+
+
 
 		//--- Main and target lang file --------------------------------------------------------------
 

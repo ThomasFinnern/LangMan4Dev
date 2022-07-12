@@ -270,6 +270,7 @@
 				description="COM_LANG4DEV_EDIT_AND_SAVE_MAIN_TRANSLATION_FILE_DESC"
 				default="0"
 				layout="joomla.form.field.radio.switcher"
+				readonly="true"
 		>
 			<option value="0">JNO</option>
 			<option value="1">JYES</option>

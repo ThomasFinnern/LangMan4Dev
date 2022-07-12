@@ -118,26 +118,37 @@ function renderLangFileEditText ($langId, $langFile, $subPrjPath,
 				// ksort($linesArray);
 				foreach($linesArray as $line) {
 
+					// toDo: use implode
 					$langText .= $line . '&#10;';
 					//$langText .= $line . '\n';
 				}
 
-
-				// source text
 				if($isMain) {
+					//--- source (edit) text -------------------------------------------
+
+					// readonly if not deselected on config
+					$readonly = $isEditAndSaveMainTranslationFile ? '': "readonly";
 					?>
 
 					<textarea id="<?php echo $langId . '_' . $editIdx. '_main'; ?>"
-					          name="langsEdited[]" rows="12"
-			                  style="overflow-x: scroll; min-width: 100%; overflow-wrap: normal; " class="bg-warning" readonly
+					          name="langsEdited[]" rows="12" class="bg-primary  text-white textarea_main"
+			                  style="overflow-x: scroll; min-width: 100%; overflow-wrap: normal; "
+
+			                  <?php echo $readonly; ?>
 			        ><?php echo $langText; ?></textarea>
 
+					<?php if ($isEditAndSaveMainTranslationFile): ?>
+						<input type="text" name="langPathFileNames[]" value="<?php echo $langFile->getLangPathFileName(); ?>"  hidden />
+					<?php endif; ?>
+
 					<?php
+
 				}  else {
-					// target edit text
+
+					//--- target edit text -------------------------------------------
 					?>
 					<textarea id="<?php echo $langId . '_' . $editIdx. '_target'; ?>"
-					          name="langsText[]" rows="12"
+					          name="langsText[]" rows="12" class="bg-white text-dark textarea_target"
 					          style="overflow-x: scroll; min-width: 100%; "
 					><?php echo $langText; ?></textarea>
 					<input type="text" name="langPathFileNames[]" value="<?php echo $langFile->getLangPathFileName(); ?>"  hidden />
