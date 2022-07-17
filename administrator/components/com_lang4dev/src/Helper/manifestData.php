@@ -113,6 +113,21 @@ class manifestData
 		return isset($this->manifest->$name) ? $this->manifest->$name : $default;
 	}
 
+	public function getByPath ($names=[], $default) {
+		$result = $default;
+
+		if ( ! is_array($names)) {
+			$name =  array ($names);
+		}
+
+		foreach ($names as $name) {
+
+
+		}
+
+		return isset($this->manifest->$name) ? $this->manifest->$name : $default;
+	}
+
 	public function getSriptFile () { return $this->get('scriptfile', '');}
 	public function getName ()      { return $this->get('name', '');}
 
@@ -131,7 +146,7 @@ class manifestData
 	 *
 	 * @since version
 	 */
-	public function langFileOrigens() // $isOnServer=true
+	public function langFileOrigins() // $isOnServer=true
 	{
 		// defined by folder language in xml
 		$isFilesLocal = false;
@@ -181,7 +196,7 @@ class manifestData
 
 
 			$administrator =
-			$stdLanguages = $this->get('administrator', []);
+			$stdLanguages = $this->get('administration', []);
 			if (count ($stdLanguages) > 0) {
 				// lang files will be on joomla standard path
 				$isFilesLocal = false;
@@ -383,7 +398,7 @@ class manifestData
 		}
 		/**/
 
-		[$isFilesLocal, $langFilePaths] = $this->langFileOrigens ();
+		[$isFilesLocal, $langFilePaths] = $this->langFileOrigins ();
 		$lines[] = 'lang files ' . ($isFilesLocal ? ' inside component' : ' joomla standard folders');
 
 		foreach ($langFilePaths as $idx => $langFilePath) {
