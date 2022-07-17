@@ -34,6 +34,10 @@ $this->useCoreUI = true;
 $isModal = $input->get('layout') == 'modal';
 $layout  = $isModal ? 'modal' : 'edit';
 $tmpl    = $isModal || $input->get('tmpl', '', 'cmd') === 'component' ? '&tmpl=component' : '';
+
+// toDo assoc ....
+$assoc = false;
+
 ?>
 
 <form action="<?php echo Route::_('index.php?option=com_lang4dev&view=project&layout=edit&id=' . (int) $this->item->id); ?>"

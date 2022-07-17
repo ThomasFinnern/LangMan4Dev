@@ -113,6 +113,7 @@ class manifestData
 		return isset($this->manifest->$name) ? $this->manifest->$name : $default;
 	}
 
+    // return null on wrong path
 	public function getByPath ($names=[], $default) {
 		$result = $default;
 
@@ -120,12 +121,21 @@ class manifestData
 			$name =  array ($names);
 		}
 
+        $base = $this->manifest;
 		foreach ($names as $name) {
 
+            $base = isset($this->manifest->$name) ? $this->manifest->$name : null;
 
+            if ($base == null) {
+                break;
+            }
 		}
 
-		return isset($this->manifest->$name) ? $this->manifest->$name : $default;
+        if ($base != null) {
+            $result = $base;
+        }
+
+		return $result;
 	}
 
 	public function getSriptFile () { return $this->get('scriptfile', '');}

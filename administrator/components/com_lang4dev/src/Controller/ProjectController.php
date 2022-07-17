@@ -112,100 +112,114 @@ class projectController extends FormController
 			$OutTxt = Text::_('COM_LANG4DEV_TRANSLATE_CREATE_LANG_INVALID_RIGHTS');
 			$app    = Factory::getApplication();
 			$app->enqueueMessage($OutTxt, 'error');
-		} else
-		{
+		}
+        else {
 
-			$input = Factory::getApplication()->input;
-			$data  = $input->post->get('jform', array(), 'array');
+            $input = Factory::getApplication()->input;
+            $data = $input->post->get('jform', array(), 'array');
 
-			$id = (int)$data ['id'];
-			$prjId = trim($data ['name']);
-			$prjRootPath = trim($data ['root_path']);
+            $id = (int)$data ['id'];
+            $prjId = trim($data ['name']);
+            $prjRootPath = trim($data ['root_path']);
 
-			$prjModel = $this->getModel ();
+            $prjModel = $this->getModel();
 
-			//--- path to project xml file ---------------------------------
+            //--- path to project xml file ---------------------------------
 
-			// detect path by project name or root path is given
-			$oSubPrjPath = new subPrjPath($prjId,$prjRootPath);
+            // detect path by project name or root path is given
+            $oSubPrjPath = new subPrjPath($prjId, $prjRootPath);
 //			[$isRootValid, $isJoomlaPath, $rootPath, $subPrjPath]
 //				= oSubPrjPath->detectRootPath ($prjId,$prjRootPath);
 
-			//--- improve user path (too short, including root ...) ---------------------------------
+            //--- improve user path (too short, including root ...) ---------------------------------
 
-			$isChanged = false;
+            $isChanged = false;
 
-			if ($oSubPrjPath->isRootValid) {
+            if ($oSubPrjPath->isRootValid) {
 
-				$subPrjPath = $oSubPrjPath->getSubPrjPath();
-				if ($prjRootPath != $subPrjPath)
-				{
-					$prjRootPath = $subPrjPath;
+                $subPrjPath = $oSubPrjPath->getSubPrjPath();
+                if ($prjRootPath != $subPrjPath) {
+                    $prjRootPath = $subPrjPath;
 
-					// write back into input
-					$isChanged = true;
+                    // write back into input
+                    $isChanged = true;
 
-					//$input->set('jform['root_path']', $prjRootPath);
-					$data ['root_path'] = $prjRootPath;
-				}
+                    //$input->set('jform['root_path']', $prjRootPath);
+                    $data ['root_path'] = $prjRootPath;
+                }
 
-				/**  ??? 'prjXmlPathFilename'
-				$subPrjXmlPathFile = $oSubPrjPath->getRootManifestPath();
-				if ($prjRootPath != $subPrjXmlPathFile)
-				{
-					$prjRootPath = $subPrjXmlPathFile;
-
-					// write back into input
-					$isChanged = true;
-
-					//$input->set('jform['root_path']', $prjRootPath);
-					$data ['prjXmlPathFilename'] = $prjRootPath;
-				}
-				/**/
-
+                /**  ??? 'prjXmlPathFilename'
+                 * $subPrjXmlPathFile = $oSubPrjPath->getRootManifestPath();
+                 * if ($prjRootPath != $subPrjXmlPathFile)
+                 * {
+                 * $prjRootPath = $subPrjXmlPathFile;
+                 *
+                 * // write back into input
+                 * $isChanged = true;
+                 *
+                 * //$input->set('jform['root_path']', $prjRootPath);
+                 * $data ['prjXmlPathFilename'] = $prjRootPath;
+                 * }
+                 * /**/
 
 
+            }
 
-			}
+            // write back into input
+            if ($isChanged) {
 
-			// write back into input
-			if ($isChanged){
+                $this->input->post->set('jform', $data);
 
-				$this->input->post->set('jform', $data);
+                $isSaved = $prjModel->save($data);
+            }
 
-				$prjModel->save ($data);
-			}
+            // Was first write of this project
+            if ($id < 1) {
 
-			// Was first write of this project
-			if ($id == -1) {
+                //$id = $prjModel->highestProjectId_DB ();
+                $id = $prjModel->justSavedId();
+            }
 
-				//$id = $prjModel->highestProjectId_DB ();
-				$id = $prjModel->justSavedId ();
-			}
+            //--- extract subprojects ---------------------------------
 
-			//--- extract subprojects ---------------------------------
-
-			$subProjects = $prjModel->subProjectsByPrjId ($oSubPrjPath);
-			// ToDo: add $subProjects = $prjModel->subProjectsByManifest ($oSubPrjPath);
-
-
-			//--- save subproject changes ---------------------------------
-
-			$subPrjModel = $this->getModel ('Subproject');
-
-			foreach ($subProjects as $subProject)
-			{
-				//  includes save
-				$subPrjModel->MergeSubProject ($subProject, $id);
-
-			}
-
-		}
+            $subProjects = $prjModel->subProjectsByPrjId($oSubPrjPath);
+            // ToDo: add $subProjects = $prjModel->subProjectsByManifest ($oSubPrjPath);
 
 
-		$OutTxt = "detectDetails for project has finished successful:";
-		$app = Factory::getApplication();
-		$app->enqueueMessage($OutTxt, 'warning');
+            //--- save subproject changes ---------------------------------
+
+            $subPrjModel = $this->getModel('Subproject');
+
+            foreach ($subProjects as $subProject) {
+                //  includes save
+                $subPrjModel->MergeSubProject($subProject, $id);
+
+            }
+
+            // success: found subprojects and was saved before
+            if (count($subProjects) > 0 && $id > 0) {
+                $OutTxt = "detectDetails for project has finished successful:";
+                $app = Factory::getApplication();
+                $app->enqueueMessage($OutTxt, 'warning');
+
+            } else {
+                if ($id < 1) {
+
+                    // error DB save
+                    $OutTxt = "error on detectDetails for project: \n"
+                        . 'Could not save into DB: "' . $prjRootPath . '"';
+                    $app = Factory::getApplication();
+                    $app->enqueueMessage($OutTxt, 'warning');
+                } else {
+
+                   // error path
+                    $OutTxt = "error on detectDetails for project: \n"
+                        . 'Could not create subprojects from root path: "' . $prjRootPath . '"';
+                    $app = Factory::getApplication();
+                    $app->enqueueMessage($OutTxt, 'warning');
+                }
+            }
+        }
 
 		$link = 'index.php?option=com_lang4dev&view=project&layout=edit&id=' . $id;
 		$this->setRedirect($link);

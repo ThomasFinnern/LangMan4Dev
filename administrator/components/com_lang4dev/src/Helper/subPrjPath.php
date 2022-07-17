@@ -50,6 +50,7 @@ class subPrjPath
 	}
 
 
+
 	private function detectRootPath($prjId='', $subPrjPath='')
 	{
 		$isRootFound  = false;
@@ -61,12 +62,22 @@ class subPrjPath
 		{
 			$prjId = $this->prjId;
 		}
+
+
 		if ($subPrjPath == '')
 		{
 			$subPrjPath = $this->subPrjPath;
 		}
 
-		//--- path already valid -------------------------
+
+        //--- path accidentally a filename -------------------------
+
+        if (File::exists($subPrjPath)) {
+
+            $subPrjPath = dirname($subPrjPath);
+        }
+
+        //--- path already valid -------------------------
 
 		$rootPath = $subPrjPath;
 		if ($rootPath != '')

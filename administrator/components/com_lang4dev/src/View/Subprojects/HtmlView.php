@@ -91,16 +91,18 @@ class HtmlView extends BaseHtmlView
 		$this->isDevelop = $l4dConfig->get('isDevelop');
 
         $this->items         = $this->get('Items');
-        $errors = $this->get('Errors');
         $this->state         = $this->get('State');
-        $errors = $this->get('Errors');
         $this->filterForm    = $this->get('FilterForm');
-        $errors = $this->get('Errors');
         $this->pagination    = $this->get('Pagination');
-        $errors = $this->get('Errors');
         $this->activeFilters = $this->get('ActiveFilters');
 
-		//---  --------------------------------------------------------------
+        // Check for errors.
+        if (count($errors = $this->get('Errors')))
+        {
+            throw new GenericDataException(implode("\n", $errors), 500);
+        }
+
+        //---  --------------------------------------------------------------
 		/**
 		HTMLHelper::_('sidebar.setAction', 'index.php?option=com_lang4dev&view=config&layout=RawView');
 		/**

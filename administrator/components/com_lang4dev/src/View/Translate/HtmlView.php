@@ -43,7 +43,7 @@ class HtmlView extends BaseHtmlView
 	 *
 	 * @var  Form
 	 */
-	protected mixed $form;
+	protected $form;
 
 	protected $project;
 
