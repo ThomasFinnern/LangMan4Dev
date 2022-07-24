@@ -13,9 +13,6 @@ namespace Finnern\Component\Lang4dev\Administrator\View\PrjTexts;
 
 require_once(__DIR__ . '/../../Helper/selectProject.php');
 
-use Finnern\Component\Lang4dev\Administrator\Helper\manifestData;
-use Finnern\Component\Lang4dev\Administrator\Helper\sessionProjectId;
-use Finnern\Component\Lang4dev\Administrator\Helper\sessionTransLangIds;
 use Joomla\CMS\Component\ComponentHelper;
 use Joomla\CMS\Filesystem\File;
 use Joomla\CMS\Filesystem\Path;
@@ -30,9 +27,11 @@ use Joomla\CMS\Router\Route;
 use Joomla\CMS\Toolbar\Toolbar;
 use Joomla\CMS\Toolbar\ToolbarHelper;
 
+use Finnern\Component\Lang4dev\Administrator\Helper\manifestData;
+use Finnern\Component\Lang4dev\Administrator\Helper\manifestLangFiles;
+use Finnern\Component\Lang4dev\Administrator\Helper\sessionProjectId;
+use Finnern\Component\Lang4dev\Administrator\Helper\sessionTransLangIds;
 use Finnern\Component\Lang4dev\Administrator\Helper\langFile;
-//use Finnern\Component\Lang4dev\Administrator\Helper\langFileNamesSet;
-//use Finnern\Component\Lang4dev\Administrator\Helper\transIdLocationsSearch;
 use Finnern\Component\Lang4dev\Administrator\Helper\projectType;
 use function Finnern\Component\Lang4dev\Administrator\Helper\selectProject;
 
@@ -124,9 +123,11 @@ class HtmlView extends BaseHtmlView
 
 		$prjXmlPathFilename = $project->subProjects[0]->prjXmlPathFilename; // . '/lang4dev.xml';
 
-		$manifestData = new manifestData ($prjXmlPathFilename);
+
+		// $manifestData = new manifestData ($prjXmlPathFilename);
+		$manifestLang = new manifestLangFiles ($prjXmlPathFilename);
 		//$manifestText = implode("\n", $manifestData->__toText());
-		$manifestText = implode("<br>", $manifestData->__toText());
+		$manifestText = implode("<br>", $manifestLang->__toText());
 
 		echo '<hr>';
 		echo $manifestText . '<br>';

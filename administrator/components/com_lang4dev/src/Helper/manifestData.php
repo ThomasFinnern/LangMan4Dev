@@ -24,7 +24,10 @@ class manifestData
 	public $prjXmlFilePath = '';
 	public $prjXmlPathFilename = '';
 
-	private $manifest = false; // XML: false or SimpleXMLElement
+	// local development folder or installed component
+	public $isInstalled = false;
+
+	protected $manifest = false; // XML: false or SimpleXMLElement
 
 	/**
 	 * @since __BUMP_VERSION__
@@ -39,6 +42,7 @@ class manifestData
 		{
 
 			$this->readManifestData();
+
 		}
 
 	}
@@ -86,6 +90,12 @@ class manifestData
 					$app->enqueueMessage($OutTxt, 'error');
 				}
 
+				if (str_starts_with ($prjXmlPathFilename, JPATH_ROOT))
+				{
+					$this->isInstalled = true;
+				} else {
+					$this->isInstalled = false;
+				}
 			}
 			else
 			{
@@ -114,7 +124,7 @@ class manifestData
 	}
 
     // return null on wrong path
-	public function getByPath ($names=[], $default) {
+	public function getByPath ($names, $default) {
 		$result = $default;
 
 		if ( ! is_array($names)) {
@@ -148,125 +158,6 @@ class manifestData
 
 
 
-	/**
-	 * @param $isOnServer bool
-	 *           OnServer true:  return path on server (base path when not local)
-	 *           OnServer false: return path on installation
-	 *
-	 *
-	 * @since version
-	 */
-	public function langFileOrigins() // $isOnServer=true
-	{
-		// defined by folder language in xml
-		$isFilesLocal = false;
-		$isFilesDefined = false;
-		$stdLangFilePaths = [];
-		$adminLangFilePaths = [];
-
-		$manifest = $this->manifest;
-
-		if (!empty ($manifest))
-		{
-			// lang files will be inside component
-			$isFilesLocal = true; // new style expected
-
-			//--- standard -----------------------------------------------
-			//<languages folder="site/com_joomgallery/languages">
-			//	<language tag="en-GB">en-GB/com_joomgallery.ini</language>
-			//</languages>
-
-			$stdLanguages = $this->get('languages', []);
-			if (count ($stdLanguages) > 0) {
-				// lang files will be on joomla standard path
-				$isFilesLocal = false;
-
-				//--- collect files from installation ------------------------------
-
-				$stdPath = $stdLanguages['folder'];
-
-				foreach ($stdLanguages->language as $language){
-
-					$tag = (string) $language['tag'];
-					$subFolder[$tag] = (string) $language; // $language[0]
-
-					$stdLangFilePaths[] = $subFolder;
-				}
-			}
-
-			//--- backend -----------------------------------------------
-			//<administration>
-			//	<languages folder="administrator/com_joomgallery/languages">
-			//	    <language tag="en-GB">en-GB/com_joomgallery.ini</language>
-			//	    <language tag="en-GB">en-GB/com_joomgallery.sys.ini</language>
-			//	    <language tag="en-GB">en-GB/com_joomgallery.exif.ini</language>
-			//	    <language tag="en-GB">en-GB/com_joomgallery.iptc.ini</language>
-			//	</languages>
-			//</administration>
-
-
-			$administrator =
-			$stdLanguages = $this->get('administration', []);
-			if (count ($stdLanguages) > 0) {
-				// lang files will be on joomla standard path
-				$isFilesLocal = false;
-
-				//--- collect files from installation ------------------------------
-
-				$stdPath = $stdLanguages['folder'];
-
-				foreach ($stdLanguages->language as $language){
-
-					$tag = (string) $language['tag'];
-					$subFolder[$tag] = (string) $language; // $language[0]
-
-					$stdLangFilePaths[] = $subFolder;
-				}
-			}
-
-
-
-			// lang files will be inside component path
-			if ($isFilesLocal) {
-
-				// test for folder language in standard and administrator
-
-
-
-			}
-
-
-
-
-			return [$isFilesLocal, $stdLangFilePaths];
-		}
-
-		/**
-		 * // Copy language files from global folder
-		 * if ($languages = $manifest->languages)
-		 * {
-		 * $folder        = (string) $languages->attributes()->folder;
-		 * $languageFiles = $languages->language;
-		 *
-		 * $langTag = $languageFiles->attributes()->tag;
-		 *
-		 * foreach ($languageFiles as $languageFile)
-		 *
-		 * Folder::create($toPath . '/' . $folder . '/' . $languageFiles->attributes()->tag);
-		 *
-		 * foreach ($languageFiles as $languageFile)
-		 * {
-		 * $src = Path::clean($client->path . '/language/' . $languageFile);
-		 * $dst = Path::clean($toPath . '/' . $folder . '/' . $languageFile);
-		 *
-		 * if (File::exists($src))
-		 * {
-		 * File::copy($src, $dst);
-		 * }
-		 * }
-		 * }
-		 * /**/
-	}
 
 
 //	protected function loadManifestFromData(\SimpleXMLElement $xml)
@@ -394,27 +285,16 @@ class manifestData
 		$lines[] = $this->__toTextItem('update');
 		$lines[] = $this->__toTextItem('version');
 
-		/**
-		$itemLanguages = $this->get('languages', []);
-		if (count ($itemLanguages) > 0) {
-			// lang files will be on joomla standard path
-			$isFilesLocal = false;
+
+
+		$lines[] = '';
+		if ($this->isInstalled) {
+			$lines[] = '( Manifest is within joomla ) ';
+		} else {
+			$lines[] = '( Manifest on dwevelopment path ) ';
 		}
-		else{
-			// lang files will be inside component
-			$isFilesLocal = true;
+		$lines[] = '';
 
-			// should test for folder language in standard and administrator
-		}
-		/**/
-
-		[$isFilesLocal, $langFilePaths] = $this->langFileOrigins ();
-		$lines[] = 'lang files ' . ($isFilesLocal ? ' inside component' : ' joomla standard folders');
-
-		foreach ($langFilePaths as $idx => $langFilePath) {
-
-			$lines[] = ' * [' . $idx . '] '. json_encode($langFilePath);
-		}
 
 		return $lines;
 	}

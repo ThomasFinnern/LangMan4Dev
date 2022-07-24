@@ -15,7 +15,7 @@ namespace Finnern\Component\Lang4dev\Administrator\Helper;
 use Joomla\CMS\Factory;
 use Joomla\CMS\Filesystem\Folder;
 
-//use Finnern\Component\Lang4dev\Administrator\Helper\langFiles;
+use Finnern\Component\Lang4dev\Administrator\Helper\projectType;
 
 // no direct access
 \defined('_JEXEC') or die;
@@ -73,7 +73,7 @@ class langFileNamesSet
             $app = Factory::getApplication();
             $app->enqueueMessage($OutTxt, 'warning');
 
-            return;
+            return false;
         }
 
         if (!is_dir($basePath))
@@ -85,7 +85,7 @@ class langFileNamesSet
             $app = Factory::getApplication();
             $app->enqueueMessage($OutTxt, 'warning');
 
-            return;
+            return false;
         }
 
 	    $this->useLangSysIni = $useLangSysIni;
@@ -193,6 +193,7 @@ class langFileNamesSet
     protected function detectLangFiles () {
 
     	$isBaseNameSet = false;
+
 	    $this->langIds = [];
 	    $baseName = '';
 
@@ -261,7 +262,86 @@ class langFileNamesSet
         return $isBaseNameSet;
     }
 
-    public function __toText () {
+	public function collectManifestLangFiles($manifestLang, $prjType)
+	{
+		$xmlLangNames = $manifestLang->stdLangFilePaths;
+		$isCheck4Ini = false;
+
+		/*--- lang file origin defined in manifest file -----------------------*/
+
+		// on backend use administrator files
+		if (   $prjType == projectType::PRJ_TYPE_COMP_BACK
+			|| $prjType == projectType::PRJ_TYPE_COMP_BACK_SYS
+		) {
+			$xmlLangNames = $manifestLang->adminLangFilePaths;
+		}
+
+		if ($prjType == projectType::PRJ_TYPE_COMP_BACK_SYS
+		)
+		{
+			$isCheck4Ini = true;
+		}
+
+		$langBasePath = $this->langBasePathJoomla ($prjType) ;
+
+		// Within joomla use standard paths
+		if ($manifestLang->isInstalled)
+		{
+
+			if (count($xmlLangNames) > 0)
+			{
+				foreach ($xmlLangNames as $idx => $langFilePathInfo)
+				{
+					foreach ($langFilePathInfo as $langId => $langFilePath)
+					{
+						$isSysIni = $langFilePath.str_ends_with('.sys.ini');
+
+						// On backend PRJ_TYPE_COMP_BACK_SYS only sys.ini files used
+						if ( ! $isCheck4Ini || $isSysIni)
+						{
+							$this->langFileNames [$langId] = $langBasePath . '/' . $langFilePath;
+						}
+					}
+				}
+			}
+
+		}
+		else
+		{
+
+			//--- on local development folder ------------------------------
+
+			/**
+			if (count($xmlLangNames) > 0)
+			{
+			foreach ($xmlLangNames as $idx => $langFilePathInfo)
+			{
+			foreach ($langFilePathInfo as $langId => $langFilePath)
+			{
+			$isSysIni = $langFilePath.str_ends_with('.sys.ini');
+
+			// On backend PRJ_TYPE_COMP_BACK_SYS only sys.ini files used
+			if ( ! $isCheck4Ini || $isSysIni)
+			{
+			$this->langFileNames [$langId] = $langBasePath . '/' . $langFilePath;
+			}
+			}
+			}
+			}
+
+			/**/
+		}
+
+
+
+	}
+
+
+
+
+
+
+	public function __toText () {
 
     	$lines = [];
 
@@ -286,5 +366,41 @@ class langFileNamesSet
 	    return $lines;
     }
 
+	private function langBasePathJoomla($prjType)
+	{
+		// most used is admin backend
+		$basePath = JPATH_ADMINISTRATOR . '/language';
+
+		switch ($prjType){
+
+			case projectType::PRJ_TYPE_NONE:
+				break;
+
+			case projectType::PRJ_TYPE_COMP_BACK_SYS:
+				// admin
+				break;
+
+			case projectType::PRJ_TYPE_COMP_BACK:
+				// admin
+				break;
+
+			case projectType::PRJ_TYPE_COMP_SITE:
+				// site
+				$basePath = JPATH_ROOT . '/language';
+				break;
+
+			case projectType::PRJ_TYPE_MODEL:
+				// site
+				$basePath = JPATH_ROOT . '/language';
+				break;
+
+			case projectType::PRJ_TYPE_PLUGIN:
+				// admin
+				break;
+
+		}
+
+		return $basePath;
+	}
 
 } // class

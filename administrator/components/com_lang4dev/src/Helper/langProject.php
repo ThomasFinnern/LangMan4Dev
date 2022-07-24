@@ -68,8 +68,8 @@ class langProject
 			foreach ($this->subProjects as $subProject)
 			{
 
-				$hasSysFiles = ! ($subProject->prjType == projectType::PRJ_TYPE_COMP_BACK
-					|| $subProject->prjType == projectType::PRJ_TYPE_COMP_SITE);
+//				$hasSysFiles = ! ($subProject->prjType == projectType::PRJ_TYPE_COMP_BACK
+//					|| $subProject->prjType == projectType::PRJ_TYPE_COMP_SITE);
 
 				// On sys file receive langIdPrefix
 				$isFilesFound = $subProject->findPrjFiles();
