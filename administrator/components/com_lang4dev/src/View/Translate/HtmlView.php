@@ -106,7 +106,7 @@ class HtmlView extends BaseHtmlView
 
 		$project->findPrjFiles();
 		$project->detectLangFiles();
-		//$project->readSubsLangFile();
+		//$project->readSubsLangFiles();
 
 		// collect content
 		$project->readAllLangFiles();

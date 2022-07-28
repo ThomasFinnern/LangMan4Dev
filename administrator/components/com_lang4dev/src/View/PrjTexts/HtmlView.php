@@ -73,7 +73,7 @@ class HtmlView extends BaseHtmlView
 		$this->isDevelop      = $l4dConfig->get('isDevelop');
 
 		$this->isDoCommentIds = $l4dConfig->get('isDoComment_prepared_missing_ids');
-		$this->main_langId = $l4dConfig->get('main_langId');
+		$this->main_langId    = $l4dConfig->get('main_langId');
 
 		//--- Form --------------------------------------------------------------------
 
@@ -94,16 +94,28 @@ class HtmlView extends BaseHtmlView
 		$sessionProjectId = new sessionProjectId();
 		[$prjId, $subPrjActive] = $sessionProjectId->getIds();
 
-		$model = $this->getModel();
+		$model         = $this->getModel();
 		$this->project =
 		$project = $model->getProject($prjId, $subPrjActive);
 
 		$project->findPrjFiles();
 		$project->detectLangFiles();
-		$project->readSubsLangFile();
+		$project->readSubsLangFiles($this->main_langId);
 
 		$project->scanCode4TransIds();
 		$project->scanCode4TransStrings();
+
+		$langFileSets = $project->LangFileCollection();
+		foreach ($langFileSets as $idx => $langFiles)
+		{
+			echo '[' . $idx . ']' . '<br>';
+
+			foreach ($langFiles as $langFile)
+			{
+				echo '*' . $langFile . '<br>';
+			}
+		}
+
 
 		/**
 		$project =

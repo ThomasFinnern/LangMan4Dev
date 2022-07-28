@@ -117,7 +117,7 @@ class langProject
 	}
 
     // one file each sub (used mostly for eng_GB)
-    public function readSubsLangFile($langId='en-GB', $isReadOriginal=false)
+    public function readSubsLangFiles($langId='en-GB', $isReadOriginal=false)
     {
         $isFilesRead = false;
 
@@ -126,7 +126,7 @@ class langProject
 
             foreach ($this->subProjects as $subProject)
             {
-                $subProject->readLangFile($langId, $isReadOriginal);
+                $subProject->readLangFiles($langId, $isReadOriginal);
             }
 
         }
@@ -146,6 +146,7 @@ class langProject
     }
 
     // one file each sub (used mostly for eng_GB)
+	// all LangId and all files within lang ID
     public function readAllLangFiles($isReadOriginal=false)
     {
         $isFilesRead = false;
@@ -158,7 +159,7 @@ class langProject
                 // all existing
                 foreach ($subProject->langIds as $langId) {
 
-                    $subProject->readLangFile($langId, $isReadOriginal);
+                    $subProject->readLangFiles($langId, $isReadOriginal);
                 }
             }
 
@@ -280,6 +281,40 @@ class langProject
 
 		return $isAligned;
 	}
+
+	public function LangFileCollection () {
+
+		$langFiles = [];
+
+		try
+		{
+			foreach ($this->subProjects as $subProject)
+			{
+				$langIds = $subProject->getLangIds();
+
+				foreach ($langIds as $langId)
+				{
+					$langFileData = $subProject->getLangFile($langId);
+
+					$langFile [] = $langFileData->getlangPathFileName ();
+					$langFiles [] = $langFile;
+				}
+			}
+		}
+		catch (\RuntimeException $e)
+		{
+			$OutTxt = '';
+			$OutTxt .= 'Error executing findFiles: "' . '<br>';
+			$OutTxt .= 'Error: "' . $e->getMessage() . '"' . '<br>';
+
+			$app = Factory::getApplication();
+			$app->enqueueMessage($OutTxt, 'error');
+		}
+
+		// return $isFilesFound;
+		return $langFiles;
+	}
+
 
 } // class
 

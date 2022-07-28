@@ -216,7 +216,7 @@ class langFileNamesSet
 	            [$langId, $baseName] = explode('.', $langFile, 2);
 
 	            $this->langIds [] = $langId;
-	            $this->langFileNames [$langId] = $langFile;
+	            $this->langFileNames [$langId][] = $langFile;
 
 	            // set base name once
 	            if($isBaseNameSet == false)
@@ -255,7 +255,7 @@ class langFileNamesSet
 
 		        $langFile = $subFolder . DIRECTORY_SEPARATOR . $baseName;
 
-		        $this->langFileNames [$langId] = $langFile;
+		        $this->langFileNames [$langId][] = $langFile;
 	        }
         }
 
@@ -264,22 +264,18 @@ class langFileNamesSet
 
 	public function collectManifestLangFiles($manifestLang, $prjType)
 	{
-		$xmlLangNames = $manifestLang->stdLangFilePaths;
 		$isCheck4Ini = false;
 
 		/*--- lang file origin defined in manifest file -----------------------*/
 
 		// on backend use administrator files
 		if (   $prjType == projectType::PRJ_TYPE_COMP_BACK
-			|| $prjType == projectType::PRJ_TYPE_COMP_BACK_SYS
-		) {
-			$xmlLangNames = $manifestLang->adminLangFilePaths;
-		}
-
-		if ($prjType == projectType::PRJ_TYPE_COMP_BACK_SYS
-		)
+			|| $prjType == projectType::PRJ_TYPE_COMP_BACK_SYS)
 		{
-			$isCheck4Ini = true;
+			$xmlLangNames = $manifestLang->adminLangFilePaths;
+		} else {
+			// On site, modul and plugin
+			$xmlLangNames = $manifestLang->stdLangFilePaths;
 		}
 
 		$langBasePath = $this->langBasePathJoomla ($prjType) ;
@@ -294,12 +290,19 @@ class langFileNamesSet
 				{
 					foreach ($langFilePathInfo as $langId => $langFilePath)
 					{
-						$isSysIni = $langFilePath.str_ends_with('.sys.ini');
+						$isSysIni = str_ends_with($langFilePath, '.sys.ini');
 
-						// On backend PRJ_TYPE_COMP_BACK_SYS only sys.ini files used
-						if ( ! $isCheck4Ini || $isSysIni)
+						// backend system and *.sys.ini found
+						if($this->useLangSysIni && $isSysIni) {
+
+							$this->langFileNames [$langId][] = $langBasePath . '/' . $langFilePath;
+
+						}
+
+						// backend or site and no *.sys.ini file
+						if(! $this->useLangSysIni && ! $isSysIni)
 						{
-							$this->langFileNames [$langId] = $langBasePath . '/' . $langFilePath;
+							$this->langFileNames [$langId][] = $langBasePath . '/' . $langFilePath;
 						}
 					}
 				}
@@ -318,7 +321,7 @@ class langFileNamesSet
 			{
 			foreach ($langFilePathInfo as $langId => $langFilePath)
 			{
-			$isSysIni = $langFilePath.str_ends_with('.sys.ini');
+			$isSysIni = str_ends_with($langFilePath, '.sys.ini');
 
 			// On backend PRJ_TYPE_COMP_BACK_SYS only sys.ini files used
 			if ( ! $isCheck4Ini || $isSysIni)
@@ -359,8 +362,8 @@ class langFileNamesSet
 	    $lines [] = $langIdsLine;
 
 	    $lines [] = '--- $langFiles ------------------------';
-	    foreach ($this->langFileNames as $langFile) {
-		    $lines [] = $langFile;
+	    foreach ($this->langFileNames as $idx => $langFile) {
+		    $lines [] = '[' . $idx . ']' . $langFile;
 	    }
 
 	    return $lines;

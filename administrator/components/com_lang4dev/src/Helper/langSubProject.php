@@ -224,16 +224,19 @@ class langSubProject extends langFileNamesSet
 	}
 
 	// read content of language file  ==> get translation in langFiles
-	public function readLangFile($langId = 'en-GB')
+	public function readLangFiles($langId = 'en-GB')
 	{
 
-		$langFileName = $this->langFileNames [$langId];
+		$langFileNames = $this->langFileNames [$langId];
 
-		// $langFile = new langFile ($langFileName);
-		$langFile = new langFile ();
-		$langFile->readFileContent($langFileName);
+		foreach ($langFileNames as $langFileName)
+		{
+			// $langFile = new langFile ($langFileName);
+			$langFile = new langFile ();
+			$langFile->readFileContent($langFileName);
 
-		$this->langFiles [$langId] = $langFile;
+			$this->langFiles [$langId] = $langFile;
+		}
 
 		// if (empty($langFiles [$langId]) 0=> return empty ? ...
 
