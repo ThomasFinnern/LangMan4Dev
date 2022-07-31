@@ -282,23 +282,18 @@ class langProject
 		return $isAligned;
 	}
 
-	public function LangFileCollection () {
+	public function LangFileNamesCollection () {
 
-		$langFiles = [];
+		$langFileSetsPrjs = [];
 
 		try
 		{
 			foreach ($this->subProjects as $subProject)
 			{
-				$langIds = $subProject->getLangIds();
 
-				foreach ($langIds as $langId)
-				{
-					$langFileData = $subProject->getLangFile($langId);
+				$prjId = $subProject->prjId . ':' . projectType::getPrjTypeText($subProject->prjType);
+				$langFileSetsPrjs [$prjId] = $subProject->langFileNameSet;
 
-					$langFile [] = $langFileData->getlangPathFileName ();
-					$langFiles [] = $langFile;
-				}
 			}
 		}
 		catch (\RuntimeException $e)
@@ -312,7 +307,7 @@ class langProject
 		}
 
 		// return $isFilesFound;
-		return $langFiles;
+		return $langFileSetsPrjs;
 	}
 
 

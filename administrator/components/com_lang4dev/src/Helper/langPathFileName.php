@@ -20,7 +20,7 @@ use Joomla\CMS\Factory;
 use Joomla\CMS\Filesystem\File;
 use Joomla\CMS\Filesystem\Folder;
 
-//use Finnern\Component\Lang4dev\Administrator\Helper\langFiles;
+//use Finnern\Component\Lang4dev\Administrator\Helper\sourceLangFiles;
 
 // no direct access
 \defined('_JEXEC') or die;

@@ -172,7 +172,7 @@
 	<!-- componentPrefix, prjXmlPathFilename, installPathFilename, useLangSysIni -->
 
 
-	<!-- ? $langFiles = [], $transIdLocations = [], $transIdsClassified; -->
+	<!-- ? $sourceLangFiles = [], $transIdLocations = [], $transIdsClassified; -->
 
 
 

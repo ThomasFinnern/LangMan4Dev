@@ -110,7 +110,7 @@ class langFile extends langPathFileName
 
                 //--- path does not exist -------------------------------
 
-                $OutTxt = 'Warning: langFile.readFileContent: File does not exist "' . $filePath . '"<br>';
+                $OutTxt = 'Warning: sourceLangFile.readFileContent: File does not exist "' . $filePath . '"<br>';
 
                 $app = Factory::getApplication();
                 $app->enqueueMessage($OutTxt, 'warning');

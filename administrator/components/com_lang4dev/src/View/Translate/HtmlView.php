@@ -51,7 +51,7 @@ class HtmlView extends BaseHtmlView
 	protected $isDevelop;
 	protected $isDoCommentIds;
 
-	//protected $langFiles = [];
+	//protected $sourceLangFiles = [];
 
 	protected $main_langId;
 	protected $trans_langId;
@@ -227,7 +227,7 @@ class HtmlView extends BaseHtmlView
                 ToolbarHelper::custom('translate.selectSourceLangId', 'icon-flag', '', 'COM_LANG4DEV_TRANS_SELECT_SOURCE_LANG_ID', false);
                 ToolbarHelper::custom('translate.selectTargetLangId', 'icon-edit', '', 'COM_LANG4DEV_TRANS_SELECT_TARGET_LANG_ID', false);
 
-				ToolbarHelper::custom('translate.createLangId', 'icon-copy', '', 'COM_LANG4DEV_TRANSLATE_ADD_LANG_FILE', false);
+				ToolbarHelper::custom('translate.createLangId', 'icon-copy', '', 'COM_LANG4DEV_TRANSLATE_NEW_LANG_FILES', false);
 				ToolbarHelper::custom('translate.saveLangEdits', 'icon-save', '', 'COM_LANG4DEV_TRANSLATE_SAVE_EDITED_LANG_FILES', false); /// ToDo: true);
 
 				break;

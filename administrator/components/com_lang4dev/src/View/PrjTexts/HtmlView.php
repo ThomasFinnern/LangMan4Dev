@@ -89,7 +89,7 @@ class HtmlView extends BaseHtmlView
 
 		//--- project --------------------------------------------------------------------
 
-		//--- Set selection of project and subproject --------------------
+		//--- Get selection of project and subproject --------------------
 
 		$sessionProjectId = new sessionProjectId();
 		[$prjId, $subPrjActive] = $sessionProjectId->getIds();
@@ -105,17 +105,26 @@ class HtmlView extends BaseHtmlView
 		$project->scanCode4TransIds();
 		$project->scanCode4TransStrings();
 
-		$langFileSets = $project->LangFileCollection();
-		foreach ($langFileSets as $idx => $langFiles)
-		{
-			echo '[' . $idx . ']' . '<br>';
+		//--- all projects filenames by lang ID  -----------------------------------------
 
-			foreach ($langFiles as $langFile)
+		$langFileSetsPrjs = $project->LangFileNamesCollection();
+
+		echo '--- langFileSetsPrjs -----------------------------------' . '<br>';
+
+		foreach ($langFileSetsPrjs as $prjId => $langFileSets)
+		{
+			echo '[' . $prjId . ']' . '<br>';
+
+			foreach ($langFileSets as $LangId => $langFiles)
 			{
-				echo '*' . $langFile . '<br>';
+				echo '...[' . $LangId . ']' . '<br>';
+
+				foreach ($langFiles as $langFile)
+				{
+					echo '...      *' . $langFile . '<br>';
+				}
 			}
 		}
-
 
 		/**
 		$project =

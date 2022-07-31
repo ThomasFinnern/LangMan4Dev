@@ -87,7 +87,7 @@ class transIdLocations
 	}
 
 	/*
-	 * should be called by names list => similar is in langFiles
+	 * should be called by names list => similar is in sourceLangFiles
 	 *
 	public function getMissingTransIds ($transIds_file){
 

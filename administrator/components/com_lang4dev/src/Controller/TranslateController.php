@@ -134,6 +134,13 @@ class TranslateController extends AdminController
 	public function createLangId () {
 		Session::checkToken() or die(Text::_('JINVALID_TOKEN'));
 
+
+		// First only shown files got  atwin (
+
+		//  ToDo: create path and files for project in new lang ID
+
+
+
 		// User is allowed to change
 		// ToDo: $canCreateFile = ...;
 		$canCreateFile = true;
@@ -155,6 +162,46 @@ class TranslateController extends AdminController
 
 			$targetLangId = $data ['createLangId'];
 			$sourceLangId = $data ['selectSourceLangId'];
+
+			//--- Get selection of project and subproject --------------------
+
+			$sessionProjectId = new sessionProjectId();
+			[$prjId, $subPrjActive] = $sessionProjectId->getIds();
+
+			$model         = $this->getModel();
+			$this->project =
+			$project = $model->getProject($prjId, $subPrjActive);
+
+			$project->findPrjFiles();
+			$project->detectLangFiles();
+
+			//--- all projects filenames by lang ID  -----------------------------------------
+
+			$langFileSetsPrjs = $project->LangFileNamesCollection();
+
+			echo '--- langFileSetsPrjs -----------------------------------' . '<br>';
+
+			foreach ($langFileSetsPrjs as $prjId => $langFileSets)
+			{
+				echo '[' . $prjId . ']' . '<br>';
+
+				foreach ($langFileSets as $LangId => $langFiles)
+				{
+					echo '...[' . $LangId . ']' . '<br>';
+
+					foreach ($langFiles as $langFile)
+					{
+						echo '...      *' . $langFile . '<br>';
+					}
+				}
+			}
+
+
+
+// .....
+
+
+
 
 			// form lang file names (wrong lang ID)
 			$langPathFileNames = $input->get('langPathFileNames', array(), 'ARRAY');
@@ -224,6 +271,18 @@ class TranslateController extends AdminController
 					}
 
 				}
+
+				if ( count ($langPathFileNames) == 0) {
+
+					$OutTxt = Text::_('COM_LANG4DEV_TRANSLATE_CREATED_LANG_ID_NO_FILES') . '\n'
+						. implode (',\n', $createdFileNames);
+					$app    = Factory::getApplication();
+					$app->enqueueMessage($OutTxt, 'info');
+
+				}
+
+
+
 			} else {
 
 				//--- invalid lang ID names ------------------------
@@ -377,7 +436,7 @@ class TranslateController extends AdminController
 
 
 
-	// ToDo: part of langFile / langFileNames class ?
+	// ToDo: part of sourceLangFile / langFileNames class ?
 	// ends on ini and does exist
 	private function verifyLangFileName(string $langPathFileName = '')
 	{

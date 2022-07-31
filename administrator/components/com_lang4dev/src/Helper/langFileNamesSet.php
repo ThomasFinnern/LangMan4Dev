@@ -31,7 +31,7 @@ class langFileNamesSet
     public $langBasePath = '';
     public $baseName = '';
     public $langIds = [];
-    public $langFileNames = [];
+    public $langFileNameSet = []; // [LangIds] [filename]
 
     protected $useLangSysIni = false;
     protected $isLangInFolders = false; // lang file are divided in folders instead of containing the name in front
@@ -46,7 +46,7 @@ class langFileNamesSet
         $this->langBasePath = '';
         $this->baseName = '';
         $this->langIds = [];
-        $this->langFileNames = [];
+        $this->langFileNameSet = [];
 
         $this->useLangSysIni = false;
         $this->isLangInFolders = false; // lang file are divided in folders instead of containing the name i front
@@ -185,12 +185,12 @@ class langFileNamesSet
         $isFound = false;
 
         // try ?
-        $isFound = $this->detectLangFiles ();
+        $isFound = $this->collectFolderLangFiles ();
 
         return $isFound;
     }
 
-    protected function detectLangFiles () {
+    protected function collectFolderLangFiles () {
 
     	$isBaseNameSet = false;
 
@@ -215,8 +215,8 @@ class langFileNamesSet
 
 	            [$langId, $baseName] = explode('.', $langFile, 2);
 
-	            $this->langIds [] = $langId;
-	            $this->langFileNames [$langId][] = $langFile;
+	            $this->langIds []                  = $langId;
+	            $this->langFileNameSet [$langId][] = $langFile;
 
 	            // set base name once
 	            if($isBaseNameSet == false)
@@ -255,7 +255,7 @@ class langFileNamesSet
 
 		        $langFile = $subFolder . DIRECTORY_SEPARATOR . $baseName;
 
-		        $this->langFileNames [$langId][] = $langFile;
+		        $this->langFileNameSet [$langId][] = $langFile;
 	        }
         }
 
@@ -295,14 +295,14 @@ class langFileNamesSet
 						// backend system and *.sys.ini found
 						if($this->useLangSysIni && $isSysIni) {
 
-							$this->langFileNames [$langId][] = $langBasePath . '/' . $langFilePath;
+							$this->langFileNameSet [$langId][] = $langBasePath . '/' . $langFilePath;
 
 						}
 
 						// backend or site and no *.sys.ini file
 						if(! $this->useLangSysIni && ! $isSysIni)
 						{
-							$this->langFileNames [$langId][] = $langBasePath . '/' . $langFilePath;
+							$this->langFileNameSet [$langId][] = $langBasePath . '/' . $langFilePath;
 						}
 					}
 				}
@@ -361,9 +361,15 @@ class langFileNamesSet
 	    }
 	    $lines [] = $langIdsLine;
 
-	    $lines [] = '--- $langFiles ------------------------';
-	    foreach ($this->langFileNames as $idx => $langFile) {
-		    $lines [] = '[' . $idx . ']' . $langFile;
+	    $lines [] = '--- $sourceLangFiles ------------------------';
+	    foreach ($this->langFileNameSet as $LangId => $langFiles)
+	    {
+		    $lines [] = '[' . $LangId . ']';
+
+		    foreach ($langFiles as $langFile)
+		    {
+			    $lines [] = '   * ' . $langFile;
+		    }
 	    }
 
 	    return $lines;

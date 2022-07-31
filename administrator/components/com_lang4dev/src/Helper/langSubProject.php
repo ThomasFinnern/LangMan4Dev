@@ -35,7 +35,7 @@ class langSubProject extends langFileNamesSet
 
 	public $useLangSysIni = false;
 
-	protected $langFiles = []; // $langId -> translation file(s)
+	protected $langFiles = []; // files with content is read
 	protected $transIdLocations = [];
 	protected $transStringsLocations = [];
 	protected $transIdsClassified;
@@ -194,21 +194,21 @@ class langSubProject extends langFileNamesSet
 		return $isFilesFound;
 	}
 
-	// read content of language file  ==> get translation in langFiles
-	public function getLangFile($langId = 'en-GB', $isReadOriginal = false)
+	// read content of language files  ==> get translation in sourceLangFiles
+	public function getLangFilesContent($langId = 'en-GB', $isReadOriginal = false)
 	{
 
 		// if not cached or $isReadOriginal
-		if (empty($this->langFiles [$langId]) || $isReadOriginal)
+		if (empty($this->langFileNameSet [$langId]) || $isReadOriginal)
 		{
 
-			return $this->readLangFile($langId = 'en-GB', $isReadOriginal = false);
+			return $this->readLangFiles($langId = 'en-GB', $isReadOriginal = false);
 		}
 
 		return $this->langFiles [$langId];
 	}
 
-	// read content of language file  ==> get translation in langFiles
+	// read content of language file  ==> get translation in sourceLangFiles
 	public function getLangIds()
 	{
 		$langIds = [];
@@ -223,22 +223,22 @@ class langSubProject extends langFileNamesSet
 		return $langIds;
 	}
 
-	// read content of language file  ==> get translation in langFiles
+	// read content of language file  ==> get translation in sourceLangFiles
 	public function readLangFiles($langId = 'en-GB')
 	{
 
-		$langFileNames = $this->langFileNames [$langId];
+		$langFileNames = $this->langFileNameSet [$langId];
 
 		foreach ($langFileNames as $langFileName)
 		{
-			// $langFile = new langFile ($langFileName);
+			// $sourceLangFile = new sourceLangFile ($langFileName);
 			$langFile = new langFile ();
 			$langFile->readFileContent($langFileName);
 
 			$this->langFiles [$langId] = $langFile;
 		}
 
-		// if (empty($langFiles [$langId]) 0=> return empty ? ...
+		// if (empty($sourceLangFiles [$langId]) 0=> return empty ? ...
 
 		return $this->langFiles [$langId];
 	}
@@ -450,7 +450,7 @@ class langSubProject extends langFileNamesSet
 			{
 				//--- search in component path -------------------------------
 
-				parent::detectLangFiles();
+				parent::collectFolderLangFiles();
 			}
 			else
 			{
