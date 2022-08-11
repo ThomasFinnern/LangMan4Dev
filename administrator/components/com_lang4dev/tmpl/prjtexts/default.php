@@ -26,6 +26,21 @@ function renderProjectSelection ($form)
 
 function renderMissingPreparedTransIds ($missing, $comment = '')
 {
+	?>
+
+    <div class="col">
+        <div class="d-inline-flex position-relative">
+			<span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger border border-light">
+			    <?php echo count ($missing); ?>
+			    <span class="visually-hidden">Count missing</span>
+			</span>
+			</span>
+	        <h3><?php echo Text::_('COM_LANG4DEV_MISSING_TRANSLATION_IDS'); ?>&nbsp;&nbsp;&nbsp;</h3>
+        </div>
+        <br>
+
+	<?php
+
 	if (count ($missing) > 0)
 	{
 		?>
@@ -39,6 +54,13 @@ function renderMissingPreparedTransIds ($missing, $comment = '')
 				    <span class="visually-hidden">Count missing</span>
 				</span>
 			</h3>
+            <a class="btn btn-sm"  style="color: black; background-color: #ced4da;" data-bs-toggle="collapse"
+                href="#collapseMissing" role="button" aria-expanded="false" aria-controls="collapseMissing">
+                <?php echo Text::_('COM_LANG4DEV_TOGGLE_MISSING_IDS'); ?>
+            </a>
+            <div class="collapse show" id="collapseMissing">
+                <br>
+
 			<div class="card-body">
 				<!-- h5 class="card-title"></h5-->
 				<p class="card-text">
@@ -47,10 +69,12 @@ function renderMissingPreparedTransIds ($missing, $comment = '')
 					{
 						echo $comment . $transId . '=""<br>';
 					}
-
 					?>
 				</p>
 			</div>
+
+            </div>
+
 		</div>
 		<br>
 
@@ -60,7 +84,7 @@ function renderMissingPreparedTransIds ($missing, $comment = '')
 	return;
 }
 
-function renderSubProjectDeveloperTexts ($transStringsLocations, $comment = '')
+function renderDeveloperAdHocTexts ($transStringsLocations, $comment = '')
 {
 	$locationsCount = count ($transStringsLocations);
 	if ($locationsCount > 0)
@@ -115,15 +139,17 @@ function renderSubProjectDeveloperTexts ($transStringsLocations, $comment = '')
 	return;
 }
 
-function renderSubProjectStatistic ($missing, $same, $notUsed, $doubles) {
+function renderSubProjectStatistic ($missing, $same, $notUsed, $doubles, $comment = '') {
 
 ?>
     <div class="row g-3">
-        <!--div class="col">
+
+        <div class="col">
 	        <div class="d-inline-flex position-relative">
 				<span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger border border-light">
 				    <?php echo count ($missing); ?>
 				    <span class="visually-hidden">Count missing</span>
+				</span>
 				</span>
 		        <h3><?php echo Text::_('COM_LANG4DEV_MISSING_TRANSLATION_IDS'); ?>&nbsp;&nbsp;&nbsp;</h3>
 	        </div>
@@ -132,13 +158,63 @@ function renderSubProjectStatistic ($missing, $same, $notUsed, $doubles) {
 	        <?php
             if (count ($missing) > 0)
             {
-	            $newItemLines = implode("<br>", $missing);
-	            echo $newItemLines;
+		        // hide with button
+		        ?>
+		        <a class="btn btn-sm"  style="color: black; background-color: #ced4da;" data-bs-toggle="collapse"
+		           href="#collapseMissing" role="button" aria-expanded="false" aria-controls="collapseMissing">
+			        <?php echo Text::_('COM_LANG4DEV_TOGGLE_MISSING_IDS'); ?>
+		        </a>
+		        <div class="collapse show" id="collapseMissing">
+			        <br>
+			        <?php
+//		            $newItemLines = implode("<br>", $missing);
+//		            echo $newItemLines;
+			        foreach ($missing as $transId)
+			        {
+				        echo $comment . $transId . '=""<br>';
+			        }
+
+			        ?>
+		        </div>
+	            <?php
             } else {
             	echo '<strong>%</strong>';
             }
             ?>
-        </div-->
+        </div>
+
+	    <div class="col">
+		    <div class="d-inline-flex position-relative">
+				<span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger border border-light">
+					<?php echo count ($notUsed); ?>
+					<span class="visually-hidden">count same</span>
+				</span>
+			    <h3><?php echo Text::_('COM_LANG4DEV_SURPLUS_TRANSLATIONS'); ?>&nbsp;&nbsp;&nbsp;</h3>
+		    </div>
+		    <br>
+
+		    <?php
+		    if (count ($notUsed) > 0)
+		    {
+			    // hide with button
+			    ?>
+			    <a class="btn btn-sm"  style="color: black; background-color: #ced4da;" data-bs-toggle="collapse"
+			       href="#collapseNotUsed" role="button" aria-expanded="false" aria-controls="collapseNotUsed">
+				    <?php echo Text::_('COM_LANG4DEV_TOGGLE_NOT_USED_IDS'); ?>
+			    </a>
+			    <div class="collapse" id="collapseNotUsed">
+				    <br>
+				    <?php
+				    $newItemLines = implode("<br>", $notUsed);
+				    echo $newItemLines;
+				    ?>
+			    </div>
+			    <?php
+		    } else {
+			    echo '<strong>%</strong>';
+		    }
+		    ?>
+	    </div>
 
         <div class="col">
 	        <div class="d-inline-flex position-relative">
@@ -153,12 +229,13 @@ function renderSubProjectStatistic ($missing, $same, $notUsed, $doubles) {
             <?php
             if (count ($same) > 0)
             {
-	            // ToDo: hide with button
+	            // hide with button
 				?>
-		        <a class="btn btn-sm"  style="color: black; background-color: #ced4da;" data-bs-toggle="collapse" href="#collapseExample" role="button" aria-expanded="false" aria-controls="collapseExample">
-			        <?php echo Text::_('COM_LANG4DEV_SHOW_MATCHING_IDS'); ?>
+		        <a class="btn btn-sm"  style="color: black; background-color: #ced4da;" data-bs-toggle="collapse" 
+		            href="#collapseSame" role="button" aria-expanded="false" aria-controls="collapseSame">
+			        <?php echo Text::_('COM_LANG4DEV_TOGGLE_MATCHING_IDS'); ?>
 		        </a>
-	            <div class="collapse" id="collapseExample">
+	            <div class="collapse" id="collapseSame">
 		            <br>
 		            <?php
 		            $newItemLines = implode("<br>", $same);
@@ -171,26 +248,7 @@ function renderSubProjectStatistic ($missing, $same, $notUsed, $doubles) {
             }
             ?>
         </div>
-        <div class="col">
-	        <div class="d-inline-flex position-relative">
-				<span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger border border-light">
-					<?php echo count ($notUsed); ?>
-					<span class="visually-hidden">count same</span>
-				</span>
-		        <h3><?php echo Text::_('COM_LANG4DEV_SURPLUS_TRANSLATIONS'); ?>&nbsp;&nbsp;&nbsp;</h3>
-	        </div>
-	        <br>
 
-            <?php
-            if (count ($notUsed) > 0)
-            {
-	            $newItemLines = implode("<br>", $notUsed);
-	            echo $newItemLines;
-            } else {
-	            echo '<strong>%</strong>';
-            }
-            ?>
-        </div>
 		<?php if (! empty ($doubles)): ?>
 <!--        <div class="col">-->
 <!--            <h3>Double Translation Ids<?php echo ' (' . count ($missing) . ')'; ?></h3><br>-->
@@ -229,7 +287,7 @@ if ($this->isDoCommentIds) {
 	{
 	foreach ($subProjects as $subProject) {
 
-		$title = $subProject->prjId . ': ' . $subProject->getPrjTypeText();
+		$prjIdAndType = $subProject->getPrjIdAndTypeText ();
 
 		//$transStringsLocations = $subProject->filteredTransStringsLocations();
 		$transStringsLocations = $subProject->getTransStringsLocations();
@@ -239,13 +297,15 @@ if ($this->isDoCommentIds) {
 		?>
 		<div class="card ">
 			<h2 class="card-header " style="background-color: #ced4da;">
-				<?php echo $title; ?>
+				<?php echo $prjIdAndType; ?>
 			</h2>
 			<div class="card-body">
 			    <!-- h5 class="card-title"></h5-->
 				<p class="card-text">
 				<?php
-				$transIdsClassified = $subProject->getTransIdsClassified();
+
+				// ['missing', same, notUsed, doubles']
+				$transIdsClassified = $this->transIdsClassified[$prjIdAndType];
 
 				// ToDo: interface parameters
 				$missing = $transIdsClassified['missing'];
@@ -253,14 +313,12 @@ if ($this->isDoCommentIds) {
 				$notUsed = $transIdsClassified['notUsed'];
 				$doubles  = $transIdsClassified['doubles'];
 
-				renderMissingPreparedTransIds ($missing, $comment);
+				// renderMissingPreparedTransIds ($missing, $comment);
 
-				renderSubProjectDeveloperTexts ($transStringsLocations, $comment);
-
+				renderDeveloperAdHocTexts ($transStringsLocations, $comment);
 
 				// ToDo: Use constants ?
-				renderSubProjectStatistic ($missing, $same, $notUsed, $doubles);
-
+				renderSubProjectStatistic ($missing, $same, $notUsed, $doubles, $comment);
 
 				?>
 				</p>

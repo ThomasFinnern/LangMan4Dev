@@ -51,9 +51,9 @@ class HtmlView extends BaseHtmlView
 	protected $isDevelop;
 	protected $isDoCommentIds;
 
-	//protected $sourceLangFiles = [];
+	//protected $langFiles = [];
 
-	protected $main_langId;
+	protected $mainLangId;
 	protected $trans_langId;
 	protected $isShowTranslationOfAllIds;
 	protected $isEditAndSaveMainTranslationFile;
@@ -76,7 +76,7 @@ class HtmlView extends BaseHtmlView
 		$this->isDebugBackend = $l4dConfig->get('isDebugBackend');
 		$this->isDevelop = $l4dConfig->get('isDevelop');
 
-		$this->main_langId = $l4dConfig->get('main_langId');
+		$this->mainLangId = $l4dConfig->get('mainLangId');
 		$this->trans_langId = $l4dConfig->get('trans_langId');
 		$this->isShowTranslationOfAllIds = $l4dConfig->get('isShowTranslationOfAllIds');
 		$this->isEditAndSaveMainTranslationFile = $l4dConfig->get('isEditAndSaveMainTranslationFile');
@@ -106,11 +106,11 @@ class HtmlView extends BaseHtmlView
 
 		$project->findPrjFiles();
 		$project->detectLangFiles();
-		//$project->readSubsLangFiles();
+		//$project->readLangFiles();
 
 		// collect content
 		$project->readAllLangFiles();
-		$project->alignTranslationsByMain($this->main_langId);
+		$project->alignTranslationsByMain($this->mainLangId);
 
 		/**
 		$project =
@@ -131,7 +131,7 @@ class HtmlView extends BaseHtmlView
 		// collect content
 		$project->readAllLangFiles();
 
-		$project->alignTranslationsByMain($this->main_langId);
+		$project->alignTranslationsByMain($this->mainLangId);
 		/**/
 
 		//-----------------------
@@ -188,7 +188,7 @@ class HtmlView extends BaseHtmlView
 		{
 			echo '<span style="color:red">'
 				. 'Tasks: <br>'
-				. '* use main_langId config / session <br>'
+				. '* use mainLangId config / session <br>'
 				. '* use trans_langId config / session <br>'
 				. '* lang_ids by sub project ->existing <br>'
 				. '* function getProject is double in prjText and more  model ? own class<br>'

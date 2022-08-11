@@ -570,66 +570,6 @@ class langFile extends langPathFileName
 		return $isSaved;
 	}
 
-	/**
-	 * seperateByTransIds
-	 *
-	 * Joke: sort like Cinderella put the good ones in the pot, the bad ones in the crop
-	 *
-	 * Each input name is sorted into one of three types
-	 *  * missing:    transId item is not defined in lang file 
-	 *  * translated: transId item has a translation item matching in lang file 
-	 *  * notUsed:    not used translations in lang file
-	 *
-	 * @param $TransIds
-	 *
-	 *
-	 * @since version
-	 */
-	public function separateByTransIds ($TransIds) {
-
-		$missing = [];
-		$translated    = [];
-		$notUsed = [];
-
-		try {
-
-			//--- missing and translated ------------------------------------
-
-			foreach ($TransIds as $TransId) {
-
-				// ID is missing
-				if (empty ($this->translations[$TransId])) {
-					$missing[] = $TransId;
-				} else {
-					// ID is translated
-					$translated[] = $TransId;
-				}
-			}
-
-			//--- not used in code ------------------------------------
-
-			foreach ($this->getItemNames () as $TransId)
-			{
-				// ID is not used
-				if ( ! in_array ($TransId, $translated)) {
-					$notUsed[] = $TransId;
-				}
-			}
-
-		}
-		catch (\RuntimeException $e)
-		{
-			$OutTxt = 'Error executing ' . __CLASS__ .  '::' . __FUNCTION__  . ': "' . '<br>';
-			$OutTxt .= 'Error: "' . $e->getMessage() . '"' . '<br>';
-
-			$app = Factory::getApplication();
-			$app->enqueueMessage($OutTxt, 'error');
-		}
-
-		return [$missing, $translated, $notUsed];
-	}
-
-
 	//
 	public function alignTranslationsByMain ($mainTranslations) {
 		
@@ -778,28 +718,24 @@ class langFile extends langPathFileName
 		return $collectedLines;
 	}
 
-	public function getItemNames ()
-	{
-		$names = [];
 
-		try {
-			// ToDo: cache it for second use, reset cache after assign /read
-			foreach ($this->translations as $transId => $translation)
-			{
-				$names [] = $transId;
-			}
+	public function cleanTranslations() {
 
-		}
-		catch (\RuntimeException $e)
-		{
-			$OutTxt = 'Error executing getItemNames: "' . '<br>';
-			$OutTxt .= 'Error: "' . $e->getMessage() . '"' . '<br>';
+		$this->removeEmptyLines();
+		$this->removeDoubleItems();
 
-			$app = Factory::getApplication();
-			$app->enqueueMessage($OutTxt, 'error');
-		}
+	}
 
-		return $names;
+	public function removeDoubleItems() {
+
+		$this->translationDoubles = [];
+
+	}
+
+	public function removeEmptyLines() {
+
+		// ToDo: fill out ...
+
 	}
 
 	public function getDoubleItemNames ()
@@ -825,26 +761,6 @@ class langFile extends langPathFileName
 		}
 
 		return $names;
-	}
-
-
-	public function cleanTranslations() {
-
-		$this->removeEmptyLines();
-		$this->removeDoubleItems();
-
-	}
-
-	public function removeDoubleItems() {
-
-		$this->translationDoubles = [];
-
-	}
-
-	public function removeEmptyLines() {
-
-		// ToDo: fill out ...
-
 	}
 
 

@@ -234,7 +234,7 @@
 		<!-- ... block translation ... -->
 
 		<field
-				name="main_langId"
+				name="mainLangId"
 				type="text"
 				default="en-GB"
 				label="COM_RSGALLERY2_MAIN_LANGUAGE_ID"

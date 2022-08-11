@@ -52,14 +52,10 @@
 			      img="class:language"
 			      link="option=com_lang4dev&amp;view=translate">COM_LANG4DEV_MENU_TRANSLATE
 			</menu>
-			<menu view="COM_LANG4DEV_MENU_TRANSLATIONS"
+			<!--menu view="COM_LANG4DEV_MENU_TRANSLATIONS"
 			      img="class:language"
 			      link="option=com_lang4dev&amp;view=translations">COM_LANG4DEV_MENU_TRANSLATIONS
-			</menu>
-			<menu view="COM_LANG4DEV_MENU_TRANSLATIONS"
-			      img="class:language"
-			      link="option=com_lang4dev&amp;view=translations">COM_LANG4DEV_MENU_TRANSLATIONS
-			</menu>
+			</menu-->
 			<menu view="COM_LANG4DEV_MENU_MAINTENANCE"
 			      img="class:equalizer"
 			      link="option=com_lang4dev&amp;view=maintenance">COM_LANG4DEV_MENU_MAINTENANCE

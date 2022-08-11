@@ -55,6 +55,9 @@ class HtmlView extends BaseHtmlView
 	protected $isDevelop;
 	protected $isDoCommentIds;
 
+	protected $mainLangId;
+	protected $transIdsClassified;
+
 	/**
 	 * Method to display the view.
 	 *
@@ -73,7 +76,13 @@ class HtmlView extends BaseHtmlView
 		$this->isDevelop      = $l4dConfig->get('isDevelop');
 
 		$this->isDoCommentIds = $l4dConfig->get('isDoComment_prepared_missing_ids');
-		$this->main_langId    = $l4dConfig->get('main_langId');
+		//$this->mainLangId    = $l4dConfig->get('mainLangId', "");
+
+		//--- session (config) -----------------------------------------------------------------
+
+		$sessionTransLangIds = new sessionTransLangIds ();
+		[$mainLangId, $transLangId] = $sessionTransLangIds->getIds();
+		$this->mainLangId    = $mainLangId;
 
 		//--- Form --------------------------------------------------------------------
 
@@ -100,30 +109,43 @@ class HtmlView extends BaseHtmlView
 
 		$project->findPrjFiles();
 		$project->detectLangFiles();
-		$project->readSubsLangFiles($this->main_langId);
+		$project->readLangFiles($this->mainLangId);
+		//$project->readAllLangFiles();
 
 		$project->scanCode4TransIds();
 		$project->scanCode4TransStrings();
 
-		//--- all projects filenames by lang ID  -----------------------------------------
+		//--- sorted types -----------------------------------------
 
-		$langFileSetsPrjs = $project->LangFileNamesCollection();
+		// ['missing', same, notUsed, doubles']
+		$this->transIdsClassified = $project->getTransIdsClassified($this->mainLangId);
 
-		echo '--- langFileSetsPrjs -----------------------------------' . '<br>';
+		//--- shoe found file list -----------------------------------------
 
-		foreach ($langFileSetsPrjs as $prjId => $langFileSets)
+		if ($this->isDebugBackend)
 		{
-			echo '[' . $prjId . ']' . '<br>';
+			//--- all projects filenames by lang ID  -----------------------------------------
 
-			foreach ($langFileSets as $LangId => $langFiles)
+			$langFileSetsPrjs = $project->LangFileNamesCollection();
+
+			echo '<h4>Lang file list</h4>';
+
+			foreach ($langFileSetsPrjs as $prjId => $langFileSets)
 			{
-				echo '...[' . $LangId . ']' . '<br>';
+				echo '[' . $prjId . ']' . '<br>';
 
-				foreach ($langFiles as $langFile)
+				foreach ($langFileSets as $LangId => $langFiles)
 				{
-					echo '...      *' . $langFile . '<br>';
+					echo '&nbsp;&nbsp;&nbsp;[' . $LangId . ']' . '<br>';
+
+					foreach ($langFiles as $langFile)
+					{
+						echo '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*&nbsp;' . $langFile . '<br>';
+					}
 				}
 			}
+
+			echo '<hr>';
 		}
 
 		/**
@@ -135,7 +157,7 @@ class HtmlView extends BaseHtmlView
 
 		$project->findPrjFiles()
 		->detectLangFiles()
-		->readSubsLangFile()
+		->readLangFiles()
 
 		->scanCode4TransIds()
 		->scanCode4TransStrings();
@@ -150,12 +172,15 @@ class HtmlView extends BaseHtmlView
 		//$manifestText = implode("\n", $manifestData->__toText());
 		$manifestText = implode("<br>", $manifestLang->__toText());
 
-		echo '<hr>';
-		echo $manifestText . '<br>';
-		echo '<hr><br>';
-		echo '<br><br>';
+		//--- show manifest content -----------------------------------------
 
+		if ($this->isDebugBackend)
+		{
+			echo '<h4>manifest content parts</h4>';
+			echo $manifestText . '<br>';
+			echo '<hr>';
 
+		}
 
 		//--- Main and target lang file --------------------------------------------------------------
 
@@ -195,10 +220,13 @@ class HtmlView extends BaseHtmlView
 		if (!empty ($this->isDevelop))
 		{
 			echo '<span style="color:red">'
-				. 'Tasks: <br>'
-				. '* Fix: <br>'
-				. '* use main_langId config / session <br>'
-				. '* <br>'
+				. '<b>Tasks:</b> <br>'
+				. '* !!! com_joomgallery: doubles between missing and surplus !!!<br>'
+				. '* is use mainLangId from (config / session) used in files view ? <br>'
+				. '* toggle AD HOC<br>'
+				. '* toggle sub project<br>'
+				. '* filename (s) behind grey type header <br>'
+//				. '* <br>'
 //				. '* <br>'
 //				. '* <br>'
 //				. '* <br>'

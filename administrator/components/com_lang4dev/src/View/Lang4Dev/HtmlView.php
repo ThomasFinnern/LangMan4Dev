@@ -101,7 +101,7 @@ class HtmlView extends BaseHtmlView
 		$this->isDebugBackend = $l4dConfig->get('isDebugBackend');
 		$this->isDevelop = $l4dConfig->get('isDevelop');
 
-		$this->main_langId = $l4dConfig->get('main_langId');
+		$this->mainLangId = $l4dConfig->get('mainLangId');
 		$this->trans_langId = $l4dConfig->get('trans_langId');
 
 		//--- Form --------------------------------------------------------------------

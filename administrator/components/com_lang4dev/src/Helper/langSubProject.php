@@ -15,7 +15,7 @@ use Joomla\CMS\Filesystem\Folder;
 use Finnern\Component\Lang4dev\Administrator\Helper\sysFilesContent;
 use Finnern\Component\Lang4dev\Administrator\Helper\searchTransIdLocations;
 
-class langSubProject extends langFileNamesSet
+class langSubProject extends langFiles
 {
 	public $prjId = '';
 	public $prjType = 0;
@@ -35,7 +35,6 @@ class langSubProject extends langFileNamesSet
 
 	public $useLangSysIni = false;
 
-	protected $langFiles = []; // files with content is read
 	protected $transIdLocations = [];
 	protected $transStringsLocations = [];
 	protected $transIdsClassified;
@@ -194,53 +193,60 @@ class langSubProject extends langFileNamesSet
 		return $isFilesFound;
 	}
 
-	// read content of language files  ==> get translation in sourceLangFiles
-	public function getLangFilesContent($langId = 'en-GB', $isReadOriginal = false)
-	{
-
-		// if not cached or $isReadOriginal
-		if (empty($this->langFileNameSet [$langId]) || $isReadOriginal)
-		{
-
-			return $this->readLangFiles($langId = 'en-GB', $isReadOriginal = false);
-		}
-
-		return $this->langFiles [$langId];
-	}
-
-	// read content of language file  ==> get translation in sourceLangFiles
+	// read content of language file  ==> get translation in langFiles
 	public function getLangIds()
 	{
 		$langIds = [];
 
-		foreach ($this->langFiles as $langId => $langFile)
+		foreach ($this->langFilesData as $langId => $langFile)
 		{
-
 			$langIds [] = $langId;
-
 		}
 
 		return $langIds;
 	}
 
-	// read content of language file  ==> get translation in sourceLangFiles
-	public function readLangFiles($langId = 'en-GB')
+	// get translations from langFiles (read) and keep file names
+	public function getLangFilesData($langId = 'en-GB', $isReadOriginal = false)
 	{
 
-		$langFileNames = $this->langFileNameSet [$langId];
+		// if not cached or $isReadOriginal
+		if (empty($this->langFileNamesSet [$langId]) || $isReadOriginal)
+		{
+			return $this->readLangFiles($langId = 'en-GB', $isReadOriginal = false);
+		}
+
+		return $this->langFilesData [$langId];
+	}
+
+	// read translations from langFiles and keep file names
+	public function readLangFiles($langId = 'en-GB')
+	{
+		if ($langId == '') {
+			$langId = 'en-GB';
+		}
+
+		$langFileNames = $this->langFileNamesSet [$langId];
 
 		foreach ($langFileNames as $langFileName)
 		{
-			// $sourceLangFile = new sourceLangFile ($langFileName);
-			$langFile = new langFile ();
-			$langFile->readFileContent($langFileName);
+			$fileName = basename ($langFileName);
+			$translations = $this->readLangFile($langFileName);
 
-			$this->langFiles [$langId] = $langFile;
+			$this->langFilesData [$langId][$fileName] = $translations;
 		}
+		// if (empty($langFiles [$langId]) 0=> return empty ? ...
 
-		// if (empty($sourceLangFiles [$langId]) 0=> return empty ? ...
+		return $this->langFilesData [$langId];
+	}
 
-		return $this->langFiles [$langId];
+	// read translations from langFile and keep file name
+	public function readLangFile($langFileName)
+	{
+		$langFileData = new langFile ();
+		$langFileData->readFileContent($langFileName);
+
+		return $langFileData;
 	}
 
 	public function scanCode4TransIdsLocations($useLangSysIni = false)
@@ -331,7 +337,7 @@ class langSubProject extends langFileNamesSet
 		return $this->transStringsLocations;
 	}
 
-	public function getPrjTransIdNames()
+	public function getPrjTransIdLocations()
 	{
 		$names = [];
 
@@ -340,14 +346,13 @@ class langSubProject extends langFileNamesSet
 
 			foreach ($this->transIdLocations as $name => $val)
 			{
-
 				$names [] = $name;
 			}
 
 		}
 		catch (\RuntimeException $e)
 		{
-			$OutTxt = 'Error executing getPrjTransIdNames: "' . '<br>';
+			$OutTxt = 'Error executing getPrjTransIdLocations: "' . '<br>';
 			$OutTxt .= 'Error: "' . $e->getMessage() . '"' . '<br>';
 
 			$app = Factory::getApplication();
@@ -381,50 +386,46 @@ class langSubProject extends langFileNamesSet
 		return $this->transStringsLocations;
 	}
 
-	public function classifyTransIds()
+	public function getTransIdsClassified($langId="en-GB", $isDoClassifyTransIds = false)
 	{
 
-		$codeTransIds = $this->getPrjTransIdNames();
+		if (empty($this->transIdsClassified) || $isDoClassifyTransIds)
+		{
 
-		// ToDo: MainLangId
-		$this->MainLangId = 'en-GB';
-		$langId           = $this->MainLangId;
+			return $this->classifyTransIds($langId);
+		}
 
-		$langFile = $this->langFiles [$langId];
-		[$missing, $same, $notUsed] = $langFile->separateByTransIds($codeTransIds);
+		return $this->transIdsClassified;
+	}
+
+	public function classifyTransIds($langId="en-GB")
+	{
+		//
+		$codeTransIds = $this->getPrjTransIdLocations();
+
+		[$missing, $same, $notUsed] = $this->matchTranslationsFile2Locations($codeTransIds, $langId);
 
 		$transIdsClassified            = [];
 		$transIdsClassified['missing'] = $missing;
 		$transIdsClassified['same']    = $same;
 		$transIdsClassified['notUsed'] = $notUsed;
 
-		$transIdsClassified['doubles'] = $this->collectDoubles();
+		$transIdsClassified['doubles'] = $this->collectDoubles($langId);
 
 		$this->transIdsClassified = $transIdsClassified;
 
 		return $this->transIdsClassified;
 	}
 
-	public function getTransIdsClassified($isClassifyTransIds = false)
-	{
-
-		if (empty($this->transIdsClassified) || $isClassifyTransIds)
-		{
-
-			return $this->classifyTransIds();
-		}
-
-		return $this->transIdsClassified;
-	}
-
-	private function collectDoubles()
+	private function collectDoubles($langId="en-GB")
 	{
 		$doubles = [];
 
-		$langId = $this->MainLangId;
-
-		$langFile = $this->langFiles [$langId];
-		$doubles  = $langFile->collectDoubles();
+		foreach ($this->langFilesData[$langId] as $langFile)
+		{
+			$fileName  = baseName ($langFile->getlangPathFileName());
+			$doubles[basename($fileName)] = $langFile->collectDoubles();
+		}
 
 		return $doubles;
 	}
@@ -434,6 +435,12 @@ class langSubProject extends langFileNamesSet
 
 		return projectType::getPrjTypeText($this->prjType);
 
+	}
+
+	public function getPrjIdAndTypeText()
+	{
+
+		return $this->prjId . ': ' . $this->getPrjTypeText();
 	}
 
 	public function detectLangFiles()
@@ -482,22 +489,22 @@ class langSubProject extends langFileNamesSet
 		{
 
 			// fetch main translation items
-			foreach ($this->langFiles as $langId => $langFile)
+			foreach ($this->langFilesData as $langId => $langFile)
 			{
 				if ($langId == $mainLangId)
 				{
 
-					$mainTrans = $this->langFiles[$langId]->translations;
+					$mainTrans = $this->langFilesData[$langId]->translations;
 				}
 			}
 
 			// for each other call
-			foreach ($this->langFiles as $langId => $temp)
+			foreach ($this->langFilesData as $langId => $temp)
 			{
 				if ($langId != $mainLangId)
 				{
 
-					$this->langFiles[$langId]->alignTranslationsByMain($mainTrans);
+					$this->langFilesData[$langId]->alignTranslationsByMain($mainTrans);
 				}
 			}
 

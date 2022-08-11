@@ -204,95 +204,36 @@ function renderLangFileEditText ($langId, $langFile, $subPrjPath,
 
 			    $editIdx =0;
 
+			    // first show main lang
+				foreach ($subProject->getLangIds () as $langId) {
+					
+					if ($langId == $this->mainLangId) {
+						
+						$langFile = $subProject->getLangFile($langId);
+						$subPrjPath = $langFile->getlangSubPrjPathFileName ();
+						renderLangFileEditText ($langId, $langFile, $subPrjPath,
+							true, $this->isEditAndSaveMainTranslationFile, $editIdx);
+						$editIdx++;
+					}
+				}
+				
+				// second show translation  lang 
+				foreach ($subProject->getLangIds () as $langId) {
+					
+					if ($langId == $this->trans_langId || $this->isShowTranslationOfAllIds) {
 
-			    $sourceFilesContent = $subProject->getLangFilesContent ($this->main_langId);
-			    $targetFilesContent = $subProject->getLangFilesContent ($this->trans_langId);
+						if ($langId != $this->mainLangId)
+						{
 
+							$langFile   = $subProject->getLangFile($langId);
+							$subPrjPath = $langFile->getlangSubPrjPathFileName();
+							renderLangFileEditText($langId, $langFile, $subPrjPath,
+								false, $this->isEditAndSaveMainTranslationFile, $editIdx);
+							$editIdx++;
+						}
 
-
-//			    $langFileSets = $subProject->langFileNameSet;
-
-//				$sourceLangSet = $langFileSets [];
-//
-//			    $sourceLangFiles = $sourceLangSet;
-
-				//--- all lang files in main ----------------------------------------------
-
-			    // each source and target file together
-			    foreach ($sourceFilesContent as $sourceFileContent)
-			    {
-				    //--- display main lang file first -------------------------
-
-				    //$subPrjPath = $sourceLangFile->getlangSubPrjPathFileName ();
-				    $subPrjPath = $sourceFileContent->getlangSubPrjPathFileName ();
-				    renderLangFileEditText ($this->main_langId, $sourceFileContent, $subPrjPath,
-					    true, $this->isEditAndSaveMainTranslationFile, $editIdx);
-				    $editIdx++;
-
-//				    //--- display translation lang file second -------------------------
-//
-//				    // create empty lang file with just a filename
-//				    $targetLangFile = new langPathFileName($sourceLangFile); // empty lang file
-//
-//				    // Exchange lang ID with source lang ID
-//				    $targetLangFile->setLangID ($this->trans_langId);
-//
-//					// display target
-//				    $subPrjPath = $sourceLangFile->getlangSubPrjPathFileName();
-//				    renderLangFileEditText($this->trans_langId, $sourceLangFile, $subPrjPath,
-//					    false, $this->isEditAndSaveMainTranslationFile, $editIdx);
-//				    $editIdx++;
-//
-//					//--- all other if requested ----------------------------
-//
-//				    if ($this->isShowTranslationOfAllIds)
-//				    {
-//					    foreach ($subProject->getLangIds () as $langId)
-//					    {
-//						    if ($langId != $this->trans_langId && $langId != $this->main_langId)
-//						    {
-//							    // create empty lang file with just a filename
-//							    $targetLangFile = new langPathFileName($sourceLangFile); // empty lang file
-//
-//							    // Exchange lang ID with source lang ID
-//							    $targetLangFile->setLangID ($langId);
-//						    }
-//					    }
-//				    }
-			    } // for
-
-//			    // first show main langs
-//				foreach ($subProject->getLangIds () as $langId) {
-//
-//					if ($langId == $this->main_langId) {
-//
-//						$sourceLangFile = $subProject->getLangFilesContent($langId);
-//
-//						$subPrjPath = $sourceLangFile->getlangSubPrjPathFileName ();
-//						renderLangFileEditText ($langId, $sourceLangFile, $subPrjPath,
-//							true, $this->isEditAndSaveMainTranslationFile, $editIdx);
-//						$editIdx++;
-//					}
-//				}
-//
-//				// second show translation  lang
-//				foreach ($subProject->getLangIds () as $langId) {
-//
-//					if ($langId == $this->trans_langId || $this->isShowTranslationOfAllIds) {
-//
-//						if ($langId != $this->main_langId)
-//						{
-//
-//							$sourceLangFile   = $subProject->getLangFilesContent($langId);
-//
-//							$subPrjPath = $sourceLangFile->getlangSubPrjPathFileName();
-//							renderLangFileEditText($langId, $sourceLangFile, $subPrjPath,
-//								false, $this->isEditAndSaveMainTranslationFile, $editIdx);
-//							$editIdx++;
-//						}
-//
-//					}
-//				}
+					}
+				}
 			    ?>
 		    </div>
 
