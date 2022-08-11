@@ -145,7 +145,7 @@ class HtmlView extends BaseHtmlView
         // on develop show open tasks if existing
         if (!empty ($this->isDevelop)) {
             echo '<span style="color:red">'
-                . 'Tasks: <br>'
+	            . '<b>Tasks:</b> <br>'
                 . '* description to each input parameter "_DESC"<br>'
                 . '* <br>'
                 . '* <br>'

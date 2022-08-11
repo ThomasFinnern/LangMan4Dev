@@ -76,15 +76,19 @@ class HtmlView extends BaseHtmlView
 		$this->isDevelop      = $l4dConfig->get('isDevelop');
 
 		$this->isDoCommentIds = $l4dConfig->get('isDoComment_prepared_missing_ids');
-		//$this->mainLangId    = $l4dConfig->get('mainLangId', "");
 
-		//--- session (config) -----------------------------------------------------------------
+		//--- session (config) ----------------------------------------------------------
 
+		// main / translation language id
 		$sessionTransLangIds = new sessionTransLangIds ();
 		[$mainLangId, $transLangId] = $sessionTransLangIds->getIds();
 		$this->mainLangId    = $mainLangId;
 
-		//--- Form --------------------------------------------------------------------
+		// selection of project and subproject
+		$sessionProjectId = new sessionProjectId();
+		[$prjId, $subPrjActive] = $sessionProjectId->getIds();
+
+		//--- Form ----------------------------------------------------------------------
 
 		$this->form = $this->get('Form');
 
@@ -96,31 +100,30 @@ class HtmlView extends BaseHtmlView
 //            throw new GenericDataException(implode("\n", $errors), 500);
 //        }
 
-		//--- project --------------------------------------------------------------------
-
-		//--- Get selection of project and subproject --------------------
-
-		$sessionProjectId = new sessionProjectId();
-		[$prjId, $subPrjActive] = $sessionProjectId->getIds();
+		//--- define project ------------------------------------------------------------
 
 		$model         = $this->getModel();
-		$this->project =
-		$project = $model->getProject($prjId, $subPrjActive);
+		$this->project = $model->getProject($prjId, $subPrjActive);
+		$project = $this->project;
 
 		$project->findPrjFiles();
 		$project->detectLangFiles();
-		$project->readLangFiles($this->mainLangId);
-		//$project->readAllLangFiles();
 
+		//--- collect content ---------------------------------------------------
+
+		// read translations
+		$project->readLangFiles($this->mainLangId);
+
+		// scan code for occurences of
 		$project->scanCode4TransIds();
 		$project->scanCode4TransStrings();
 
-		//--- sorted types -----------------------------------------
+		//--- sort by types -----------------------------------------
 
 		// ['missing', same, notUsed, doubles']
 		$this->transIdsClassified = $project->getTransIdsClassified($this->mainLangId);
 
-		//--- shoe found file list -----------------------------------------
+		//--- show found file list -----------------------------------------
 
 		if ($this->isDebugBackend)
 		{
@@ -162,20 +165,20 @@ class HtmlView extends BaseHtmlView
 		->scanCode4TransIds()
 		->scanCode4TransStrings();
 		/**/
+
 		//--- test manifest file ----------------------------------------
-
-		$prjXmlPathFilename = $project->subProjects[0]->prjXmlPathFilename; // . '/lang4dev.xml';
-
-
-		// $manifestData = new manifestData ($prjXmlPathFilename);
-		$manifestLang = new manifestLangFiles ($prjXmlPathFilename);
-		//$manifestText = implode("\n", $manifestData->__toText());
-		$manifestText = implode("<br>", $manifestLang->__toText());
-
-		//--- show manifest content -----------------------------------------
 
 		if ($this->isDebugBackend)
 		{
+			$prjXmlPathFilename = $project->subProjects[0]->prjXmlPathFilename; // . '/lang4dev.xml';
+
+			// $manifestData = new manifestData ($prjXmlPathFilename);
+			$manifestLang = new manifestLangFiles ($prjXmlPathFilename);
+			//$manifestText = implode("\n", $manifestData->__toText());
+			$manifestText = implode("<br>", $manifestLang->__toText());
+
+			//--- show manifest content -----------------------------------------
+
 			echo '<h4>manifest content parts</h4>';
 			echo $manifestText . '<br>';
 			echo '<hr>';
@@ -226,6 +229,8 @@ class HtmlView extends BaseHtmlView
 				. '* toggle AD HOC<br>'
 				. '* toggle sub project<br>'
 				. '* filename (s) behind grey type header <br>'
+				. '* use isLangAtStdJoomla in findPrjFiles<br>'
+				. '* use isLangAtStdJoomla in detectLangFiles<br>'
 //				. '* <br>'
 //				. '* <br>'
 //				. '* <br>'

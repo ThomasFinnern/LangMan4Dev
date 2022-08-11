@@ -208,30 +208,39 @@ function renderLangFileEditText ($langId, $langFile, $subPrjPath,
 				foreach ($subProject->getLangIds () as $langId) {
 					
 					if ($langId == $this->mainLangId) {
-						
-						$langFile = $subProject->getLangFile($langId);
-						$subPrjPath = $langFile->getlangSubPrjPathFileName ();
-						renderLangFileEditText ($langId, $langFile, $subPrjPath,
-							true, $this->isEditAndSaveMainTranslationFile, $editIdx);
-						$editIdx++;
+
+						// all sub project type files by lang Id
+						$langFiles = $subProject->getLangFilesData($langId);
+
+						foreach ($langFiles as $langFile)
+						{
+							$subPrjPath = $langFile->getlangSubPrjPathFileName();
+							renderLangFileEditText($langId, $langFile, $subPrjPath,
+								true, $this->isEditAndSaveMainTranslationFile, $editIdx);
+							$editIdx++;
+						}
 					}
 				}
 				
 				// second show translation  lang 
 				foreach ($subProject->getLangIds () as $langId) {
 					
-					if ($langId == $this->trans_langId || $this->isShowTranslationOfAllIds) {
+					if ($langId == $this->transLangId || $this->isShowTranslationOfAllIds) {
 
 						if ($langId != $this->mainLangId)
 						{
 
-							$langFile   = $subProject->getLangFile($langId);
-							$subPrjPath = $langFile->getlangSubPrjPathFileName();
-							renderLangFileEditText($langId, $langFile, $subPrjPath,
-								false, $this->isEditAndSaveMainTranslationFile, $editIdx);
-							$editIdx++;
-						}
+							// all sub project type files by lang Id
+							$langFiles = $subProject->getLangFilesData($langId);
 
+							foreach ($langFiles as $langFile)
+							{
+								$subPrjPath = $langFile->getlangSubPrjPathFileName();
+								renderLangFileEditText($langId, $langFile, $subPrjPath,
+									false, $this->isEditAndSaveMainTranslationFile, $editIdx);
+								$editIdx++;
+							}
+						}
 					}
 				}
 			    ?>

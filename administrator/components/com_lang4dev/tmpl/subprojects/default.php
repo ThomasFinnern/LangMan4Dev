@@ -132,6 +132,18 @@ if ($saveOrder && !empty($this->items))
 						<?php echo Text::_('JGRID_HEADING_ID'); ?>
 					</th>
 
+
+
+					<th>
+						<?php echo Text::_('COM_LANG4DEV_SUBPROJECT_PREFIX'); ?>
+					</th>
+
+					<th>
+						<?php echo Text::_('COM_LANG4DEV_SUBPROJECT_LANG_LOCATION_JOOMLA_STANDARD_SHORT'); ?>
+					</th>
+
+
+
 					<th>
 						<?php echo Text::_('COM_LANG4DEV_SUBPROJECT_ROOT_PATH'); ?>
 					</th>
@@ -197,7 +209,7 @@ if ($saveOrder && !empty($this->items))
 					</td>
 
 					<td class="small d-none d-md-table-cell">
-						<?php echo $i . ': ' . $item->title; ?>
+						<?php echo $i . ':<br>' . $item->title; ?>
 					</td>
 
 					<th scope="row">
@@ -222,6 +234,17 @@ if ($saveOrder && !empty($this->items))
 							<?php endif; ?>
 						</span>
 					</th>
+
+
+
+					<td class="small d-none d-md-table-cell">
+						<?php echo $item->prefix; ?>
+					</td>
+
+					<td class="small d-none d-md-table-cell">
+						<?php echo $item->isLangAtStdJoomla; ?>
+					</td>
+
 
 
 					<td class="small d-none d-md-table-cell">

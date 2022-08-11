@@ -1,23 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <form addfieldprefix="Finnern\Component\Lang4dev\Administrator\Field">
-	<field
-			name="selectSourceLangId"
-			type="text"
-			label="COM_LANG4DEV_TRANS_SOURCE_LANG_ID"
-			description="COM_LANG4DEV_TRANS_SOURCE_LANG_ID_DESC"
-			default="en-GB"
-			class="readonly"
-	/>
-
-	<field
-			name="selectTargetLangId"
-			type="text"
-			label="COM_LANG4DEV_TRANS_TARGET_LANG_ID"
-			description="COM_LANG4DEV_TRANS_TARGET_LANG_ID_DESC"
-			default="de-DE"
-			class="readonly"
-	/>
-
 	<!-- project selection -->
 	<field
 			id="selectProject"
@@ -44,6 +26,7 @@
 			type="text"
 			label="COM_LANG4DEV_TRANS_SOURCE_LANG_ID"
 			description="COM_LANG4DEV_TRANS_SOURCE_LANG_ID_DESC"
+			default="Xen-GB"
 			onchange="Joomla.submitform('lang4dev.selectLangIds', this.form)"
 	/>
 
@@ -52,6 +35,7 @@
 			type="text"
 			label="COM_LANG4DEV_TRANS_TARGET_LANG_ID"
 			description="COM_LANG4DEV_TRANS_TARGET_LANG_ID_DESC"
+			default="Xde-DE"
 			onchange="Joomla.submitform('lang4dev.selectLangIds', this.form)"
 	/>
 

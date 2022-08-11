@@ -86,6 +86,8 @@ $assoc = false; // ToDo: check how it is used
 			                        echo $this->form->renderField('prefix');
 
 			                        echo $this->form->renderField('prjXmlPathFilename');
+
+			                        echo $this->form->renderField('isLangAtStdJoomla');
 			                        echo $this->form->renderField('installPathFilename');
 
 			                        echo $this->form->renderField('parent_id');

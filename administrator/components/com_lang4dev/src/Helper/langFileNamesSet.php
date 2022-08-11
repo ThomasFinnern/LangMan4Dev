@@ -341,12 +341,34 @@ class langFileNamesSet
 
 	}
 
+	// search for matching filename
+	public function matchingNameByTransId ($mainLangId, $mainLangFileName, $transLangId) {
+
+		// create empty lang file with just a filename
+		$langFile = new langfile(); // empty lang file
+		$langFile->setLangPathFileName ($mainLangFileName);
+
+		// Exchange lang ID with source lang ID
+		$langFile->setLangID ($transLangId);
+
+		$matchLangFileName = $langFile->setLangPathFileName ();
+
+
+		$matchLangFileName = $mainLangFileName;
+
+		// handle filenames with id in front 'en-GB.com_rsgallery2.ini'
+		if (str_starts_with($mainLangId)) {
+
+			$matchLangFileName = $transLangId . '.' . substr ($mainLangFileName, 5);
+		}
+
+
+		return $matchLangFileName;
+	}
 
 
 
-
-
-    public function __toText () {
+	public function __toText () {
 
     	$lines = [];
 

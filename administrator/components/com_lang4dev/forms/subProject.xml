@@ -55,6 +55,12 @@
 	       description="COM_LANG4DEV_SUBPROJECT_PREFIX_DESC"
 	/>
 
+	<field name="isLangAtStdJoomla"
+	       type="radio"
+	       label="COM_LANG4DEV_SUBPROJECT_LANG_LOCATION_JOOMLA_STANDARD"
+	       description="COM_LANG4DEV_SUBPROJECT_LANG_LOCATION_JOOMLA_STANDARD_DESC"
+	/>
+
 	<field
 			name="notes"
 			type="textarea"
@@ -63,6 +69,7 @@
 			size="40"
 			maxlength="255"
 	/>
+
 
 	<field name="prjXmlPathFilename"
 	       type="text"

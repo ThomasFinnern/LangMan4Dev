@@ -29,7 +29,7 @@ class manifestLangFiles extends manifestData
 //	private $manifest = false; // XML: false or SimpleXMLElement
 
 	// is old paths definition is used ==> language files in joomla base paths instead of inside component
-	public $isLanguagesItemExist = false;
+	public $isLangAtStdJoomla = false; // not inside component folder
 	public $stdLangFilePaths = [];
 	public $adminLangFilePaths = [];
 
@@ -113,20 +113,17 @@ class manifestLangFiles extends manifestData
 	{
 		// defined by folder language in xml
 
-		$this->isLanguagesItemExist = false;
+		$this->isLangAtStdJoomla = false;
 		$this->stdLangFilePaths     = [];
 		$this->adminLangFilePaths = [];
 
 		try
 		{
-
-
 			$manifest = $this->manifest;
 
 			if (!empty ($manifest))
 			{
-
-				//--- standard -----------------------------------------------
+				//--- old standard -----------------------------------------------
 				//<languages folder="site/com_joomgallery/languages">
 				//	<language tag="en-GB">en-GB/com_joomgallery.ini</language>
 				//</languages>
@@ -134,9 +131,8 @@ class manifestLangFiles extends manifestData
 				$stdLanguages = $this->get('languages', []);
 				if (count($stdLanguages) > 0)
 				{
-
-					// lang files path will be defined in XML anf copied to joomla standard path
-					$this->isLanguagesItemExist = true;
+					// lang files path will be defined in XML and copied to joomla standard path not component
+					$this->isLangAtStdJoomla = true;
 
 					//--- collect files from installation ------------------------------
 
@@ -168,7 +164,7 @@ class manifestLangFiles extends manifestData
 				{
 
 					// lang files path will be defined in XML anf copied to joomla standard path
-					$this->isLanguagesItemExist = true;
+					$this->isLangAtStdJoomla = true;
 
 					//--- collect files from installation ------------------------------
 
@@ -207,10 +203,57 @@ class manifestLangFiles extends manifestData
 			$app->enqueueMessage($OutTxt, 'error');
 		}
 
-		return $this->isLanguagesItemExist;
+		return $this->isLangAtStdJoomla;
 	}
 
+	// new: lang files within component
+	public function isLangAtStdJoomla ()
+	{
+		$this->isLangAtStdJoomla  = false;
 
+		try
+		{
+			$manifest = $this->manifest;
+
+			if (!empty ($manifest))
+			{
+				//--- old standard -----------------------------------------------
+				//<languages folder="site/com_joomgallery/languages">
+				//	<language tag="en-GB">en-GB/com_joomgallery.ini</language>
+				//</languages>
+
+				// site
+				$stdLanguages = $this->get('languages', []);
+				if (count($stdLanguages) > 0)
+				{
+					// lang files path will be defined in XML and copied to joomla standard path not component
+					$this->isLangAtStdJoomla = true;
+
+				}
+
+				// administration
+				$administration = $this->get('administration', []);
+				$stdLanguages   = $administration->languages;
+				if (count($stdLanguages) > 0)
+				{
+					// lang files path will be defined in XML anf copied to joomla standard path
+					$this->isLangAtStdJoomla = true;
+
+				}
+			}
+		}
+		catch (\RuntimeException $e)
+		{
+			$OutTxt = '';
+			$OutTxt .= 'Error executing langFileOrigins: ' . '"<br>';
+			$OutTxt .= 'Error: "' . $e->getMessage() . '"' . '<br>';
+
+			$app = Factory::getApplication();
+			$app->enqueueMessage($OutTxt, 'error');
+		}
+
+		return $this->isLangAtStdJoomla;
+	}
 
 
 
@@ -219,7 +262,7 @@ class manifestLangFiles extends manifestData
 
 		$lines = parent::__toText();
 
-		$lines[] = 'lang files ' . ($this->isLanguagesItemExist ? ' inside component' : ' joomla standard folders');
+		$lines[] = 'lang files ' . ($this->isLangAtStdJoomla ? ' joomla standard folders' : ' inside component');
 
 		if (count($this->stdLangFilePaths) > 0)
 		{

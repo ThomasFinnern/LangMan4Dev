@@ -121,6 +121,7 @@ class TranslateModel extends AdminModel
 
 			$subPrj->installPathFilename = $dbSub->installPathFilename;
 			$subPrj->langIdPrefix = $dbSub->prefix;
+			$subPrj->isLangAtStdJoomla = $dbSub->isLangAtStdJoomla;
 		}
 
 		return $project;
@@ -140,6 +141,7 @@ class TranslateModel extends AdminModel
 				->select($db->quoteName('prjId'))
 				->select($db->quoteName('subPrjType'))
 				->select($db->quoteName('prefix'))
+				->select($db->quoteName('isLangAtStdJoomla'))
 				->select($db->quoteName('root_path'))
 				->select($db->quoteName('prjXmlPathFilename'))
 				->select($db->quoteName('installPathFilename'))

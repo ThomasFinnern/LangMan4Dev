@@ -130,7 +130,7 @@ class sessionTransLangIds
 				$l4dConfig = ComponentHelper::getComponent('com_lang4dev')->getParams();
 
 				$mainLangId = $l4dConfig->get('mainLangId');
-				$transLangId = $l4dConfig->get('trans_langId');
+				$transLangId = $l4dConfig->get('transLangId');
 			}
 		}
 

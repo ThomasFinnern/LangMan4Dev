@@ -13,6 +13,7 @@ namespace Finnern\Component\Lang4dev\Administrator\View\Translate;
 
 require_once(__DIR__ . '/../../Helper/selectProject.php');
 
+use Finnern\Component\Lang4dev\Administrator\Helper\manifestLangFiles;
 use Finnern\Component\Lang4dev\Administrator\Helper\sessionProjectId;
 use Finnern\Component\Lang4dev\Administrator\Helper\sessionTransLangIds;
 use Joomla\CMS\Component\ComponentHelper;
@@ -54,7 +55,7 @@ class HtmlView extends BaseHtmlView
 	//protected $langFiles = [];
 
 	protected $mainLangId;
-	protected $trans_langId;
+	protected $transLangId;
 	protected $isShowTranslationOfAllIds;
 	protected $isEditAndSaveMainTranslationFile;
 
@@ -76,12 +77,22 @@ class HtmlView extends BaseHtmlView
 		$this->isDebugBackend = $l4dConfig->get('isDebugBackend');
 		$this->isDevelop = $l4dConfig->get('isDevelop');
 
-		$this->mainLangId = $l4dConfig->get('mainLangId');
-		$this->trans_langId = $l4dConfig->get('trans_langId');
 		$this->isShowTranslationOfAllIds = $l4dConfig->get('isShowTranslationOfAllIds');
 		$this->isEditAndSaveMainTranslationFile = $l4dConfig->get('isEditAndSaveMainTranslationFile');
 
-        //--- Form --------------------------------------------------------------------
+		//--- session (config) ----------------------------------------------------------
+
+		// main / translation language id
+		$sessionTransLangIds = new sessionTransLangIds ();
+		[$mainLangId, $transLangId] = $sessionTransLangIds->getIds();
+		$this->mainLangId    = $mainLangId;
+		$this->transLangId = $transLangId;
+
+		// selection of project and subproject
+		$sessionProjectId = new sessionProjectId();
+		[$prjId, $subPrjActive] = $sessionProjectId->getIds();
+
+		//--- Form ----------------------------------------------------------------------
 
         $this->form = $this->get('Form');
 
@@ -93,23 +104,24 @@ class HtmlView extends BaseHtmlView
 //            throw new GenericDataException(implode("\n", $errors), 500);
 //        }
 
-        //--- project --------------------------------------------------------------------
+		$this->form->setValue('selectSourceLangId', null, $mainLangId);
+		$this->form->setValue('selectTargetLangId', null, $transLangId);
 
-		//--- Set selection of project and subproject --------------------
-
-		$sessionProjectId = new sessionProjectId();
-		[$prjId, $subPrjActive] = $sessionProjectId->getIds();
+		//--- define project -------------------------------------------------------------------
 
 		$model = $this->getModel();
-		$this->project =
-		$project = $model->getProject($prjId, $subPrjActive);
+		$this->project = $model->getProject($prjId, $subPrjActive);
+		$project = $this->project;
 
 		$project->findPrjFiles();
 		$project->detectLangFiles();
-		//$project->readLangFiles();
 
-		// collect content
-		$project->readAllLangFiles();
+		//--- collect content ---------------------------------------------------
+
+		// read translations
+		$project->readLangFiles($this->mainLangId);
+		// $project->readAllLangFiles();
+
 		$project->alignTranslationsByMain($this->mainLangId);
 
 		/**
@@ -144,13 +156,53 @@ class HtmlView extends BaseHtmlView
 		}
 		/**/
 
-		//--- Main and target lang file --------------------------------------------------------------
+		//--- show found file list -----------------------------------------
 
-		$sessionTransLangIds = new sessionTransLangIds ();
-		[$mainLangId, $transLangId] = $sessionTransLangIds->getIds();
+		if ($this->isDebugBackend)
+		{
+			//--- all projects filenames by lang ID  -----------------------------------------
 
-		$this->form->setValue('selectSourceLangId', null, $mainLangId);
-		$this->form->setValue('selectTargetLangId', null, $transLangId);
+			$langFileSetsPrjs = $project->LangFileNamesCollection();
+
+			echo '<h4>Lang file list</h4>';
+
+			foreach ($langFileSetsPrjs as $prjId => $langFileSets)
+			{
+				echo '[' . $prjId . ']' . '<br>';
+
+				foreach ($langFileSets as $LangId => $langFiles)
+				{
+					echo '&nbsp;&nbsp;&nbsp;[' . $LangId . ']' . '<br>';
+
+					foreach ($langFiles as $langFile)
+					{
+						echo '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*&nbsp;' . $langFile . '<br>';
+					}
+				}
+			}
+
+			echo '<hr>';
+		}
+
+		//--- test manifest file ----------------------------------------
+
+		if ($this->isDebugBackend)
+		{
+			$prjXmlPathFilename = $project->subProjects[0]->prjXmlPathFilename; // . '/lang4dev.xml';
+
+			// $manifestData = new manifestData ($prjXmlPathFilename);
+			$manifestLang = new manifestLangFiles ($prjXmlPathFilename);
+			//$manifestText = implode("\n", $manifestData->__toText());
+			$manifestText = implode("<br>", $manifestLang->__toText());
+
+			//--- show manifest content -----------------------------------------
+
+			echo '<h4>manifest content parts</h4>';
+			echo $manifestText . '<br>';
+			echo '<hr>';
+
+		}
+
 
 
 		//---  --------------------------------------------------------------
@@ -187,15 +239,14 @@ class HtmlView extends BaseHtmlView
 		if (!empty ($this->isDevelop))
 		{
 			echo '<span style="color:red">'
-				. 'Tasks: <br>'
-				. '* use mainLangId config / session <br>'
-				. '* use trans_langId config / session <br>'
+				. '<b>Tasks: </b><br>'
 				. '* lang_ids by sub project ->existing <br>'
 				. '* function getProject is double in prjText and more  model ? own class<br>'
 				. '* source lang ID as list field of availables ? config ? project ... ? <br>'
 				. '* Target lang id as list field of ISO 639 list<br>'
 				. '* New lang id as list field of ISO 639 list<br>'
-//				. '* <br>'
+				. '* use isLangAtStdJoomla in findPrjFiles<br>'
+				. '* use isLangAtStdJoomla in detectLangFiles<br>'
 //				. '* <br>'
 //				. '* <br>'
 //				. '* <br>'

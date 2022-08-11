@@ -981,6 +981,7 @@ class SubprojectModel extends AdminModel
 		$data ['root_path'] = $subProject->prjRootPath;
 		$data ['prefix'] = $subProject->langIdPrefix;
 		$data ['notes'] = '%';
+		$data ['isLangAtStdJoomla'] = $subProject->isLangAtStdJoomla;
 		// ToDo: activate or check as actual is empty $data ['prjXmlPathFilename'] = $subProject->prjXmlPathFilename;
 		$data ['prjXmlPathFilename'] = $subProject->prjXmlPathFilename;
 		$data ['installPathFilename'] = $subProject->installPathFilename;
@@ -990,22 +991,7 @@ class SubprojectModel extends AdminModel
 		// ToDo: $data ['lang_ids'] = $subProject->;
 
 		$isSaved = $this->save($data);
-		/**/
 
-		/**
-		$table->prjId = $subProject->prjId;
-		$table->subPrjType = $subProject->prjType;
-		$table->root_path = $subProject->prjRootPath;
-		$table->prefix = $subProject->langIdPrefix ;
-		$table->notes = '%';
-		// ToDo: activate or check as actual is empty $data ['prjXmlPathFilename'] = $subProject->prjXmlPathFilename;
-		$table->prjXmlPathFilename = $subProject->prjXmlFilePath;
-		$table->installPathFilename = $subProject->installPathFilename;
-		// ToDo: $table->lang_path_type = $subProject->;
-		// ToDo: $table->lang_ids = $subProject->;
-
-		$isSaved = $table->save();
-		/**/
 		return $isSaved;
 	}
 
@@ -1024,6 +1010,7 @@ class SubprojectModel extends AdminModel
 		$data ['root_path'] = $subProject->prjRootPath;
 		$data ['prefix`'] = $subProject->langIdPrefix ;
 		$data ['notes'] = '%';
+		$data ['isLangAtStdJoomla'] = $subProject->isLangAtStdJoomla;
 		// ToDo: activate or check as actual is empty $data ['prjXmlPathFilename'] = $subProject->prjXmlPathFilename;
 		$data ['prjXmlPathFilename'] = $subProject->prjXmlPathFilename;
 		$data ['installPathFilename'] = $subProject->installPathFilename;

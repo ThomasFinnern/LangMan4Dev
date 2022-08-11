@@ -285,53 +285,54 @@ if ($this->isDoCommentIds) {
 
 	if(count ($subProjects) > 0)
 	{
-	foreach ($subProjects as $subProject) {
+		foreach ($subProjects as $subProject) {
 
-		$prjIdAndType = $subProject->getPrjIdAndTypeText ();
+			$prjIdAndType = $subProject->getPrjIdAndTypeText ();
 
-		//$transStringsLocations = $subProject->filteredTransStringsLocations();
-		$transStringsLocations = $subProject->getTransStringsLocations();
+			//$transStringsLocations = $subProject->filteredTransStringsLocations();
+			$transStringsLocations = $subProject->getTransStringsLocations();
 
-// style="width: 18rem; bg-light .bg-transparent bg-secondary text-white
+			// style="width: 18rem; bg-light .bg-transparent bg-secondary text-white
 
-		?>
-		<div class="card ">
-			<h2 class="card-header " style="background-color: #ced4da;">
-				<?php echo $prjIdAndType; ?>
-			</h2>
-			<div class="card-body">
-			    <!-- h5 class="card-title"></h5-->
-				<p class="card-text">
-				<?php
+			?>
+			<div class="card ">
+				<h2 class="card-header " style="background-color: #ced4da;">
+					<?php echo $prjIdAndType; ?>
+				</h2>
+				<div class="card-body">
+				    <!-- h5 class="card-title"></h5-->
+					<p class="card-text">
+					<?php
 
-				// ['missing', same, notUsed, doubles']
-				$transIdsClassified = $this->transIdsClassified[$prjIdAndType];
+					// ['missing', same, notUsed, doubles']
+					$transIdsClassified = $this->transIdsClassified[$prjIdAndType];
 
-				// ToDo: interface parameters
-				$missing = $transIdsClassified['missing'];
-				$same    = $transIdsClassified['same'];
-				$notUsed = $transIdsClassified['notUsed'];
-				$doubles  = $transIdsClassified['doubles'];
+					// ToDo: interface parameters
+					$missing = $transIdsClassified['missing'];
+					$same    = $transIdsClassified['same'];
+					$notUsed = $transIdsClassified['notUsed'];
+					$doubles  = $transIdsClassified['doubles'];
 
-				// renderMissingPreparedTransIds ($missing, $comment);
+					// renderMissingPreparedTransIds ($missing, $comment);
 
-				renderDeveloperAdHocTexts ($transStringsLocations, $comment);
+					renderDeveloperAdHocTexts ($transStringsLocations, $comment);
 
-				// ToDo: Use constants ?
-				renderSubProjectStatistic ($missing, $same, $notUsed, $doubles, $comment);
+					// ToDo: Use constants ?
+					renderSubProjectStatistic ($missing, $same, $notUsed, $doubles, $comment);
 
-				?>
-				</p>
+					?>
+					</p>
+				</div>
 			</div>
-		</div>
-		<?php
+			<?php
 
-	}
-	} else {
+		}
+	} else
+	{
 
 		// ToDo: use bootstrap card
 		echo '<br>';
-		echo '<h2>' . Text::_('COM_LANG4DEV_NO_SUB_PROJECTS_DEFINED_FOR_PROJECT'). '</h2>';
+		echo '<h2>' . Text::_('COM_LANG4DEV_NO_SUB_PROJECTS_DEFINED_FOR_PROJECT') . '</h2>';
 		echo ' ' . Text::_('COM_LANG4DEV_NO_SUB_PROJECTS_DEFINED_FOR_PROJECT_DESC') . ' ';
 	}
 	?>

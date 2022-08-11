@@ -97,6 +97,9 @@ CREATE TABLE IF NOT EXISTS `#__lang4dev_subprojects` (
   KEY `idx_access` (`access`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 DEFAULT COLLATE=utf8mb4_unicode_ci;
 
+ALTER TABLE `#__lang4dev_subprojects` ADD COLUMN `isLangAtStdJoomla` int NOT NULL DEFAULT 0 AFTER `notes`;
+
+
 -- INSERT INTO `#__lang4dev_subprojects` (`name`,`alias`,`note`, `base_path`) VALUES
 -- ('com_lang4dev','com_lang4dev','Test data pointing to this component paths',
 -- 'administrator/components/com_lang4dev'),

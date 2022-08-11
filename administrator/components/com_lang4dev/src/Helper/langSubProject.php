@@ -34,6 +34,7 @@ class langSubProject extends langFiles
 	// public $text_prefix;
 
 	public $useLangSysIni = false;
+	public $isLangAtStdJoomla = false;
 
 	protected $transIdLocations = [];
 	protected $transStringsLocations = [];
@@ -111,9 +112,10 @@ class langSubProject extends langFiles
 
 		// ToDo: prjXmlFilePath <-> use prjXmlPathFileName (actually empty so ...
 
-		[$installFileName, $langIdPrefix] = $finder->extractPrjVars($this->prjXmlPathFilename);
+		[$installFileName, $langIdPrefix, $isLangAtStdJoomla] = $finder->extractPrjVars($this->prjXmlPathFilename);
 		$this->langIdPrefix        = $langIdPrefix;
 		$this->installPathFilename = $installFileName;
+		$this->isLangAtStdJoomla = $isLangAtStdJoomla;
 
 		return;
 	}
@@ -167,6 +169,7 @@ class langSubProject extends langFiles
 						$this->prjXmlPathFilename  = $sysXmlData->prjXmlPathFilename;
 						$this->installPathFilename = $sysXmlData->installPathFilename;
 						$this->langIdPrefix        = $sysXmlData->langIdPrefix;
+						$this->isLangAtStdJoomla   = $sysXmlData->isLangAtStdJoomla;
 					}
 
 					$this->detectLangBasePath($this->prjXmlFilePath, $this->useLangSysIni);
@@ -421,6 +424,7 @@ class langSubProject extends langFiles
 	{
 		$doubles = [];
 
+		// ToDo: each langFilesData[$langId] as $langFile get data not file name
 		foreach ($this->langFilesData[$langId] as $langFile)
 		{
 			$fileName  = baseName ($langFile->getlangPathFileName());
@@ -452,8 +456,8 @@ class langSubProject extends langFiles
 			// Manifest tells if files have to be searched inside component or old on joomla standard paths
 			$manifestLang = new manifestLangFiles ($this->prjXmlPathFilename);
 
-			// new style lang file origins
-			if ( ! $manifestLang->isLanguagesItemExist)
+			// lang file origins inside component
+			if ( ! $manifestLang->isLangAtStdJoomla)
 			{
 				//--- search in component path -------------------------------
 
@@ -488,25 +492,52 @@ class langSubProject extends langFiles
 		try
 		{
 
-			// fetch main translation items
-			foreach ($this->langFilesData as $langId => $langFile)
-			{
-				if ($langId == $mainLangId)
-				{
+//			// fetch main translation items
+//			foreach ($this->langFilesData as $langId => $langFiles)
+//			{
+//				if ($langId == $mainLangId)
+//				{
+//
+//					$mainTrans = $this->langFilesData[$langId]->translations;
+//				}
+//			}
+//
+//			// for each other call
+//			foreach ($this->langFilesData as $langId => $temp)
+//			{
+//				if ($langId != $mainLangId)
+//				{
+//
+//					$this->langFilesData[$langId]->alignTranslationsByMain($mainTrans);
+//				}
+//			}
 
-					$mainTrans = $this->langFilesData[$langId]->translations;
+			$mainLangData = $this->langFilesData[$mainLangId];
+
+			$transLangIds = $this->getLangIds();
+
+			// all other lang ids
+			foreach ($transLangIds as $transLangId) {
+				if ($transLangId != $mainLangId) {
+
+					$transLangData = $this->langFilesData[$transLangId];
+
+					foreach ($mainLangData as $fileData) {
+
+						$mainLangFileName = $fileData->getlangPathFileName();
+						$matchLangFileName = $this->matchingNameByTransId ($mainLangId, $mainLangFileName, $transLangId);
+
+
+
+//						$mainTrans = $this->langFilesData[$langId]->translations;
+//						$this->langFilesData[$langId]->alignTranslationsByMain($mainTrans);
+					}
 				}
-			}
+			} // for
 
-			// for each other call
-			foreach ($this->langFilesData as $langId => $temp)
-			{
-				if ($langId != $mainLangId)
-				{
 
-					$this->langFilesData[$langId]->alignTranslationsByMain($mainTrans);
-				}
-			}
+
+
 
 		}
 		catch (\RuntimeException $e)

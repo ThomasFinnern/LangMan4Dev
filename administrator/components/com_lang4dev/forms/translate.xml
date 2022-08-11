@@ -5,6 +5,7 @@
 			type="text"
 			label="COM_LANG4DEV_TRANS_SOURCE_LANG_ID"
 			description="COM_LANG4DEV_TRANS_SOURCE_LANG_ID_DESC"
+			default="Xen-GB"
 			onchange="Joomla.submitform('translate.selectLangIds', this.form)"
 	/>
 
@@ -13,6 +14,7 @@
 			type="text"
 			label="COM_LANG4DEV_TRANS_TARGET_LANG_ID"
 			description="COM_LANG4DEV_TRANS_TARGET_LANG_ID_DESC"
+			default="Xde-DE"
 			onchange="Joomla.submitform('translate.selectLangIds', this.form)"
 	/>
 

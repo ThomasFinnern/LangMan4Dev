@@ -101,8 +101,13 @@ class HtmlView extends BaseHtmlView
 		$this->isDebugBackend = $l4dConfig->get('isDebugBackend');
 		$this->isDevelop = $l4dConfig->get('isDevelop');
 
-		$this->mainLangId = $l4dConfig->get('mainLangId');
-		$this->trans_langId = $l4dConfig->get('trans_langId');
+		//--- session (config) ----------------------------------------------------------
+
+		// main / translation language id
+		$sessionTransLangIds = new sessionTransLangIds ();
+		[$mainLangId, $transLangId] = $sessionTransLangIds->getIds();
+		$this->mainLangId    = $mainLangId;
+		$this->transLangId = $transLangId;
 
 		//--- Form --------------------------------------------------------------------
 
@@ -115,16 +120,12 @@ class HtmlView extends BaseHtmlView
 //            throw new GenericDataException(implode("\n", $errors), 500);
 //        }
 
+		$this->form->setValue('selectSourceLangId', null, $mainLangId);
+		$this->form->setValue('selectTargetLangId', null, $transLangId);
+
 		//--- project --------------------------------------------------------------------
 
 
-		//--- Main and target lang file --------------------------------------------------------------
-
-		$sessionTransLangIds = new sessionTransLangIds ();
-		[$mainLangId, $transLangId] = $sessionTransLangIds->getIds();
-
-		$this->form->setValue('selectSourceLangId', null, $mainLangId);
-		$this->form->setValue('selectTargetLangId', null, $transLangId);
 
 		// ...
 
@@ -195,11 +196,11 @@ class HtmlView extends BaseHtmlView
         if (!empty ($this->isDevelop))
         {
             echo '<span style="color:red">'
+	            . '<b>Tasks:</b> <br>'
+	            . '* collectManifestLangFiles: implement "local development folder" part<br>'
                 . '* Check J4x for exception handling try ...  catch ??? <br>'
                 . '* Other background (white ?)<br>'
 				. '* styling To SCSS file<br>'
-				. '* hide Translations <br>'
-//				. '* <br>'
 //				. '* <br>'
 //				. '* <br>'
 //				. '* <br>'

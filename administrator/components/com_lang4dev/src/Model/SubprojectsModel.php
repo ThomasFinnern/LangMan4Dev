@@ -184,6 +184,7 @@ class SubprojectsModel extends ListModel
 
 				. 'a.prefix, '
 				. 'a.notes, '
+				. 'a.isLangAtStdJoomla, '
 
 				. 'a.prjXmlPathFilename, '
 				. 'a.installPathFilename, '
@@ -343,6 +344,7 @@ class SubprojectsModel extends ListModel
 			. 'a.prjId, '
 			. 'a.alias, '
             . 'a.notes, '
+            . 'a.isLangAtStdJoomla, '
             . 'a.root_path, '
             . 'a.twin_id,'
 

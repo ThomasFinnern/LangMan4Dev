@@ -24,6 +24,8 @@ class sysFilesContent
 	public $prjXmlPathFilename;
 	public $installPathFilename;
 	public $langIdPrefix;
+	public $isLangAtStdJoomla;
+
 
 	public function __construct($prjId = '',
 		$prjType = projectType::PRJ_TYPE_NONE,
@@ -195,48 +197,40 @@ class sysFilesContent
     public function findInstallFile () {
 
         $isFileFound = false;
-        $installFile = '';
+        $installPathFileName = '';
 
-        try {
+        try
+        {
 
-            //--- fast guess script name --------------------------------
+	        //--- fast guess script name --------------------------------
 
-            $installFile = $this->prjXmlFilePath . '/' . 'script.php';
+	        // $installPathFileName = $this->prjXmlFilePath . '/' . 'script.php'; // if file_exist ...
 
-			/** shortcut leaves out $langIdPrefix
-            if (is_file ($installFile)) {
-                $isFileFound = true;
-            }
-            else
-            {
-			/**/
-                //--- extract from project xml file --------------------------
+	        //--- extract from project xml file --------------------------
 
-                $prjXmlPathFilename = $this->prjXmlPathFilename;
-                // Not found
-	            if ( ! is_file ($prjXmlPathFilename))
-	            {
-		            $prjXmlPathFilename = $this->projectFileName();
-	            }
+	        $prjXmlPathFilename = $this->prjXmlPathFilename;
+	        // Not found
+	        if (!is_file($prjXmlPathFilename))
+	        {
+		        $prjXmlPathFilename = $this->projectFileName();
+	        }
 
-	            if (is_file ($prjXmlPathFilename))
-	            {
+	        if (is_file($prjXmlPathFilename))
+	        {
 
-		            [$fileName, $langIdPrefix] = $this->extractPrjVars($prjXmlPathFilename);
+		        [$installFileName, $langIdPrefix, $isLangAtStdJoomla] = $this->extractPrjVars($prjXmlPathFilename);
 
-		            $installFile = $this->prjXmlFilePath . '/' . $fileName;
+		        $installPathFileName = $this->prjXmlFilePath . '/' . $installFileName;
 
-		            if (is_file($installFile))
-		            {
-			            $isFileFound = true;
-			            $this->installPathFilename = $installFile;
-		            }
+		        if (is_file($installPathFileName))
+		        {
+			        $isFileFound               = true;
+			        $this->installPathFilename = $installPathFileName;
+		        }
 
-		            $this->langIdPrefix = $langIdPrefix;
-	            }
-	        /**
-            }
-			/**/
+		        $this->langIdPrefix      = $langIdPrefix;
+		        $this->isLangAtStdJoomla = $isLangAtStdJoomla;
+	        }
 
         }
         catch (\RuntimeException $e)
@@ -258,6 +252,7 @@ class sysFilesContent
     {
         $installFileName = '';
 	    $langIdPrefix = '';
+	    $isLangAtStdJoomla = false;
 
         try {
 
@@ -298,6 +293,12 @@ class sysFilesContent
                 }
             }
 
+			$manifestFile = new manifestLangFiles($prjXmlPathFileName);
+
+	        $langIdPrefix = strtoupper($manifestFile->get('name', ''));
+	        $installFileName = $manifestFile->get('scriptfile', '');
+	        $isLangAtStdJoomla = $manifestFile->isLangAtStdJoomla();
+
         }
         catch (\RuntimeException $e)
         {
@@ -309,7 +310,7 @@ class sysFilesContent
             $app->enqueueMessage($OutTxt, 'error');
         }
 
-        return [$installFileName, $langIdPrefix];
+        return [$installFileName, $langIdPrefix, $isLangAtStdJoomla];
     }
 
 	public function detectLangBasePath ($basePath = '', $useLangSysIni = false) {
