@@ -128,10 +128,8 @@ class projectController extends FormController
 
             // detect path by project name or root path is given
             $oSubPrjPath = new subPrjPath($prjId, $prjRootPath);
-//			[$isRootValid, $isJoomlaPath, $rootPath, $subPrjPath]
-//				= oSubPrjPath->detectRootPath ($prjId,$prjRootPath);
 
-            //--- improve user path (too short, including root ...) ---------------------------------
+            //--- improve user path (too short, including root ...) ----------
 
             $isChanged = false;
 
@@ -147,22 +145,6 @@ class projectController extends FormController
                     //$input->set('jform['root_path']', $prjRootPath);
                     $data ['root_path'] = $prjRootPath;
                 }
-
-                /**  ??? 'prjXmlPathFilename'
-                 * $subPrjXmlPathFile = $oSubPrjPath->getRootManifestPath();
-                 * if ($prjRootPath != $subPrjXmlPathFile)
-                 * {
-                 * $prjRootPath = $subPrjXmlPathFile;
-                 *
-                 * // write back into input
-                 * $isChanged = true;
-                 *
-                 * //$input->set('jform['root_path']', $prjRootPath);
-                 * $data ['prjXmlPathFilename'] = $prjRootPath;
-                 * }
-                 * /**/
-
-
             }
 
             // write back into input
@@ -184,7 +166,6 @@ class projectController extends FormController
 
             $subProjects = $prjModel->subProjectsByPrjId($oSubPrjPath);
             // ToDo: add $subProjects = $prjModel->subProjectsByManifest ($oSubPrjPath);
-
 
             //--- save subproject changes ---------------------------------
 

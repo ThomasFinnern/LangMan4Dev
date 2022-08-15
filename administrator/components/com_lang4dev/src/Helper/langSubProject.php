@@ -90,7 +90,7 @@ class langSubProject extends langFiles
 
 					$isOk = true;
 
-					// ToDO: keep root path without JPATH_ROOT part.
+					// ToDo: keep root path without JPATH_ROOT part.
 					// Needs a access function of the prjRootPath
 					// with flag it is on server (instead of PC)
 					$this->prjRootPath = $testPath;
@@ -99,6 +99,30 @@ class langSubProject extends langFiles
 		}
 
 		return $isOk;
+	}
+
+	private function checkManifestPath()
+	{
+		$isManifestPathValid = false;
+
+		// continue when path has enough characters
+		if (strlen($this->prjXmlPathFilename) > 5)
+		{
+			if (is_file ($this->prjXmlPathFilename))
+			{
+				$isManifestPathValid = true;
+
+				// ToDo: create path from ....
+				$this->prjXmlFilePath = basename ($this->prjXmlPathFilename);
+			}
+			else
+			{
+				// else is not needed ?
+				$this->prjXmlPathFilename = $this->prjXmlPathFilename;
+			}
+		}
+
+		return $isManifestPathValid;
 	}
 
 	public function retrieveMainPrefixId()
@@ -120,6 +144,27 @@ class langSubProject extends langFiles
 		return;
 	}
 
+	private function projectFileName()
+	{
+		$projectFileName = $this->prjId;
+
+		if (   $this->prjType == projectType::PRJ_TYPE_COMP_BACK_SYS
+			|| $this->prjType == projectType::PRJ_TYPE_COMP_BACK)
+		{
+			// $projectFileName = 'com_' . $this->prjId;
+			$projectFileName = substr($this->prjId, 4);
+		}
+
+		$projectFileName = $projectFileName . '.xml';
+
+		return $projectFileName;
+	}
+
+	// In first version the manifest file was searched,
+	// now the location of the manifest file is expected
+	// to  be assigned already
+	//
+
 	public function findPrjFiles()
 	{
 
@@ -128,62 +173,118 @@ class langSubProject extends langFiles
 		try
 		{
 
-			//--- check valid path ---------------------------------------------------
+			//--- check valid project root path ---------------------------------------------------
 
-			// continue when path is valid
 			$isRootPathValid = $this->checkRootPath();
+
+			// xml may be in administrator / ... sub path
+			if (!$isRootPathValid)
+			{
+				$projectFileName = $this->projectFileName();
+
+				// sets $prjXmlFilePath
+				$isFileFound     = searchXmlProjectFile($projectFileName, $this->prjRootPath); // $this->prjXmlFilePath); //
+				$isRootPathValid = $this->checkRootPath();
+			}
+
+			// manifest found ?
 			if ($isRootPathValid)
 			{
+				//--- check valid manifest path ---------------------------------------------------
 
-				//--- pre check type -----------------
+				$isManifestPathValid = $this->checkManifestPath();
 
-				if ($this->prjType == projectType::PRJ_TYPE_COMP_BACK_SYS)
+				// manifest found ?
+				if ($isManifestPathValid)
 				{
-					$this->useLangSysIni = true;
-				}
+					//--- open manifest file -------------------------------------------------
 
-				//--- project XML and script file -------------------------------------------------
+					// Manifest tells if files have to be searched inside component or old on joomla standard paths
+					$manifestLang = new manifestLangFiles ($this->prjXmlPathFilename);
 
-				$hasSysFiles = projectType::subPrjHasSysFiles($this->prjType);
-				if ($hasSysFiles)
-				{
+					//--- project XML and script file -------------------------------------------------
 
-					//--- Assign from variables function call ------------------------------------
+					// files config.xml and  to expect for sub project
+					[$isConfigXml, $isInstallPhp] = projectType::enabledByType($this->prjType);
 
-					$sysXmlData = new sysFilesContent();
 
-					$sysXmlData->prjId       = $this->prjId;
-					$sysXmlData->prjType     = $this->prjType;
-					$sysXmlData->prjRootPath = $this->prjRootPath;
+					if ($isInstallPhp) {
 
-					// use sysFilesContent
-					// new ...;
+						$this->installPathFilename = $manifestLang->getSriptFile();
+						// ToDo: function checkInstallFile ();
 
-					$isFilesFound = $sysXmlData->findPrjFiles();
-
-					// take results
-					if ($isFilesFound)
-					{
-						$this->prjXmlFilePath = $sysXmlData->prjXmlFilePath;
-
-						$this->prjXmlPathFilename  = $sysXmlData->prjXmlPathFilename;
-						$this->installPathFilename = $sysXmlData->installPathFilename;
-						$this->langIdPrefix        = $sysXmlData->langIdPrefix;
-						$this->isLangAtStdJoomla   = $sysXmlData->isLangAtStdJoomla;
 					}
 
-					$this->detectLangBasePath($this->prjXmlFilePath, $this->useLangSysIni);
-				}
-				else
-				{
-					$this->prjXmlFilePath = $this->prjRootPath;
-					$this->detectLangBasePath($this->prjRootPath, $this->useLangSysIni);
+					// ToDo: remove  as config is not needed handle otherwise ?
+					if($isConfigXml) {
+
+
+
+					}
+
+					// lang id of project
+					$this->langIdPrefix = $manifestLang->getName();
+
+
+					//--- pre check type -----------------
+
+					if ($this->prjType == projectType::PRJ_TYPE_COMP_BACK_SYS)
+					{
+						$this->useLangSysIni = true;
+					}
+
+
+					//--- lang files by manifest ----------------------------------------
+
+
+
+
+
+
+
+
+
+					$hasSysFiles = projectType::subPrjHasSysFiles($this->prjType);
+					if ($hasSysFiles)
+					{
+
+						//--- Assign from variables function call ------------------------------------
+
+						$sysXmlData = new sysFilesContent();
+
+						$sysXmlData->prjId       = $this->prjId;
+						$sysXmlData->prjType     = $this->prjType;
+						$sysXmlData->prjRootPath = $this->prjRootPath;
+
+						// use sysFilesContent
+						// new ...;
+
+						$isFilesFound = $sysXmlData->findPrjFiles();
+
+						// take results
+						if ($isFilesFound)
+						{
+							$this->prjXmlFilePath = $sysXmlData->prjXmlFilePath;
+
+							$this->prjXmlPathFilename  = $sysXmlData->prjXmlPathFilename;
+							$this->installPathFilename = $sysXmlData->installPathFilename;
+							$this->langIdPrefix        = $sysXmlData->langIdPrefix;
+							$this->isLangAtStdJoomla   = $sysXmlData->isLangAtStdJoomla;
+						}
+
+						$this->detectLangBasePath($this->prjXmlFilePath, $this->useLangSysIni);
+					}
+					else
+					{
+						$this->prjXmlFilePath = $this->prjRootPath;
+						$this->detectLangBasePath($this->prjRootPath, $this->useLangSysIni);
+					}
+
 				}
 
 			}
-
-		}
-		catch (\RuntimeException $e)
+		catch
+			(\RuntimeException $e)
 		{
 			$OutTxt = '';
 			$OutTxt .= 'Error executing findPrjFiles: "' . '<br>';
@@ -225,7 +326,8 @@ class langSubProject extends langFiles
 	// read translations from langFiles and keep file names
 	public function readLangFiles($langId = 'en-GB')
 	{
-		if ($langId == '') {
+		if ($langId == '')
+		{
 			$langId = 'en-GB';
 		}
 
@@ -233,11 +335,12 @@ class langSubProject extends langFiles
 
 		foreach ($langFileNames as $langFileName)
 		{
-			$fileName = basename ($langFileName);
+			$fileName     = basename($langFileName);
 			$translations = $this->readLangFile($langFileName);
 
 			$this->langFilesData [$langId][$fileName] = $translations;
 		}
+
 		// if (empty($langFiles [$langId]) 0=> return empty ? ...
 
 		return $this->langFilesData [$langId];
@@ -389,7 +492,7 @@ class langSubProject extends langFiles
 		return $this->transStringsLocations;
 	}
 
-	public function getTransIdsClassified($langId="en-GB", $isDoClassifyTransIds = false)
+	public function getTransIdsClassified($langId = "en-GB", $isDoClassifyTransIds = false)
 	{
 
 		if (empty($this->transIdsClassified) || $isDoClassifyTransIds)
@@ -401,7 +504,7 @@ class langSubProject extends langFiles
 		return $this->transIdsClassified;
 	}
 
-	public function classifyTransIds($langId="en-GB")
+	public function classifyTransIds($langId = "en-GB")
 	{
 		//
 		$codeTransIds = $this->getPrjTransIdLocations();
@@ -420,14 +523,14 @@ class langSubProject extends langFiles
 		return $this->transIdsClassified;
 	}
 
-	private function collectDoubles($langId="en-GB")
+	private function collectDoubles($langId = "en-GB")
 	{
 		$doubles = [];
 
 		// ToDo: each langFilesData[$langId] as $langFile get data not file name
 		foreach ($this->langFilesData[$langId] as $langFile)
 		{
-			$fileName  = baseName ($langFile->getlangPathFileName());
+			$fileName                     = baseName($langFile->getlangPathFileName());
 			$doubles[basename($fileName)] = $langFile->collectDoubles();
 		}
 
@@ -447,27 +550,33 @@ class langSubProject extends langFiles
 		return $this->prjId . ': ' . $this->getPrjTypeText();
 	}
 
-	public function detectLangFiles()
+	public function yyy_detectLangFiles()
 	{
 
 		try
 		{
+			//--- pre check type -----------------
+
+			if ($this->prjType == projectType::PRJ_TYPE_COMP_BACK_SYS)
+			{
+				$this->useLangSysIni = true;
+			}
 
 			// Manifest tells if files have to be searched inside component or old on joomla standard paths
 			$manifestLang = new manifestLangFiles ($this->prjXmlPathFilename);
 
 			// lang file origins inside component
-			if ( ! $manifestLang->isLangAtStdJoomla)
+			if (!$manifestLang->isLangAtStdJoomla)
 			{
 				//--- search in component path -------------------------------
 
-				parent::collectFolderLangFiles();
+				parent::collectPrjFolderLangFiles();
 			}
 			else
 			{
 				//--- use joomla standard paths ------------------------------
 
-				parent::collectManifestLangFiles ($manifestLang, $this->prjType);
+				parent::collectManifestLangFiles($manifestLang, $this->prjType);
 			}
 		}
 		catch (\RuntimeException $e)
@@ -517,27 +626,24 @@ class langSubProject extends langFiles
 			$transLangIds = $this->getLangIds();
 
 			// all other lang ids
-			foreach ($transLangIds as $transLangId) {
-				if ($transLangId != $mainLangId) {
+			foreach ($transLangIds as $transLangId)
+			{
+				if ($transLangId != $mainLangId)
+				{
 
 					$transLangData = $this->langFilesData[$transLangId];
 
-					foreach ($mainLangData as $fileData) {
+					foreach ($mainLangData as $fileData)
+					{
 
-						$mainLangFileName = $fileData->getlangPathFileName();
-						$matchLangFileName = $this->matchingNameByTransId ($mainLangId, $mainLangFileName, $transLangId);
-
-
+						$mainLangFileName  = $fileData->getlangPathFileName();
+						$matchLangFileName = $this->matchingNameByTransId($mainLangId, $mainLangFileName, $transLangId);
 
 //						$mainTrans = $this->langFilesData[$langId]->translations;
 //						$this->langFilesData[$langId]->alignTranslationsByMain($mainTrans);
 					}
 				}
 			} // for
-
-
-
-
 
 		}
 		catch (\RuntimeException $e)
@@ -553,6 +659,8 @@ class langSubProject extends langFiles
 		return; // $isFilesFound;
 		// ToDo: ....
 	}
+
+}
 
 } // class
 

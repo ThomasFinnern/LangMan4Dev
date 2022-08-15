@@ -192,7 +192,7 @@ class langFileNamesSet
     }
 	/**/
 
-    protected function collectFolderLangFiles () {
+    protected function collectPrjFolderLangFiles () {
 
     	$isBaseNameSet = false;
 
@@ -319,19 +319,19 @@ class langFileNamesSet
 			/**
 			if (count($xmlLangNames) > 0)
 			{
-			foreach ($xmlLangNames as $idx => $langFilePathInfo)
-			{
-			foreach ($langFilePathInfo as $langId => $langFilePath)
-			{
-			$isSysIni = str_ends_with($langFilePath, '.sys.ini');
+				foreach ($xmlLangNames as $idx => $langFilePathInfo)
+				{
+					foreach ($langFilePathInfo as $langId => $langFilePath)
+					{
+						$isSysIni = str_ends_with($langFilePath, '.sys.ini');
 
-			// On backend PRJ_TYPE_COMP_BACK_SYS only sys.ini files used
-			if ( ! $isCheck4Ini || $isSysIni)
-			{
-			$this->langFileNames [$langId] = $langBasePath . '/' . $langFilePath;
-			}
-			}
-			}
+						// On backend PRJ_TYPE_COMP_BACK_SYS only sys.ini files used
+						if (!$isCheck4Ini || $isSysIni)
+						{
+							$this->langFileNames [$langId] = $langBasePath . '/' . $langFilePath;
+						}
+					}
+				}
 			}
 
 			/**/

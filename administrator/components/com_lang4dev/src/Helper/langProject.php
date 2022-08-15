@@ -59,6 +59,7 @@ class langProject
 		return $subPrj;
 	}
 
+	// script- / install file, language files as list
 	public function findPrjFiles()
 	{
 
@@ -68,11 +69,13 @@ class langProject
 			foreach ($this->subProjects as $subProject)
 			{
 
-//				$hasSysFiles = ! ($subProject->prjType == projectType::PRJ_TYPE_COMP_BACK
-//					|| $subProject->prjType == projectType::PRJ_TYPE_COMP_SITE);
 
 				// On sys file receive langIdPrefix
 				$isFilesFound = $subProject->findPrjFiles();
+
+
+
+
 
 				/**  see below
 				if($hasSysFiles && $isFilesFound)
@@ -88,7 +91,6 @@ class langProject
 				/**/
 
 				// It is expected that function detectDetails defines the sub project langIdPrefix
-				$this->langIdPrefix = $subProject->langIdPrefix;
 
                 /**
                 if ($subProject->useLangSysIni) {
@@ -102,6 +104,10 @@ class langProject
                 /**/
 
 			}
+
+			// from manifest file
+			$this->langIdPrefix = $this->subProjects[0]->langIdPrefix;
+
 		}
 		catch (\RuntimeException $e)
 		{

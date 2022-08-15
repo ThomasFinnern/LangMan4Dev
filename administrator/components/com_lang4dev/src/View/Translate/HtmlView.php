@@ -113,8 +113,9 @@ class HtmlView extends BaseHtmlView
 		$this->project = $model->getProject($prjId, $subPrjActive);
 		$project = $this->project;
 
+		// script- / install file, language files as list
 		$project->findPrjFiles();
-		$project->detectLangFiles();
+		// $project->detectLangFiles();
 
 		//--- collect content ---------------------------------------------------
 

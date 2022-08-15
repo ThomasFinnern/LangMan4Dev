@@ -136,7 +136,7 @@ class sysFilesContent
         return $isFileFound;
     }
 
-    public function searchXmlProjectFile ($projectFileName, $searchPath) {
+    public static function searchXmlProjectFile ($projectFileName, $searchPath) {
 
         $isFileFound = false;
 
@@ -489,22 +489,6 @@ class sysFilesContent
 
 		return $isBaseNameSet;
 	}
-
-    private function projectFileName()
-    {
-        $projectFileName = $this->prjId;
-
-        if (   $this->prjType == projectType::PRJ_TYPE_COMP_BACK_SYS
-            || $this->prjType == projectType::PRJ_TYPE_COMP_BACK)
-        {
-            // $projectFileName = 'com_' . $this->prjId;
-            $projectFileName = substr($this->prjId, 4);
-        }
-
-        $projectFileName = $projectFileName . '.xml';
-
-        return $projectFileName;
-    }
 
 } // class
 
