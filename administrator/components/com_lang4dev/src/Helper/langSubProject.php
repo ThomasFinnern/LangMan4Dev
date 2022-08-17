@@ -12,8 +12,8 @@ use Joomla\CMS\Factory;
 use Joomla\CMS\Filesystem\File;
 use Joomla\CMS\Filesystem\Folder;
 
-use Finnern\Component\Lang4dev\Administrator\Helper\sysFilesContent;
-use Finnern\Component\Lang4dev\Administrator\Helper\searchTransIdLocations;
+//use Finnern\Component\Lang4dev\Administrator\Helper\sysFilesContent;
+//use Finnern\Component\Lang4dev\Administrator\Helper\searchTransIdLocations;
 
 class langSubProject extends langFiles
 {
@@ -118,30 +118,11 @@ class langSubProject extends langFiles
 			else
 			{
 				// else is not needed ?
-				$this->prjXmlPathFilename = $this->prjXmlPathFilename;
+				$this->prjXmlPathFilename = $this->prjXmlPathFilename . "";
 			}
 		}
 
 		return $isManifestPathValid;
-	}
-
-	public function retrieveMainPrefixId()
-	{
-
-		// ToDo: create class for maintenance to make public all single variables, then use class for class $prefix ...
-		// ToDo: adjust finder below accordingly
-
-		// ToDo: replace with better solution -> may need mor through search for different palces plugin, modules
-		$finder = new sysFilesContent($this->prjId, $this->prjType, $this->prjRootPath, $this->prjXmlFilePath);
-
-		// ToDo: prjXmlFilePath <-> use prjXmlPathFileName (actually empty so ...
-
-		[$installFileName, $langIdPrefix, $isLangAtStdJoomla] = $finder->extractPrjVars($this->prjXmlPathFilename);
-		$this->langIdPrefix        = $langIdPrefix;
-		$this->installPathFilename = $installFileName;
-		$this->isLangAtStdJoomla = $isLangAtStdJoomla;
-
-		return;
 	}
 
 	private function projectFileName()
@@ -183,7 +164,7 @@ class langSubProject extends langFiles
 				$projectFileName = $this->projectFileName();
 
 				// sets $prjXmlFilePath
-				$isFileFound     = searchXmlProjectFile($projectFileName, $this->prjRootPath); // $this->prjXmlFilePath); //
+				$isFileFound     = $this->searchXmlProjectFile($projectFileName, $this->prjRootPath); // $this->prjXmlFilePath); //
 				$isRootPathValid = $this->checkRootPath();
 			}
 
@@ -207,24 +188,22 @@ class langSubProject extends langFiles
 					// files config.xml and  to expect for sub project
 					[$isConfigXml, $isInstallPhp] = projectType::enabledByType($this->prjType);
 
-
-					if ($isInstallPhp) {
+					if ($isInstallPhp)
+					{
 
 						$this->installPathFilename = $manifestLang->getSriptFile();
 						// ToDo: function checkInstallFile ();
 
 					}
 
-					// ToDo: remove  as config is not needed handle otherwise ?
-					if($isConfigXml) {
-
-
-
-					}
+//					// ToDo: remove  as config is not needed here and handle otherwise ?
+//					if ($isConfigXml)
+//					{
+//
+//					}
 
 					// lang id of project
 					$this->langIdPrefix = $manifestLang->getName();
-
 
 					//--- pre check type -----------------
 
@@ -233,58 +212,32 @@ class langSubProject extends langFiles
 						$this->useLangSysIni = true;
 					}
 
+					// manifest tells about defined list of lang files
+					$this->isLangAtStdJoomla  = $manifestLang->isLangAtStdJoomla;
 
-					//--- lang files by manifest ----------------------------------------
+					//--- lang files list by manifest ----------------------------------------
 
+					if ($this->isLangAtStdJoomla) {
 
+						// includes detectLangBasePath
+						$this->collectManifestLangFiles($manifestLang, $this->prjType);
 
+						// ToDo: extendManifestLangFilesList()
+						// search for late additions not mentioned in manifest
+						$this->extendManifestLangFilesList();
 
+					} else {
 
-
-
-
-
-					$hasSysFiles = projectType::subPrjHasSysFiles($this->prjType);
-					if ($hasSysFiles)
-					{
-
-						//--- Assign from variables function call ------------------------------------
-
-						$sysXmlData = new sysFilesContent();
-
-						$sysXmlData->prjId       = $this->prjId;
-						$sysXmlData->prjType     = $this->prjType;
-						$sysXmlData->prjRootPath = $this->prjRootPath;
-
-						// use sysFilesContent
-						// new ...;
-
-						$isFilesFound = $sysXmlData->findPrjFiles();
-
-						// take results
-						if ($isFilesFound)
-						{
-							$this->prjXmlFilePath = $sysXmlData->prjXmlFilePath;
-
-							$this->prjXmlPathFilename  = $sysXmlData->prjXmlPathFilename;
-							$this->installPathFilename = $sysXmlData->installPathFilename;
-							$this->langIdPrefix        = $sysXmlData->langIdPrefix;
-							$this->isLangAtStdJoomla   = $sysXmlData->isLangAtStdJoomla;
-						}
-
-						$this->detectLangBasePath($this->prjXmlFilePath, $this->useLangSysIni);
-					}
-					else
-					{
 						$this->prjXmlFilePath = $this->prjRootPath;
 						$this->detectLangBasePath($this->prjRootPath, $this->useLangSysIni);
+
+						$this->collectPrjFolderLangFiles();
 					}
 
 				}
-
 			}
-		catch
-			(\RuntimeException $e)
+		}
+		catch (\RuntimeException $e)
 		{
 			$OutTxt = '';
 			$OutTxt .= 'Error executing findPrjFiles: "' . '<br>';
@@ -660,7 +613,62 @@ class langSubProject extends langFiles
 		// ToDo: ....
 	}
 
-}
+	public function searchXmlProjectFile ($projectFileName, $searchPath) {
+
+		$isFileFound = false;
+
+		if ($searchPath)
+		{
+			// expected path and file name
+			$prjXmlPathFilename = $searchPath . '/' . $projectFileName;
+
+			try
+			{
+
+				//--- ? path to file given ? --------------------------------------
+				// d:\Entwickl\2022\_github\LangMan4Dev\administrator\components\com_lang4dev\lang4dev.xml
+
+				if (is_file($prjXmlPathFilename))
+				{
+
+					$this->prjXmlFilePath = $searchPath;
+					$this->prjXmlPathFilename = $prjXmlPathFilename;
+					$isFileFound          = true;
+
+				}
+				else
+				{
+					#--- All sub folders in folder -------------------------------------
+
+					foreach (Folder::folders($searchPath) as $folderName)
+					{
+
+						$subFolder = $searchPath . '/' . $folderName;
+
+						$isPathFound = $this->searchXmlProjectFile($projectFileName, $subFolder);
+
+						if ($isPathFound)
+						{
+							break;
+						}
+					}
+
+				}
+			}
+			catch (\RuntimeException $e)
+			{
+				$OutTxt = '';
+				$OutTxt .= 'Error executing searchXmlProjectFile: "' . '<br>';
+				$OutTxt .= 'Error: "' . $e->getMessage() . '"' . '<br>';
+
+				$app = Factory::getApplication();
+				$app->enqueueMessage($OutTxt, 'error');
+			}
+		}
+
+		return $isFileFound;
+	}
+
 
 } // class
 

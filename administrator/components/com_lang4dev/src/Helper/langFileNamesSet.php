@@ -275,9 +275,12 @@ class langFileNamesSet
 			|| $prjType == projectType::PRJ_TYPE_COMP_BACK_SYS)
 		{
 			$xmlLangNames = $manifestLang->adminLangFilePaths;
+
 		} else {
 			// On site, modul and plugin
 			$xmlLangNames = $manifestLang->stdLangFilePaths;
+
+
 		}
 
 		$langBasePath = $this->langBasePathJoomla ($prjType) ;
@@ -285,6 +288,7 @@ class langFileNamesSet
 		// Within joomla use standard paths
 		if ($manifestLang->isInstalled)
 		{
+			$this->langBasePath =  $this->langBasePathJoomla ($prjType);
 
 			if (count($xmlLangNames) > 0)
 			{
@@ -316,6 +320,8 @@ class langFileNamesSet
 
 			//--- on local development folder ------------------------------
 
+//			$this->langBasePath =  $this->langBasePathJoomla ($prjType);
+
 			/**
 			if (count($xmlLangNames) > 0)
 			{
@@ -340,6 +346,14 @@ class langFileNamesSet
 
 
 	}
+
+	public function extendManifestLangFilesList() {
+
+		// ToDo: ....
+
+
+	}
+
 
 	// search for matching filename
 	public function matchingNameByTransId ($mainLangId, $mainLangFileName, $transLangId) {
