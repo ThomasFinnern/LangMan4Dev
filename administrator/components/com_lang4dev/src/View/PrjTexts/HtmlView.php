@@ -115,7 +115,7 @@ class HtmlView extends BaseHtmlView
 		// read translations
 		$project->readLangFiles($this->mainLangId);
 
-		// scan code for occurences of
+		// scan code for occurrences of
 		$project->scanCode4TransIds();
 		$project->scanCode4TransStrings();
 
@@ -232,7 +232,7 @@ class HtmlView extends BaseHtmlView
 				. '* filename (s) behind grey type header <br>'
 				. '* use isLangAtStdJoomla in findPrjFiles<br>'
 				. '* use isLangAtStdJoomla in detectLangFiles<br>'
-//				. '* <br>'
+				. '* ? config.xml, access xml -> are scanned ? from manifest ?<br>'
 //				. '* <br>'
 //				. '* <br>'
 //				. '* <br>'

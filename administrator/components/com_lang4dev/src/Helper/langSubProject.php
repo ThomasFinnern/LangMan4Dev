@@ -113,7 +113,7 @@ class langSubProject extends langFiles
 				$isManifestPathValid = true;
 
 				// ToDo: create path from ....
-				$this->prjXmlFilePath = basename ($this->prjXmlPathFilename);
+				$this->prjXmlFilePath = dirname ($this->prjXmlPathFilename);
 			}
 			else
 			{
@@ -143,9 +143,9 @@ class langSubProject extends langFiles
 
 	// In first version the manifest file was searched,
 	// now the location of the manifest file is expected
-	// to  be assigned already
+	// to be assigned already
 	//
-
+	// script- / install file, language files as list, transId
 	public function findPrjFiles()
 	{
 
@@ -190,8 +190,7 @@ class langSubProject extends langFiles
 
 					if ($isInstallPhp)
 					{
-
-						$this->installPathFilename = $manifestLang->getSriptFile();
+						$this->installPathFilename = $this->prjXmlFilePath . '/' . $manifestLang->getSriptFile();
 						// ToDo: function checkInstallFile ();
 
 					}
@@ -203,7 +202,7 @@ class langSubProject extends langFiles
 //					}
 
 					// lang id of project
-					$this->langIdPrefix = $manifestLang->getName();
+					$this->langIdPrefix = strtoupper($manifestLang->getName());
 
 					//--- pre check type -----------------
 
@@ -311,17 +310,17 @@ class langSubProject extends langFiles
 	public function scanCode4TransIdsLocations($useLangSysIni = false)
 	{
 
-		$searchTransIdLocations = new searchTransIdLocations ();
+		$searchTransIdLocations = new searchTransIdLocations ($this->langIdPrefix);
 
 		$searchTransIdLocations->useLangSysIni       = $this->useLangSysIni;
 		$searchTransIdLocations->prjXmlPathFilename  = $this->prjXmlPathFilename;
 		$searchTransIdLocations->installPathFilename = $this->installPathFilename;
 
-		$searchTransIdLocations->langIdPrefix = $this->langIdPrefix;
+		// $searchTransIdLocations->langIdPrefix = $this->langIdPrefix;
+
 		// sys file selected
 		if ($useLangSysIni || $this->useLangSysIni)
 		{
-
 			//--- scan project files  ------------------------------------
 
 			// scan project XML
@@ -357,13 +356,12 @@ class langSubProject extends langFiles
 	public function scanCode4TransStringsLocations($useLangSysIni = false)
 	{
 
-		$searchTransIdLocations = new searchTransStrings ();
+		$searchTransIdLocations = new searchTransStrings ($this->langIdPrefix);
 
 		$searchTransIdLocations->useLangSysIni       = $this->useLangSysIni;
 		$searchTransIdLocations->prjXmlPathFilename  = $this->prjXmlPathFilename;
 		$searchTransIdLocations->installPathFilename = $this->installPathFilename;
 
-		$searchTransIdLocations->langIdPrefix = $this->langIdPrefix;
 		// sys file selected
 		if ($useLangSysIni || $this->useLangSysIni)
 		{
@@ -554,16 +552,6 @@ class langSubProject extends langFiles
 		try
 		{
 
-//			// fetch main translation items
-//			foreach ($this->langFilesData as $langId => $langFiles)
-//			{
-//				if ($langId == $mainLangId)
-//				{
-//
-//					$mainTrans = $this->langFilesData[$langId]->translations;
-//				}
-//			}
-//
 //			// for each other call
 //			foreach ($this->langFilesData as $langId => $temp)
 //			{
@@ -574,29 +562,47 @@ class langSubProject extends langFiles
 //				}
 //			}
 
-			$mainLangData = $this->langFilesData[$mainLangId];
+			$mainLangFilesData = $this->langFilesData[$mainLangId];
 
 			$transLangIds = $this->getLangIds();
 
 			// all other lang ids
 			foreach ($transLangIds as $transLangId)
 			{
+				// Not main language
 				if ($transLangId != $mainLangId)
 				{
 
-					$transLangData = $this->langFilesData[$transLangId];
+					//--- all main lang files -----------------------------------------------
 
-					foreach ($mainLangData as $fileData)
+					$transFilesData = $this->langFilesData[$transLangId];
+
+					foreach ($mainLangFilesData as $mainFileData)
 					{
+						//--- create matching translation file name -----------------------------------------------
 
-						$mainLangFileName  = $fileData->getlangPathFileName();
-						$matchLangFileName = $this->matchingNameByTransId($mainLangId, $mainLangFileName, $transLangId);
+						$mainLangFileName  = $mainFileData->getlangPathFileName();
+						$mainTrans = $mainFileData->translations;
 
-//						$mainTrans = $this->langFilesData[$langId]->translations;
-//						$this->langFilesData[$langId]->alignTranslationsByMain($mainTrans);
-					}
+						$matchTransFileName = $this->matchingNameByTransId($mainLangId, $mainLangFileName, $transLangId);
+
+						// look up the matching translation
+						foreach ($transFilesData as $transFileData)
+						{
+							$actTransFileName = $transFileData->getlangPathFileName();
+
+							// toDo: should not be needed
+							$actTransFileName = str_replace('\\', '/', $actTransFileName);
+							if ($actTransFileName == $matchTransFileName) {
+
+								// align order of items in matching translation
+								$transFileData->alignTranslationsByMain($mainTrans);
+							}
+						}
+
+					} // main files
 				}
-			} // for
+			} // for translation ids
 
 		}
 		catch (\RuntimeException $e)

@@ -120,8 +120,8 @@ class HtmlView extends BaseHtmlView
 		//--- collect content ---------------------------------------------------
 
 		// read translations
-		$project->readLangFiles($this->mainLangId);
-		// $project->readAllLangFiles();
+		// $project->readLangFiles($this->mainLangId);
+		$project->readAllLangFiles();
 
 		$project->alignTranslationsByMain($this->mainLangId);
 

@@ -104,7 +104,7 @@ class SubprojectSelectField extends ListField
 
 			$this->value = $subPrjActive;
 
-			// $user = Factory::getApplication()->getIdentity(); // Todo: Restrict to accessible subprojects
+			// $user = Factory::getApplication()->getIdentity(); // ToDo: Restrict to accessible subprojects
 			$db    = Factory::getDbo();
 
 			$query = $db->getQuery(true)

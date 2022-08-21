@@ -40,9 +40,9 @@ class searchTransIdLocations
 	/**
 	 * @since __BUMP_VERSION__
 	 */
-	public function __construct($searchPaths = array(), $langIdPrefix = 'COM_LANG4DEV_')
+	public function __construct($langIdPrefix = 'COM_LANG4DEV_', $searchPaths = array())
 	{
-		// ToDO: check for uppercase and trailing '_'
+		// ToDo: check for uppercase and trailing '_'
 
 		$this->transIdLocations       = new transIdLocations();
 		$this->langIdPrefix = $langIdPrefix;

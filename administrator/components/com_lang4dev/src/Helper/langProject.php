@@ -59,7 +59,7 @@ class langProject
 		return $subPrj;
 	}
 
-	// script- / install file, language files as list
+	// script- / install file, language files as list, transId
 	public function findPrjFiles()
 	{
 
@@ -68,40 +68,8 @@ class langProject
 
 			foreach ($this->subProjects as $subProject)
 			{
-
-
-				// On sys file receive langIdPrefix
+				//
 				$isFilesFound = $subProject->findPrjFiles();
-
-
-
-
-
-				/**  see below
-				if($hasSysFiles && $isFilesFound)
-				{
-					$this->langIdPrefix = $subProject->langIdPrefix;
-				}
-				else
-				{
-					// On not sys file assign langIdPrefix (ToDo: solve: may not exist yet)
-					$subProject->langIdPrefix = $this->langIdPrefix;
-					// $subProject->findPrjFiles();
-				}
-				/**/
-
-				// It is expected that function detectDetails defines the sub project langIdPrefix
-
-                /**
-                if ($subProject->useLangSysIni) {
-
-                    $this->isSysFileFound = true;
-
-                    $this->prjRootPath  = $subProject->prjRootPath;
-                    $this->prjXmlPathFilename  = $subProject->prjXmlPathFilename;
-                    $this->installPathFilename = $subProject->installPathFilename;
-                }
-                /**/
 
 			}
 

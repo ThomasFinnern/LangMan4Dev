@@ -24,7 +24,7 @@ Text::_('Then there are special characters like next') . ' ' . Text::_('a äÄ, 
 Text::_('so'); Text::_('short');
 
 
-echo 'just echoed'; echo 'second in tow'
+echo 'just echoed'; echo 'second in tow';
 
 
 // ToDo: Add com_lang4dev transId tests again

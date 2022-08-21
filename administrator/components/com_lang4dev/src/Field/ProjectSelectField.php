@@ -100,7 +100,7 @@ class ProjectSelectField extends ListField
 
 		try
 		{
-			// $user = Factory::getApplication()->getIdentity(); // Todo: Restrict to accessible projects
+			// $user = Factory::getApplication()->getIdentity(); // ToDo: Restrict to accessible projects
 			$db    = Factory::getDbo();
 
 			$query = $db->getQuery(true)

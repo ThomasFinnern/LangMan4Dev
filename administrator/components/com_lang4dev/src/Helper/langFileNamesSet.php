@@ -202,7 +202,7 @@ class langFileNamesSet
 	    if ($this->useLangSysIni == true) {
 		    $regex = '\.sys\.ini$';
 	    } else {
-	    	// ToDO: regex with check for not .sys. before search string
+	    	// ToDo: regex with check for not .sys. before search string
 		    $regex = '(?<!\.sys)\.ini$';
 	    }
 
@@ -363,19 +363,9 @@ class langFileNamesSet
 		$langFile->setLangPathFileName ($mainLangFileName);
 
 		// Exchange lang ID with source lang ID
-		$langFile->setLangID ($transLangId);
+		$langFile->replaceLangId ($transLangId);
 
-		$matchLangFileName = $langFile->setLangPathFileName ();
-
-
-		$matchLangFileName = $mainLangFileName;
-
-		// handle filenames with id in front 'en-GB.com_rsgallery2.ini'
-		if (str_starts_with($mainLangId)) {
-
-			$matchLangFileName = $transLangId . '.' . substr ($mainLangFileName, 5);
-		}
-
+		$matchLangFileName = $langFile->getLangPathFileName ();
 
 		return $matchLangFileName;
 	}

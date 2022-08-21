@@ -60,7 +60,11 @@ class langPathFileName
 	 */
 	public function __construct($langPathFileName = '')
 	{
-		$this->setLangPathFileName ($langPathFileName);
+		if ($langPathFileName != '') {
+			$this->setLangPathFileName ($langPathFileName);
+		} else {
+			$this->langPathFileName = '';
+		}
 	}
 
 	public function clear()
@@ -77,6 +81,7 @@ class langPathFileName
 		return $this->langPathFileName;
 	}
 
+	// part inside component
 	public function getlangSubPrjPathFileName (){
 
 		$prjPath = self::extractProjectPath ($this->langPathFileName);
@@ -88,9 +93,9 @@ class langPathFileName
 		// 2022.06.07 $langId = $this->langId;
 
 		// reformat subproject path
-		$fullPath = self::createLangPathFileName ($fileName, $prjPath, $langId, $isIdPreceded, $isSysFile);
+		$componentPath = self::createLangPathFileName ($fileName, $prjPath, $langId, $isIdPreceded, $isSysFile);
 
-		$subPrjPath = substr ($fullPath, strlen ($prjPath) + 1);
+		$subPrjPath = substr ($componentPath, strlen ($prjPath) + 1);
 
 		return $subPrjPath;
 	}
@@ -125,7 +130,8 @@ class langPathFileName
 
 	public function setLangPathFileName ($langPathFileName = ''){
 
-		$this->langPathFileName = $langPathFileName;
+		// clean up backslashes
+		$this->langPathFileName = str_replace('\\', '/', $langPathFileName);
 
 		if ($langPathFileName != '')
 		{
@@ -151,6 +157,12 @@ class langPathFileName
 
 		// path parts
 		[$fileName, $oldLangId, $isIdPreceded, $isSysFile] = self::extractNameParts($this->langPathFileName);
+
+		// handle filenames with id in front 'en-GB.com_rsgallery2.ini'
+		if (str_starts_with($fileName, $oldLangId)) {
+
+			$fileName = $langId . '.' . substr ($fileName, 5);
+		}
 
 		// create it again
 		$langPathFileName = self::createLangPathFileName ($fileName, $prjPath, $langId, $isIdPreceded, $isSysFile);
@@ -222,7 +234,8 @@ class langPathFileName
 
 			$langPath .= '.ini';
 
-			$langPathFileName = $langPath;
+			// clean up backslashes
+			$langPathFileName = str_replace('\\', '/', $langPath);
 		}
 		// catch
 

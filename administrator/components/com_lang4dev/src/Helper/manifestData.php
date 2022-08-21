@@ -118,9 +118,13 @@ class manifestData
 		return $isValidXml;
 	}
 
+	// info cast to string / int .. when using it (otherwise array is returned)
 	public function get ($name, $default) {
 
-		return isset($this->manifest->$name) ? $this->manifest->$name : $default;
+//		return isset($this->manifest->$name) ? $this->manifest->$name : $default;
+		$name = $this->manifest->$name;
+		// return isset($this->manifest->$name) ? $this->manifest->$name : $default;
+		return $name;
 	}
 
     // return null on wrong path
@@ -148,9 +152,10 @@ class manifestData
 		return $result;
 	}
 
-	public function getSriptFile () { return $this->get('scriptfile', '');}
-	public function getName ()      { return $this->get('name', '');}
+	public function getSriptFile () { return (string) $this->get('scriptfile', '');}
+	public function getName ()      { return (string) $this->get('name', '');}
 
+	// info cast to string / int .. when using it (otherwise array is returned)
 	public function getXml ($name) {
 
 		return isset($this->manifest->$name) ? $this->manifest->$name : null;

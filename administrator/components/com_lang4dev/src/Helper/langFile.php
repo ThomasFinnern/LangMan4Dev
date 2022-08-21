@@ -210,7 +210,7 @@ class langFile extends langPathFileName
 
                     # Is new element
                     if (!in_array($transId, $this->translations)) {
-                        // todo: own class, save with line as id for telling lines od double entries
+                        // ToDo: own class, save with line as id for telling lines od double entries
                         $this->translations[$transId] = $nextItem;
 
                         # init next item
@@ -445,7 +445,7 @@ class langFile extends langPathFileName
 	{
 		// ToDo: try catch
 
-		// ToDO: keep line number overwrite translation
+		// ToDo: keep line number overwrite translation
 		if (!empty ($translation) && !empty ($translation->transId))
 		{
 			$transId = $translation->transId;
@@ -503,7 +503,7 @@ class langFile extends langPathFileName
 		}  else {
 			$logText = 'Translation with ID: "' . $transId . '" does not exist';
 
-			// ToDO: warning enqueue
+			// ToDo: warning enqueue
 			$app = Factory::getApplication();
 			$app->enqueueMessage($logText, 'warning');
 

@@ -121,7 +121,7 @@ function renderLangFileEditText ($langId, $langFile, $subPrjPath,
 				// ksort($linesArray);
 				foreach($linesArray as $line) {
 
-					// toDo: use implode
+					// ToDo: use implode
 					$langText .= $line . '&#10;';
 					//$langText .= $line . '\n';
 				}
