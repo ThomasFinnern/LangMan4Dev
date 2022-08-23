@@ -111,14 +111,16 @@ class langPathFileName
 
 		try
 		{
-			$langIDPath   = dirname($langPathFileName);
-			$languagePath = dirname($langIDPath);
-			$projectPath  = dirname($languagePath);
+//			$langIDPath   = dirname($langPathFileName);
+//			$languagePath = dirname($langIDPath);
+//			$projectPath  = dirname($languagePath);
+
+			$projectPath  = dirname($langPathFileName, 3);
 
         } catch (\RuntimeException $e)
 		{
 			$OutTxt = '';
-			$OutTxt .= 'Error executing assignTranslationLines: ' . '<br>';
+			$OutTxt .= 'Error executing extractProjectPath: ' . '<br>';
 			$OutTxt .= 'Error: "' . $e->getMessage() . '"' . '<br>';
 
 			$app = Factory::getApplication();
@@ -200,6 +202,22 @@ class langPathFileName
 		}
 
 		return [$fileName, $langId, $isIdPreceded, $isSysFile];
+	}
+
+	public function isSystemLangPath (){
+		$isSystemLangPath = false;
+
+		$prjPath = self::extractProjectPath ($this->langPathFileName);
+
+		if (str_starts_with($prjPath, str_replace('\\', '/', JPATH_ADMINISTRATOR))) { // . '/' .'languages')) {
+			$isSystemLangPath = true;
+		}
+
+		if (str_starts_with($prjPath, str_replace('\\', '/', JPATH_ROOT))) { // . '/' .'languages')) {
+			$isSystemLangPath = true;
+		}
+
+		return $isSystemLangPath;
 	}
 
 	public function extractNameFlags()
@@ -344,5 +362,44 @@ class langPathFileName
 		return $isCreated;
 	}
 
+	public static function allLangIds_FromSubFolderNames($langBaseFolder='')
+	{
+		$folderLangIds = [];
+
+		try
+		{
+			$folderLangIdsPaths = array_filter(glob($langBaseFolder . '/*'), 'is_dir');
+
+			foreach ($folderLangIdsPaths as $folderLangIdsPath)
+			{
+				$testLangId = basename($folderLangIdsPath);
+
+				// minmal length
+				if (strlen($testLangId) > 4) {
+
+					// should have a '-' at pos 3
+					if ($testLangId[2] == '-') {
+
+						$folderLangIds [] = $testLangId;
+					}
+
+
+				}
+
+			}
+
+		} catch (\RuntimeException $e)
+		{
+			$OutTxt = '';
+			$OutTxt .= 'Error executing allLangIds_FromSubFolderNames: ' . '<br>'
+				. ': "' . $langBaseFolder .'"';
+			$OutTxt .= 'Error: "' . $e->getMessage() . '"' . '<br>';
+
+			$app = Factory::getApplication();
+			$app->enqueueMessage($OutTxt, 'error');
+		}
+
+		return $folderLangIds;
+	}
 
 } // class

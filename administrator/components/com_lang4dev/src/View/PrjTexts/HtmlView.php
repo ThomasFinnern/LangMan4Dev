@@ -106,6 +106,14 @@ class HtmlView extends BaseHtmlView
 		$this->project = $model->getProject($prjId, $subPrjActive);
 		$project = $this->project;
 
+		/* test projects *
+		$project =
+		$this->project = selectProject('lang4dev');
+		// $this->project = selectProject('joomgallery');
+		// $this->project = selectProject('rsgallery2');
+		// $this->project = selectProject('joomla4x');
+		/**/
+
 		// script- / install file, language files as list
 		$project->findPrjFiles();
 		// $project->detectLangFiles();
@@ -151,21 +159,6 @@ class HtmlView extends BaseHtmlView
 
 			echo '<hr>';
 		}
-
-		/**
-		$project =
-		$this->project = selectProject('lang4dev');
-		//        $this->project = selectProject('lang4dev');
-		//        $this->project = selectProject('joomgallery');
-		////        $this->project = selectProject('joomla4x');
-
-		$project->findPrjFiles()
-		->detectLangFiles()
-		->readLangFiles()
-
-		->scanCode4TransIds()
-		->scanCode4TransStrings();
-		/**/
 
 		//--- test manifest file ----------------------------------------
 
@@ -225,14 +218,9 @@ class HtmlView extends BaseHtmlView
 		{
 			echo '<span style="color:red">'
 				. '<b>Tasks:</b> <br>'
-				. '* !!! com_joomgallery: doubles between missing and surplus !!!<br>'
-				. '* is use mainLangId from (config / session) used in files view ? <br>'
-				. '* toggle AD HOC<br>'
-				. '* toggle sub project<br>'
-				. '* filename (s) behind grey type header <br>'
-				. '* use isLangAtStdJoomla in findPrjFiles<br>'
-				. '* use isLangAtStdJoomla in detectLangFiles<br>'
-				. '* ? config.xml, access xml -> are scanned ? from manifest ?<br>'
+				. '* use mainLangId from (config / session) used in files view ? <br>'
+//				. '* <br>'
+//				. '* <br>'
 //				. '* <br>'
 //				. '* <br>'
 //				. '* <br>'

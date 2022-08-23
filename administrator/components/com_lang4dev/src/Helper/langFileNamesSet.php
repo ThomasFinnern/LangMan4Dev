@@ -264,6 +264,7 @@ class langFileNamesSet
         return $isBaseNameSet;
     }
 
+	// restrict to sub prj type
 	public function collectManifestLangFiles($manifestLang, $prjType)
 	{
 		$isCheck4Ini = false;
@@ -303,12 +304,23 @@ class langFileNamesSet
 
 							$this->langFileNamesSet [$langId][] = $langBasePath . '/' . $langFilePath;
 
+							// append new lang ID
+							if (!in_array($langId, $this->langIds))
+							{
+								$this->langIds [] = $langId;
+							}
 						}
 
 						// backend or site and no *.sys.ini file
 						if(! $this->useLangSysIni && ! $isSysIni)
 						{
 							$this->langFileNamesSet [$langId][] = $langBasePath . '/' . $langFilePath;
+
+							// append new lang ID
+							if (!in_array($langId, $this->langIds))
+							{
+								$this->langIds [] = $langId;
+							}
 						}
 					}
 				}
@@ -317,7 +329,7 @@ class langFileNamesSet
 		}
 		else
 		{
-
+			// ToDo: local developer project not ion server
 			//--- on local development folder ------------------------------
 
 //			$this->langBasePath =  $this->langBasePathJoomla ($prjType);
@@ -347,10 +359,74 @@ class langFileNamesSet
 
 	}
 
-	public function extendManifestLangFilesList() {
+	public function extendManifestLangFilesList()
+	{
 
-		// ToDo: ....
+		try
+		{
+			if (count($this->langIds) > 0)
+			{
+				//--- Select basis language / files to match others ----------------------
 
+				$firstLangId = $this->langIds[0];
+				$langFiles = $this->langFileNamesSet [$firstLangId];
+
+				if (count($langFiles) > 0)
+				{
+					//--- basis folder -------------------------------------------------------
+
+					$firstLangFile  = $langFiles [0];
+					$langBaseFolder = dirname($firstLangFile, 2);
+
+					//--- all lang IDs (en-GB ...) in folder -------------------------
+
+					$folderLangIds = langPathFileName::allLangIds_FromSubFolderNames($langBaseFolder);
+					foreach ($folderLangIds as $folderLangId)
+					{
+						//--- all not detected lang IDs -----------------------------------
+
+						if (!in_array($folderLangId, $this->langIds) && $folderLangId != 'overrides')
+						{
+							// check for existence of matching lang ID file
+							foreach ($langFiles as $baseLangFile)
+							{
+								//--- create matching name with actual lang ID -------------------
+
+								$matchLangFile = new langPathFileName ($baseLangFile);
+
+								// exchange lang ID in path and pre name
+								$matchLangFile->setlangID($folderLangId);
+
+								$matchLangFilePathName = $matchLangFile->getlangPathFileName();
+
+								if (file_exists($matchLangFilePathName)) {
+
+									// first match ?
+									if (!in_array($folderLangId, $this->langIds))
+									{
+										$this->langIds [] = $folderLangId;
+									}
+
+									$this->langFileNamesSet [$folderLangId][] = $matchLangFilePathName;
+								}
+
+							}
+						}
+					}
+
+				}
+			}
+
+		}
+		catch (\RuntimeException $e)
+		{
+			$OutTxt = '';
+			$OutTxt .= 'Error executing findPrjFiles: "' . '<br>';
+			$OutTxt .= 'Error: "' . $e->getMessage() . '"' . '<br>';
+
+			$app = Factory::getApplication();
+			$app->enqueueMessage($OutTxt, 'error');
+		}
 
 	}
 

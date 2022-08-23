@@ -2,6 +2,7 @@
 
 \defined('_JEXEC') or die;
 
+use Finnern\Component\Lang4dev\Administrator\Helper\langPathFileName;
 use Joomla\CMS\HTML\HTMLHelper;
 use Joomla\CMS\Language\Text;
 use Joomla\CMS\Router\Route;
@@ -204,45 +205,57 @@ function renderLangFileEditText ($langId, $langFile, $subPrjPath,
 
 			    $editIdx =0;
 
-			    // first show main lang
-				foreach ($subProject->getLangIds () as $langId) {
-					
-					if ($langId == $this->mainLangId) {
+				//--- all main files ----------------------------------
 
-						// all sub project type files by lang Id
-						$langFiles = $subProject->getLangFilesData($langId);
+			    $mainLangFiles = $subProject->getLangFilesData($this->mainLangId);
 
-						foreach ($langFiles as $langFile)
-						{
-							$subPrjPath = $langFile->getlangSubPrjPathFileName();
-							renderLangFileEditText($langId, $langFile, $subPrjPath,
-								true, $this->isEditAndSaveMainTranslationFile, $editIdx);
-							$editIdx++;
-						}
-					}
-				}
-				
-				// second show translation  lang 
-				foreach ($subProject->getLangIds () as $langId) {
-					
-					if ($langId == $this->transLangId || $this->isShowTranslationOfAllIds) {
+			    foreach ($mainLangFiles as $mainLangFile)
+			    {
+				    $subPrjPath = $mainLangFile->getlangSubPrjPathFileName();
 
+					//--- render main file first -------------------------------------------------------
+
+				    renderLangFileEditText($this->mainLangId, $mainLangFile, $subPrjPath,
+					    true, $this->isEditAndSaveMainTranslationFile, $editIdx);
+				    $editIdx++;
+
+					//--- all matching translation lang files ----------------------------------
+
+				    $mainLangFileName = basename($subPrjPath);
+
+				    foreach ($subProject->getLangIds () as $langId)
+				    {
+						// main is already rendered
 						if ($langId != $this->mainLangId)
 						{
-
-							// all sub project type files by lang Id
-							$langFiles = $subProject->getLangFilesData($langId);
-
-							foreach ($langFiles as $langFile)
+							// matches translation or show all
+							if ($langId == $this->transLangId || $this->isShowTranslationOfAllIds)
 							{
-								$subPrjPath = $langFile->getlangSubPrjPathFileName();
-								renderLangFileEditText($langId, $langFile, $subPrjPath,
-									false, $this->isEditAndSaveMainTranslationFile, $editIdx);
-								$editIdx++;
+								$transLangFiles = $subProject->getLangFilesData($langId);
+
+								//--- find matching name with actual lang ID -------------------
+
+								foreach ($transLangFiles as $transLangFile)
+								{
+									$transLangFileName = basename($transLangFile->getLangPathFileName());
+
+									if ($transLangFileName == $mainLangFileName)
+									{
+										$subPrjPath = $transLangFile->getlangSubPrjPathFileName();
+
+										//--- render translation files -------------------------------------------------------
+
+										renderLangFileEditText($langId, $transLangFile, $subPrjPath,
+											false, $this->isEditAndSaveMainTranslationFile, $editIdx);
+										$editIdx++;
+
+									}
+								}
 							}
 						}
-					}
-				}
+				    }
+			    }
+
 			    ?>
 		    </div>
 

@@ -145,6 +145,11 @@ class langFiles extends langFileNamesSet
 			$app->enqueueMessage($OutTxt, 'error');
 		}
 
+		// sort once
+		sort ($missing);
+		sort ($translated);
+		sort ($notUsed);
+
 		return [$missing, $translated, $notUsed];
 	}
 

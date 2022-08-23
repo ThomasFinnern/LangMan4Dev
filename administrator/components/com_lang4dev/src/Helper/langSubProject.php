@@ -501,49 +501,6 @@ class langSubProject extends langFiles
 		return $this->prjId . ': ' . $this->getPrjTypeText();
 	}
 
-	public function yyy_detectLangFiles()
-	{
-
-		try
-		{
-			//--- pre check type -----------------
-
-			if ($this->prjType == projectType::PRJ_TYPE_COMP_BACK_SYS)
-			{
-				$this->useLangSysIni = true;
-			}
-
-			// Manifest tells if files have to be searched inside component or old on joomla standard paths
-			$manifestLang = new manifestLangFiles ($this->prjXmlPathFilename);
-
-			// lang file origins inside component
-			if (!$manifestLang->isLangAtStdJoomla)
-			{
-				//--- search in component path -------------------------------
-
-				parent::collectPrjFolderLangFiles();
-			}
-			else
-			{
-				//--- use joomla standard paths ------------------------------
-
-				parent::collectManifestLangFiles($manifestLang, $this->prjType);
-			}
-		}
-		catch (\RuntimeException $e)
-		{
-			$OutTxt = '';
-			$OutTxt .= 'Error executing detectLangFiles: "' . '<br>';
-			$OutTxt .= 'Error: "' . $e->getMessage() . '"' . '<br>';
-
-			$app = Factory::getApplication();
-			$app->enqueueMessage($OutTxt, 'error');
-		}
-
-		return; // $isFilesFound;
-		// ToDo: ....
-	}
-
 	public function alignTranslationsByMain($mainLangId)
 	{
 
@@ -675,6 +632,17 @@ class langSubProject extends langFiles
 		return $isFileFound;
 	}
 
+	public function getLangFileNames ($langId)  {
+
+		$fileNames = [];
+
+		foreach ($this->langFileNamesSet[$langId] as $filePathName)
+		{
+			$fileNames [] = basename($filePathName);
+		}
+
+		return $fileNames;
+	}
 
 } // class
 

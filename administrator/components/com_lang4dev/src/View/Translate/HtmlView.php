@@ -113,6 +113,14 @@ class HtmlView extends BaseHtmlView
 		$this->project = $model->getProject($prjId, $subPrjActive);
 		$project = $this->project;
 
+		/* test projects *
+		$project =
+		$this->project = selectProject('lang4dev');
+		// $this->project = selectProject('joomgallery');
+		// $this->project = selectProject('rsgallery2');
+		// $this->project = selectProject('joomla4x');
+		/**/
+
 		// script- / install file, language files as list
 		$project->findPrjFiles();
 		// $project->detectLangFiles();
@@ -124,38 +132,6 @@ class HtmlView extends BaseHtmlView
 		$project->readAllLangFiles();
 
 		$project->alignTranslationsByMain($this->mainLangId);
-
-		/**
-		$project =
-		$this->project = selectProject('lang4dev');
-//		$this->project = selectProject('lang4dev');
-//		$this->project = selectProject('rsgallery2');
-//		$this->project = selectProject('joomgallery');
-////		$this->project = selectProject('joomla4x');
-
-
-		// ? use config lang ids or found ids
-		
-		// init required langIds 
-        $project->findPrjFiles();
-
-		$project->detectLangFiles();
-
-		// collect content
-		$project->readAllLangFiles();
-
-		$project->alignTranslationsByMain($this->mainLangId);
-		/**/
-
-		//-----------------------
-		/**
-		foreach ($project->subProjects as $subProject)
-		{
-
-		$this->subProjects->langIds = config;
-
-		}
-		/**/
 
 		//--- show found file list -----------------------------------------
 
@@ -248,6 +224,8 @@ class HtmlView extends BaseHtmlView
 				. '* New lang id as list field of ISO 639 list<br>'
 				. '* use isLangAtStdJoomla in findPrjFiles<br>'
 				. '* use isLangAtStdJoomla in detectLangFiles<br>'
+				. '* use list of langIds to create a translation selection <br>'
+				. '*  <br>'
 //				. '* <br>'
 //				. '* <br>'
 //				. '* <br>'

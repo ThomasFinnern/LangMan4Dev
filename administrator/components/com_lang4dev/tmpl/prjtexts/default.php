@@ -1,9 +1,46 @@
 <?php
 
 \defined('_JEXEC') or die;
+
+use Finnern\Component\Lang4dev\Administrator\Helper\langPathFileName;
 use Joomla\CMS\HTML\HTMLHelper;
 use Joomla\CMS\Language\Text;
 use Joomla\CMS\Router\Route;
+
+
+function renderHeaderPrjIdType($prjIdAndType='', $fileNames='', $path='??? dummy path ??? may be a bit longer though ? ')
+{
+	?>
+	<!--div class="row g-2"-->
+	<div class="row">
+		<div class="d-flex align-items-center">
+			<div class="p-2 flex-grow-1">
+
+					<?php echo $prjIdAndType; ?>
+
+			</div>
+
+			<div class="p-2 fs-4">
+					<?php
+						foreach ($fileNames as $fileName)
+						{
+							echo '&nbsp;' . $fileName . '<br>';
+						}
+					?>
+			</div>
+			<div class="p-2 fs-4">
+				<?php echo $path; ?>
+			</div>
+		</div>
+
+	</div>
+	<?php
+
+	return;
+}
+
+
+
 
 function renderProjectSelection ($form)
 {
@@ -292,12 +329,36 @@ if ($this->isDoCommentIds) {
 			//$transStringsLocations = $subProject->filteredTransStringsLocations();
 			$transStringsLocations = $subProject->getTransStringsLocations();
 
+			$fileNames = $subProject->getLangFileNames ($this->mainLangId);
+
+			//--- create dummy lang name for path extract --------------------
+
+			$dummyLangFilePathName = $subProject->langBasePath . '/' . $this->mainLangId . '/' . 'dumyyName.ini';
+			$oLangPathFileName     = new langPathFileName ($dummyLangFilePathName);
+
+			$postId = ""; //  = " (C) ";  // lang files inside component
+			if ($oLangPathFileName->isSystemLangPath()) {
+				$postId = " (J) ";  // lang files inside joomla base lang path
+			}
+
+			$componentLangPath = dirname ($oLangPathFileName->getlangSubPrjPathFileName()) . $postId;
+
+			if ($this->isDebugBackend)
+			{
+				$componentLangPath = $subProject->langBasePath . '/' . $this->mainLangId . $postId;
+			}
 			// style="width: 18rem; bg-light .bg-transparent bg-secondary text-white
 
 			?>
 			<div class="card ">
 				<h2 class="card-header " style="background-color: #ced4da;">
-					<?php echo $prjIdAndType; ?>
+					<?php
+
+					// echo $prjIdAndType;
+					renderHeaderPrjIdType ($prjIdAndType, $fileNames, $componentLangPath);
+
+					?>
+
 				</h2>
 				<div class="card-body">
 				    <!-- h5 class="card-title"></h5-->
