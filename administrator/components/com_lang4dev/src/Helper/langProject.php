@@ -66,16 +66,18 @@ class langProject
 		try
 		{
 
-			foreach ($this->subProjects as $subProject)
+			if (count($this->subProjects) > 0)
 			{
-				//
-				$isFilesFound = $subProject->findPrjFiles();
+				foreach ($this->subProjects as $subProject)
+				{
+					//
+					$isFilesFound = $subProject->findPrjFiles();
 
+				}
+
+				// from manifest file
+				$this->langIdPrefix = $this->subProjects[0]->langIdPrefix;
 			}
-
-			// from manifest file
-			$this->langIdPrefix = $this->subProjects[0]->langIdPrefix;
-
 		}
 		catch (\RuntimeException $e)
 		{

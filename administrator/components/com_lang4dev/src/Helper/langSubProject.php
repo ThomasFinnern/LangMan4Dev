@@ -185,34 +185,7 @@ class langSubProject extends langFiles
 
 					//--- project XML and script file -------------------------------------------------
 
-					// files config.xml and  to expect for sub project
-					[$isConfigXml, $isInstallPhp] = projectType::enabledByType($this->prjType);
-
-					if ($isInstallPhp)
-					{
-						$this->installPathFilename = $this->prjXmlFilePath . '/' . $manifestLang->getSriptFile();
-						// ToDo: function checkInstallFile ();
-
-					}
-
-//					// ToDo: remove  as config is not needed here and handle otherwise ?
-//					if ($isConfigXml)
-//					{
-//
-//					}
-
-					// lang id of project
-					$this->langIdPrefix = strtoupper($manifestLang->getName());
-
-					//--- pre check type -----------------
-
-					if ($this->prjType == projectType::PRJ_TYPE_COMP_BACK_SYS)
-					{
-						$this->useLangSysIni = true;
-					}
-
-					// manifest tells about defined list of lang files
-					$this->isLangAtStdJoomla  = $manifestLang->isLangAtStdJoomla;
+					$this->projectXMLAndScriptFile($manifestLang);
 
 					//--- lang files list by manifest ----------------------------------------
 
@@ -642,6 +615,40 @@ class langSubProject extends langFiles
 		}
 
 		return $fileNames;
+	}
+
+	/**
+	 * @param   manifestLangFiles  $manifestLang
+	 *
+	 *
+	 * @since version
+	 */
+	public function projectXMLAndScriptFile(manifestLangFiles $manifestLang): void
+	{
+		//--- project XML and script file -------------------------------------------------
+
+		// files config.xml and  to expect for sub project
+		[$isConfigXml, $isInstallPhp] = projectType::enabledByType($this->prjType);
+
+		if ($isInstallPhp)
+		{
+			$this->installPathFilename = $this->prjXmlFilePath . '/' . $manifestLang->getSriptFile();
+			// ToDo: function checkInstallFile ();
+
+		}
+
+		// lang id of project
+		$this->langIdPrefix = strtoupper($manifestLang->getName());
+
+		//--- pre check type -----------------
+
+		if ($this->prjType == projectType::PRJ_TYPE_COMP_BACK_SYS)
+		{
+			$this->useLangSysIni = true;
+		}
+
+		// manifest tells about defined list of lang files
+		$this->isLangAtStdJoomla = $manifestLang->isLangAtStdJoomla;
 	}
 
 } // class

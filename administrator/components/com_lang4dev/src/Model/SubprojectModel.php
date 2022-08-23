@@ -953,8 +953,10 @@ class SubprojectModel extends AdminModel
 		$existingId = $this->checkSubPrjDoesExist ($subProject, $parentId);
 
 		if ($existingId > 0) {
+			// change existing
 			$isSaved = $this->mergeSubProject_DB ($existingId, $subProject);
 		} else {
+			// create new
 			$isSaved = $this->createSubProject_DB ($subProject, $parentId);
 		}
 
@@ -968,7 +970,6 @@ class SubprojectModel extends AdminModel
 		$table      = $this->getTable();
 		//$table->load($existingId);
 
-
 		$data = [];
 
 		/**/
@@ -981,7 +982,7 @@ class SubprojectModel extends AdminModel
 		$data ['root_path'] = $subProject->prjRootPath;
 		$data ['prefix'] = $subProject->langIdPrefix;
 		$data ['notes'] = '%';
-		$data ['isLangAtStdJoomla'] = $subProject->isLangAtStdJoomla;
+		$data ['isLangAtStdJoomla'] = $subProject->isLangAtStdJoomla ? 1 : 0;
 		// ToDo: activate or check as actual is empty $data ['prjXmlPathFilename'] = $subProject->prjXmlPathFilename;
 		$data ['prjXmlPathFilename'] = $subProject->prjXmlPathFilename;
 		$data ['installPathFilename'] = $subProject->installPathFilename;
@@ -991,6 +992,17 @@ class SubprojectModel extends AdminModel
 		// ToDo: $data ['lang_ids'] = $subProject->;
 
 		$isSaved = $this->save($data);
+
+		if ( ! $isSaved) {
+
+			$errFound = $this->getErrors();
+
+			$OutTxt = 'error on mergeSubProject_DB: "' . $errFound . '"\n'
+				. 'Could not save into DB : "' . $data ['title'] . '"';
+			$app = Factory::getApplication();
+			$app->enqueueMessage($OutTxt, 'error');
+
+		}
 
 		return $isSaved;
 	}
@@ -1002,15 +1014,15 @@ class SubprojectModel extends AdminModel
 		$data = [];
 		$data ['id'] = 0;
 
-		$data ['title'] = $subProject->prjId . '_' . projectType::getPrjTypeText($subProject->prjType);
+		$data ['title'] = '(' . $parentId . ') ' . $subProject->prjId . '_' . projectType::getPrjTypeText($subProject->prjType);
 		$data ['alias'] = strtolower($data ['title']);
 
 		$data ['prjId'] = $subProject->prjId;
 		$data ['subPrjType'] = $subProject->prjType;
 		$data ['root_path'] = $subProject->prjRootPath;
-		$data ['prefix`'] = $subProject->langIdPrefix ;
+		$data ['prefix'] = $subProject->langIdPrefix ;
 		$data ['notes'] = '%';
-		$data ['isLangAtStdJoomla'] = $subProject->isLangAtStdJoomla;
+		$data ['isLangAtStdJoomla'] = $subProject->isLangAtStdJoomla ? 1 : 0;
 		// ToDo: activate or check as actual is empty $data ['prjXmlPathFilename'] = $subProject->prjXmlPathFilename;
 		$data ['prjXmlPathFilename'] = $subProject->prjXmlPathFilename;
 		$data ['installPathFilename'] = $subProject->installPathFilename;
@@ -1019,7 +1031,20 @@ class SubprojectModel extends AdminModel
 		// ToDo: $data ['lang_path_type'] = $subProject->;
 		// ToDo: $data ['lang_ids'] = $subProject->;
 
-		return $this->save($data);
+		$isSaved = $this->save($data);
+
+		if ( ! $isSaved) {
+
+			$errFound = $this->getErrors();
+
+			$OutTxt = 'error on createSubProject_DB: "' . $errFound . '"\n'
+				. 'Could not save into DB : "' . $data ['title'] . '"';
+			$app = Factory::getApplication();
+			$app->enqueueMessage($OutTxt, 'error');
+
+		}
+
+		return $isSaved;
 	}
 
 	private function checkSubPrjDoesExist($subProject, $parentId)

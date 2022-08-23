@@ -219,7 +219,7 @@ class HtmlView extends BaseHtmlView
 			echo '<span style="color:red">'
 				. '<b>Tasks:</b> <br>'
 				. '* use mainLangId from (config / session) used in files view ? <br>'
-//				. '* <br>'
+				. '* Use OutText / ? outtxt for AD HOC texts<br>'
 //				. '* <br>'
 //				. '* <br>'
 //				. '* <br>'

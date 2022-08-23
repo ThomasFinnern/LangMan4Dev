@@ -147,6 +147,8 @@ class projectController extends FormController
                 }
             }
 
+			$isSaved = true; // fall back
+
             // write back into input
             if ($isChanged) {
 
@@ -157,10 +159,24 @@ class projectController extends FormController
 
             // Was first write of this project
             if ($id < 1) {
+	            $isSaved = $prjModel->save($data);
 
                 //$id = $prjModel->highestProjectId_DB ();
                 $id = $prjModel->justSavedId();
             }
+
+			if( ! $isSaved) {
+
+				$OutTxt = "error on detectDetails for project: \n"
+					. 'Could not save into DB (project): "' . $prjRootPath . '"';
+				$app = Factory::getApplication();
+				$app->enqueueMessage($OutTxt, 'error');
+
+				// toDo: fetch errors
+				// $errors = $this->get('Errors');
+
+				return;
+			}
 
             //--- extract subprojects ---------------------------------
 
@@ -173,11 +189,27 @@ class projectController extends FormController
 
             foreach ($subProjects as $subProject) {
                 //  includes save
-                $subPrjModel->MergeSubProject($subProject, $id);
+                $isSaved &= $subPrjModel->MergeSubProject($subProject, $id);
 
             }
 
-            // success: found subprojects and was saved before
+	        if( ! $isSaved) {
+
+		        $OutTxt = "error on detectDetails for project: \n"
+			        . 'One or more subprojects could not be saved into DB (sub project): "' . $prjRootPath . '"';
+		        $app = Factory::getApplication();
+		        $app->enqueueMessage($OutTxt, 'error');
+
+		        // toDo: fetch errors
+		        //$errors = $this->get('Errors');
+
+		        return;
+	        }
+
+
+
+
+	        // success: found subprojects and was saved before
             if (count($subProjects) > 0 && $id > 0) {
                 $OutTxt = "detectDetails for project has finished successful:";
                 $app = Factory::getApplication();

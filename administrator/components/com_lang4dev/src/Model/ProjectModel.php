@@ -12,6 +12,7 @@ namespace Finnern\Component\Lang4dev\Administrator\Model;
 \defined('_JEXEC') or die;
 
 use Finnern\Component\Lang4dev\Administrator\Helper\langSubProject;
+use Finnern\Component\Lang4dev\Administrator\Helper\manifestLangFiles;
 use Finnern\Component\Lang4dev\Administrator\Helper\projectType;
 use Joomla\CMS\Access\Rules;
 use Joomla\CMS\Association\AssociationServiceInterface;
@@ -939,6 +940,8 @@ class ProjectModel extends AdminModel
 
 		foreach ($prjTypes as $prjType)
 		{
+			//--- new sub project -------------------------------------------------
+
 			$langSubProject = new langSubProject (
 				$oSubPrjPath->prjId,
 				$prjType,
@@ -946,8 +949,12 @@ class ProjectModel extends AdminModel
 				$oSubPrjPath->getRootManifestPath()
 			);
 
-			// $langIdPrefix and $installFileName
-			$langSubProject->retrieveMainPrefixId();
+			//--- project XML and script file -------------------------------------------------
+
+			$manifestLang = new manifestLangFiles ($oSubPrjPath->prjXmlPathFilename);
+			$langSubProject->projectXMLAndScriptFile($manifestLang);
+
+			//--- collect new sub project ------------------
 
 			$subProjects[]  = $langSubProject;
 

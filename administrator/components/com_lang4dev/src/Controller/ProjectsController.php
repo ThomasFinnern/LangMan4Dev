@@ -125,7 +125,7 @@ class projectsController extends FormController
 				}
 				else
 				{
-					$this->setMessage(Text::plural('COM_LANG4DEV_N_MENUS_DELETED', count($cids)));
+					$this->setMessage(Text::plural('COM_LANG4DEV_N_PROJECTS_DELETED', count($cids)));
 				}
 			}
 		}
