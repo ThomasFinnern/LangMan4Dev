@@ -10,24 +10,23 @@
  * @version
  * @package       Lang4dev
  * @copyright (C) 2022-2022 Lang4dev Team
- * @license     GPL2
+ * @license       GPL2
  */
-
 
 namespace Finnern\Component\Lang4dev\Administrator\Helper;
 
 use Joomla\CMS\Factory;
 use Joomla\CMS\Filesystem\File;
 use Joomla\CMS\Filesystem\Folder;
+use RuntimeException;
+use function defined;
 
 //use Finnern\Component\Lang4dev\Administrator\Helper\sourceLangFiles;
 
 // no direct access
-\defined('_JEXEC') or die;
-
+defined('_JEXEC') or die;
 
 // ToDo: divide root path / project path .....
-
 
 /**
  * File path and name with parts:
@@ -54,15 +53,18 @@ class langPathFileName
 
 	// ToDo: base path variable 
 	// ToDo: get without base path ? base path as parameter ?
-	
+
 	/**
 	 * @since __BUMP_VERSION__
 	 */
 	public function __construct($langPathFileName = '')
 	{
-		if ($langPathFileName != '') {
-			$this->setLangPathFileName ($langPathFileName);
-		} else {
+		if ($langPathFileName != '')
+		{
+			$this->setLangPathFileName($langPathFileName);
+		}
+		else
+		{
 			$this->langPathFileName = '';
 		}
 	}
@@ -77,14 +79,30 @@ class langPathFileName
 	}
 
 //	public function getRootLangPathFileName (){
-	public function getlangPathFileName (){
+
+	/**
+	 *
+	 * @return mixed|string
+	 *
+	 * @since version
+	 */
+	public function getlangPathFileName()
+	{
 		return $this->langPathFileName;
 	}
 
 	// part inside component
-	public function getlangSubPrjPathFileName (){
 
-		$prjPath = self::extractProjectPath ($this->langPathFileName);
+	/**
+	 *
+	 * @return string
+	 *
+	 * @since version
+	 */
+	public function getlangSubPrjPathFileName()
+	{
+
+		$prjPath = self::extractProjectPath($this->langPathFileName);
 
 		// path parts
 		// 2022.06.07 // 2022.06.07 $langId[$fileName, $oldLangId, $isIdPreceded, $isSysFile] =
@@ -93,19 +111,36 @@ class langPathFileName
 		// 2022.06.07 $langId = $this->langId;
 
 		// reformat subproject path
-		$componentPath = self::createLangPathFileName ($fileName, $prjPath, $langId, $isIdPreceded, $isSysFile);
+		$componentPath = self::createLangPathFileName($fileName, $prjPath, $langId, $isIdPreceded, $isSysFile);
 
-		$subPrjPath = substr ($componentPath, strlen ($prjPath) + 1);
+		$subPrjPath = substr($componentPath, strlen($prjPath) + 1);
 
 		return $subPrjPath;
 	}
 
-	public function getlangFileName (){
+	/**
+	 *
+	 * @return string
+	 *
+	 * @since version
+	 */
+	public function getlangFileName()
+	{
 		return basename($this->langPathFileName);
 	}
 
 	// base path below language file (where project xml is expected)
-	public static function extractProjectPath ($langPathFileName){
+
+	/**
+	 * @param $langPathFileName
+	 *
+	 * @return string
+	 *
+	 * @throws \Exception
+	 * @since version
+	 */
+	public static function extractProjectPath($langPathFileName)
+	{
 
 		$projectPath = "";
 
@@ -115,9 +150,10 @@ class langPathFileName
 //			$languagePath = dirname($langIDPath);
 //			$projectPath  = dirname($languagePath);
 
-			$projectPath  = dirname($langPathFileName, 3);
+			$projectPath = dirname($langPathFileName, 3);
 
-        } catch (\RuntimeException $e)
+		}
+		catch (RuntimeException $e)
 		{
 			$OutTxt = '';
 			$OutTxt .= 'Error executing extractProjectPath: ' . '<br>';
@@ -130,7 +166,14 @@ class langPathFileName
 		return $projectPath;
 	}
 
-	public function setLangPathFileName ($langPathFileName = ''){
+	/**
+	 * @param $langPathFileName
+	 *
+	 *
+	 * @since version
+	 */
+	public function setLangPathFileName($langPathFileName = '')
+	{
 
 		// clean up backslashes
 		$this->langPathFileName = str_replace('\\', '/', $langPathFileName);
@@ -143,83 +186,134 @@ class langPathFileName
 
 	}
 
-	public function getlangID (){ return $this->langId;}
+	/**
+	 *
+	 * @return mixed|string
+	 *
+	 * @since version
+	 */
+	public function getlangID()
+	{
+		return $this->langId;
+	}
 
-	public function setlangID ($langId){
+	/**
+	 * @param $langId
+	 *
+	 *
+	 * @since version
+	 */
+	public function setlangID($langId)
+	{
 
 		// replace in 'path file name' on one/two places
-		$this->replaceLangId ($langId);
+		$this->replaceLangId($langId);
 
 	}
 
-	public function replaceLangId ($langId) {
+	/**
+	 * @param $langId
+	 *
+	 *
+	 * @throws \Exception
+	 * @since version
+	 */
+	public function replaceLangId($langId)
+	{
 
 		// project path
-		$prjPath = self::extractProjectPath ($this->langPathFileName);
+		$prjPath = self::extractProjectPath($this->langPathFileName);
 
 		// path parts
 		[$fileName, $oldLangId, $isIdPreceded, $isSysFile] = self::extractNameParts($this->langPathFileName);
 
 		// handle filenames with id in front 'en-GB.com_rsgallery2.ini'
-		if (str_starts_with($fileName, $oldLangId)) {
+		if (str_starts_with($fileName, $oldLangId))
+		{
 
-			$fileName = $langId . '.' . substr ($fileName, 5);
+			$fileName = $langId . '.' . substr($fileName, 5);
 		}
 
 		// create it again
-		$langPathFileName = self::createLangPathFileName ($fileName, $prjPath, $langId, $isIdPreceded, $isSysFile);
+		$langPathFileName = self::createLangPathFileName($fileName, $prjPath, $langId, $isIdPreceded, $isSysFile);
 
-		$this->langId = $langId;
+		$this->langId           = $langId;
 		$this->langPathFileName = $langPathFileName;
 
 	}
 
+	/**
+	 * @param $langPathFileName
+	 *
+	 * @return array
+	 *
+	 * @since version
+	 */
 	public static function extractNameParts($langPathFileName)
 	{
-		$fileName = basename ($langPathFileName);
+		$fileName = basename($langPathFileName);
 		$fullPath = dirname($langPathFileName);
 
 		// lang id
 		$langId = basename($fullPath);
 
 		// is id preceded
-		$isIdPreceded = str_starts_with ($fileName, $langId );
+		$isIdPreceded = str_starts_with($fileName, $langId);
 
 		// remove langId from file name
-		if ($isIdPreceded) {
+		if ($isIdPreceded)
+		{
 			$fileName = substr($fileName, 5);
 		}
 
 		// sys file
-		$isSysFile = str_ends_with($fileName, '.sys.ini') ;
+		$isSysFile = str_ends_with($fileName, '.sys.ini');
 
 		// remove extension
-		if ($isSysFile) {
-			$fileName = substr($fileName, 0,-8);
+		if ($isSysFile)
+		{
+			$fileName = substr($fileName, 0, -8);
 
-		} else {
-			$fileName = substr($fileName,0, -4);
+		}
+		else
+		{
+			$fileName = substr($fileName, 0, -4);
 		}
 
 		return [$fileName, $langId, $isIdPreceded, $isSysFile];
 	}
 
-	public function isSystemLangPath (){
+	/**
+	 *
+	 * @return bool
+	 *
+	 * @throws \Exception
+	 * @since version
+	 */
+	public function isSystemLangPath()
+	{
 		$isSystemLangPath = false;
 
-		$prjPath = self::extractProjectPath ($this->langPathFileName);
+		$prjPath = self::extractProjectPath($this->langPathFileName);
 
-		if (str_starts_with($prjPath, str_replace('\\', '/', JPATH_ADMINISTRATOR))) { // . '/' .'languages')) {
+		if (str_starts_with($prjPath, str_replace('\\', '/', JPATH_ADMINISTRATOR)))
+		{ // . '/' .'languages')) {
 			$isSystemLangPath = true;
 		}
 
-		if (str_starts_with($prjPath, str_replace('\\', '/', JPATH_ROOT))) { // . '/' .'languages')) {
+		if (str_starts_with($prjPath, str_replace('\\', '/', JPATH_ROOT)))
+		{ // . '/' .'languages')) {
 			$isSystemLangPath = true;
 		}
 
 		return $isSystemLangPath;
 	}
 
+	/**
+	 *
+	 *
+	 * @since version
+	 */
 	public function extractNameFlags()
 	{
 
@@ -228,6 +322,17 @@ class langPathFileName
 
 	}
 
+	/**
+	 * @param $fileName
+	 * @param $prjPath
+	 * @param $langId
+	 * @param $isIdPreceded
+	 * @param $isSysFile
+	 *
+	 * @return array|string|string[]
+	 *
+	 * @since version
+	 */
 	public static function createLangPathFileName($fileName, $prjPath, $langId, $isIdPreceded, $isSysFile)
 	{
 		$langPathFileName = '';
@@ -255,27 +360,46 @@ class langPathFileName
 			// clean up backslashes
 			$langPathFileName = str_replace('\\', '/', $langPath);
 		}
-		// catch
 
+		// catch
 
 		return $langPathFileName;
 	}
 
 	// use local filename insead of external one
-	public function check4ValidPathFileName ($isMustExist=false)
+
+	/**
+	 * @param $isMustExist
+	 *
+	 * @return bool
+	 *
+	 * @since version
+	 */
+	public function check4ValidPathFileName($isMustExist = false)
 	{
-		return self::isValidPathFileName ($this->getlangFileName(), $isMustExist);
+		return self::isValidPathFileName($this->getlangFileName(), $isMustExist);
 	}
 
-	public static function isValidPathFileName ($langPathFileName = '', $isMustExist=false) {
+	/**
+	 * @param $langPathFileName
+	 * @param $isMustExist
+	 *
+	 * @return bool
+	 *
+	 * @since version
+	 */
+	public static function isValidPathFileName($langPathFileName = '', $isMustExist = false)
+	{
 
 		$isNameVerified = true;
 
-		if ( ! str_ends_with ($langPathFileName, '.ini')) {
+		if (!str_ends_with($langPathFileName, '.ini'))
+		{
 
 			$isNameVerified = false;
 
-		} else
+		}
+		else
 		{
 
 			//
@@ -287,16 +411,13 @@ class langPathFileName
 
 			// accidentally includes path (Has slash in it)
 
-
 			// ToDo: name/path has valid lang ID
 
 			// sys exist at right place ?
 
-
-
-
 			// File must exist
-			if ($isMustExist && ! File::exists ($langPathFileName)) {
+			if ($isMustExist && !File::exists($langPathFileName))
+			{
 
 				$isNameVerified = false;
 
@@ -306,14 +427,23 @@ class langPathFileName
 		return $isNameVerified;
 	}
 
-	public function createLangFolder($langPathFileName='')
+	/**
+	 * @param $langPathFileName
+	 *
+	 * @return bool
+	 *
+	 * @throws \Exception
+	 * @since version
+	 */
+	public function createLangFolder($langPathFileName = '')
 	{
 		$isCreated = false;
 
 		try
 		{
 			// use local one if nothing is given
-			if ($langPathFileName = '') {
+			if ($langPathFileName = '')
+			{
 
 				$langPathFileName = $this->getlangFileName();
 			}
@@ -322,7 +452,7 @@ class langPathFileName
 			$isCreated = Folder::exists($langPathFileName);
 
 			// Needs creation
-			if ( ! $isCreated)
+			if (!$isCreated)
 			{
 
 				$langIDPath   = dirname($langPathFileName);
@@ -338,21 +468,23 @@ class langPathFileName
 			}
 
 			// error message on failure
-			if ( ! $isCreated) {
+			if (!$isCreated)
+			{
 
 				$OutTxt = '';
 				$OutTxt .= 'Error in createLangFolder: can not create: ' . '<br>'
-					. ': "' . $langPathFileName .'"';
+					. ': "' . $langPathFileName . '"';
 
 				$app = Factory::getApplication();
 				$app->enqueueMessage($OutTxt, 'error');
 			}
 
-		} catch (\RuntimeException $e)
+		}
+		catch (RuntimeException $e)
 		{
 			$OutTxt = '';
 			$OutTxt .= 'Error executing createLangFolder: ' . '<br>'
-				. ': "' . $langPathFileName .'"';
+				. ': "' . $langPathFileName . '"';
 			$OutTxt .= 'Error: "' . $e->getMessage() . '"' . '<br>';
 
 			$app = Factory::getApplication();
@@ -362,7 +494,15 @@ class langPathFileName
 		return $isCreated;
 	}
 
-	public static function allLangIds_FromSubFolderNames($langBaseFolder='')
+	/**
+	 * @param $langBaseFolder
+	 *
+	 * @return array
+	 *
+	 * @throws \Exception
+	 * @since version
+	 */
+	public static function allLangIds_FromSubFolderNames($langBaseFolder = '')
 	{
 		$folderLangIds = [];
 
@@ -375,24 +515,26 @@ class langPathFileName
 				$testLangId = basename($folderLangIdsPath);
 
 				// minmal length
-				if (strlen($testLangId) > 4) {
+				if (strlen($testLangId) > 4)
+				{
 
 					// should have a '-' at pos 3
-					if ($testLangId[2] == '-') {
+					if ($testLangId[2] == '-')
+					{
 
 						$folderLangIds [] = $testLangId;
 					}
-
 
 				}
 
 			}
 
-		} catch (\RuntimeException $e)
+		}
+		catch (RuntimeException $e)
 		{
 			$OutTxt = '';
 			$OutTxt .= 'Error executing allLangIds_FromSubFolderNames: ' . '<br>'
-				. ': "' . $langBaseFolder .'"';
+				. ': "' . $langBaseFolder . '"';
 			$OutTxt .= 'Error: "' . $e->getMessage() . '"' . '<br>';
 
 			$app = Factory::getApplication();

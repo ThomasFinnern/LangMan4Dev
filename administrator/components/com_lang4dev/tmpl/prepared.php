@@ -5,7 +5,7 @@
  * @license       http://www.gnu.org/copyleft/gpl.html GNU/GPL
  */
 
-\defined('_JEXEC') or die;
+defined('_JEXEC') or die;
 
 use Joomla\CMS\HTML\HTMLHelper;
 use Joomla\CMS\Language\Text;
@@ -26,35 +26,34 @@ HTMLHelper::_('script', 'com_lang4dev/backend/imagesProperties.js', ['version' =
 				<?php echo $this->sidebar; ?>
 			</div>
 		<?php endif; ?>
-        <!--div class="<?php echo (!empty($this->sidebar)) ? 'col-md-10' : 'col-md-12'; ?>"-->
-        <div class="flex-fill">
+		<!--div class="<?php echo (!empty($this->sidebar)) ? 'col-md-10' : 'col-md-12'; ?>"-->
+		<div class="flex-fill">
 			<div id="j-main-container" class="j-main-container">
 
 				<?php echo HTMLHelper::_('bootstrap.startTabSet', 'myTab', array('active' => 'PreparedButNotReady')); ?>
 
 				<?php echo HTMLHelper::_('bootstrap.addTab', 'myTab', 'PreparedButNotReady', Text::_('COM_LANG4DEV_MAINT_PREPARED_NOT_READY', true)); ?>
-                <p></p>
-                <legend><strong><?php echo Text::_('COM_LANG4DEV_MAINT_PREPARED_NOT_READY_DESC'); ?></strong></legend>
-                <p><h3><?php echo Text::_('COM_LANG4DEV_MANIFEST_INFO_VIEW'); ?></h3></p>
+				<p></p>
+				<legend><strong><?php echo Text::_('COM_LANG4DEV_MAINT_PREPARED_NOT_READY_DESC'); ?></strong></legend>
+				<p>
+				<h3><?php echo Text::_('COM_LANG4DEV_MANIFEST_INFO_VIEW'); ?></h3></p>
 
-                <?php
+				<?php
 
-					try
-					{
-
-
+				try
+				{
 
 
-					}
-					catch (\RuntimeException $e)
-					{
-						$OutTxt = '';
-						$OutTxt .= 'Error rawEdit view: "' . 'PreparedButNotReady' . '"<br>';
-						$OutTxt .= 'Error: "' . $e->getMessage() . '"' . '<br>';
-					
-						$app = Factory::getApplication();
-						$app->enqueueMessage($OutTxt, 'error');
-					}
+				}
+				catch (RuntimeException $e)
+				{
+					$OutTxt = '';
+					$OutTxt .= 'Error rawEdit view: "' . 'PreparedButNotReady' . '"<br>';
+					$OutTxt .= 'Error: "' . $e->getMessage() . '"' . '<br>';
+
+					$app = Factory::getApplication();
+					$app->enqueueMessage($OutTxt, 'error');
+				}
 
 				?>
 
@@ -65,9 +64,9 @@ HTMLHelper::_('script', 'com_lang4dev/backend/imagesProperties.js', ['version' =
 				<!--input type="hidden" name="option" value="com_lang4dev" />
 				<input type="hidden" name="rsgOption" value="maintenance" /-->
 
-				<input type="hidden" name="task" value="" />
+				<input type="hidden" name="task" value=""/>
 				<?php echo HTMLHelper::_('form.token'); ?>
-            </div>
+			</div>
 		</div>
 	</div>
 

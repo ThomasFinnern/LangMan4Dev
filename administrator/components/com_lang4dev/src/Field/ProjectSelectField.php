@@ -10,16 +10,17 @@
 
 // used in upload
 
-
 namespace Finnern\Component\Lang4dev\Administrator\Field;
 
-\defined('_JEXEC') or die;
+defined('_JEXEC') or die;
 
 use Finnern\Component\Lang4dev\Administrator\Helper\sessionProjectId;
 use Joomla\CMS\Factory;
 use Joomla\CMS\Form\Field\ListField;
 use Joomla\CMS\HTML\HTMLHelper;
 use Joomla\CMS\Language\Text;
+use RuntimeException;
+use function defined;
 
 /**
  * Collects available subproject ids with titles and creates
@@ -39,13 +40,13 @@ class ProjectSelectField extends ListField
 	 */
 //	protected static $options = [];
 
-    /**
-     * The field type.
-     *
-     * @var string
-     *
-     * @since __BUMP_VERSION__
-     */
+	/**
+	 * The field type.
+	 *
+	 * @var string
+	 *
+	 * @since __BUMP_VERSION__
+	 */
 	protected $type = 'ProjectSelect';
 
 	/**
@@ -71,18 +72,18 @@ class ProjectSelectField extends ListField
 		$sessionProjectId = new sessionProjectId();
 		[$prjId, $subPrjActive] = $sessionProjectId->getIds();
 
-		$this->setValue ($prjId);
+		$this->setValue($prjId);
 
 		/**
-		if ($this->form->getValue('id', 0) == 0)
-		{
-			return '<span class="readonly">' . Text::_('COM_MENUS_ITEM_FIELD_ORDERING_TEXT') . '</span>';
-		}
-		else
-		{
-			return parent::getInput();
-		}
-		/**/
+		 * if ($this->form->getValue('id', 0) == 0)
+		 * {
+		 * return '<span class="readonly">' . Text::_('COM_MENUS_ITEM_FIELD_ORDERING_TEXT') . '</span>';
+		 * }
+		 * else
+		 * {
+		 * return parent::getInput();
+		 * }
+		 * /**/
 
 		return parent::getInput();
 	}
@@ -91,8 +92,8 @@ class ProjectSelectField extends ListField
 	 * Method to get a list of options for a list input.
 	 *
 	 * @return  string array  The field option objects.
-     *
-     * @since __BUMP_VERSION__
+	 *
+	 * @since __BUMP_VERSION__
 	 */
 	protected function getOptions()
 	{
@@ -101,22 +102,20 @@ class ProjectSelectField extends ListField
 		try
 		{
 			// $user = Factory::getApplication()->getIdentity(); // ToDo: Restrict to accessible projects
-			$db    = Factory::getDbo();
+			$db = Factory::getDbo();
 
 			$query = $db->getQuery(true)
 				->select($db->quoteName('id', 'value'))
 				->select($db->quoteName('title', 'text'))
-
-                ->from($db->quoteName('#__lang4dev_projects'))
+				->from($db->quoteName('#__lang4dev_projects'))
 				// ToDo: Use option in XML to select ASC/DESC
-				->order($db->quoteName('id') . ' DESC')
-			;
+				->order($db->quoteName('id') . ' DESC');
 
 			// Get the options.
 			$projects = $db->setQuery($query)->loadObjectList();
 
 		}
-		catch (\RuntimeException $e)
+		catch (RuntimeException $e)
 		{
 			Factory::getApplication()->enqueueMessage($e->getMessage(), 'error');
 		}
@@ -131,10 +130,10 @@ class ProjectSelectField extends ListField
 		// Put "Select an option" on the top of the list.
 		array_unshift($options, HTMLHelper::_('select.option', '0', Text::_('COM_LANG4DEV_SELECT_PROJECT')));
 
-        // Merge any additional options in the XML definition.
-        $options = array_merge(parent::getOptions(), $options);
+		// Merge any additional options in the XML definition.
+		$options = array_merge(parent::getOptions(), $options);
 
-        return $options;
+		return $options;
 	}
 }
 

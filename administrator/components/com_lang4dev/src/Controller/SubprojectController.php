@@ -1,16 +1,17 @@
 <?php
 /**
- * @package     Joomla.Administrator
- * @subpackage  com_lang4dev
+ * @package       Joomla.Administrator
+ * @subpackage    com_lang4dev
  *
  * @copyright (C) 2022-2022 Lang4dev Team
- * @license     GNU General Public License version 2 or later; see LICENSE.txt
+ * @license       GNU General Public License version 2 or later; see LICENSE.txt
  */
 
 namespace Finnern\Component\Lang4dev\Administrator\Controller;
 
-\defined('_JEXEC') or die;
+defined('_JEXEC') or die;
 
+use JInput;
 use Joomla\CMS\Factory;
 use Joomla\CMS\Language\Text;
 use Joomla\CMS\MVC\Controller\FormController;
@@ -20,14 +21,16 @@ use Joomla\CMS\Router\Route;
 use Joomla\CMS\Router\Router;
 use Joomla\CMS\Session\Session;
 use Joomla\Component\Associations\Administrator\Helper\AssociationsHelper;
+use Joomla\Component\Menus\Administrator\Model\MenuModel;
 use Joomla\Registry\Registry;
 use Joomla\Utilities\ArrayHelper;
+
 // ???? use Symfony\Component\Yaml\Yaml;
 
 use Finnern\Component\Lang4dev\Administrator\Helper\langSubProject;
 use Finnern\Component\Lang4dev\Administrator\Helper\projectType;
-
-
+use Lang4dev\Component\Lang4dev\Administrator\Model\GalleryModel;
+use function defined;
 
 /**
  * The Gallery Controller
@@ -50,9 +53,9 @@ class subprojectController extends FormController
 	 * @param   array                $config   An optional associative array of configuration settings.
 	 * @param   MVCFactoryInterface  $factory  The factory.
 	 * @param   CMSApplication       $app      The JApplication for the dispatcher
-	 * @param   \JInput              $input    Input
+	 * @param   JInput              $input    Input
 	 *
-	 * @since __BUMP_VERSION__
+	 * @since  __BUMP_VERSION__
 	 * @see    \JControllerLegacy
 	 */
 	public function __construct($config = array(), MVCFactoryInterface $factory = null, $app = null, $input = null)
@@ -68,7 +71,7 @@ class subprojectController extends FormController
 	/**
 	 * Standard cancel, back to list view
 	 *
-	 * @param null $key
+	 * @param   null  $key
 	 *
 	 * @return bool
 	 *
@@ -83,9 +86,16 @@ class subprojectController extends FormController
 
 		return true;
 	}
-	
-	public function detectDetails () {
-		
+
+	/**
+	 *
+	 * @return bool|void
+	 *
+	 * @since version
+	 */
+	public function detectDetails()
+	{
+
 		$result = false;
 
 		Session::checkToken() or die(Text::_('JINVALID_TOKEN'));
@@ -95,22 +105,22 @@ class subprojectController extends FormController
 		// try ...
 
 		// check: does it need $input = ....
-		$data  = $this->input->post->get('jform', array(), 'array');
+		$data = $this->input->post->get('jform', array(), 'array');
 
 		// subproject
 		/**/
-		$prjId = $data ['prjId'];
+		$prjId   = $data ['prjId'];
 		$prjType = (int) $data ['subPrjType'];
 
-		$rootPath = trim($data ['root_path']);
+		$rootPath           = trim($data ['root_path']);
 		$data ['root_path'] = $rootPath;
 		/**/
 
 		//--- retrieve data from paths --------------------------------------------
 
-		$subPrj = new langSubProject ();
-		$subPrj->prjId = $prjId;
-		$subPrj->prjType = $prjType;
+		$subPrj              = new langSubProject ();
+		$subPrj->prjId       = $prjId;
+		$subPrj->prjType     = $prjType;
 		$subPrj->prjRootPath = $rootPath;
 
 		$isFilesFound = $subPrj->findPrjFiles();
@@ -127,11 +137,11 @@ class subprojectController extends FormController
 		// Add new data to input before process by parent save()
 		$this->input->post->set('jform', $data);
 
-		$result = parent::save($key=null, $urlVar='id') && $isFilesFound;
+		$result = parent::save($key = null, $urlVar = 'id') && $isFilesFound;
 
 		//--- return to edit --------------------------------
 
-		$id = (int) $data ['id'];
+		$id   = (int) $data ['id'];
 		$link = 'index.php?option=com_lang4dev&view=subproject&layout=edit&id=' . $id;
 		$this->setRedirect($link);
 
@@ -139,107 +149,77 @@ class subprojectController extends FormController
 	}
 
 	/**
-     * Remove an item.
-     *
-     * @return  void
-     *
-     * @since   1.6
-     */
-    /**
-    public function delete()
-    {
-        // Check for request forgeries
-        $this->checkToken();
-
-        $user = $this->app->getIdentity();
-        $cids = (array) $this->input->get('cid', array(), 'array');
-
-        if (count($cids) < 1)
-        {
-            $this->setMessage(Text::_('COM_LANG4DEV_NO_IMAGE_SELECTED'), 'warning');
-        }
-        else
-        {
-            // Access checks.
-            foreach ($cids as $i => $id)
-            {
-                if (!$user->authorise('core.delete', 'com_menus.menu.' . (int) $id))
-                {
-                    // Prune items that you can't change.
-                    unset($cids[$i]);
-                    $this->app->enqueueMessage(Text::_('JLIB_APPLICATION_ERROR_DELETE_NOT_PERMITTED'), 'error');
-                }
-            }
-
-            if (count($cids) > 0)
-            {
-                // Get the model.
-                /** @var \Joomla\Component\Menus\Administrator\Model\MenuModel $model *
-                $model = $this->getModel();
-
-                // Make sure the item ids are integers
-                $cids = ArrayHelper::toInteger($cids);
-
-                // Remove the items.
-                if (!$model->delete($cids))
-                {
-                    $this->setMessage($model->getError(), 'error');
-                }
-                else
-                {
-                    // Delete image files physically
-
-                    /** ToDo: following
-                    $IsDeleted = false;
-
-                    try
-                    {
-
-                        // ToDo: handle deleting of files like in menu (m-controller -> m-model -> m-table)
-
-                        $filename          = $this->name;
-
-                        //$imgFileModel = JModelLegacy::getInstance('imageFile', 'subprojectModel');
-                        $imgFileModel = $this->getModel ('imageFile');
-
-                        $IsFilesAreDeleted = $imgFileModel->deleteImgItemImages($filename);
-                        if (! $IsFilesAreDeleted)
-                        {
-                            // Remove from database
-                        }
-
-                        $IsDeleted = parent::delete($pk);
-                    }
-                    catch (\RuntimeException $e)
-                    {
-                        $OutTxt = '';
-                        $OutTxt .= 'Error executing image.table.delete: "' . $pk . '<br>';
-                        $OutTxt .= 'Error: "' . $e->getMessage() . '"' . '<br>';
-
-                        $app = Factory::getApplication();
-                        $app->enqueueMessage($OutTxt, 'error');
-                    }
-
-                    return $IsDeleted;
-                    /**
-
-
-
-
-
-
-
-
-
-                    $this->setMessage(Text::plural('COM_LANG4DEV_N_ITEMS_DELETED', count($cids)));
-                }
-            }
-        }
-
-        $this->setRedirect('index.php?option=com_menus&view=menus');
-    }
-    /**/
-
+	 * Remove an item.
+	 *
+	 * @return  void
+	 *
+	 * @since   1.6
+	 */
+	/** @var MenuModel $model *
+	 * $model = $this->getModel();
+	 *
+	 * // Make sure the item ids are integers
+	 * $cids = ArrayHelper::toInteger($cids);
+	 *
+	 * // Remove the items.
+	 * if (!$model->delete($cids))
+	 * {
+	 * $this->setMessage($model->getError(), 'error');
+	 * }
+	 * else
+	 * {
+	 * // Delete image files physically
+	 *
+	 * /** ToDo: following
+	 * $IsDeleted = false;
+	 *
+	 * try
+	 * {
+	 *
+	 * // ToDo: handle deleting of files like in menu (m-controller -> m-model -> m-table)
+	 *
+	 * $filename          = $this->name;
+	 *
+	 * //$imgFileModel = JModelLegacy::getInstance('imageFile', 'subprojectModel');
+	 * $imgFileModel = $this->getModel ('imageFile');
+	 *
+	 * $IsFilesAreDeleted = $imgFileModel->deleteImgItemImages($filename);
+	 * if (! $IsFilesAreDeleted)
+	 * {
+	 * // Remove from database
+	 * }
+	 *
+	 * $IsDeleted = parent::delete($pk);
+	 * }
+	 * catch (\RuntimeException $e)
+	 * {
+	 * $OutTxt = '';
+	 * $OutTxt .= 'Error executing image.table.delete: "' . $pk . '<br>';
+                        * $OutTxt .= 'Error: "' . $e->getMessage() . '"' . '<br>';
+	 *
+	 * $app = Factory::getApplication();
+	 * $app->enqueueMessage($OutTxt, 'error');
+	 * }
+	 *
+	 * return $IsDeleted;
+	 * /**
+	 *
+	 *
+	 *
+	 *
+	 *
+	 *
+	 *
+	 *
+	 *
+	 * $this->setMessage(Text::plural('COM_LANG4DEV_N_ITEMS_DELETED', count($cids)));
+	 * }
+	 * }
+	 * }
+	 *
+	 * $this->setRedirect('index.php?option=com_menus&view=menus');
+	 * }
+	 * /**/
 
 	/**
 	 * Method to check if you can add a new record.
@@ -250,14 +230,14 @@ class subprojectController extends FormController
 	 *
 	 * @since __BUMP_VERSION__
 	 *
-	protected function allowAdd($data = array())
-	{
-        $app  = Factory::getApplication();
-        $user = $app->getIdentity();
-
-		return ($user->authorise('core.create', $this->extension) || count($user->getAuthorisedGalleries($this->extension, 'core.create')));
-	}
-	/**/
+	 * protected function allowAdd($data = array())
+	 * {
+	 * $app  = Factory::getApplication();
+	 * $user = $app->getIdentity();
+	 *
+	 * return ($user->authorise('core.create', $this->extension) || count($user->getAuthorisedGalleries($this->extension, 'core.create')));
+	 * }
+	 * /**/
 
 	/**
 	 * Method to check if you can edit a record.
@@ -269,41 +249,41 @@ class subprojectController extends FormController
 	 *
 	 * @since __BUMP_VERSION__
 	 *
-	protected function allowEdit($data = array(), $key = 'parent_id')
-	{
-		$recordId = (int) isset($data[$key]) ? $data[$key] : 0;
-        $app  = Factory::getApplication();
-        $user = $app->getIdentity();
-
-		// Check "edit" permission on record asset (explicit or inherited)
-		if ($user->authorise('core.edit', $this->extension . '.gallery.' . $recordId))
-		{
-			return true;
-		}
-
-		// Check "edit own" permission on record asset (explicit or inherited)
-		if ($user->authorise('core.edit.own', $this->extension . '.gallery.' . $recordId))
-		{
-			// Need to do a lookup from the model to get the owner
-			$record = $this->getModel()->getItem($recordId);
-
-			if (empty($record))
-			{
-				return false;
-			}
-
-			$ownerId = $record->created_user_id;
-
-			// If the owner matches 'me' then do the test.
-			if ($ownerId == $user->id)
-			{
-				return true;
-			}
-		}
-
-		return false;
-	}
-	/**/
+	 * protected function allowEdit($data = array(), $key = 'parent_id')
+	 * {
+	 * $recordId = (int) isset($data[$key]) ? $data[$key] : 0;
+	 * $app  = Factory::getApplication();
+	 * $user = $app->getIdentity();
+	 *
+	 * // Check "edit" permission on record asset (explicit or inherited)
+	 * if ($user->authorise('core.edit', $this->extension . '.gallery.' . $recordId))
+	 * {
+	 * return true;
+	 * }
+	 *
+	 * // Check "edit own" permission on record asset (explicit or inherited)
+	 * if ($user->authorise('core.edit.own', $this->extension . '.gallery.' . $recordId))
+	 * {
+	 * // Need to do a lookup from the model to get the owner
+	 * $record = $this->getModel()->getItem($recordId);
+	 *
+	 * if (empty($record))
+	 * {
+	 * return false;
+	 * }
+	 *
+	 * $ownerId = $record->created_user_id;
+	 *
+	 * // If the owner matches 'me' then do the test.
+	 * if ($ownerId == $user->id)
+	 * {
+	 * return true;
+	 * }
+	 * }
+	 *
+	 * return false;
+	 * }
+	 * /**/
 
 	/**
 	 * Method to run batch operations.
@@ -314,20 +294,20 @@ class subprojectController extends FormController
 	 *
 	 * @since __BUMP_VERSION__
 	 *
-	public function batch($model = null)
-	{
-	Session::checkToken() or die(Text::_('JINVALID_TOKEN'));
-
-		// Set the model
-		/** @var \Lang4dev\Component\Lang4dev\Administrator\Model\GalleryModel $model *
-		$model = $this->getModel('Gallery');
-
-		// Preset the redirect
-		$this->setRedirect('index.php?option=com_lang4dev&view=galleries&extension=' . $this->extension);
-
-		return parent::batch($model);
-	}
-	/**/
+	 * public function batch($model = null)
+	 * {
+	 * Session::checkToken() or die(Text::_('JINVALID_TOKEN'));
+	 *
+	 * // Set the model
+	 * /** @var GalleryModel $model *
+	 *                          $model = $this->getModel('Gallery');
+	 *
+	 * // Preset the redirect
+	 * $this->setRedirect('index.php?option=com_lang4dev&view=galleries&extension=' . $this->extension);
+	 *
+	 * return parent::batch($model);
+	 * }
+	 * /**/
 
 	/**
 	 * Gets the URL arguments to append to an item redirect.
@@ -339,14 +319,14 @@ class subprojectController extends FormController
 	 *
 	 * @since __BUMP_VERSION__
 	 *
-	protected function getRedirectToItemAppend($recordId = null, $urlVar = 'id')
-	{
-		$append = parent::getRedirectToItemAppend($recordId);
-		$append .= '&extension=' . $this->extension;
-
-		return $append;
-	}
-	/**/
+	 * protected function getRedirectToItemAppend($recordId = null, $urlVar = 'id')
+	 * {
+	 * $append = parent::getRedirectToItemAppend($recordId);
+	 * $append .= '&extension=' . $this->extension;
+	 *
+	 * return $append;
+	 * }
+	 * /**/
 
 	/**
 	 * Gets the URL arguments to append to a list redirect.
@@ -355,40 +335,40 @@ class subprojectController extends FormController
 	 *
 	 * @since __BUMP_VERSION__
 	 *
-	protected function getRedirectToListAppend()
-	{
-		$append = parent::getRedirectToListAppend();
-		$append .= '&extension=' . $this->extension;
-
-		return $append;
-	}
-	/**/
+	 * protected function getRedirectToListAppend()
+	 * {
+	 * $append = parent::getRedirectToListAppend();
+	 * $append .= '&extension=' . $this->extension;
+	 *
+	 * return $append;
+	 * }
+	 * /**/
 
 	/**
 	 * Function that allows child controller access to model data after the data has been saved.
 	 *
-	 * @param   \Joomla\CMS\MVC\Model\BaseDatabaseModel  $model      The data model object.
-	 * @param   array                                    $validData  The validated data.
+	 * @param   BaseDatabaseModel  $model      The data model object.
+	 * @param   array              $validData  The validated data.
 	 *
 	 * @return  void
 	 *
 	 * @since __BUMP_VERSION__
 	 *
-	protected function postSaveHook(BaseDatabaseModel $model, $validData = array())
-	{
-		$item = $model->getItem();
-
-		if (isset($item->params) && is_array($item->params))
-		{
-			$registry = new Registry($item->params);
-			$item->params = (string) $registry;
-		}
-
-		if (isset($item->metadata) && is_array($item->metadata))
-		{
-			$registry = new Registry($item->metadata);
-			$item->metadata = (string) $registry;
-		}
-	}
-	/**/
+	 * protected function postSaveHook(BaseDatabaseModel $model, $validData = array())
+	 * {
+	 * $item = $model->getItem();
+	 *
+	 * if (isset($item->params) && is_array($item->params))
+	 * {
+	 * $registry = new Registry($item->params);
+	 * $item->params = (string) $registry;
+	 * }
+	 *
+	 * if (isset($item->metadata) && is_array($item->metadata))
+	 * {
+	 * $registry = new Registry($item->metadata);
+	 * $item->metadata = (string) $registry;
+	 * }
+	 * }
+	 * /**/
 }

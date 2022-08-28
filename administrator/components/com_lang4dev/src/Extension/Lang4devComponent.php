@@ -1,10 +1,10 @@
 <?php
 /**
- * @package     Joomla.Administrator
- * @subpackage  com_lang4dev
+ * @package       Joomla.Administrator
+ * @subpackage    com_lang4dev
  *
  * @copyright (C) 2022-2022 Lang4dev Team
- * @license     GNU General Public License version 2 or later; see LICENSE.txt
+ * @license       GNU General Public License version 2 or later; see LICENSE.txt
  */
 
 namespace Finnern\Component\Lang4dev\Administrator\Extension;
@@ -56,6 +56,5 @@ class Lang4devComponent extends MVCComponent implements BootableExtensionInterfa
 		$this->getRegistry()->register('lang4devadministrator', new AdministratorService);
 		//$this->getRegistry()->register('fooicon', new Icon($container->get(SiteApplication::class)));
 	}
-
 
 }

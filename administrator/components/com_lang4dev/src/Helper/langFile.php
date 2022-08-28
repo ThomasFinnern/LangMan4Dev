@@ -12,8 +12,10 @@
 
 namespace Finnern\Component\Lang4dev\Administrator\Helper;
 
+use Exception;
 use Joomla\CMS\Factory;
 use Joomla\CMS\Filesystem\File;
+
 //use Joomla\CMS\Filesystem\Folder;
 
 use Finnern\Component\Lang4dev\Administrator\Helper\langTranslation;
@@ -21,6 +23,7 @@ use Finnern\Component\Lang4dev\Administrator\Helper\langPathFileName;
 
 use Joomla\CMS\Filesystem\Folder;
 use RuntimeException;
+
 // use function defined;
 
 // no direct access
@@ -57,7 +60,6 @@ class langFile extends langPathFileName
 	const LINE_TYPE__PREPARED = 4;
 	const LINE_TYPE__INVALID_ID = 5;
 
-
 // base class -> public $langId = 'en-GB'; // 'en-GB'  // lang ID
 // base class -> public $langPathFileName = 'd:/xampp/htdocs/joomla4x/administrator/components/com_lang4dev/language/en-GB/com_lang4dev.ini';
 // base class -> 	public $isSysFile = false;  # lang file type (normal/sys)
@@ -73,7 +75,7 @@ class langFile extends langPathFileName
 	 */
 	public function __construct($langPathFileName = '')
 	{
-		parent::__construct ($langPathFileName);
+		parent::__construct($langPathFileName);
 
 		# load file if exists
 		if ($this->isValidPathFileName($langPathFileName, true))
@@ -86,185 +88,213 @@ class langFile extends langPathFileName
 	{
 		// parent::clear();  Name is still needed
 
-		$this->translations        = [];  # All translations
-		$this->translationDoubles  = [];
-		$this->header              = [];  # Start comments on translation file
-		$this->trailer             = [];  # Trailing comments on translation file
+		$this->translations       = [];  # All translations
+		$this->translationDoubles = [];
+		$this->header             = [];  # Start comments on translation file
+		$this->trailer            = [];  # Trailing comments on translation file
 	}
 
 	public function readFileContent($filePath = '')
-    {
-        $isAssigned = false;
+	{
+		$isAssigned = false;
 
-        try {
+		try
+		{
 
-            if ( ! empty ($filePath)) {
-                // ToDo: do we want to assign a different  file content or do we want to restart with new files
-                $this->langPathFileName = $filePath;
-	            $this->extractNameFlags();
-            } else {
-                $filePath = $this->langPathFileName;
-            }
+			if (!empty ($filePath))
+			{
+				// ToDo: do we want to assign a different  file content or do we want to restart with new files
+				$this->langPathFileName = $filePath;
+				$this->extractNameFlags();
+			}
+			else
+			{
+				$filePath = $this->langPathFileName;
+			}
 
-            if ( ! is_file($filePath)) {
+			if (!is_file($filePath))
+			{
 
-                //--- path does not exist -------------------------------
+				//--- path does not exist -------------------------------
 
-                $OutTxt = 'Warning: sourceLangFile.readFileContent: File does not exist "' . $filePath . '"<br>';
+				$OutTxt = 'Warning: sourceLangFile.readFileContent: File does not exist "' . $filePath . '"<br>';
 
-                $app = Factory::getApplication();
-                $app->enqueueMessage($OutTxt, 'warning');
+				$app = Factory::getApplication();
+				$app->enqueueMessage($OutTxt, 'warning');
 
-            } else
-            {
-	            $lines = file($filePath);
+			}
+			else
+			{
+				$lines = file($filePath);
 
-	            $this->assignTranslationLines($lines);
+				$this->assignTranslationLines($lines);
 
-	            $isAssigned = true;
-            }
+				$isAssigned = true;
+			}
 
-        } catch (\RuntimeException $e) {
-            $OutTxt = '';
-            $OutTxt .= 'Error executing readFileContent: "' . '<br>';
-            $OutTxt .= 'File: "' . $filePath . '"<br>';
-            $OutTxt .= 'langId: "' . $langId . '"<br>';
-            $OutTxt .= 'Error: "' . $e->getMessage() . '"' . '<br>';
+		}
+		catch (RuntimeException $e)
+		{
+			$OutTxt = '';
+			$OutTxt .= 'Error executing readFileContent: "' . '<br>';
+			$OutTxt .= 'File: "' . $filePath . '"<br>';
+			$OutTxt .= 'langId: "' . $langId . '"<br>';
+			$OutTxt .= 'Error: "' . $e->getMessage() . '"' . '<br>';
 
-            $app = Factory::getApplication();
-            $app->enqueueMessage($OutTxt, 'error');
-        }
+			$app = Factory::getApplication();
+			$app->enqueueMessage($OutTxt, 'error');
+		}
 
-        return $isAssigned;
-    }
+		return $isAssigned;
+	}
 
-		
-	public function assignTranslationLines ($lines) {
+	public function assignTranslationLines($lines)
+	{
 
-		try {
+		try
+		{
 
 			$this->clear();
 
-            // Keep first comments as header
+			// Keep first comments as header
 
-            $isHeaderActive = true;
+			$isHeaderActive = true;
 
-            # init new item
-            $nextItem = new langTranslation();
+			# init new item
+			$nextItem = new langTranslation();
 
-            // all lines
-            foreach ($lines as $lineNr => $line) {
-                $line = trim($line);
-				
-				$lineType = $this->check4LineType ($line);
-				
-                // Inside header
-                if ($isHeaderActive) {
-					
-                    # Comment line
-					if ($lineType == self::LINE_TYPE__COMMENT) {
-					
-                        $this->header [] = $line;
-                        continue;
-                    } else {
-                        # first item line or empty line
-                        $isHeaderActive = false;
+			// all lines
+			foreach ($lines as $lineNr => $line)
+			{
+				$line = trim($line);
 
-                        // add first empty line
-                        if (strlen($line) == 0) {
-                            $this->header [] = $line;
-                            continue;
-                        }
-                    }
-                }
-                
-                //--- content lines -----------------------------
+				$lineType = $this->check4LineType($line);
 
-                // Comment or empty line
-                // if (str_starts_with($line, ';') || strlen($line) < 1) {
-                if ($lineType == self::LINE_TYPE__COMMENT || $lineType == self::LINE_TYPE__INVALID_ID) {
-                    $nextItem->commentsBefore [] = $line;
-                } else {
+				// Inside header
+				if ($isHeaderActive)
+				{
 
-		            // Remove comment indicator on prepared translations
+					# Comment line
+					if ($lineType == self::LINE_TYPE__COMMENT)
+					{
+
+						$this->header [] = $line;
+						continue;
+					}
+					else
+					{
+						# first item line or empty line
+						$isHeaderActive = false;
+
+						// add first empty line
+						if (strlen($line) == 0)
+						{
+							$this->header [] = $line;
+							continue;
+						}
+					}
+				}
+
+				//--- content lines -----------------------------
+
+				// Comment or empty line
+				// if (str_starts_with($line, ';') || strlen($line) < 1) {
+				if ($lineType == self::LINE_TYPE__COMMENT || $lineType == self::LINE_TYPE__INVALID_ID)
+				{
+					$nextItem->commentsBefore [] = $line;
+				}
+				else
+				{
+
+					// Remove comment indicator on prepared translations
 					if ($lineType == self::LINE_TYPE__PREPARED)
 					{
-						$line = substr($line, 1);
+						$line                 = substr($line, 1);
 						$nextItem->isPrepared = true;
 
 					}
 
-                    //--- translation split --------------------------------------
+					//--- translation split --------------------------------------
 
-	                [$isValid, $transId, $transText, $commentBehind] = $this->extractTranslation ($line);
+					[$isValid, $transId, $transText, $commentBehind] = $this->extractTranslation($line);
 
-	                if ($isValid)
-	                {
-		                $nextItem->transId = $transId;
-		                $nextItem->translationText = $transText;
-		                $nextItem->commentBehind = $commentBehind;
-		                $nextItem->lineNr = $lineNr;
-	                }
+					if ($isValid)
+					{
+						$nextItem->transId         = $transId;
+						$nextItem->translationText = $transText;
+						$nextItem->commentBehind   = $commentBehind;
+						$nextItem->lineNr          = $lineNr;
+					}
 
-                    //--- save as new or existing ----------------------------------------
+					//--- save as new or existing ----------------------------------------
 
-                    # Is new element
-                    if (!in_array($transId, $this->translations)) {
-                        // ToDo: own class, save with line as id for telling lines od double entries
-                        $this->translations[$transId] = $nextItem;
+					# Is new element
+					if (!in_array($transId, $this->translations))
+					{
+						// ToDo: own class, save with line as id for telling lines od double entries
+						$this->translations[$transId] = $nextItem;
 
-                        # init next item
-                        $nextItem = new langTranslation();
-                    } else {
-                        // Element does already exist in file
+						# init next item
+						$nextItem = new langTranslation();
+					}
+					else
+					{
+						// Element does already exist in file
 
-                        // Same same ?
-                        if ($this->translations[$transId]->translationText == $nextItem->translationText) {
-                            $logText = "Existing element found in Line " . $lineNr . ": " . $transId
-                                . " = " . $this->translations[$transId];
-                        } else {
-                            // Different text
-                            $logText = "Existing mismatching element found in Line " . $lineNr . ":\r\n"
-                                . "1st: " . $transId . " = " . $this->translations[$transId]->translationText
-                                . "2nd: " . $transId . " = " . $nextItem->translationText;
-                        }
+						// Same same ?
+						if ($this->translations[$transId]->translationText == $nextItem->translationText)
+						{
+							$logText = "Existing element found in Line " . $lineNr . ": " . $transId
+								. " = " . $this->translations[$transId];
+						}
+						else
+						{
+							// Different text
+							$logText = "Existing mismatching element found in Line " . $lineNr . ":\r\n"
+								. "1st: " . $transId . " = " . $this->translations[$transId]->translationText
+								. "2nd: " . $transId . " = " . $nextItem->translationText;
+						}
 
-                        $app = Factory::getApplication();
-                        $app->enqueueMessage($logText, 'warning');
+						$app = Factory::getApplication();
+						$app->enqueueMessage($logText, 'warning');
 
-                        // save double by line number
-                        $this->translationDoubles [$lineNr] = $nextItem;
+						// save double by line number
+						$this->translationDoubles [$lineNr] = $nextItem;
 
-                        # init next item
-                        $nextItem = new langTranslation();
-                    }
-                }  // content
+						# init next item
+						$nextItem = new langTranslation();
+					}
+				}  // content
 
-            } // all lines
+			} // all lines
 
-            //--- trailing lines -----------------------------
+			//--- trailing lines -----------------------------
 
-            if ($nextItem->lineNr == -1 && count($nextItem->commentsBefore) > 0) {
+			if ($nextItem->lineNr == -1 && count($nextItem->commentsBefore) > 0)
+			{
 
-                $this->trailer = $nextItem->commentsBefore;
-            }
+				$this->trailer = $nextItem->commentsBefore;
+			}
 
-            $isAssigned = true;
+			$isAssigned = true;
 
-        } catch (\RuntimeException $e) {
-            $OutTxt = '';
-            $OutTxt .= 'Error executing assignTranslationLines: ' . '<br>';
-            $OutTxt .= 'Error: "' . $e->getMessage() . '"' . '<br>';
+		}
+		catch (RuntimeException $e)
+		{
+			$OutTxt = '';
+			$OutTxt .= 'Error executing assignTranslationLines: ' . '<br>';
+			$OutTxt .= 'Error: "' . $e->getMessage() . '"' . '<br>';
 
-            $app = Factory::getApplication();
-            $app->enqueueMessage($OutTxt, 'error');
-        }
+			$app = Factory::getApplication();
+			$app->enqueueMessage($OutTxt, 'error');
+		}
 
-        return $isAssigned;
-    }
+		return $isAssigned;
+	}
 
-	private function check4LineType ($line=''){
-		
+	private function check4LineType($line = '')
+	{
+
 		$lineType = self::LINE_TYPE__NONE;
 
 		// comment or preparation line ?
@@ -274,60 +304,70 @@ class langFile extends langPathFileName
 
 			$idx = strrpos($line, ';');
 
-			if($idx >= 0) {
-				
-				$line = trim(substr($line, $idx+1));
+			if ($idx >= 0)
+			{
+
+				$line = trim(substr($line, $idx + 1));
 
 			}
 
 			// determine if valid translation is existing behind coment character 
-			[$isValid, $transId, $transText] = $this->extractTranslation ($line);
+			[$isValid, $transId, $transText] = $this->extractTranslation($line);
 
-			if ($isValid) {
+			if ($isValid)
+			{
 				$lineType = self::LINE_TYPE__PREPARED;
-			} else {
+			}
+			else
+			{
 				$lineType = self::LINE_TYPE__COMMENT;
 			}
 
-		} else {
+		}
+		else
+		{
 			//--- no comment line ----------------------------------------------
-			
-			// determine if valid translation is existing  
-			[$isValid, $transId, $transText] = $this->extractTranslation ($line);
 
-			if ($isValid) {
+			// determine if valid translation is existing  
+			[$isValid, $transId, $transText] = $this->extractTranslation($line);
+
+			if ($isValid)
+			{
 				$lineType = self::LINE_TYPE__TRANS_ID;
 
-			} else {
+			}
+			else
+			{
 				// not defined line ? empty or invlaid text
 				$lineType = self::LINE_TYPE__INVALID_ID;
 			}
-			
+
 		}
-		
+
 		return $lineType;
 	}
 
 // needs line to have removed pre text and does not cara about post comment in line  
-	public function extractTranslation  ($line){
+	public function extractTranslation($line)
+	{
 
-		$isValid = false;
-		$transId = "";
-		$transText = "";
+		$isValid       = false;
+		$transId       = "";
+		$transText     = "";
 		$commentBehind = "";
 
 		//--- translation split --------------------------------------
 		try
 		{
 //			if(strstr($line, '=')) {}
-			[$pName, $pTranslation] = array_pad(explode('=', $line, 2), 2,'');
+			[$pName, $pTranslation] = array_pad(explode('=', $line, 2), 2, '');
 
 			if (empty ($pTranslation))
 			{
 				$tran = $pName;
 			}
 
-			if ( ! empty ($pTranslation))
+			if (!empty ($pTranslation))
 			{
 				$transId         = trim($pName);
 				$translationPart = trim($pTranslation);
@@ -359,7 +399,9 @@ class langFile extends langPathFileName
 				}
 			}
 
-		} catch (\RuntimeException $e) {
+		}
+		catch (RuntimeException $e)
+		{
 			$OutTxt = '';
 			$OutTxt .= 'Error executing extractTranslation line part: "' . $line . '"<br>';
 			$OutTxt .= 'Error: "' . $e->getMessage() . '"' . '<br>';
@@ -375,12 +417,14 @@ class langFile extends langPathFileName
 	{
 		$iSValid = false;
 
-		try {
-		// only upper case and underscores allowed
+		try
+		{
+			// only upper case and underscores allowed
 
-		$iSValid = true;
+			$iSValid = true;
 
-		} catch (\RuntimeException $e)
+		}
+		catch (RuntimeException $e)
 		{
 			$OutTxt = '';
 			$OutTxt .= 'Error executing checkTransId: "' . $transId . '"<br>';
@@ -397,13 +441,16 @@ class langFile extends langPathFileName
 	{
 		$iSValid = false;
 
-		try {
-		// match first " with last ?
-		// allow \" in between
+		try
+		{
+			// match first " with last ?
+			// allow \" in between
 
-		$iSValid = true;
+			$iSValid = true;
 
-		} catch (\RuntimeException $e) {
+		}
+		catch (RuntimeException $e)
+		{
 			$OutTxt = '';
 			$OutTxt .= 'Error executing checkTransText: "' . $transText . '"<br>';
 			$OutTxt .= 'Error: "' . $e->getMessage() . '"' . '<br>';
@@ -459,6 +506,7 @@ class langFile extends langPathFileName
 	 * Overwrites given tranlsation variables
 	 * On $doClean the line index is kept. Any other
 	 * variable is reset before standard assignment
+	 *
 	 * @param         $transId
 	 * @param         $translationText
 	 * @param   bool  $doClean
@@ -469,14 +517,16 @@ class langFile extends langPathFileName
 	 *
 	 * @since version
 	 */
-	public function setTranslationText($transId, $translationText, $doClean=true, $commentsBefore=null, $commentBehind=null, $lineNr=-1)
+	public function setTranslationText($transId, $translationText, $doClean = true, $commentsBefore = null, $commentBehind = null, $lineNr = -1)
 	{
 		// ToDo: try catch
 
-		if ( ! empty ($this->translations[$transId])) {
+		if (!empty ($this->translations[$transId]))
+		{
 			$translation = $this->translations[$transId];
 
-			if ($doClean) {
+			if ($doClean)
+			{
 				// keep line index
 				$translation->clean();
 			}
@@ -488,7 +538,6 @@ class langFile extends langPathFileName
 				$translation->commentsBefore = $commentsBefore;
 			}
 
-
 			if (!empty ($commentBehind))
 			{
 				$translation->commentBehind = $commentBehind;
@@ -499,8 +548,9 @@ class langFile extends langPathFileName
 				$translation->lineNr = $lineNr;
 			}
 
-
-		}  else {
+		}
+		else
+		{
 			$logText = 'Translation with ID: "' . $transId . '" does not exist';
 
 			// ToDo: warning enqueue
@@ -517,7 +567,7 @@ class langFile extends langPathFileName
 	 *
 	 * @return bool
 	 *
-	 * @throws \Exception
+	 * @throws Exception
 	 * @since version
 	 */
 	public function writeToFile($filePath = "", $doBackup = false)
@@ -571,32 +621,36 @@ class langFile extends langPathFileName
 	}
 
 	//
-	public function alignTranslationsByMain ($mainTranslations) {
-		
+	public function alignTranslationsByMain($mainTranslations)
+	{
+
 		$alignedTranslations = [];
-		
-		foreach ($mainTranslations as $mainTrans) {
+
+		foreach ($mainTranslations as $mainTrans)
+		{
 
 			$transId = $mainTrans->transId;
 
 			// if not exist create dummy element
-			if(empty ($this->translations [$transId]))
+			if (empty ($this->translations [$transId]))
 			{
 				//--- create prepared item -------------------------
 
-				$translationText = '' ;
-				$commentsBefore = $this->prepareCommentsBefore ($mainTrans->commentsBefore);
-				$commentBehind = $this->prepareComment($mainTrans->commentBehind);
-				$lineNr = $mainTrans->lineNr;
+				$translationText = '';
+				$commentsBefore  = $this->prepareCommentsBefore($mainTrans->commentsBefore);
+				$commentBehind   = $this->prepareComment($mainTrans->commentBehind);
+				$lineNr          = $mainTrans->lineNr;
 				// mark as prepared
 				$isPrepared = true;
 
-				$nextItem = new langTranslation($transId,  $translationText,  $commentsBefore,
+				$nextItem = new langTranslation($transId, $translationText, $commentsBefore,
 					$commentBehind, $lineNr, $isPrepared);
 
 				$alignedTranslations [$transId] = $nextItem;
 
-			} else {
+			}
+			else
+			{
 				//--- Item exist, use it ------------------------
 
 				$translation = $this->translations [$transId];
@@ -611,27 +665,30 @@ class langFile extends langPathFileName
 
 		// ToDo: what about not used translations ? throw away ? or own category ?
 
-				
 		$this->translations = $alignedTranslations;
 	}
 
-	public function prepareCommentsBefore ($mainCommentsBefore=[]) {
+	public function prepareCommentsBefore($mainCommentsBefore = [])
+	{
 		$commentsBefore = [];
 
-		foreach  ($mainCommentsBefore as $commentLine) {
+		foreach ($mainCommentsBefore as $commentLine)
+		{
 
-			$commentsBefore[] = $this->prepareComment ($commentLine);
+			$commentsBefore[] = $this->prepareComment($commentLine);
 
 		}
 
 		return $commentsBefore;
 	}
 
-	public function prepareComment ($mainComment='') {
+	public function prepareComment($mainComment = '')
+	{
 
 		$comment = '';
 
-		if (strlen($mainComment) > 0) {
+		if (strlen($mainComment) > 0)
+		{
 
 			$comment = '%Main%' . $mainComment . '%';
 		}
@@ -655,7 +712,7 @@ class langFile extends langPathFileName
 
 			// translation lines
 			$idx = 0;
-			
+
 			// check each line for existing translation
 			foreach ($this->translations as $transId => $translation)
 			{
@@ -671,9 +728,10 @@ class langFile extends langPathFileName
 
 				$translationText = $translation->translationText;
 				$line            = $transId . '="' . $translationText . '"';
-				
+
 				// do comment not translated lines (TransId exist, no text though)
-				if ($translation->isPrepared) {
+				if ($translation->isPrepared)
+				{
 					$line = ";" . $line;
 				}
 
@@ -718,31 +776,34 @@ class langFile extends langPathFileName
 		return $collectedLines;
 	}
 
-
-	public function cleanTranslations() {
+	public function cleanTranslations()
+	{
 
 		$this->removeEmptyLines();
 		$this->removeDoubleItems();
 
 	}
 
-	public function removeDoubleItems() {
+	public function removeDoubleItems()
+	{
 
 		$this->translationDoubles = [];
 
 	}
 
-	public function removeEmptyLines() {
+	public function removeEmptyLines()
+	{
 
 		// ToDo: fill out ...
 
 	}
 
-	public function getDoubleItemNames ()
+	public function getDoubleItemNames()
 	{
 		$names = [];
 
-		try {
+		try
+		{
 
 			// ToDo: cache it for second use, reset cache after assign /read
 			foreach ($this->translationDoubles as $lineId => $translation)
@@ -751,7 +812,7 @@ class langFile extends langPathFileName
 			}
 
 		}
-		catch (\RuntimeException $e)
+		catch (RuntimeException $e)
 		{
 			$OutTxt = 'Error executing getDoubleItemNames: "' . '<br>';
 			$OutTxt .= 'Error: "' . $e->getMessage() . '"' . '<br>';
@@ -763,16 +824,14 @@ class langFile extends langPathFileName
 		return $names;
 	}
 
-
-
 	public function collectDoubles()
 	{
 		$doubles = [];
 
 		$doublesNames = $this->getDoubleItemNames();
 
-
-		foreach ($doublesNames as $transId) {
+		foreach ($doublesNames as $transId)
+		{
 
 			// ? not needed ? $doubles [$transId] = [];
 			$doubles [$transId][] = $this->translations [$transId];
@@ -798,10 +857,11 @@ class langFile extends langPathFileName
 		// Attention ToDo: how to change the header
 		// Attention ToDo: how to change the trailer
 
-		foreach ($this->translations as $translation) {
+		foreach ($this->translations as $translation)
+		{
 
 			$translation->translationText = '';
-			$translation->isPrepared = true;
+			$translation->isPrepared      = true;
 
 			// Attention ToDo: how to change the commentsBefore lines
 			// Attention ToDo: how to change the commentBehind
@@ -810,38 +870,40 @@ class langFile extends langPathFileName
 		return;
 	}
 
+	public function __toText()
+	{
 
+		$lines = [];
 
+		$lines [] = 'langId = "' . $this->langId . '"';
+		$lines [] = 'langPathFileName = "' . $this->langPathFileName . '"';
+		$lines [] = '$isSysFile = "' . $this->isSysFile . '"';
 
-    public function __toText () {
+		$lines [] = '--- $header ------------------------';
+		foreach ($this->header as $headerLine)
+		{
+			$lines [] = $headerLine;
+		}
 
-        $lines = [];
+		$lines [] = '--- $translations ------------------------';
+		foreach ($this->translations as $transId => $translation)
+		{
+			$lines [] = $transId . '="' . $translation . '"';
+		}
 
-        $lines [] = 'langId = "' . $this->langId . '"';
-        $lines [] = 'langPathFileName = "' . $this->langPathFileName . '"';
-        $lines [] = '$isSysFile = "' . $this->isSysFile . '"';
+		$lines [] = '--- $translations doubles ------------------------';
+		foreach ($this->translationDoubles as $transId => $translation)
+		{
+			$lines [] = $transId . '="' . $translation . '"';
+		}
 
-        $lines [] = '--- $header ------------------------';
-        foreach ($this->header as $headerLine) {
-            $lines [] = $headerLine;
-        }
+		$lines [] = '--- $trailer ------------------------';
+		foreach ($this->trailer as $trailerLine)
+		{
+			$lines [] = $trailerLine;
+		}
 
-        $lines [] = '--- $translations ------------------------';
-        foreach ($this->translations as $transId => $translation) {
-            $lines [] = $transId . '="' .  $translation . '"';
-        }
-
-        $lines [] = '--- $translations doubles ------------------------';
-        foreach ($this->translationDoubles as $transId => $translation) {
-            $lines [] = $transId . '="' .  $translation . '"';
-        }
-
-        $lines [] = '--- $trailer ------------------------';
-        foreach ($this->trailer as $trailerLine) {
-            $lines [] = $trailerLine;
-        }
-
-        return $lines;
-    }
+		return $lines;
+	}
 
 } // class

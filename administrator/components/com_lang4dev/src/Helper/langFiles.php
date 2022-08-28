@@ -9,7 +9,6 @@
  * @license
  */
 
-
 namespace Finnern\Component\Lang4dev\Administrator\Helper;
 
 use Joomla\CMS\Factory;
@@ -17,15 +16,16 @@ use Joomla\CMS\Filesystem\File;
 use Joomla\CMS\Filesystem\Folder;
 
 use Finnern\Component\Lang4dev\Administrator\Helper\langFile;
+use RuntimeException;
+use function defined;
 
 // no direct access
-\defined('_JEXEC') or die;
+defined('_JEXEC') or die;
 
 /**
- * Collect file information and contents of all translation files 
+ * Collect file information and contents of all translation files
  * for one base folder (existing)
  * Write the changes set inlcuding ToDo: complete sentence
-
  * The files uses is limitet as *.ini are not useful
  *
  * @package Lang4dev
@@ -36,7 +36,6 @@ class langFiles extends langFileNamesSet
 
 	/** @var array<langfile> */
 	protected $langFilesData = []; // [$langId] -> translations from langFiles read and file names
-
 
 	/**
 	 * matchTranslationsFile2Locations
@@ -54,7 +53,16 @@ class langFiles extends langFileNamesSet
 	 * @since version
 	 */
 	//public function separateFilesByTransIds ($codeTransIds)
-	public function matchTranslationsFile2Locations ($codeTransIds, $langId="en-GB", )
+	/**
+	 * @param $codeTransIds
+	 * @param $langId
+	 *
+	 * @return array
+	 *
+	 * @throws \Exception
+	 * @since version
+	 */
+	public function matchTranslationsFile2Locations($codeTransIds, $langId = "en-GB",)
 	{
 		$missing    = [];
 		$translated = [];
@@ -62,11 +70,13 @@ class langFiles extends langFileNamesSet
 
 		$translations = [];
 
-		try {
+		try
+		{
 
 			//--- collect translations of all files in sub project -----------------
 
-			foreach ($this->langFilesData[$langId] as $langFileData) {
+			foreach ($this->langFilesData[$langId] as $langFileData)
+			{
 
 				// array_push($translations,  array_values($langFileData->translations));
 				$translations = $translations + $langFileData->translations;
@@ -76,9 +86,9 @@ class langFiles extends langFileNamesSet
 				$this->matchTranslations2Locations($codeTransIds, $translations);
 
 		}
-		catch (\RuntimeException $e)
+		catch (RuntimeException $e)
 		{
-			$OutTxt = 'Error executing ' . __CLASS__ .  '::' . __FUNCTION__  . ': "' . '<br>';
+			$OutTxt = 'Error executing ' . __CLASS__ . '::' . __FUNCTION__ . ': "' . '<br>';
 			$OutTxt .= 'Error: "' . $e->getMessage() . '"' . '<br>';
 
 			$app = Factory::getApplication();
@@ -104,22 +114,37 @@ class langFiles extends langFileNamesSet
 	 * @since version
 	 */
 	//public function separateByTransIds ($codeTransIds , $translations) {
-	public function matchTranslations2Locations ($codeTransIds , $translations) {
+	/**
+	 * @param $codeTransIds
+	 * @param $translations
+	 *
+	 * @return array[]
+	 *
+	 * @throws \Exception
+	 * @since version
+	 */
+	public function matchTranslations2Locations($codeTransIds, $translations)
+	{
 
-		$missing = [];
-		$translated    = [];
-		$notUsed = [];
+		$missing    = [];
+		$translated = [];
+		$notUsed    = [];
 
-		try {
+		try
+		{
 
 			//--- missing and translated ------------------------------------
 
-			foreach ($codeTransIds as $codeTransId) {
+			foreach ($codeTransIds as $codeTransId)
+			{
 
 				// ID is missing
-				if (empty ($translations[$codeTransId])) {
+				if (empty ($translations[$codeTransId]))
+				{
 					$missing[] = $codeTransId;
-				} else {
+				}
+				else
+				{
 					// ID is translated
 					$translated[] = $codeTransId;
 				}
@@ -127,18 +152,19 @@ class langFiles extends langFileNamesSet
 
 			//--- not used in code ------------------------------------
 
-			foreach ($this->getItemNames ($translations) as $TransId)
+			foreach ($this->getItemNames($translations) as $TransId)
 			{
 				// ID is not used
-				if ( ! in_array ($TransId, $translated)) {
+				if (!in_array($TransId, $translated))
+				{
 					$notUsed[] = $TransId;
 				}
 			}
 
 		}
-		catch (\RuntimeException $e)
+		catch (RuntimeException $e)
 		{
-			$OutTxt = 'Error executing ' . __CLASS__ .  '::' . __FUNCTION__  . ': "' . '<br>';
+			$OutTxt = 'Error executing ' . __CLASS__ . '::' . __FUNCTION__ . ': "' . '<br>';
 			$OutTxt .= 'Error: "' . $e->getMessage() . '"' . '<br>';
 
 			$app = Factory::getApplication();
@@ -146,18 +172,27 @@ class langFiles extends langFileNamesSet
 		}
 
 		// sort once
-		sort ($missing);
-		sort ($translated);
-		sort ($notUsed);
+		sort($missing);
+		sort($translated);
+		sort($notUsed);
 
 		return [$missing, $translated, $notUsed];
 	}
 
-	public function getItemNames ($translations)
+	/**
+	 * @param $translations
+	 *
+	 * @return array
+	 *
+	 * @throws \Exception
+	 * @since version
+	 */
+	public function getItemNames($translations)
 	{
 		$names = [];
 
-		try {
+		try
+		{
 			// ToDo: cache it for second use, reset cache after assign /read
 			foreach ($translations as $transId => $translation)
 			{
@@ -165,7 +200,7 @@ class langFiles extends langFileNamesSet
 			}
 
 		}
-		catch (\RuntimeException $e)
+		catch (RuntimeException $e)
 		{
 			$OutTxt = 'Error executing getItemNames: "' . '<br>';
 			$OutTxt .= 'Error: "' . $e->getMessage() . '"' . '<br>';
@@ -176,8 +211,5 @@ class langFiles extends langFileNamesSet
 
 		return $names;
 	}
-
-
-
 
 } // class

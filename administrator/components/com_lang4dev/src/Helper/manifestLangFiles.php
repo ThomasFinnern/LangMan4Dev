@@ -15,9 +15,11 @@ use Joomla\CMS\Filesystem\Folder;
 use Joomla\CMS\Language\Text;
 
 use Finnern\Component\Lang4dev\Administrator\Helper\manifestData;
+use RuntimeException;
+use function defined;
 
 // no direct access
-\defined('_JEXEC') or die;
+defined('_JEXEC') or die;
 
 // https://www.php.net/manual/de/simplexml.examples-basic.php
 
@@ -42,20 +44,29 @@ class manifestLangFiles extends manifestData
 
 	}
 
+	/**
+	 * @param $prjXmlPathFilename
+	 *
+	 * @return bool
+	 *
+	 * @throws \Exception
+	 * @since version
+	 */
 	public function readManifestData($prjXmlPathFilename = '')
 	{
 		$isValidXml = parent::readManifestData($prjXmlPathFilename);
 
 		try
 		{
-			if ($isValidXml) {
+			if ($isValidXml)
+			{
 
 				$this->langFileOrigins();
 
 			}
 
 		}
-		catch (\RuntimeException $e)
+		catch (RuntimeException $e)
 		{
 			$OutTxt = '';
 			$OutTxt .= 'Error executing readManifestData: "' . $prjXmlPathFilename . '"<br>';
@@ -71,35 +82,34 @@ class manifestLangFiles extends manifestData
 	 * example from joomla
 	 *
 	 *
-	public function test()
-	{
-
-		// Copy language files from global folder
-		if ($languages = $manifest->languages)
-		{
-			$folder        = (string) $languages->attributes()->folder;
-			$languageFiles = $languages->language;
-
-			$langTag = $languageFiles->attributes()->tag;
-
-			foreach ($languageFiles as $languageFile)
-
-				Folder::create($toPath . '/' . $folder . '/' . $languageFiles->attributes()->tag);
-
-			foreach ($languageFiles as $languageFile)
-			{
-				$src = Path::clean($client->path . '/language/' . $languageFile);
-				$dst = Path::clean($toPath . '/' . $folder . '/' . $languageFile);
-
-				if (File::exists($src))
-				{
-					File::copy($src, $dst);
-				}
-			}
-		}
-	}
-	/**/
-
+	 * public function test()
+	 * {
+	 *
+	 * // Copy language files from global folder
+	 * if ($languages = $manifest->languages)
+	 * {
+	 * $folder        = (string) $languages->attributes()->folder;
+	 * $languageFiles = $languages->language;
+	 *
+	 * $langTag = $languageFiles->attributes()->tag;
+	 *
+	 * foreach ($languageFiles as $languageFile)
+	 *
+	 * Folder::create($toPath . '/' . $folder . '/' . $languageFiles->attributes()->tag);
+	 *
+	 * foreach ($languageFiles as $languageFile)
+	 * {
+	 * $src = Path::clean($client->path . '/language/' . $languageFile);
+	 * $dst = Path::clean($toPath . '/' . $folder . '/' . $languageFile);
+	 *
+	 * if (File::exists($src))
+	 * {
+	 * File::copy($src, $dst);
+	 * }
+	 * }
+	 * }
+	 * }
+	 * /**/
 
 	/**
 	 * @param $isOnServer bool
@@ -113,8 +123,8 @@ class manifestLangFiles extends manifestData
 	{
 		// defined by folder language in xml
 
-		$this->isLangAtStdJoomla = false;
-		$this->stdLangFilePaths     = [];
+		$this->isLangAtStdJoomla  = false;
+		$this->stdLangFilePaths   = [];
 		$this->adminLangFilePaths = [];
 
 		try
@@ -193,7 +203,7 @@ class manifestLangFiles extends manifestData
 
 			}
 		}
-		catch (\RuntimeException $e)
+		catch (RuntimeException $e)
 		{
 			$OutTxt = '';
 			$OutTxt .= 'Error executing langFileOrigins: ' . '"<br>';
@@ -207,7 +217,14 @@ class manifestLangFiles extends manifestData
 	}
 
 	// new: lang files within component
-	public function getIsLangAtStdJoomla ()
+
+	/**
+	 *
+	 * @return bool|mixed
+	 *
+	 * @since version
+	 */
+	public function getIsLangAtStdJoomla()
 	{
 //		$this->isLangAtStdJoomla  = false;
 //
@@ -244,11 +261,16 @@ class manifestLangFiles extends manifestData
 
 		$isLangAtStdJoomla = $this->langFileOrigins();
 		$isLangAtStdJoomla = $this->isLangAtStdJoomla;
+
 		return $this->isLangAtStdJoomla;
 	}
 
-
-
+	/**
+	 *
+	 * @return array
+	 *
+	 * @since version
+	 */
 	public function __toText()
 	{
 

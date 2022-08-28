@@ -1,12 +1,12 @@
 <?php
 /**
- * @package     Joomla.Administrator
- * @subpackage  com_lang4dev
+ * @package       Joomla.Administrator
+ * @subpackage    com_lang4dev
  *
  * @copyright (C) 2022-2022 Lang4dev Team
- * @license     GNU General Public License version 2 or later; see LICENSE.txt
+ * @license       GNU General Public License version 2 or later; see LICENSE.txt
  */
-\defined('_JEXEC') or die;
+defined('_JEXEC') or die;
 
 use Joomla\CMS\Application\ApplicationHelper;
 use Joomla\CMS\Factory;
@@ -98,15 +98,17 @@ class Com_Lang4devInstallerScript extends InstallerScript
 	 *
 	 * @return  boolean  True on success
 	 *
+	 * @throws Exception
 	 * @since  __BUMP_VERSION__
 	 *
-	 * @throws Exception
 	 */
 	public function preflight($type, $parent): bool
 	{
-		if ($type !== 'uninstall') {
+		if ($type !== 'uninstall')
+		{
 			// Check for the minimum PHP version before continuing
-			if (!empty($this->minimumPHPVersion) && version_compare(PHP_VERSION, $this->minimumPHPVersion, '<')) {
+			if (!empty($this->minimumPHPVersion) && version_compare(PHP_VERSION, $this->minimumPHPVersion, '<'))
+			{
 				Log::add(
 					Text::sprintf('JLIB_INSTALLER_MINIMUM_PHP', $this->minimumPHPVersion),
 					Log::WARNING,
@@ -117,7 +119,8 @@ class Com_Lang4devInstallerScript extends InstallerScript
 			}
 
 			// Check for the minimum Joomla version before continuing
-			if (!empty($this->minimumJoomlaVersion) && version_compare(JVERSION, $this->minimumJoomlaVersion, '<')) {
+			if (!empty($this->minimumJoomlaVersion) && version_compare(JVERSION, $this->minimumJoomlaVersion, '<'))
+			{
 				Log::add(
 					Text::sprintf('JLIB_INSTALLER_MINIMUM_JOOMLA', $this->minimumJoomlaVersion),
 					Log::WARNING,
@@ -150,6 +153,5 @@ class Com_Lang4devInstallerScript extends InstallerScript
 
 		return true;
 	}
-
 
 }

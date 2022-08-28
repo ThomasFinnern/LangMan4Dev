@@ -13,9 +13,11 @@ use Joomla\CMS\Factory;
 use Joomla\CMS\Filesystem\File;
 use Joomla\CMS\Filesystem\Folder;
 use Joomla\CMS\Language\Text;
+use RuntimeException;
+use function defined;
 
 // no direct access
-\defined('_JEXEC') or die;
+defined('_JEXEC') or die;
 
 // https://www.php.net/manual/de/simplexml.examples-basic.php
 
@@ -47,6 +49,14 @@ class manifestData
 
 	}
 
+	/**
+	 * @param $prjXmlPathFilename
+	 *
+	 * @return bool
+	 *
+	 * @throws \Exception
+	 * @since version
+	 */
 	public function readManifestData($prjXmlPathFilename = '')
 	{
 		$isValidXml = false;
@@ -90,10 +100,12 @@ class manifestData
 					$app->enqueueMessage($OutTxt, 'error');
 				}
 
-				if (str_starts_with ($prjXmlPathFilename, JPATH_ROOT))
+				if (str_starts_with($prjXmlPathFilename, JPATH_ROOT))
 				{
 					$this->isInstalled = true;
-				} else {
+				}
+				else
+				{
 					$this->isInstalled = false;
 				}
 			}
@@ -105,7 +117,7 @@ class manifestData
 			}
 
 		}
-		catch (\RuntimeException $e)
+		catch (RuntimeException $e)
 		{
 			$OutTxt = '';
 			$OutTxt .= 'Error executing readManifestData: "' . $prjXmlPathFilename . '"<br>';
@@ -119,44 +131,97 @@ class manifestData
 	}
 
 	// info cast to string / int .. when using it (otherwise array is returned)
-	public function get ($name, $default) {
+
+	/**
+	 * @param $name
+	 * @param $default
+	 *
+	 * @return mixed
+	 *
+	 * @since version
+	 */
+	public function get($name, $default)
+	{
 
 //		return isset($this->manifest->$name) ? $this->manifest->$name : $default;
 		$result = $this->manifest->$name;
+
 		// return isset($this->manifest->$name) ? $this->manifest->$name : $default;
 		return $result;
 	}
 
-    // return null on wrong path
-	public function getByPath ($names, $default) {
+	// return null on wrong path
+
+	/**
+	 * @param $names
+	 * @param $default
+	 *
+	 * @return bool|mixed
+	 *
+	 * @since version
+	 */
+	public function getByPath($names, $default)
+	{
 		$result = $default;
 
-		if ( ! is_array($names)) {
-			$name =  array ($names);
+		if (!is_array($names))
+		{
+			$name = array($names);
 		}
 
-        $base = $this->manifest;
-		foreach ($names as $name) {
+		$base = $this->manifest;
+		foreach ($names as $name)
+		{
 
-            $base = isset($this->manifest->$name) ? $this->manifest->$name : null;
+			$base = isset($this->manifest->$name) ? $this->manifest->$name : null;
 
-            if ($base == null) {
-                break;
-            }
+			if ($base == null)
+			{
+				break;
+			}
 		}
 
-        if ($base != null) {
-            $result = $base;
-        }
+		if ($base != null)
+		{
+			$result = $base;
+		}
 
 		return $result;
 	}
 
-	public function getSriptFile () { return (string) $this->get('scriptfile', '');}
-	public function getName ()      { return (string) $this->get('name', '');}
+	/**
+	 *
+	 * @return string
+	 *
+	 * @since version
+	 */
+	public function getSriptFile()
+	{
+		return (string) $this->get('scriptfile', '');
+	}
+
+	/**
+	 *
+	 * @return string
+	 *
+	 * @since version
+	 */
+	public function getName()
+	{
+		return (string) $this->get('name', '');
+	}
 
 	// info cast to string / int .. when using it (otherwise array is returned)
-	public function getXml ($name) {
+
+	/**
+	 * @param $name
+	 *
+	 * @return null
+	 *
+	 * @since version
+	 */
+	public function getXml($name)
+	{
 
 		return isset($this->manifest->$name) ? $this->manifest->$name : null;
 	}
@@ -263,13 +328,19 @@ class manifestData
 	 * }
 	 * /**/
 
-
-	public function __toTextItem ($name='')
+	public function __toTextItem($name = '')
 	{
 		return $name . '="' . $this->get($name, '') . '"';
 	}
 
-	public function __toText () {
+	/**
+	 *
+	 * @return array
+	 *
+	 * @since version
+	 */
+	public function __toText()
+	{
 
 		$lines = [];
 
@@ -290,22 +361,19 @@ class manifestData
 		$lines[] = $this->__toTextItem('update');
 		$lines[] = $this->__toTextItem('version');
 
-
-
 		$lines[] = '';
-		if ($this->isInstalled) {
+		if ($this->isInstalled)
+		{
 			$lines[] = '( Manifest is within joomla ) ';
-		} else {
+		}
+		else
+		{
 			$lines[] = '( Manifest on dwevelopment path ) ';
 		}
 		$lines[] = '';
 
-
 		return $lines;
 	}
-
-
-
 
 } // class
 

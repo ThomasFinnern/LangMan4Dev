@@ -2,18 +2,19 @@
 /**
  * Translation items collected from code file
  *
- * @version       
+ * @version
  * @package       Lang4dev
  * @copyright (C) 2022-2022 Lang4dev Team
- * @license       
+ * @license
  */
 
 namespace Finnern\Component\Lang4dev\Administrator\Helper;
 
 use Joomla\CMS\Factory;
+use function defined;
 
 // no direct access
-\defined('_JEXEC') or die;
+defined('_JEXEC') or die;
 
 /**
  * Keeps one location of one language item
@@ -21,19 +22,17 @@ use Joomla\CMS\Factory;
  *
  * @package Lang4dev
  *
- * @since __BUMP_VERSION__
+ * @since   __BUMP_VERSION__
  */
 class transIdLocation
 {
 	public $name = '';
-    public $file = '';
-    public $path = '';
+	public $file = '';
+	public $path = '';
 	public $lineNr = -1;
 	public $colIdx = -1;
 
-
 	/**
-
 	 * @since __BUMP_VERSION__
 	 */
 	public function __construct(
@@ -41,11 +40,11 @@ class transIdLocation
 		$file = '',
 		$path = '',
 		$lineNr = -1,
-		$colIdx =-1)
+		$colIdx = -1)
 	{
-		$this->name = $name;
-		$this->file = $file;
-		$this->path = $path;
+		$this->name   = $name;
+		$this->file   = $file;
+		$this->path   = $path;
 		$this->lineNr = $lineNr;
 		$this->colIdx = $colIdx;
 	}

@@ -1,17 +1,18 @@
 <?php
 /**
- * @package     Joomla.Administrator
- * @subpackage  com_lang4dev
+ * @package       Joomla.Administrator
+ * @subpackage    com_lang4dev
  *
  * @copyright (C) 2022-2022 Lang4dev Team
- * @license     GNU General Public License version 2 or later; see LICENSE.txt
+ * @license       GNU General Public License version 2 or later; see LICENSE.txt
  */
 
 namespace Finnern\Component\Lang4dev\Administrator\Model;
 
-\defined('_JEXEC') or die;
+defined('_JEXEC') or die;
 
 use Finnern\Component\Lang4dev\Administrator\Helper\sessionProjectId;
+use JForm;
 use Joomla\CMS\Access\Rules;
 use Joomla\CMS\Association\AssociationServiceInterface;
 use Joomla\CMS\Categories\CategoryServiceInterface;
@@ -33,6 +34,7 @@ use Joomla\CMS\Workflow\Workflow;
 use Joomla\Registry\Registry;
 use Joomla\String\StringHelper;
 use Joomla\Utilities\ArrayHelper;
+use function defined;
 
 // associations: use Finnern\Component\Lang4def\Administrator\Helper\Lang4devHelper;
 
@@ -47,7 +49,7 @@ class Lang4devModel extends AdminModel
 	 * The prefix to use with controller messages.
 	 *
 	 * @var    string
- * @since __BUMP_VERSION__
+	 * @since __BUMP_VERSION__
 	 */
 	protected $text_prefix = 'COM_LANG4DEV';
 
@@ -59,14 +61,13 @@ class Lang4devModel extends AdminModel
 	 */
 	public $typeAlias = 'com_lang4dev.lang4dev';
 
-
 	/**
 	 * Method to get the row form.
 	 *
 	 * @param   array    $data      Data for the form.
 	 * @param   boolean  $loadData  True if the form is to load its own data (default case), false if not.
 	 *
-	 * @return  \JForm|boolean  A JForm object on success, false on failure
+	 * @return  JForm|boolean  A JForm object on success, false on failure
 	 *
 	 * @since __BUMP_VERSION__
 	 */
@@ -78,7 +79,6 @@ class Lang4devModel extends AdminModel
 		{
 			return false;
 		}
-
 
 		return $form;
 	}

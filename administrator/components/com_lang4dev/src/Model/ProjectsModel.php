@@ -1,22 +1,26 @@
 <?php
 /**
- * @package     Lang4dev
- * @subpackage  com_lang4dev
+ * @package       Lang4dev
+ * @subpackage    com_lang4dev
  * @copyright (C) 2022-2022 Lang4dev Team
- * @license     http://www.gnu.org/copyleft/gpl.html GNU/GPL
- * @author      finnern
+ * @license       http://www.gnu.org/copyleft/gpl.html GNU/GPL
+ * @author        finnern
  */
 
 namespace Finnern\Component\Lang4dev\Administrator\Model;
 
-\defined('_JEXEC') or die;
+defined('_JEXEC') or die;
 
+use DatabaseQuery;
+use JLoader;
 use Joomla\CMS\Association\AssociationServiceInterface;
 use Joomla\CMS\Categories\CategoryServiceInterface;
 use Joomla\CMS\Factory;
 use Joomla\CMS\Language\Associations;
 use Joomla\CMS\MVC\Factory\MVCFactoryInterface;
 use Joomla\CMS\MVC\Model\ListModel;
+use stdClass;
+use function defined;
 
 /**
  * Lang4dev Component Projects Model
@@ -32,7 +36,7 @@ class ProjectsModel extends ListModel
 	 * @param   MVCFactoryInterface  $factory  The factory.
 	 *
 	 * @see     \JControllerLegacy
-	 * @since __BUMP_VERSION__
+	 * @since   __BUMP_VERSION__
 	 */
 	public function __construct($config = array(), MVCFactoryInterface $factory = null)
 	{
@@ -47,7 +51,7 @@ class ProjectsModel extends ListModel
 				'created', 'a.created',
 				'created_by', 'a.created_by',
 
-                'published', 'a.published',
+				'published', 'a.published',
 
 //				'modified', 'a.modified',
 //				'modified_by', 'a.modified_by',
@@ -109,7 +113,7 @@ class ProjectsModel extends ListModel
 		// Extract the optional section name
 		$this->setState('filter.section', (count($parts) > 1) ? $parts[1] : null);
 
-		$search   = $this->getUserStateFromRequest($this->context . '.search', 'filter_search');
+		$search = $this->getUserStateFromRequest($this->context . '.search', 'filter_search');
 		$this->setState('filter.search', $search);
 
 		// List state information.
@@ -152,34 +156,33 @@ class ProjectsModel extends ListModel
 	/**
 	 * Method to get a database query to list galleries.
 	 *
-	 * @return  \DatabaseQuery object.
+	 * @return  DatabaseQuery object.
 	 *
 	 * @since __BUMP_VERSION__
 	 */
 	protected function getListQuery()
 	{
 		// Create a new query object.
-		$db = $this->getDbo();
+		$db    = $this->getDbo();
 		$query = $db->getQuery(true);
 
-        $app  = Factory::getApplication();
-        $user = $app->getIdentity();
+		$app  = Factory::getApplication();
+		$user = $app->getIdentity();
 
-        // Select the required fields from the table.
+		// Select the required fields from the table.
 		$query->select(
 			$this->getState(
-				/**/
+			/**/
 				'list.select',
 				'a.id, '
 				. 'a.title, '
 				. 'a.name, '
 				. 'a.alias, '
-                . 'a.notes, '
-                . 'a.root_path, '
-                . 'a.twin_id,'
+				. 'a.notes, '
+				. 'a.root_path, '
+				. 'a.twin_id,'
 
-
-                . 'a.params, '
+				. 'a.params, '
 
 				. 'a.checked_out, '
 				. 'a.checked_out_time, '
@@ -192,7 +195,7 @@ class ProjectsModel extends ListModel
 				. 'a.ordering,'
 
 				. 'a.approved,'
-                . 'a.asset_id,'
+				. 'a.asset_id,'
 				. 'a.access'
 			)
 		);
@@ -281,41 +284,41 @@ class ProjectsModel extends ListModel
 //		$query->where('a.id > 1');
 
 		/**
-		// Filter on the language.
-		if ($language = $this->getState('filter.language'))
-		{
-			$query->where('a.language = ' . $db->quote($language));
-		}
-		/**/
+		 * // Filter on the language.
+		 * if ($language = $this->getState('filter.language'))
+		 * {
+		 * $query->where('a.language = ' . $db->quote($language));
+		 * }
+		 * /**/
 
 		// Filter by a single tag.
 		/**
-		$tagId = $this->getState('filter.tag');
-
-		if (is_numeric($tagId))
-		{
-			$query->where($db->quoteName('tagmap.tag_id') . ' = ' . (int) $tagId)
-				->join(
-					'LEFT', $db->quoteName('#__contentitem_tag_map', 'tagmap')
-					. ' ON ' . $db->quoteName('tagmap.content_item_id') . ' = ' . $db->quoteName('a.id')
-					. ' AND ' . $db->quoteName('tagmap.type_alias') . ' = ' . $db->quote($extension . '.category')
-				);
-		}
-		/**/
+		 * $tagId = $this->getState('filter.tag');
+		 *
+		 * if (is_numeric($tagId))
+		 * {
+		 * $query->where($db->quoteName('tagmap.tag_id') . ' = ' . (int) $tagId)
+		 * ->join(
+		 * 'LEFT', $db->quoteName('#__contentitem_tag_map', 'tagmap')
+		 * . ' ON ' . $db->quoteName('tagmap.content_item_id') . ' = ' . $db->quoteName('a.id')
+		 * . ' AND ' . $db->quoteName('tagmap.type_alias') . ' = ' . $db->quote($extension . '.category')
+		 * );
+		 * }
+		 * /**/
 
 		// Add the list ordering clause
-        $listOrdering = $this->getState('list.ordering', 'a.ordering');
-        $listDirn = $db->escape($this->getState('list.direction', 'DESC'));
+		$listOrdering = $this->getState('list.ordering', 'a.ordering');
+		$listDirn     = $db->escape($this->getState('list.direction', 'DESC'));
 		// $listDirn = $db->escape($this->getState('list.direction', 'ASC'));
 
-        if ($listOrdering == 'a.access')
-        {
-            $query->order('a.access ' . $listDirn . ', a.id ' . $listDirn);
-        }
-        else
-        {
-            $query->order($db->escape($listOrdering) . ' ' . $listDirn);
-        }
+		if ($listOrdering == 'a.access')
+		{
+			$query->order('a.access ' . $listDirn . ', a.id ' . $listDirn);
+		}
+		else
+		{
+			$query->order($db->escape($listOrdering) . ' ' . $listDirn);
+		}
 
 		// Group by on Galleries for \JOIN with component tables to count items
 		$query->group(
@@ -324,13 +327,13 @@ class ProjectsModel extends ListModel
 			. 'a.title, '
 			. 'a.name, '
 			. 'a.alias, '
-            . 'a.notes, '
-            . 'a.root_path, '
-            . 'a.twin_id,'
+			. 'a.notes, '
+			. 'a.root_path, '
+			. 'a.twin_id,'
 
-            . 'a.params, '
+			. 'a.params, '
 
-            . 'a.checked_out, '
+			. 'a.checked_out, '
 			. 'a.checked_out_time, '
 			. 'a.created, '
 			. 'a.created_by, '
@@ -338,14 +341,14 @@ class ProjectsModel extends ListModel
 			. 'a.modified, '
 			. 'a.modified_by, '
 
-            . 'a.ordering,'
+			. 'a.ordering,'
 
-            . 'a.approved,'
-            . 'a.asset_id,'
-            . 'a.access, '
+			. 'a.approved,'
+			. 'a.asset_id,'
+			. 'a.access, '
 
 			. 'uc.name, '
-		    . 'ua.name '
+			. 'ua.name '
 
 		);
 
@@ -375,7 +378,7 @@ class ProjectsModel extends ListModel
 			// Set ordering to the last item if not set
 			if (empty($table->ordering))
 			{
-				$db = $this->getDbo();
+				$db    = $this->getDbo();
 				$query = $db->getQuery(true)
 					->select('MAX(ordering)')
 					->from('#__banners');
@@ -415,10 +418,10 @@ class ProjectsModel extends ListModel
 
 		$extension = $this->getState('filter.extension');
 
-		$assoc = Associations::isEnabled();
+		$assoc     = Associations::isEnabled();
 		$extension = explode('.', $extension);
 		$component = array_shift($extension);
-		$cname = str_replace('com_', '', $component);
+		$cname     = str_replace('com_', '', $component);
 
 		if (!$assoc || !$component || !$cname)
 		{
@@ -437,7 +440,7 @@ class ProjectsModel extends ListModel
 		}
 
 		$hname = $cname . 'HelperAssociation';
-		\JLoader::register($hname, JPATH_SITE . '/components/' . $component . '/helpers/association.php');
+		JLoader::register($hname, JPATH_SITE . '/components/' . $component . '/helpers/association.php');
 
 		$assoc = class_exists($hname) && !empty($hname::$category_association);
 
@@ -458,10 +461,10 @@ class ProjectsModel extends ListModel
 		if ($items != false)
 		{
 			/**
-			$extension = $this->getState('filter.extension');
-
-			$this->countItems($items, $extension);
-			/**/
+			 * $extension = $this->getState('filter.extension');
+			 *
+			 * $this->countItems($items, $extension);
+			 * /**/
 		}
 
 		return $items;
@@ -470,31 +473,31 @@ class ProjectsModel extends ListModel
 	/**
 	 * Method to load the countItems method from the extensions
 	 *
-	 * @param   \stdClass[]  &$items     The category items
-	 * @param   string       $extension  The category extension
+	 * @param   stdClass[]  &$items      The category items
+	 * @param   string        $extension  The category extension
 	 *
 	 * @return  void
 	 *
 	 * @since __BUMP_VERSION__
 	 */
 	/**
-	public function countItems(&$items, $extension)
-	{
-		$parts     = explode('.', $extension, 2);
-		$section   = '';
-
-		if (count($parts) > 1)
-		{
-			$section = $parts[1];
-		}
-
-		$component = Factory::getApplication()->bootComponent($parts[0]);
-
-		if ($component instanceof CategoryServiceInterface)
-		{
-			$component->countItems($items, $section);
-		}
-	}
-	/**/
+	 * public function countItems(&$items, $extension)
+	 * {
+	 * $parts     = explode('.', $extension, 2);
+	 * $section   = '';
+	 *
+	 * if (count($parts) > 1)
+	 * {
+	 * $section = $parts[1];
+	 * }
+	 *
+	 * $component = Factory::getApplication()->bootComponent($parts[0]);
+	 *
+	 * if ($component instanceof CategoryServiceInterface)
+	 * {
+	 * $component->countItems($items, $section);
+	 * }
+	 * }
+	 * /**/
 
 } // class

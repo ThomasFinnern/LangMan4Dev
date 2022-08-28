@@ -9,11 +9,13 @@
 
 namespace Finnern\Component\Lang4dev\Administrator\Model;
 
-\defined('_JEXEC') or die;
+defined('_JEXEC') or die;
 
+use Exception;
 use Finnern\Component\Lang4dev\Administrator\Helper\langSubProject;
 use Finnern\Component\Lang4dev\Administrator\Helper\manifestLangFiles;
 use Finnern\Component\Lang4dev\Administrator\Helper\projectType;
+use JForm;
 use Joomla\CMS\Access\Rules;
 use Joomla\CMS\Association\AssociationServiceInterface;
 use Joomla\CMS\Categories\CategoryServiceInterface;
@@ -36,6 +38,8 @@ use Joomla\Registry\Registry;
 use Joomla\String\StringHelper;
 use Joomla\Utilities\ArrayHelper;
 use Finnern\Component\Lang4dev\Administrator\Helper\subPrjPath;
+use JTableCategory;
+use function defined;
 
 // associations: use Finnern\Component\Lang4def\Administrator\Helper\Lang4devHelper;
 
@@ -148,7 +152,7 @@ class ProjectModel extends AdminModel
 	 * @param   string  $prefix  The class prefix. Optional.
 	 * @param   array   $config  Configuration array for model. Optional.
 	 *
-	 * @return  \Joomla\CMS\Table\Table  A JTable object
+	 * @return  Table  A JTable object
 	 *
 	 * @since __BUMP_VERSION__
 	 */
@@ -308,7 +312,7 @@ class ProjectModel extends AdminModel
 	 * @param   array    $data      Data for the form.
 	 * @param   boolean  $loadData  True if the form is to load its own data (default case), false if not.
 	 *
-	 * @return  \JForm|boolean  A JForm object on success, false on failure
+	 * @return  JForm|boolean  A JForm object on success, false on failure
 	 *
 	 * @since __BUMP_VERSION__
 	 */
@@ -368,7 +372,7 @@ class ProjectModel extends AdminModel
 	 * A protected method to get the where clause for the reorder
 	 * This ensures that the row will be moved relative to a row with the same extension
 	 *
-	 * @param   \JTableCategory  $table  Current table instance
+	 * @param   JTableCategory  $table  Current table instance
 	 *
 	 * @return  array  An array of conditions to add to ordering queries.
 	 *
@@ -429,13 +433,13 @@ class ProjectModel extends AdminModel
 	/**
 	 * Method to preprocess the form.
 	 *
-	 * @param   \JForm  $form   A JForm object.
+	 * @param   JForm  $form   A JForm object.
 	 * @param   mixed   $data   The data expected for the form.
 	 * @param   string  $group  The name of the plugin group to import.
 	 *
 	 * @return  void
 	 *
-	 * @throws  \Exception if there is an error in the form event.
+	 * @throws  Exception if there is an error in the form event.
 	 *
 	 * protected function preprocessForm(\JForm $form, $data, $group = 'content')
 	 * {
@@ -562,6 +566,13 @@ class ProjectModel extends AdminModel
 	 * @since __BUMP_VERSION__
 	 */
 	/**/
+	/**
+	 * @param $table
+	 *
+	 *
+	 * @throws Exception
+	 * @since version
+	 */
 	protected function prepareTable($table)
 	{
 		$date        = Factory::getDate()->toSql();
@@ -920,6 +931,13 @@ class ProjectModel extends AdminModel
 		return (int) $max;
 	}
 
+	/**
+	 *
+	 * @return int
+	 *
+	 * @throws Exception
+	 * @since version
+	 */
 	public function justSavedId()
 	{
 		// On save the id is kept in session state
@@ -928,9 +946,13 @@ class ProjectModel extends AdminModel
 		return $newId;
 	}
 
-
-
-
+	/**
+	 * @param $oSubPrjPath
+	 *
+	 * @return array
+	 *
+	 * @since version
+	 */
 	public function subProjectsByPrjId($oSubPrjPath)
 	{
 		$subProjects = [];
@@ -956,13 +978,12 @@ class ProjectModel extends AdminModel
 
 			//--- collect new sub project ------------------
 
-			$subProjects[]  = $langSubProject;
+			$subProjects[] = $langSubProject;
 
 		}
 
 		return $subProjects;
 	}
-
 
 	/**
 	 * Delete #__content_frontpage items if the deleted articles was featured
@@ -980,7 +1001,7 @@ class ProjectModel extends AdminModel
 		if ($return)
 		{
 			// delete subproject by parent id
-			$db = $this->getDbo();
+			$db    = $this->getDbo();
 			$query = $db->getQuery(true)
 				->delete($db->quoteName('#__lang4dev_subprojects'))
 				->whereIn($db->quoteName('parent_id'), $pks);
@@ -993,7 +1014,5 @@ class ProjectModel extends AdminModel
 
 		return $return;
 	}
-
-
 
 } // class

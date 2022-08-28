@@ -83,7 +83,7 @@ if ($saveOrder && !empty($this->items))
 			<!--div class="alert alert-info"-->
 			<span class="fa fa-info-circle" aria-hidden="true"></span><span
 					class="sr-only"><?php echo Text::_('INFO'); ?></span>
-			<?php echo Text::_('COM_LANG4DEV_CREATE_YOUR_FIRST_PROJECT');  ?>
+			<?php echo Text::_('COM_LANG4DEV_CREATE_YOUR_FIRST_PROJECT'); ?>
 			<!--/div-->
 		</div>
 	</div>
@@ -95,35 +95,35 @@ if ($saveOrder && !empty($this->items))
 				<?php echo Text::_('COM_LANG4DEV_TABLE_CAPTION'); ?>, <?php echo Text::_('JGLOBAL_SORTED_BY'); ?>
 			</caption>
 			<thead>
-				<tr>
-					<td style="width:1%" class="text-center">
-						<?php echo HTMLHelper::_('grid.checkall'); ?>
-					</td>
+			<tr>
+				<td style="width:1%" class="text-center">
+					<?php echo HTMLHelper::_('grid.checkall'); ?>
+				</td>
 
-					<th scope="col" style="width:1%" class="text-center d-none d-md-table-cell">
-						<?php echo HTMLHelper::_('searchtools.sort', '', 'a.ordering', $listDirn, $listOrder, null, 'asc', 'JGRID_HEADING_ORDERING', 'icon-menu-2'); ?>
-					</th>
+				<th scope="col" style="width:1%" class="text-center d-none d-md-table-cell">
+					<?php echo HTMLHelper::_('searchtools.sort', '', 'a.ordering', $listDirn, $listOrder, null, 'asc', 'JGRID_HEADING_ORDERING', 'icon-menu-2'); ?>
+				</th>
 
-					<th scope="col" style="width:3%" class="text-center d-none d-md-table-cell">
+				<th scope="col" style="width:3%" class="text-center d-none d-md-table-cell">
 	                                        <span class="small"
 	                                              title="<?php echo $this->escape("Remove when order is fixed"); ?>">
 	                                            <?php echo Text::_('JGRID_HEADING_ORDERING'); ?>
 	                                        </span>
-					</th>
+				</th>
 
-					<th>
-						<?php echo Text::_('JGLOBAL_TITLE'); ?>
-					</th>
+				<th>
+					<?php echo Text::_('JGLOBAL_TITLE'); ?>
+				</th>
 
-					<th>
-						<?php echo Text::_('JGRID_HEADING_ID'); ?>
-					</th>
+				<th>
+					<?php echo Text::_('JGRID_HEADING_ID'); ?>
+				</th>
 
-					<th>
-						<?php echo Text::_('COM_LANG4DEV_SUBPROJECT_ROOT_PATH'); ?>
-					</th>
+				<th>
+					<?php echo Text::_('COM_LANG4DEV_SUBPROJECT_ROOT_PATH'); ?>
+				</th>
 
-				</tr>
+			</tr>
 			</thead>
 
 			<tbody <?php if ($saveOrder) : ?> class="js-draggable" data-url="<?php echo $saveOrderingUrl; ?>" data-direction="<?php echo strtolower($listDirn); ?>" data-nested="false"<?php endif; ?>>

@@ -11,6 +11,7 @@ namespace Finnern\Component\Lang4dev\Administrator\Helper;
 use Joomla\CMS\Factory;
 use Joomla\CMS\Filesystem\File;
 use Joomla\CMS\Filesystem\Folder;
+use RuntimeException;
 
 //use Finnern\Component\Lang4dev\Administrator\Helper\sysFilesContent;
 //use Finnern\Component\Lang4dev\Administrator\Helper\searchTransIdLocations;
@@ -40,6 +41,12 @@ class langSubProject extends langFiles
 	protected $transStringsLocations = [];
 	protected $transIdsClassified;
 
+	/**
+	 * @param $prjId
+	 * @param $prjType
+	 * @param $prjRootPath
+	 * @param $prjXmlPathFilename
+	 */
 	public function __construct($prjId = '',
 		$prjType = projectType::PRJ_TYPE_NONE,
 		$prjRootPath = '',
@@ -62,6 +69,12 @@ class langSubProject extends langFiles
 		}
 	}
 
+	/**
+	 *
+	 * @return bool
+	 *
+	 * @since version
+	 */
 	private function checkRootPath()
 	{
 		$isOk = false;
@@ -101,6 +114,12 @@ class langSubProject extends langFiles
 		return $isOk;
 	}
 
+	/**
+	 *
+	 * @return bool
+	 *
+	 * @since version
+	 */
 	private function checkManifestPath()
 	{
 		$isManifestPathValid = false;
@@ -108,12 +127,12 @@ class langSubProject extends langFiles
 		// continue when path has enough characters
 		if (strlen($this->prjXmlPathFilename) > 5)
 		{
-			if (is_file ($this->prjXmlPathFilename))
+			if (is_file($this->prjXmlPathFilename))
 			{
 				$isManifestPathValid = true;
 
 				// ToDo: create path from ....
-				$this->prjXmlFilePath = dirname ($this->prjXmlPathFilename);
+				$this->prjXmlFilePath = dirname($this->prjXmlPathFilename);
 			}
 			else
 			{
@@ -125,6 +144,12 @@ class langSubProject extends langFiles
 		return $isManifestPathValid;
 	}
 
+	/**
+	 *
+	 * @return string
+	 *
+	 * @since version
+	 */
 	private function projectFileName()
 	{
 		$projectFileName = $this->prjId;
@@ -145,13 +170,21 @@ class langSubProject extends langFiles
 
 	//
 	// script- / install file, language files as list, transId
-	public function findPrjFiles($isAddLangFileNames=true)
+	/**
+	 * @param $isAddLangFileNames
+	 *
+	 * @return false
+	 *
+	 * @throws \Exception
+	 * @since version
+	 */
+	public function findPrjFiles($isAddLangFileNames = true)
 	{
 
 		$isFilesFound = false;
 
 		$isManifestPathValid = false;
-		$isRootPathValid = false;
+		$isRootPathValid     = false;
 
 		try
 		{
@@ -178,12 +211,12 @@ class langSubProject extends langFiles
 
 				$isManifestPathValid = $this->checkManifestPath();
 
-				if ( ! $isManifestPathValid)
+				if (!$isManifestPathValid)
 				{
 
 					$projectFileName = $this->projectFileName();
 
-					$isFileFound = $this->searchXmlProjectFile($projectFileName, $this->prjRootPath); // $this->prjXmlFilePath); //
+					$isFileFound         = $this->searchXmlProjectFile($projectFileName, $this->prjRootPath); // $this->prjXmlFilePath); //
 					$isManifestPathValid = $this->checkManifestPath();
 
 				}
@@ -228,7 +261,7 @@ class langSubProject extends langFiles
 			}
 
 		}
-		catch (\RuntimeException $e)
+		catch (RuntimeException $e)
 		{
 			$OutTxt = '';
 			$OutTxt .= 'Error executing findPrjFiles: "' . '<br>';
@@ -242,6 +275,13 @@ class langSubProject extends langFiles
 	}
 
 	// read content of language file  ==> get translation in langFiles
+
+	/**
+	 *
+	 * @return array
+	 *
+	 * @since version
+	 */
 	public function getLangIds()
 	{
 		$langIds = [];
@@ -255,6 +295,15 @@ class langSubProject extends langFiles
 	}
 
 	// get translations from langFiles (read) and keep file names
+
+	/**
+	 * @param $langId
+	 * @param $isReadOriginal
+	 *
+	 * @return langFile
+	 *
+	 * @since version
+	 */
 	public function getLangFilesData($langId = 'en-GB', $isReadOriginal = false)
 	{
 
@@ -268,6 +317,14 @@ class langSubProject extends langFiles
 	}
 
 	// read translations from langFiles and keep file names
+
+	/**
+	 * @param $langId
+	 *
+	 * @return langFile
+	 *
+	 * @since version
+	 */
 	public function readLangFiles($langId = 'en-GB')
 	{
 		if ($langId == '')
@@ -291,6 +348,14 @@ class langSubProject extends langFiles
 	}
 
 	// read translations from langFile and keep file name
+
+	/**
+	 * @param $langFileName
+	 *
+	 * @return langFile
+	 *
+	 * @since version
+	 */
 	public function readLangFile($langFileName)
 	{
 		$langFileData = new langFile ();
@@ -299,6 +364,13 @@ class langSubProject extends langFiles
 		return $langFileData;
 	}
 
+	/**
+	 * @param $useLangSysIni
+	 *
+	 * @return array|mixed
+	 *
+	 * @since version
+	 */
 	public function scanCode4TransIdsLocations($useLangSysIni = false)
 	{
 
@@ -345,6 +417,13 @@ class langSubProject extends langFiles
 		return $this->transIdLocations;
 	}
 
+	/**
+	 * @param $useLangSysIni
+	 *
+	 * @return array|mixed
+	 *
+	 * @since version
+	 */
 	public function scanCode4TransStringsLocations($useLangSysIni = false)
 	{
 
@@ -386,6 +465,13 @@ class langSubProject extends langFiles
 		return $this->transStringsLocations;
 	}
 
+	/**
+	 *
+	 * @return array
+	 *
+	 * @throws \Exception
+	 * @since version
+	 */
 	public function getPrjTransIdLocations()
 	{
 		$names = [];
@@ -399,7 +485,7 @@ class langSubProject extends langFiles
 			}
 
 		}
-		catch (\RuntimeException $e)
+		catch (RuntimeException $e)
 		{
 			$OutTxt = 'Error executing getPrjTransIdLocations: "' . '<br>';
 			$OutTxt .= 'Error: "' . $e->getMessage() . '"' . '<br>';
@@ -411,6 +497,13 @@ class langSubProject extends langFiles
 		return $names;
 	}
 
+	/**
+	 * @param $isScanOriginal
+	 *
+	 * @return array|mixed
+	 *
+	 * @since version
+	 */
 	public function getTransIdLocations($isScanOriginal = false)
 	{
 		// if not cached or $isReadOriginal
@@ -423,6 +516,13 @@ class langSubProject extends langFiles
 		return $this->transIdLocations;
 	}
 
+	/**
+	 * @param $isScanOriginal
+	 *
+	 * @return array|mixed
+	 *
+	 * @since version
+	 */
 	public function getTransStringsLocations($isScanOriginal = false)
 	{
 		// if not cached or $isReadOriginal
@@ -435,6 +535,14 @@ class langSubProject extends langFiles
 		return $this->transStringsLocations;
 	}
 
+	/**
+	 * @param $langId
+	 * @param $isDoClassifyTransIds
+	 *
+	 * @return array
+	 *
+	 * @since version
+	 */
 	public function getTransIdsClassified($langId = "en-GB", $isDoClassifyTransIds = false)
 	{
 
@@ -447,6 +555,14 @@ class langSubProject extends langFiles
 		return $this->transIdsClassified;
 	}
 
+	/**
+	 * @param $langId
+	 *
+	 * @return array
+	 *
+	 * @throws \Exception
+	 * @since version
+	 */
 	public function classifyTransIds($langId = "en-GB")
 	{
 		//
@@ -466,6 +582,13 @@ class langSubProject extends langFiles
 		return $this->transIdsClassified;
 	}
 
+	/**
+	 * @param $langId
+	 *
+	 * @return array
+	 *
+	 * @since version
+	 */
 	private function collectDoubles($langId = "en-GB")
 	{
 		$doubles = [];
@@ -480,6 +603,12 @@ class langSubProject extends langFiles
 		return $doubles;
 	}
 
+	/**
+	 *
+	 * @return string
+	 *
+	 * @since version
+	 */
 	public function getPrjTypeText()
 	{
 
@@ -487,12 +616,25 @@ class langSubProject extends langFiles
 
 	}
 
+	/**
+	 *
+	 * @return string
+	 *
+	 * @since version
+	 */
 	public function getPrjIdAndTypeText()
 	{
 
 		return $this->prjId . ': ' . $this->getPrjTypeText();
 	}
 
+	/**
+	 * @param $mainLangId
+	 *
+	 *
+	 * @throws \Exception
+	 * @since version
+	 */
 	public function alignTranslationsByMain($mainLangId)
 	{
 
@@ -530,8 +672,8 @@ class langSubProject extends langFiles
 					{
 						//--- create matching translation file name -----------------------------------------------
 
-						$mainLangFileName  = $mainFileData->getlangPathFileName();
-						$mainTrans = $mainFileData->translations;
+						$mainLangFileName = $mainFileData->getlangPathFileName();
+						$mainTrans        = $mainFileData->translations;
 
 						$matchTransFileName = $this->matchingNameByTransId($mainLangId, $mainLangFileName, $transLangId);
 
@@ -542,7 +684,8 @@ class langSubProject extends langFiles
 
 							// toDo: should not be needed
 							$actTransFileName = str_replace('\\', '/', $actTransFileName);
-							if ($actTransFileName == $matchTransFileName) {
+							if ($actTransFileName == $matchTransFileName)
+							{
 
 								// align order of items in matching translation
 								$transFileData->alignTranslationsByMain($mainTrans);
@@ -554,7 +697,7 @@ class langSubProject extends langFiles
 			} // for translation ids
 
 		}
-		catch (\RuntimeException $e)
+		catch (RuntimeException $e)
 		{
 			$OutTxt = '';
 			$OutTxt .= 'Error executing alignTranslationsByMain: "' . '<br>';
@@ -568,7 +711,17 @@ class langSubProject extends langFiles
 		// ToDo: ....
 	}
 
-	public function searchXmlProjectFile ($projectFileName, $searchPath) {
+	/**
+	 * @param $projectFileName
+	 * @param $searchPath
+	 *
+	 * @return bool
+	 *
+	 * @throws \Exception
+	 * @since version
+	 */
+	public function searchXmlProjectFile($projectFileName, $searchPath)
+	{
 
 		$isFileFound = false;
 
@@ -586,9 +739,9 @@ class langSubProject extends langFiles
 				if (is_file($prjXmlPathFilename))
 				{
 
-					$this->prjXmlFilePath = $searchPath;
+					$this->prjXmlFilePath     = $searchPath;
 					$this->prjXmlPathFilename = $prjXmlPathFilename;
-					$isFileFound          = true;
+					$isFileFound              = true;
 
 				}
 				else
@@ -610,7 +763,7 @@ class langSubProject extends langFiles
 
 				}
 			}
-			catch (\RuntimeException $e)
+			catch (RuntimeException $e)
 			{
 				$OutTxt = '';
 				$OutTxt .= 'Error executing searchXmlProjectFile: "' . '<br>';
@@ -624,7 +777,15 @@ class langSubProject extends langFiles
 		return $isFileFound;
 	}
 
-	public function getLangFileNames ($langId)  {
+	/**
+	 * @param $langId
+	 *
+	 * @return array
+	 *
+	 * @since version
+	 */
+	public function getLangFileNames($langId)
+	{
 
 		$fileNames = [];
 

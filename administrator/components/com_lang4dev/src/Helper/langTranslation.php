@@ -20,10 +20,10 @@ defined('_JEXEC') or die;
  * Keeps one translation (line) of one language item
  * with above comments, behind comments
  * ? empty lines ?
- * 
- * prepared items have a twin in the main language and 
+ *
+ * prepared items have a twin in the main language and
  * no content (content may exist on later code development)
- * 
+ *
  * @package Lang4dev
  *
  * @since   __BUMP_VERSION__
@@ -45,7 +45,7 @@ class langTranslation
 		$translationText = '',
 		$commentsBefore = [],
 		$commentBehind = '',
-		$lineNr = -1, 
+		$lineNr = -1,
 		$isPrepared = false)
 	{
 		$this->transId         = $transId;
@@ -66,14 +66,20 @@ class langTranslation
 		$this->init($this->lineNr);
 	}
 
+	/**
+	 * @param $lineNr
+	 *
+	 *
+	 * @since version
+	 */
 	public function init($lineNr = -1)
 	{
-		$this->transId            = '';
+		$this->transId         = '';
 		$this->translationText = '';
 		$this->commentsBefore  = [];
 		$this->commentBehind   = '';
 		$this->lineNr          = $lineNr;
-		$this->isPrepared        = false;
+		$this->isPrepared      = false;
 	}
 
 }

@@ -1,15 +1,15 @@
 <?php
 /**
- * @package     Joomla.Administrator
- * @subpackage  com_lang4dev
+ * @package       Joomla.Administrator
+ * @subpackage    com_lang4dev
  *
  * @copyright (C) 2022-2022 Lang4dev Team
- * @license     GNU General Public License version 2 or later; see LICENSE.txt
+ * @license       GNU General Public License version 2 or later; see LICENSE.txt
  */
 
 namespace Finnern\Component\Lang4dev\Administrator\View\PrjTexts;
 
-\defined('_JEXEC') or die;
+defined('_JEXEC') or die;
 
 require_once(__DIR__ . '/../../Helper/selectProject.php');
 
@@ -33,6 +33,7 @@ use Finnern\Component\Lang4dev\Administrator\Helper\sessionProjectId;
 use Finnern\Component\Lang4dev\Administrator\Helper\sessionTransLangIds;
 use Finnern\Component\Lang4dev\Administrator\Helper\langFile;
 use Finnern\Component\Lang4dev\Administrator\Helper\projectType;
+use function defined;
 use function Finnern\Component\Lang4dev\Administrator\Helper\selectProject;
 
 /**
@@ -82,7 +83,7 @@ class HtmlView extends BaseHtmlView
 		// main / translation language id
 		$sessionTransLangIds = new sessionTransLangIds ();
 		[$mainLangId, $transLangId] = $sessionTransLangIds->getIds();
-		$this->mainLangId    = $mainLangId;
+		$this->mainLangId = $mainLangId;
 
 		// selection of project and subproject
 		$sessionProjectId = new sessionProjectId();
@@ -104,7 +105,7 @@ class HtmlView extends BaseHtmlView
 
 		$model         = $this->getModel();
 		$this->project = $model->getProject($prjId, $subPrjActive);
-		$project = $this->project;
+		$project       = $this->project;
 
 		/* test projects *
 		$project =
@@ -198,6 +199,7 @@ class HtmlView extends BaseHtmlView
 		$this->addToolbar($Layout);
 
 		parent::display($tpl);
+
 		return;
 	}
 
@@ -231,22 +233,22 @@ class HtmlView extends BaseHtmlView
 		switch ($Layout)
 		{
 			/**
-			case 'RawView':
-				ToolBarHelper::title(Text::_('COM_Lang4dev_MAINTENANCE')
-					. ': ' . Text::_('COM_Lang4dev_CONFIGURATION_RAW_VIEW'), 'screwdriver');
-				ToolBarHelper::cancel('config.cancel_rawView', 'JTOOLBAR_CLOSE');
-
-
-				break;
-
-			case 'RawEdit':
-				ToolBarHelper::title(Text::_('COM_Lang4dev_MAINTENANCE')
-					. ': ' . Text::_('COM_Lang4dev_CONFIGURATION_RAW_EDIT'), 'screwdriver');
-				ToolBarHelper::apply('config.apply_rawEdit');
-				ToolBarHelper::save('config.save_rawEdit');
-				ToolBarHelper::cancel('config.cancel_rawEdit', 'JTOOLBAR_CLOSE');
-				break;
-			/**/
+			 * case 'RawView':
+			 * ToolBarHelper::title(Text::_('COM_Lang4dev_MAINTENANCE')
+			 * . ': ' . Text::_('COM_Lang4dev_CONFIGURATION_RAW_VIEW'), 'screwdriver');
+			 * ToolBarHelper::cancel('config.cancel_rawView', 'JTOOLBAR_CLOSE');
+			 *
+			 *
+			 * break;
+			 *
+			 * case 'RawEdit':
+			 * ToolBarHelper::title(Text::_('COM_Lang4dev_MAINTENANCE')
+			 * . ': ' . Text::_('COM_Lang4dev_CONFIGURATION_RAW_EDIT'), 'screwdriver');
+			 * ToolBarHelper::apply('config.apply_rawEdit');
+			 * ToolBarHelper::save('config.save_rawEdit');
+			 * ToolBarHelper::cancel('config.cancel_rawEdit', 'JTOOLBAR_CLOSE');
+			 * break;
+			 * /**/
 			default:
 				ToolBarHelper::cancel('lang4dev.cancel', 'JTOOLBAR_CLOSE');
 				break;
@@ -261,8 +263,6 @@ class HtmlView extends BaseHtmlView
 			$toolbar->preferences('com_lang4dev');
 		}
 	}
-
-
 
 }
 

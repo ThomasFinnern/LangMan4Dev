@@ -1,15 +1,15 @@
 <?php
 /**
- * @package     Joomla.Administrator
- * @subpackage  com_lang4dev
+ * @package       Joomla.Administrator
+ * @subpackage    com_lang4dev
  *
  * @copyright (C) 2022-2022 Lang4dev Team
- * @license     GNU General Public License version 2 or later; see LICENSE.txt
+ * @license       GNU General Public License version 2 or later; see LICENSE.txt
  */
 
 namespace Finnern\Component\Lang4dev\Administrator\View\Translations;
 
-\defined('_JEXEC') or die;
+defined('_JEXEC') or die;
 
 use Joomla\CMS\Component\ComponentHelper;
 use Joomla\CMS\Helper\ContentHelper;
@@ -21,6 +21,7 @@ use Joomla\CMS\MVC\View\GenericDataException;
 use Joomla\CMS\Router\Route;
 use Joomla\CMS\Toolbar\Toolbar;
 use Joomla\CMS\Toolbar\ToolbarHelper;
+use function defined;
 
 //use Finnern\Component\Lang4dev\Administrator\Helper\Lang4devHelper;
 
@@ -48,24 +49,22 @@ class HtmlView extends BaseHtmlView
 		$Layout = Factory::getApplication()->input->get('layout');
 		//echo '$Layout: ' . $Layout . '<br>';
 
-		$l4dConfig = ComponentHelper::getComponent('com_lang4dev')->getParams();
+		$l4dConfig            = ComponentHelper::getComponent('com_lang4dev')->getParams();
 		$this->isDebugBackend = $l4dConfig->get('isDebugBackend');
-		$this->isDevelop = $l4dConfig->get('isDevelop');
-
+		$this->isDevelop      = $l4dConfig->get('isDevelop');
 
 		//---  --------------------------------------------------------------
 		/**
-		HTMLHelper::_('sidebar.setAction', 'index.php?option=com_lang4dev&view=config&layout=RawView');
-		/**
-		$Layout = Factory::getApplication()->input->get('layout');
-		Lang4devHelper::addSubmenu('config');
-		$this->sidebar = \JHtmlSidebar::render();
-		**/
+		 * $Layout = Factory::getApplication()->input->get('layout');
+		 * Lang4devHelper::addSubmenu('config');
+		 * $this->sidebar = \JHtmlSidebar::render();
+		 **/
 
 		$this->addToolbar($Layout);
 		/**/
 
 		parent::display($tpl);
+
 		return;
 	}
 
@@ -98,24 +97,24 @@ class HtmlView extends BaseHtmlView
 		switch ($Layout)
 		{
 			/**
-			case 'RawView':
-				ToolBarHelper::title(Text::_('COM_Lang4dev_MAINTENANCE')
-					. ': ' . Text::_('COM_Lang4dev_CONFIGURATION_RAW_VIEW'), 'screwdriver');
-				ToolBarHelper::cancel('config.cancel_rawView', 'JTOOLBAR_CLOSE');
-
-
-				break;
-
-			case 'RawEdit':
-				ToolBarHelper::title(Text::_('COM_Lang4dev_MAINTENANCE')
-					. ': ' . Text::_('COM_Lang4dev_CONFIGURATION_RAW_EDIT'), 'screwdriver');
-				ToolBarHelper::apply('config.apply_rawEdit');
-				ToolBarHelper::save('config.save_rawEdit');
-				ToolBarHelper::cancel('config.cancel_rawEdit', 'JTOOLBAR_CLOSE');
-				break;
-			/**/
+			 * case 'RawView':
+			 * ToolBarHelper::title(Text::_('COM_Lang4dev_MAINTENANCE')
+			 * . ': ' . Text::_('COM_Lang4dev_CONFIGURATION_RAW_VIEW'), 'screwdriver');
+			 * ToolBarHelper::cancel('config.cancel_rawView', 'JTOOLBAR_CLOSE');
+			 *
+			 *
+			 * break;
+			 *
+			 * case 'RawEdit':
+			 * ToolBarHelper::title(Text::_('COM_Lang4dev_MAINTENANCE')
+			 * . ': ' . Text::_('COM_Lang4dev_CONFIGURATION_RAW_EDIT'), 'screwdriver');
+			 * ToolBarHelper::apply('config.apply_rawEdit');
+			 * ToolBarHelper::save('config.save_rawEdit');
+			 * ToolBarHelper::cancel('config.cancel_rawEdit', 'JTOOLBAR_CLOSE');
+			 * break;
+			 * /**/
 			default:
-                ToolBarHelper::cancel('lang4dev.cancel', 'JTOOLBAR_CLOSE');
+				ToolBarHelper::cancel('lang4dev.cancel', 'JTOOLBAR_CLOSE');
 				break;
 		}
 
@@ -128,8 +127,6 @@ class HtmlView extends BaseHtmlView
 			$toolbar->preferences('com_lang4dev');
 		}
 	}
-
-
 
 }
 

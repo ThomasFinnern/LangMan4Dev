@@ -1,15 +1,15 @@
 <?php
 /**
- * @package     Joomla.Administrator
- * @subpackage  com_lang4dev
+ * @package       Joomla.Administrator
+ * @subpackage    com_lang4dev
  *
  * @copyright (C) 2022-2022 Lang4dev Team
- * @license     GNU General Public License version 2 or later; see LICENSE.txt
+ * @license       GNU General Public License version 2 or later; see LICENSE.txt
  */
 
 namespace Finnern\Component\Lang4dev\Administrator\View\Translate;
 
-\defined('_JEXEC') or die;
+defined('_JEXEC') or die;
 
 require_once(__DIR__ . '/../../Helper/selectProject.php');
 
@@ -29,8 +29,8 @@ use Joomla\CMS\Toolbar\Toolbar;
 use Joomla\CMS\Toolbar\ToolbarHelper;
 
 //use Finnern\Component\Lang4dev\Administrator\Helper\Lang4devHelper;
+use function defined;
 use function Finnern\Component\Lang4dev\Administrator\Helper\selectProject;
-
 
 /**
  * View class for a list of lang4dev.
@@ -59,7 +59,6 @@ class HtmlView extends BaseHtmlView
 	protected $isShowTranslationOfAllIds;
 	protected $isEditAndSaveMainTranslationFile;
 
-
 	/**
 	 * Method to display the view.
 	 *
@@ -73,11 +72,11 @@ class HtmlView extends BaseHtmlView
 	{
 		//--- config --------------------------------------------------------------------
 
-		$l4dConfig = ComponentHelper::getComponent('com_lang4dev')->getParams();
+		$l4dConfig            = ComponentHelper::getComponent('com_lang4dev')->getParams();
 		$this->isDebugBackend = $l4dConfig->get('isDebugBackend');
-		$this->isDevelop = $l4dConfig->get('isDevelop');
+		$this->isDevelop      = $l4dConfig->get('isDevelop');
 
-		$this->isShowTranslationOfAllIds = $l4dConfig->get('isShowTranslationOfAllIds');
+		$this->isShowTranslationOfAllIds        = $l4dConfig->get('isShowTranslationOfAllIds');
 		$this->isEditAndSaveMainTranslationFile = $l4dConfig->get('isEditAndSaveMainTranslationFile');
 
 		//--- session (config) ----------------------------------------------------------
@@ -85,7 +84,7 @@ class HtmlView extends BaseHtmlView
 		// main / translation language id
 		$sessionTransLangIds = new sessionTransLangIds ();
 		[$mainLangId, $transLangId] = $sessionTransLangIds->getIds();
-		$this->mainLangId    = $mainLangId;
+		$this->mainLangId  = $mainLangId;
 		$this->transLangId = $transLangId;
 
 		// selection of project and subproject
@@ -94,9 +93,9 @@ class HtmlView extends BaseHtmlView
 
 		//--- Form ----------------------------------------------------------------------
 
-        $this->form = $this->get('Form');
+		$this->form = $this->get('Form');
 
-        $errors = $this->get('Errors');
+		$errors = $this->get('Errors');
 
 //        // Check for errors.
 //        if (count($errors = $this->get('Errors')))
@@ -109,9 +108,9 @@ class HtmlView extends BaseHtmlView
 
 		//--- define project -------------------------------------------------------------------
 
-		$model = $this->getModel();
+		$model         = $this->getModel();
 		$this->project = $model->getProject($prjId, $subPrjActive);
-		$project = $this->project;
+		$project       = $this->project;
 
 		/* test projects *
 		$project =
@@ -180,21 +179,18 @@ class HtmlView extends BaseHtmlView
 
 		}
 
-
-
 		//---  --------------------------------------------------------------
 		/**
-		HTMLHelper::_('sidebar.setAction', 'index.php?option=com_lang4dev&view=config&layout=RawView');
-		/**
-		$Layout = Factory::getApplication()->input->get('layout');
-		Lang4devHelper::addSubmenu('config');
-		$this->sidebar = \JHtmlSidebar::render();
-		**/
+		 * $Layout = Factory::getApplication()->input->get('layout');
+		 * Lang4devHelper::addSubmenu('config');
+		 * $this->sidebar = \JHtmlSidebar::render();
+		 **/
 
 		$Layout = Factory::getApplication()->input->get('layout');
 		//echo '$Layout: ' . $Layout . '<br>';
 
 		$this->addToolbar($Layout);
+
 		/**/
 
 		return parent::display($tpl);
@@ -235,27 +231,27 @@ class HtmlView extends BaseHtmlView
 		switch ($Layout)
 		{
 			/**
-			case 'RawView':
-				ToolBarHelper::title(Text::_('COM_Lang4dev_MAINTENANCE')
-					. ': ' . Text::_('COM_Lang4dev_CONFIGURATION_RAW_VIEW'), 'screwdriver');
-				ToolBarHelper::cancel('config.cancel_rawView', 'JTOOLBAR_CLOSE');
-
-
-				break;
-
-			case 'RawEdit':
-				ToolBarHelper::title(Text::_('COM_Lang4dev_MAINTENANCE')
-					. ': ' . Text::_('COM_Lang4dev_CONFIGURATION_RAW_EDIT'), 'screwdriver');
-				ToolBarHelper::apply('config.apply_rawEdit');
-				ToolBarHelper::save('config.save_rawEdit');
-				ToolBarHelper::cancel('config.cancel_rawEdit', 'JTOOLBAR_CLOSE');
-				break;
-			/**/
+			 * case 'RawView':
+			 * ToolBarHelper::title(Text::_('COM_Lang4dev_MAINTENANCE')
+			 * . ': ' . Text::_('COM_Lang4dev_CONFIGURATION_RAW_VIEW'), 'screwdriver');
+			 * ToolBarHelper::cancel('config.cancel_rawView', 'JTOOLBAR_CLOSE');
+			 *
+			 *
+			 * break;
+			 *
+			 * case 'RawEdit':
+			 * ToolBarHelper::title(Text::_('COM_Lang4dev_MAINTENANCE')
+			 * . ': ' . Text::_('COM_Lang4dev_CONFIGURATION_RAW_EDIT'), 'screwdriver');
+			 * ToolBarHelper::apply('config.apply_rawEdit');
+			 * ToolBarHelper::save('config.save_rawEdit');
+			 * ToolBarHelper::cancel('config.cancel_rawEdit', 'JTOOLBAR_CLOSE');
+			 * break;
+			 * /**/
 			default:
-                ToolBarHelper::cancel('lang4dev.cancel', 'JTOOLBAR_CLOSE');
+				ToolBarHelper::cancel('lang4dev.cancel', 'JTOOLBAR_CLOSE');
 
-                ToolbarHelper::custom('translate.selectSourceLangId', 'icon-flag', '', 'COM_LANG4DEV_TRANS_SELECT_SOURCE_LANG_ID', false);
-                ToolbarHelper::custom('translate.selectTargetLangId', 'icon-edit', '', 'COM_LANG4DEV_TRANS_SELECT_TARGET_LANG_ID', false);
+				ToolbarHelper::custom('translate.selectSourceLangId', 'icon-flag', '', 'COM_LANG4DEV_TRANS_SELECT_SOURCE_LANG_ID', false);
+				ToolbarHelper::custom('translate.selectTargetLangId', 'icon-edit', '', 'COM_LANG4DEV_TRANS_SELECT_TARGET_LANG_ID', false);
 
 				ToolbarHelper::custom('translate.createLangId', 'icon-copy', '', 'COM_LANG4DEV_TRANSLATE_NEW_LANG_FILES', false);
 				ToolbarHelper::custom('translate.saveLangEdits', 'icon-save', '', 'COM_LANG4DEV_TRANSLATE_SAVE_EDITED_LANG_FILES', false); /// ToDo: true);
@@ -272,8 +268,6 @@ class HtmlView extends BaseHtmlView
 			$toolbar->preferences('com_lang4dev');
 		}
 	}
-
-
 
 }
 

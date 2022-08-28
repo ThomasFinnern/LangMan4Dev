@@ -1,16 +1,17 @@
 <?php
 /**
- * @package     Joomla.Administrator
- * @subpackage  com_lang4dev
+ * @package       Joomla.Administrator
+ * @subpackage    com_lang4dev
  *
  * @copyright (C) 2022-2022 Lang4dev Team
- * @license     GNU General Public License version 2 or later; see LICENSE.txt
+ * @license       GNU General Public License version 2 or later; see LICENSE.txt
  */
 
 namespace Finnern\Component\Lang4dev\Administrator\Controller;
 
-\defined('_JEXEC') or die;
+defined('_JEXEC') or die;
 
+use JInput;
 use Joomla\CMS\Factory;
 use Joomla\CMS\Language\Text;
 use Joomla\CMS\MVC\Controller\FormController;
@@ -22,12 +23,12 @@ use Joomla\CMS\Session\Session;
 use Joomla\Component\Associations\Administrator\Helper\AssociationsHelper;
 use Joomla\Registry\Registry;
 use Joomla\Utilities\ArrayHelper;
+
 // ???? use Symfony\Component\Yaml\Yaml;
 
 use Finnern\Component\Lang4dev\Administrator\Helper\langSubProject;
 use Finnern\Component\Lang4dev\Administrator\Helper\projectType;
-
-
+use function defined;
 
 /**
  * The Gallery Controller
@@ -50,9 +51,9 @@ class subprojectsController extends FormController
 	 * @param   array                $config   An optional associative array of configuration settings.
 	 * @param   MVCFactoryInterface  $factory  The factory.
 	 * @param   CMSApplication       $app      The JApplication for the dispatcher
-	 * @param   \JInput              $input    Input
+	 * @param   JInput              $input    Input
 	 *
-	 * @since __BUMP_VERSION__
+	 * @since  __BUMP_VERSION__
 	 * @see    \JControllerLegacy
 	 */
 	public function __construct($config = array(), MVCFactoryInterface $factory = null, $app = null, $input = null)
@@ -72,7 +73,7 @@ class subprojectsController extends FormController
 	 * @param   string  $prefix  The class prefix. Optional.
 	 * @param   array   $config  The array of possible config values. Optional.
 	 *
-	 * @return  \Joomla\CMS\MVC\Model\BaseDatabaseModel  The model.
+	 * @return  BaseDatabaseModel  The model.
 	 *
 	 * @since __BUMP_VERSION__
 	 */
@@ -81,6 +82,12 @@ class subprojectsController extends FormController
 		return parent::getModel($name, $prefix, $config);
 	}
 
+	/**
+	 *
+	 *
+	 * @throws \Exception
+	 * @since version
+	 */
 	public function delete()
 	{
 		// Check for request forgeries
@@ -90,25 +97,27 @@ class subprojectsController extends FormController
 		$ids  = $this->input->get('cid', array(), 'array');
 
 		/**
-		// Access checks.
-		foreach ($ids as $i => $id)
-		{
-			if (!$user->authorise('core.delete', 'com_lang4dev.????.' . (int) $id))
-			{
-				// Prune items that you can't delete.
-				unset($ids[$i]);
-				$this->app->enqueueMessage(Text::_('JERROR_CORE_DELETE_NOT_PERMITTED'), 'notice');
-			}
-		}
-		/**/
+		 * // Access checks.
+		 * foreach ($ids as $i => $id)
+		 * {
+		 * if (!$user->authorise('core.delete', 'com_lang4dev.????.' . (int) $id))
+		 * {
+		 * // Prune items that you can't delete.
+		 * unset($ids[$i]);
+		 * $this->app->enqueueMessage(Text::_('JERROR_CORE_DELETE_NOT_PERMITTED'), 'notice');
+		 * }
+		 * }
+		 * /**/
 		$canDelete = true;
 
-		if ( ! $canDelete ) {
+		if (!$canDelete)
+		{
 
 			$OutTxt = Text::_('COM_LANG4DEV_DELETE_INVALID_RIGHTS');
 			$app    = Factory::getApplication();
 			$app->enqueueMessage($OutTxt, 'error');
-		} else
+		}
+		else
 		{
 			if (empty($ids))
 			{
@@ -136,9 +145,5 @@ class subprojectsController extends FormController
 		$link = 'index.php?option=com_lang4dev&view=subprojects';
 		$this->setRedirect($link);
 	}
-
-
-
-
 
 } // class

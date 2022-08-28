@@ -1,21 +1,23 @@
 <?php
 /**
- * List of translation items collected from code files 
- * @version       
+ * List of translation items collected from code files
+ *
+ * @version
  * @package       Lang4dev
  * @copyright (C) 2022-2022 Lang4dev Team
- * @license       
+ * @license
  */
 
 namespace Finnern\Component\Lang4dev\Administrator\Helper;
 
 use Joomla\CMS\Factory;
+use RuntimeException;
+use function defined;
 
 // no direct access
-\defined('_JEXEC') or die;
+defined('_JEXEC') or die;
 
 /**
-
  * @since __BUMP_VERSION__
  */
 
@@ -30,51 +32,83 @@ use Joomla\CMS\Factory;
  * with file name, location, line and column index
  *
  * @package Lang4dev
-
- * @since __BUMP_VERSION__
+ * @since   __BUMP_VERSION__
  */
 class transIdLocations
 {
 
 	public $items = [];
- 
+
+	/**
+	 * @param $items
+	 */
 	public function __construct($items = [])
 	{
-		if ( !empty ($items))
+		if (!empty ($items))
 		{
 			$this->items = $items;
 		}
 	}
 
-	public function addItem ($item)
+	/**
+	 * @param $item
+	 *
+	 *
+	 * @since version
+	 */
+	public function addItem($item)
 	{
-		$name = $item->name;
+		$name                 = $item->name;
 		$this->items[$name][] = $item;
 	}
 
-	public function getItem ($name, $idx)
+	/**
+	 * @param $name
+	 * @param $idx
+	 *
+	 * @return mixed
+	 *
+	 * @since version
+	 */
+	public function getItem($name, $idx)
 	{
 		return $this->items[$name][$idx];
 	}
 
-	public function getItems ($name)
+	/**
+	 * @param $name
+	 *
+	 * @return mixed
+	 *
+	 * @since version
+	 */
+	public function getItems($name)
 	{
 		return $this->items[$name];
 	}
 
-	public function getItemNames ()
+	/**
+	 *
+	 * @return array
+	 *
+	 * @throws \Exception
+	 * @since version
+	 */
+	public function getItemNames()
 	{
 		$names = [];
 
-		try {
+		try
+		{
 
-			foreach ($this->items as $name => $val) {
+			foreach ($this->items as $name => $val)
+			{
 
 				$names [] = $name;
 			}
 
 		}
-		catch (\RuntimeException $e)
+		catch (RuntimeException $e)
 		{
 			$OutTxt = 'Error executing getItemNames: "' . '<br>';
 			$OutTxt .= 'Error: "' . $e->getMessage() . '"' . '<br>';
@@ -107,14 +141,22 @@ class transIdLocations
 	}
 	/**/
 
-	public function _toText ()
+	/**
+	 *
+	 * @return false|string
+	 *
+	 * @throws \Exception
+	 * @since version
+	 */
+	public function _toText()
 	{
 		$text = '';
 
-		try {
-			$text = json_encode ($this->items);
+		try
+		{
+			$text = json_encode($this->items);
 		}
-		catch (\RuntimeException $e)
+		catch (RuntimeException $e)
 		{
 			$OutTxt = 'Error executing _toText: "' . '<br>';
 			$OutTxt .= 'Error: "' . $e->getMessage() . '"' . '<br>';
@@ -126,18 +168,27 @@ class transIdLocations
 		return $text;
 	}
 
-	public function _toTextNames ($separator = ', ') // $separator ='/n'
+	/**
+	 * @param $separator
+	 *
+	 * @return string
+	 *
+	 * @throws \Exception
+	 * @since version
+	 */
+	public function _toTextNames($separator = ', ') // $separator ='/n'
 	{
 		$text = '';
 
-		try {
+		try
+		{
 
-			$names = $this->getItemNames ();
+			$names = $this->getItemNames();
 
-			$text = join ($separator, $names);
+			$text = join($separator, $names);
 
 		}
-		catch (\RuntimeException $e)
+		catch (RuntimeException $e)
 		{
 			$OutTxt = 'Error executing _toTextNames: "' . '<br>';
 			$OutTxt .= 'Error: "' . $e->getMessage() . '"' . '<br>';

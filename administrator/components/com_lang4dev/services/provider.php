@@ -1,13 +1,13 @@
 <?php
 /**
- * @package     Joomla.Administrator
- * @subpackage  com_lang4dev
+ * @package       Joomla.Administrator
+ * @subpackage    com_lang4dev
  *
  * @copyright (C) 2022-2022 Lang4dev Team
- * @license     GNU General Public License version 2 or later; see LICENSE.txt
+ * @license       GNU General Public License version 2 or later; see LICENSE.txt
  */
 
-\defined('_JEXEC') or die;
+defined('_JEXEC') or die;
 
 use Joomla\CMS\Categories\CategoryFactoryInterface;
 use Joomla\CMS\Dispatcher\ComponentDispatcherFactoryInterface;
@@ -32,8 +32,7 @@ use Finnern\Component\Lang4dev\Administrator\Helper\AssociationsHelper;
  *
  * @since  __BUMP_VERSION__
  */
-return new class implements ServiceProviderInterface
-{
+return new class implements ServiceProviderInterface {
 	/**
 	 * Registers the service provider with a DI container.
 	 *
@@ -58,7 +57,7 @@ return new class implements ServiceProviderInterface
 				$component = new Lang4devComponent($container->get(ComponentDispatcherFactoryInterface::class));
 
 				$component->setRegistry($container->get(Registry::class));
-				
+
 				$component->setMVCFactory($container->get(MVCFactoryInterface::class));
 //				$component->setCategoryFactory($container->get(CategoryFactoryInterface::class));
 //				$component->setAssociationExtension($container->get(AssociationExtensionInterface::class));

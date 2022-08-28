@@ -14,9 +14,11 @@ use Joomla\CMS\Factory;
 use Joomla\CMS\Filesystem\Folder;
 
 use Finnern\Component\Lang4dev\Administrator\Helper\transIdLocations;
+use RuntimeException;
+use function defined;
 
 // no direct access
-\defined('_JEXEC') or die;
+defined('_JEXEC') or die;
 
 /**
  * Search language constants (Items) in given folders
@@ -26,15 +28,47 @@ use Finnern\Component\Lang4dev\Administrator\Helper\transIdLocations;
  */
 class searchTransIdLocations
 {
+	/**
+	 * @var string
+	 * @since version
+	 */
 	public $fileTypes = 'php, xml';
+	/**
+	 * @var mixed|string
+	 * @since version
+	 */
 	public $langIdPrefix = '';
+	/**
+	 * @var array|mixed
+	 * @since version
+	 */
 	public $searchPaths = [];
+	/**
+	 * @var \Finnern\Component\Lang4dev\Administrator\Helper\transIdLocations
+	 * @since version
+	 */
 	public $transIdLocations;
 
+	/**
+	 * @var bool
+	 * @since version
+	 */
 	public $useLangSysIni = false;
+	/**
+	 * @var string
+	 * @since version
+	 */
 	public $prjXmlPathFilename = "";
+	/**
+	 * @var string
+	 * @since version
+	 */
 	public $installPathFilename = "";
 
+	/**
+	 * @var string
+	 * @since version
+	 */
 	protected $name = 'Lang4dev';
 
 	/**
@@ -44,8 +78,8 @@ class searchTransIdLocations
 	{
 		// ToDo: check for uppercase and trailing '_'
 
-		$this->transIdLocations       = new transIdLocations();
-		$this->langIdPrefix = $langIdPrefix;
+		$this->transIdLocations = new transIdLocations();
+		$this->langIdPrefix     = $langIdPrefix;
 
 		// if ( !empty ($searchPaths)) ... ???
 		$this->searchPaths = $searchPaths;
@@ -54,6 +88,13 @@ class searchTransIdLocations
 
 	// Attention the removing of comments may lead to wrong
 	// Index in line for found '*/'
+	/**
+	 *
+	 * @return \Finnern\Component\Lang4dev\Administrator\Helper\transIdLocations|void
+	 *
+	 * @throws \Exception
+	 * @since version
+	 */
 	public function findAllTranslationIds()
 	{
 		// ToDo: log $langIdPrefix, $searchPaths
@@ -70,7 +111,8 @@ class searchTransIdLocations
 
 			//--- prefix --------------------------------------------------
 
-			if (strlen($this->langIdPrefix) < 5) {
+			if (strlen($this->langIdPrefix) < 5)
+			{
 				$hasErr = true;
 
 				$OutTxt = 'findAllTranslationIds: langIdPrefix is not set or too smalll: "' . $this->langIdPrefix . '"';
@@ -81,27 +123,28 @@ class searchTransIdLocations
 
 			//--- search paths given --------------------------------------------------
 
-			if (count($this->searchPaths) < 1) {
+			if (count($this->searchPaths) < 1)
+			{
 				$hasErr = true;
 
-				$OutTxt = 'findAllTranslationIds: search paths not given' ;
+				$OutTxt = 'findAllTranslationIds: search paths not given';
 
 				$app = Factory::getApplication();
 				$app->enqueueMessage($OutTxt, 'error');
 			}
 
 			/**
-			//--- ???? --------------------------------------------------
-
-			if (strlen($this->langIdPrefix) < 5) {
-				$hasErr = true;
-
-				$OutTxt = 'findAllTranslationIds: langIdPrefix is not set or too small: "' . $this->langIdPrefix . '"';
-
-				$app = Factory::getApplication();
-				$app->enqueueMessage($OutTxt, 'error');
-			}
-			/**/
+			 * //--- ???? --------------------------------------------------
+			 *
+			 * if (strlen($this->langIdPrefix) < 5) {
+			 * $hasErr = true;
+			 *
+			 * $OutTxt = 'findAllTranslationIds: langIdPrefix is not set or too small: "' . $this->langIdPrefix . '"';
+			 *
+			 * $app = Factory::getApplication();
+			 * $app->enqueueMessage($OutTxt, 'error');
+			 * }
+			 * /**/
 
 			//--- exit on error -----------------------------------------
 
@@ -136,7 +179,7 @@ class searchTransIdLocations
 			}
 
 		}
-		catch (\RuntimeException $e)
+		catch (RuntimeException $e)
 		{
 			$OutTxt = '';
 			$OutTxt .= 'Error executing findAllTranslationIds: "' . '<br>';
@@ -149,6 +192,13 @@ class searchTransIdLocations
 		return $this->transIdLocations; // ? a lot to return ?
 	}
 
+	/**
+	 * @param $searchPath
+	 *
+	 *
+	 * @throws \Exception
+	 * @since version
+	 */
 	public function searchLangIds_in_Path($searchPath)
 	{
 		try
@@ -158,22 +208,22 @@ class searchTransIdLocations
 			foreach ($this->filesInDir($searchPath) as $fileName)
 			{
 				$filePath = $searchPath . DIRECTORY_SEPARATOR . $fileName;
-				$ext = pathinfo($filePath, PATHINFO_EXTENSION);
+				$ext      = pathinfo($filePath, PATHINFO_EXTENSION);
 
-                //--- prevent project sys files -----------------------------------
+				//--- prevent project sys files -----------------------------------
 
-                if ($ext == 'php' && $filePath == $this->installPathFilename)
-                {
-                    continue;
-                }
-                if ($ext == 'xml' && $filePath == $this->prjXmlPathFilename)
-                {
-                    continue;
-                }
+				if ($ext == 'php' && $filePath == $this->installPathFilename)
+				{
+					continue;
+				}
+				if ($ext == 'xml' && $filePath == $this->prjXmlPathFilename)
+				{
+					continue;
+				}
 
-                //--- scan content of valid  files -----------------------------------
+				//--- scan content of valid  files -----------------------------------
 
-                if ($ext == 'php')
+				if ($ext == 'php')
 				{
 					$this->searchTransIds_in_PHP_file($fileName, $searchPath);
 				}
@@ -192,7 +242,7 @@ class searchTransIdLocations
 			}
 
 		}
-		catch (\RuntimeException $e)
+		catch (RuntimeException $e)
 		{
 			$OutTxt = '';
 			$OutTxt .= 'Error executing searchLangIdsInPath: "' . '<br>';
@@ -203,6 +253,14 @@ class searchTransIdLocations
 		}
 	}
 
+	/**
+	 * @param $folder
+	 *
+	 * @return array|bool
+	 *
+	 * @throws \Exception
+	 * @since version
+	 */
 	public function filesInDir($folder)
 	{
 		$files = [];
@@ -214,7 +272,7 @@ class searchTransIdLocations
 			$regEx = '\.php|\.xml$';
 			$files = Folder::files($folder, $regEx);
 		}
-		catch (\RuntimeException $e)
+		catch (RuntimeException $e)
 		{
 			$OutTxt = '';
 			$OutTxt .= 'Error executing filesInDir: "' . '<br>';
@@ -229,10 +287,18 @@ class searchTransIdLocations
 
 	// Multiple items in one line
 
+	/**
+	 * @param $fileName
+	 * @param $path
+	 *
+	 *
+	 * @throws \Exception
+	 * @since version
+	 */
 	public function searchTransIds_in_PHP_file($fileName, $path)
 	{
 		$isInComment = false;
-		$lines = [];
+		$lines       = [];
 
 		try
 		{
@@ -263,8 +329,8 @@ class searchTransIdLocations
 					//--- add items
 					foreach ($items as $item)
 					{
-						$item->file    = $fileName;
-						$item->path    = $path;
+						$item->file   = $fileName;
+						$item->path   = $path;
 						$item->lineNr = $lineNr;
 
 						$this->transIdLocations->addItem($item);
@@ -273,7 +339,7 @@ class searchTransIdLocations
 
 			}
 		}
-		catch (\RuntimeException $e)
+		catch (RuntimeException $e)
 		{
 			$OutTxt = 'Error executing searchTransIdsIn_PHP_file: "' . '<br>';
 			$OutTxt .= 'Error: "' . $e->getMessage() . '"' . '<br>';
@@ -285,6 +351,15 @@ class searchTransIdLocations
 		// return $this->transIdLocations;
 	}
 
+	/**
+	 * @param $line
+	 * @param $isInComment
+	 *
+	 * @return false|mixed|string
+	 *
+	 * @throws \Exception
+	 * @since version
+	 */
 	public function removeCommentPHP($line, &$isInComment)
 	{
 		$bareLine = $line;
@@ -292,27 +367,28 @@ class searchTransIdLocations
 		try
 		{
 			// No inside a '/*' comment
-			if ( ! $isInComment)
+			if (!$isInComment)
 			{
 				//--- check for comments ---------------------------------------
 
-				$doubleSlash = '//';
+				$doubleSlash   = '//';
 				$slashAsterisk = '/*';
 
-				$doubleSlashIdx = strpos ($line, $doubleSlash);
-				$slashAsteriskIdx = strpos ($line, $slashAsterisk);
+				$doubleSlashIdx   = strpos($line, $doubleSlash);
+				$slashAsteriskIdx = strpos($line, $slashAsterisk);
 
 				// comment exists, keep start of string
 				if ($doubleSlashIdx != false || $slashAsteriskIdx != false)
 				{
-					if ($doubleSlashIdx != false && $slashAsteriskIdx == false) {
-						$bareLine =  strstr ($line, $doubleSlash, true);
+					if ($doubleSlashIdx != false && $slashAsteriskIdx == false)
+					{
+						$bareLine = strstr($line, $doubleSlash, true);
 					}
 					else
 					{
 						if ($doubleSlashIdx == false && $slashAsteriskIdx != false)
 						{
-							$bareLine = strstr($line, $slashAsterisk, true);
+							$bareLine    = strstr($line, $slashAsterisk, true);
 							$isInComment = true;
 						}
 						else
@@ -320,10 +396,13 @@ class searchTransIdLocations
 							//--- both found ---------------------------------
 
 							// which one is first
-							if ($doubleSlashIdx < $slashAsteriskIdx) {
-								$bareLine =  strstr ($line, $doubleSlash, true);
-							} else {
-								$bareLine = strstr($line, $slashAsterisk, true);
+							if ($doubleSlashIdx < $slashAsteriskIdx)
+							{
+								$bareLine = strstr($line, $doubleSlash, true);
+							}
+							else
+							{
+								$bareLine    = strstr($line, $slashAsterisk, true);
 								$isInComment = true;
 							}
 
@@ -331,16 +410,17 @@ class searchTransIdLocations
 
 					}
 
-
 				} // No comment indicator
 
-			} else {
+			}
+			else
+			{
 				//--- Inside a '/*' comment
 
 				$bareLine = '';
 
-				$asteriskSlash = '*/';
-				$asteriskSlashIdx = strpos ($line, $asteriskSlash);
+				$asteriskSlash    = '*/';
+				$asteriskSlashIdx = strpos($line, $asteriskSlash);
 
 				// end found ?
 				if ($asteriskSlashIdx != false)
@@ -350,12 +430,12 @@ class searchTransIdLocations
 
 					// handle rest of string
 					$isInComment = false;
-					$bareLine = $this->removeCommentPHP($bareLine, $isInComment);
+					$bareLine    = $this->removeCommentPHP($bareLine, $isInComment);
 				}
 			}
 
 		}
-		catch (\RuntimeException $e)
+		catch (RuntimeException $e)
 		{
 			$OutTxt = '';
 			$OutTxt .= 'Error executing removeCommentPHP: "' . '<br>';
@@ -370,9 +450,17 @@ class searchTransIdLocations
 
 	// Multiple items in one line
 	// Must be cleaned from comments first
+	/**
+	 * @param $line
+	 *
+	 * @return array
+	 *
+	 * @throws \Exception
+	 * @since version
+	 */
 	public function searchLangIdsInLinePHP($line)
 	{
-		$items = [];
+		$items   = [];
 		$matches = [];
 
 		try
@@ -409,7 +497,7 @@ class searchTransIdLocations
 			}
 
 		}
-		catch (\RuntimeException $e)
+		catch (RuntimeException $e)
 		{
 			$OutTxt = '';
 			$OutTxt .= 'Error executing searchLangIdsInLinePHP: "' . '<br>';
@@ -422,6 +510,14 @@ class searchTransIdLocations
 		return $items;
 	}
 
+	/**
+	 * @param $fileName
+	 * @param $path
+	 *
+	 *
+	 * @throws \Exception
+	 * @since version
+	 */
 	public function searchTransIds_in_XML_file($fileName, $path)
 	{
 		$isInComment = false;
@@ -454,8 +550,8 @@ class searchTransIdLocations
 					//--- add items
 					foreach ($items as $item)
 					{
-						$item->file    = $fileName;
-						$item->path    = $path;
+						$item->file   = $fileName;
+						$item->path   = $path;
 						$item->lineNr = $lineNr;
 
 						$this->transIdLocations->addItem($item);
@@ -464,7 +560,7 @@ class searchTransIdLocations
 
 			}
 		}
-		catch (\RuntimeException $e)
+		catch (RuntimeException $e)
 		{
 			$OutTxt = '';
 			$OutTxt .= 'Error executing searchTransIdsIn_XML_file: "' . '<br>';
@@ -477,6 +573,15 @@ class searchTransIdLocations
 //		return $this->transIdLocations;
 	}
 
+	/**
+	 * @param $line
+	 * @param $isInComment
+	 *
+	 * @return false|mixed|string
+	 *
+	 * @throws \Exception
+	 * @since version
+	 */
 	public function removeCommentXML($line, &$isInComment)
 	{
 		$bareLine = $line;
@@ -485,28 +590,30 @@ class searchTransIdLocations
 		{
 
 			// No inside a '<--' comment
-			if ( ! $isInComment)
+			if (!$isInComment)
 			{
 				//--- check for comments ---------------------------------------
 
-				$commStart = '<!--';
-				$commStartIdx = strpos ($line, $commStart);
+				$commStart    = '<!--';
+				$commStartIdx = strpos($line, $commStart);
 
 				// comment exists, keep start of string
 				if ($commStartIdx != false)
 				{
-					$bareLine = strstr($line, $commStart, true);
+					$bareLine    = strstr($line, $commStart, true);
 					$isInComment = true;
 
 				} // No comment indicator
 
-			} else {
+			}
+			else
+			{
 				//--- Inside a '/*' comment
 
 				$bareLine = '';
 
-				$commEnd = '-->';
-				$commEndIdx = strpos ($line, $commEnd);
+				$commEnd    = '-->';
+				$commEndIdx = strpos($line, $commEnd);
 
 				// end found ?
 				if ($commEndIdx != false)
@@ -516,12 +623,12 @@ class searchTransIdLocations
 
 					// handle rest of string
 					$isInComment = false;
-					$bareLine = $this->removeCommentPHP($bareLine, $isInComment);
+					$bareLine    = $this->removeCommentPHP($bareLine, $isInComment);
 				}
 			}
 
 		}
-		catch (\RuntimeException $e)
+		catch (RuntimeException $e)
 		{
 			$OutTxt = '';
 			$OutTxt .= 'Error executing removeCommentXML: "' . '<br>';
@@ -534,9 +641,17 @@ class searchTransIdLocations
 		return $bareLine;
 	}
 
+	/**
+	 * @param $line
+	 *
+	 * @return array
+	 *
+	 * @throws \Exception
+	 * @since version
+	 */
 	public function searchLangIdsInLineXML($line)
 	{
-		$items = [];
+		$items   = [];
 		$matches = [];
 
 		try
@@ -552,7 +667,7 @@ class searchTransIdLocations
 			preg_match_all($searchRegex, $line, $matchGroups);
 
 			if (!empty($matchGroups))
-			// if (count ($matchGroups) > 0)
+				// if (count ($matchGroups) > 0)
 			{
 				$idx = 0;
 
@@ -571,7 +686,7 @@ class searchTransIdLocations
 				}
 			}
 		}
-		catch (\RuntimeException $e)
+		catch (RuntimeException $e)
 		{
 			$OutTxt = '';
 			$OutTxt .= 'Error executing searchLangIdsInLineXML: "' . '<br>';
@@ -584,6 +699,14 @@ class searchTransIdLocations
 		return $items;
 	}
 
+	/**
+	 * @param $folder
+	 *
+	 * @return array|false
+	 *
+	 * @throws \Exception
+	 * @since version
+	 */
 	public function folderInDir($folder)
 	{
 		$folders = [];
@@ -595,7 +718,7 @@ class searchTransIdLocations
 			$folders = Folder::folders($folder);
 
 		}
-		catch (\RuntimeException $e)
+		catch (RuntimeException $e)
 		{
 			$OutTxt = '';
 			$OutTxt .= 'Error executing folderInDir: "' . '<br>';

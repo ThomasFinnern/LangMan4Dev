@@ -12,7 +12,14 @@ namespace Finnern\Component\Lang4dev\Administrator\Helper;
 
 use Finnern\Component\Lang4dev\Administrator\Helper\langProject;
 
-function createPrj_RSG2 () {
+/**
+ *
+ * @return \Finnern\Component\Lang4dev\Administrator\Helper\langProject
+ *
+ * @since version
+ */
+function createPrj_RSG2()
+{
 
 	$prjLang4dev = new langProject ();
 
@@ -23,7 +30,7 @@ function createPrj_RSG2 () {
 
 	$subPrj = $prjLang4dev->addSubProject('com_lang4dev',
 		projectType::PRJ_TYPE_COMP_BACK,
-		JPATH_ADMINISTRATOR. '/components/com_lang4dev'
+		JPATH_ADMINISTRATOR . '/components/com_lang4dev'
 	);
 
 	$subPrj = $prjLang4dev->addSubProject('com_lang4dev',
@@ -34,8 +41,14 @@ function createPrj_RSG2 () {
 	return $prjLang4dev;
 }
 
-
-function createPrj_JoomGallery () {
+/**
+ *
+ * @return \Finnern\Component\Lang4dev\Administrator\Helper\langProject
+ *
+ * @since version
+ */
+function createPrj_JoomGallery()
+{
 
 	$prjJoomGallery = new langProject ();
 
@@ -46,7 +59,7 @@ function createPrj_JoomGallery () {
 
 	$subPrj = $prjJoomGallery->addSubProject('com_joomgallery',
 		projectType::PRJ_TYPE_COMP_BACK,
-		JPATH_ADMINISTRATOR. '/components/com_joomgallery'
+		JPATH_ADMINISTRATOR . '/components/com_joomgallery'
 	);
 
 	$subPrj = $prjJoomGallery->addSubProject('com_joomgallery',
@@ -69,7 +82,6 @@ function createPrj_JoomGallery () {
 		JPATH_PLUGINS . '/privacy/joomgalleryimages'
 	);
 
-
 	$subPrj = $prjJoomGallery->addSubProject('web-joomgallery',
 		projectType::PRJ_TYPE_PLUGIN,
 		JPATH_PLUGINS . '/webservices/joomgallery'
@@ -78,57 +90,77 @@ function createPrj_JoomGallery () {
 	return $prjJoomGallery;
 }
 
-function createPrj_Lang4Dev ()
+/**
+ *
+ * @return \Finnern\Component\Lang4dev\Administrator\Helper\langProject
+ *
+ * @since version
+ */
+function createPrj_Lang4Dev()
 {
-		//--- lang4dev --------------------------------
+	//--- lang4dev --------------------------------
 
-		$prjLang4dev = new langProject ();
+	$prjLang4dev = new langProject ();
 
-		$subPrj = $prjLang4dev->addSubProject('com_lang4dev',
-			projectType::PRJ_TYPE_COMP_BACK_SYS,
-			JPATH_ADMINISTRATOR . '/components/com_lang4dev'
-		);
+	$subPrj = $prjLang4dev->addSubProject('com_lang4dev',
+		projectType::PRJ_TYPE_COMP_BACK_SYS,
+		JPATH_ADMINISTRATOR . '/components/com_lang4dev'
+	);
 
-		$subPrj = $prjLang4dev->addSubProject('com_lang4dev',
-			projectType::PRJ_TYPE_COMP_BACK,
-			JPATH_ADMINISTRATOR . '/components/com_lang4dev'
-		);
+	$subPrj = $prjLang4dev->addSubProject('com_lang4dev',
+		projectType::PRJ_TYPE_COMP_BACK,
+		JPATH_ADMINISTRATOR . '/components/com_lang4dev'
+	);
 
 	return $prjLang4dev;
 }
 
-function createPrj_Joomla4x ()
+/**
+ *
+ * @return \Finnern\Component\Lang4dev\Administrator\Helper\langProject
+ *
+ * @since version
+ */
+function createPrj_Joomla4x()
 {
-		//--- lang4dev --------------------------------
+	//--- lang4dev --------------------------------
 
-		$prjLang4dev = new langProject ();
+	$prjLang4dev = new langProject ();
 
-		// two paths ? (1) for trans eng, (2) trans ger destination
+	// two paths ? (1) for trans eng, (2) trans ger destination
 
 	return $prjLang4dev;
 }
 
-
-	function selectProject ($prjName='') {
+/**
+ * @param $prjName
+ *
+ * @return \Finnern\Component\Lang4dev\Administrator\Helper\langProject
+ *
+ * @since version
+ */
+function selectProject($prjName = '')
+{
 
 	$langProject = new langProject ();
 
-	switch ($prjName) {
+	switch ($prjName)
+	{
 		case 'lang4dev':
 			$langProject = createPrj_Lang4Dev();
-		break;
+			break;
 
 		case 'rsgallery2':
 			$langProject = createPrj_RSG2();
-		break;
+			break;
 
 		case 'joomgallery':
 			$langProject = createPrj_JoomGallery();
-		break;
+			break;
 
 		case 'joomla4x':
 			$langProject = createPrj_Joomla4x();
-		break;
+			break;
 	}
 
 	return $langProject;

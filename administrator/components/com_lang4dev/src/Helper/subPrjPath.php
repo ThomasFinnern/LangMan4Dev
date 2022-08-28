@@ -1,10 +1,10 @@
 <?php
 /**
- * @package     Lang4dev
+ * @package         Lang4dev
  * @subpackage
  *
  * @copyright   (C) 2022-2022 Lang4dev Team
- * @license     GPL2
+ * @license         GPL2
  */
 
 namespace Finnern\Component\Lang4dev\Administrator\Helper;
@@ -28,7 +28,7 @@ class subPrjPath
 	 */
 	public function __construct($prjId, $subPrjPath)
 	{
-		$this->prjId = $prjId;
+		$this->prjId      = $prjId;
 		$this->subPrjPath = $subPrjPath;
 
 		// at least the project id is given
@@ -43,15 +43,48 @@ class subPrjPath
 
 	}
 
-	public function getRootPath () {return $this->rootPath;}
-	public function getSubPrjPath () {return $this->subPrjPath;}
-	public function getRootManifestPath () {
-		return $this->rootPath . '/' . strtolower(substr($this->prjId,4)) . '.xml';
+	/**
+	 *
+	 * @return mixed|string
+	 *
+	 * @since version
+	 */
+	public function getRootPath()
+	{
+		return $this->rootPath;
 	}
 
+	/**
+	 *
+	 * @return mixed|string
+	 *
+	 * @since version
+	 */
+	public function getSubPrjPath()
+	{
+		return $this->subPrjPath;
+	}
 
+	/**
+	 *
+	 * @return string
+	 *
+	 * @since version
+	 */
+	public function getRootManifestPath()
+	{
+		return $this->rootPath . '/' . strtolower(substr($this->prjId, 4)) . '.xml';
+	}
 
-	private function detectRootPath($prjId='', $subPrjPath='')
+	/**
+	 * @param $prjId
+	 * @param $subPrjPath
+	 *
+	 * @return array
+	 *
+	 * @since version
+	 */
+	private function detectRootPath($prjId = '', $subPrjPath = '')
 	{
 		$isRootFound  = false;
 		$isJoomlaPath = false;
@@ -63,21 +96,20 @@ class subPrjPath
 			$prjId = $this->prjId;
 		}
 
-
 		if ($subPrjPath == '')
 		{
 			$subPrjPath = $this->subPrjPath;
 		}
 
+		//--- path accidentally a filename -------------------------
 
-        //--- path accidentally a filename -------------------------
+		if (File::exists($subPrjPath))
+		{
 
-        if (File::exists($subPrjPath)) {
+			$subPrjPath = dirname($subPrjPath);
+		}
 
-            $subPrjPath = dirname($subPrjPath);
-        }
-
-        //--- path already valid -------------------------
+		//--- path already valid -------------------------
 
 		$rootPath = $subPrjPath;
 		if ($rootPath != '')
@@ -85,7 +117,8 @@ class subPrjPath
 			if (Folder::exists($rootPath))
 			{
 				$isRootFound = true;
-			} else
+			}
+			else
 			{
 				//--- fast lane for sources in joomla installation -------------------------
 
@@ -100,7 +133,7 @@ class subPrjPath
 		}
 
 		// path not given but project in admin components
-		if ( ! $isRootFound)
+		if (!$isRootFound)
 		{
 			// detect sub path also
 			if ($subPrjPath == '')
@@ -109,7 +142,7 @@ class subPrjPath
 				switch (strtolower(substr($prjId, 0, 3)))
 				{
 					case "com":
-						$rootPath = JPATH_ADMINISTRATOR  . '/components/' . $prjId;
+						$rootPath = JPATH_ADMINISTRATOR . '/components/' . $prjId;
 						break;
 					case "mod":
 						$rootPath = JPATH_ROOT . '/modules/' . $prjId;
@@ -118,7 +151,7 @@ class subPrjPath
 						// second part of name is part of path
 						// // plg_finder_...
 						$parts = explode('_', $prjId, 2);
-						if(count ($parts) > 1)
+						if (count($parts) > 1)
 						{
 							$rootPath = JPATH_ROOT . '/plugins/' . $parts [1] . '/' . $prjId;
 						}
@@ -129,14 +162,16 @@ class subPrjPath
 				}
 			}
 
-			if (Folder::exists($rootPath)) {
+			if (Folder::exists($rootPath))
+			{
 				$isRootFound = true;
 			}
 
 		}
 
 		// detect if joomla path is part of source
-		if ($isRootFound) {
+		if ($isRootFound)
+		{
 			// use found path
 			if ($subPrjPath == '')
 			{
@@ -144,12 +179,12 @@ class subPrjPath
 			}
 
 			// replace backslash
-			$jroot_slash = str_replace('\\', '/', JPATH_ROOT);
-			$rootPath_slash = str_replace('\\', '/', $rootPath);
+			$jroot_slash      = str_replace('\\', '/', JPATH_ROOT);
+			$rootPath_slash   = str_replace('\\', '/', $rootPath);
 			$subPrjPath_slash = str_replace('\\', '/', $subPrjPath);
 
 			// Is a path within joomla installation found ?
-			if(str_starts_with (strtolower($rootPath_slash), strtolower($jroot_slash)))
+			if (str_starts_with(strtolower($rootPath_slash), strtolower($jroot_slash)))
 			{
 
 				$isJoomlaPath = true;
@@ -157,30 +192,32 @@ class subPrjPath
 			}
 
 			// reduce path to project path within joomla directory
-			if(str_starts_with (strtolower($subPrjPath_slash), strtolower($jroot_slash)))
+			if (str_starts_with(strtolower($subPrjPath_slash), strtolower($jroot_slash)))
 			{
 				// remove joomla root path
 				$j_pathLength = strlen($jroot_slash);
-				$subPrjPath   = substr($subPrjPath_slash, $j_pathLength+1);
-			} else {
+				$subPrjPath   = substr($subPrjPath_slash, $j_pathLength + 1);
+			}
+			else
+			{
 				// $subPrjPath   = $subPrjPath_slash; // ToDo: shall we use converted ?
 			}
 		}
 
 		// path already defined and outside joomla
-		if ( ! $isRootFound)
+		if (!$isRootFound)
 		{
 			// path already defined
 			$rootPath = $subPrjPath;
 			// ToDo: should the project id checked as part of the path ?
 			if (Folder::exists($rootPath))
 			{
-				$isRootFound  = true;
+				$isRootFound = true;
 			}
 		}
 
 		// next check .... ???
-		if ( ! $isRootFound)
+		if (!$isRootFound)
 		{
 
 			// root path is not defined jet
@@ -199,6 +236,5 @@ class subPrjPath
 
 		return [$isRootFound, $isJoomlaPath, $rootPath, $subPrjPath];
 	}
-
 
 }

@@ -1,18 +1,19 @@
 <?php
 /**
- * @package     Joomla.Administrator
- * @subpackage  com_lang4dev
+ * @package       Joomla.Administrator
+ * @subpackage    com_lang4dev
  *
  * @copyright (C) 2022-2022 Lang4dev Team
- * @license     GNU General Public License version 2 or later; see LICENSE.txt
+ * @license       GNU General Public License version 2 or later; see LICENSE.txt
  */
 
 namespace Finnern\Component\Lang4dev\Administrator\Model;
 
-\defined('_JEXEC') or die;
+defined('_JEXEC') or die;
 
 use Finnern\Component\Lang4dev\Administrator\Helper\langProject;
 use Finnern\Component\Lang4dev\Administrator\Helper\sessionProjectId;
+use JForm;
 use Joomla\CMS\Access\Rules;
 use Joomla\CMS\Association\AssociationServiceInterface;
 use Joomla\CMS\Categories\CategoryServiceInterface;
@@ -34,6 +35,8 @@ use Joomla\CMS\Workflow\Workflow;
 use Joomla\Registry\Registry;
 use Joomla\String\StringHelper;
 use Joomla\Utilities\ArrayHelper;
+use RuntimeException;
+use function defined;
 
 // associations: use Finnern\Component\Lang4def\Administrator\Helper\Lang4devHelper;
 
@@ -60,14 +63,13 @@ class TranslateModel extends AdminModel
 	 */
 	public $typeAlias = 'com_lang4dev.translation';
 
-
 	/**
 	 * Method to get the row form.
 	 *
 	 * @param   array    $data      Data for the form.
 	 * @param   boolean  $loadData  True if the form is to load its own data (default case), false if not.
 	 *
-	 * @return  \JForm|boolean  A JForm object on success, false on failure
+	 * @return  JForm|boolean  A JForm object on success, false on failure
 	 *
 	 * @since __BUMP_VERSION__
 	 */
@@ -83,6 +85,14 @@ class TranslateModel extends AdminModel
 		return $form;
 	}
 
+	/**
+	 * @param $prjDbId
+	 * @param $subPrjActive
+	 *
+	 * @return langProject
+	 *
+	 * @since version
+	 */
 	public function getProject($prjDbId, $subPrjActive)
 	{
 		$project = new langProject ();
@@ -93,19 +103,22 @@ class TranslateModel extends AdminModel
 
 		//--- all sub ids ----------------------------------------------
 
-		$dbSubProjects = $this->subPrjsDbData ($prjDbId);
+		$dbSubProjects = $this->subPrjsDbData($prjDbId);
 
 		//--- add subprojects ------------------------------------
 
-		foreach ($dbSubProjects as $dbSub) {
+		foreach ($dbSubProjects as $dbSub)
+		{
 
 			//--- regard user selection ----------------------------------------
 
 			// restrict not selected
-			if ($subPrjActive != 0) {
+			if ($subPrjActive != 0)
+			{
 
 				//  not the one the user selected
-				if ($subPrjActive != $dbSub->id) {
+				if ($subPrjActive != $dbSub->id)
+				{
 
 					continue;
 				}
@@ -120,18 +133,27 @@ class TranslateModel extends AdminModel
 			);
 
 			$subPrj->installPathFilename = $dbSub->installPathFilename;
-			$subPrj->langIdPrefix = $dbSub->prefix;
-			$subPrj->isLangAtStdJoomla = $dbSub->isLangAtStdJoomla;
+			$subPrj->langIdPrefix        = $dbSub->prefix;
+			$subPrj->isLangAtStdJoomla   = $dbSub->isLangAtStdJoomla;
 		}
 
 		return $project;
 	}
 
+	/**
+	 * @param $parent_id
+	 *
+	 * @return array|mixed
+	 *
+	 * @throws \Exception
+	 * @since version
+	 */
 	private function subPrjsDbData($parent_id)
 	{
 		$dbSubProjects = [];
 
-		try {
+		try
+		{
 
 			//--- collect data from manifest -----------------
 			$db = Factory::getDbo();
@@ -145,16 +167,16 @@ class TranslateModel extends AdminModel
 				->select($db->quoteName('root_path'))
 				->select($db->quoteName('prjXmlPathFilename'))
 				->select($db->quoteName('installPathFilename'))
-
 				->where($db->quoteName('parent_id') . ' = ' . (int) $parent_id)
 				->from($db->quoteName('#__lang4dev_subprojects'))
-				->order($db->quoteName('subPrjType') . ' ASC')
-			;
+				->order($db->quoteName('subPrjType') . ' ASC');
 
 			// Get the options.
 			$dbSubProjects = $db->setQuery($query)->loadObjectList();
 
-		} catch (\RuntimeException $e) {
+		}
+		catch (RuntimeException $e)
+		{
 			$OutTxt = '';
 			$OutTxt .= 'Error executing collectSubProjectIds: ' . '<br>';
 			$OutTxt .= 'Error: "' . $e->getMessage() . '"' . '<br>';
@@ -166,11 +188,20 @@ class TranslateModel extends AdminModel
 		return $dbSubProjects;
 	}
 
+	/**
+	 * @param   langProject  $project
+	 * @param                $prjId
+	 *
+	 *
+	 * @throws \Exception
+	 * @since version
+	 */
 	private function addPrjDbData(langProject $project, $prjId)
 	{
 		$project->dbId = $prjId;
 
-		try {
+		try
+		{
 
 			//--- collect data from manifest -----------------
 			$db = Factory::getDbo();
@@ -179,31 +210,31 @@ class TranslateModel extends AdminModel
 				->select($db->quoteName('name'))
 				->select($db->quoteName('title'))
 				->select($db->quoteName('root_path'))
-
 				->where($db->quoteName('id') . ' = ' . (int) $prjId)
-				->from($db->quoteName('#__lang4dev_projects'))
-//				->order($db->quoteName('subPrjType') . ' ASC')
+				->from($db->quoteName('#__lang4dev_projects'))//				->order($db->quoteName('subPrjType') . ' ASC')
 			;
 
 			// Get the options.
 			$prjDb = $db->setQuery($query)->loadObject();
 
 			// $project->prjName = $prjDb->name;
-			$project->prjName = $prjDb->title;
+			$project->prjName     = $prjDb->title;
 			$project->prjRootPath = $prjDb->root_path;
 
 			/** doesn't have these ... *
-			$project->prjXmlPathFilename = $prjDb->prjXmlPathFilename;
-			$project->installPathFilename = $prjDb->installPathFilename;
-			$project->prefix = $prjDb->prefix;
-			$project->subPrjType = $prjDb->subPrjType;
-			/**/
+			 * $project->prjXmlPathFilename = $prjDb->prjXmlPathFilename;
+			 * $project->installPathFilename = $prjDb->installPathFilename;
+			 * $project->prefix = $prjDb->prefix;
+			 * $project->subPrjType = $prjDb->subPrjType;
+			 * /**/
 
 			// = prjType ???
 			// Not in DB actually: $project->langIdPrefix = $prjDb->;
 			// $project->isSysFileFound = $prjDb->;
 
-		} catch (\RuntimeException $e) {
+		}
+		catch (RuntimeException $e)
+		{
 			$OutTxt = '';
 			$OutTxt .= 'Error executing collectSubProjectIds: ' . '<br>';
 			$OutTxt .= 'Error: "' . $e->getMessage() . '"' . '<br>';

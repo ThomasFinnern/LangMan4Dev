@@ -10,16 +10,17 @@
 
 // used in upload
 
-
 namespace Finnern\Component\Lang4dev\Administrator\Field;
 
-\defined('_JEXEC') or die;
+defined('_JEXEC') or die;
 
 use Finnern\Component\Lang4dev\Administrator\Helper\sessionProjectId;
 use Joomla\CMS\Factory;
 use Joomla\CMS\Form\Field\ListField;
 use Joomla\CMS\HTML\HTMLHelper;
 use Joomla\CMS\Language\Text;
+use RuntimeException;
+use function defined;
 
 /**
  * Collects available subproject ids with titles and creates
@@ -32,18 +33,24 @@ use Joomla\CMS\Language\Text;
 class SubprojectSelectField extends ListField
 {
 
-	protected $prjId=-1;
+	protected $prjId = -1;
 
-    /**
-     * The field type.
-     *
-     * @var string
-     *
-     * @since __BUMP_VERSION__
-     */
+	/**
+	 * The field type.
+	 *
+	 * @var string
+	 *
+	 * @since __BUMP_VERSION__
+	 */
 	protected $type = 'SubprojectSelect';
 
 	/**/
+	/**
+	 *
+	 * @return string
+	 *
+	 * @since version
+	 */
 	protected function getInput()
 	{
 		//--- Set selection of project and subproject --------------------
@@ -51,45 +58,44 @@ class SubprojectSelectField extends ListField
 		$sessionProjectId = new sessionProjectId();
 		[$prjId, $subPrjActive] = $sessionProjectId->getIds();
 
-		$this->setValue ($subPrjActive);
+		$this->setValue($subPrjActive);
 		/**
-		$this->prjId = $prjId;
-
-		if ($this->form->getValue('id', 0) == 0)
-		{
-			return '<span class="readonly">' . Text::_('COM_MENUS_ITEM_FIELD_ORDERING_TEXT') . '</span>';
-		}
-		else
-		{
-		return parent::getInput();
-		}
-		/**/
+		 * $this->prjId = $prjId;
+		 *
+		 * if ($this->form->getValue('id', 0) == 0)
+		 * {
+		 * return '<span class="readonly">' . Text::_('COM_MENUS_ITEM_FIELD_ORDERING_TEXT') . '</span>';
+		 * }
+		 * else
+		 * {
+		 * return parent::getInput();
+		 * }
+		 * /**/
 		/**
-		if($subPrjActive > 0)
-		{
-			return parent::getInput();
-		}
-		else {
-			if($subPrjActive == 0) {
-				return '<span class="readonly">' . Text::_('All subprojects') . '</span>';
-			} else
-			{
-				return '<span class="readonly">' . Text::_('??? -1 ???') . '</span>';
-			}
-		}
-		/**/
+		 * if($subPrjActive > 0)
+		 * {
+		 * return parent::getInput();
+		 * }
+		 * else {
+		 * if($subPrjActive == 0) {
+		 * return '<span class="readonly">' . Text::_('All subprojects') . '</span>';
+		 * } else
+		 * {
+		 * return '<span class="readonly">' . Text::_('??? -1 ???') . '</span>';
+		 * }
+		 * }
+		 * /**/
 
 		return parent::getInput();
 	}
 	/**/
 
-
 	/**
 	 * Method to get a list of options for a list input.
 	 *
 	 * @return  string []  The field option objects.
-     *
-     * @since __BUMP_VERSION__
+	 *
+	 * @since __BUMP_VERSION__
 	 */
 	protected function getOptions()
 	{
@@ -105,24 +111,21 @@ class SubprojectSelectField extends ListField
 			$this->value = $subPrjActive;
 
 			// $user = Factory::getApplication()->getIdentity(); // ToDo: Restrict to accessible subprojects
-			$db    = Factory::getDbo();
+			$db = Factory::getDbo();
 
 			$query = $db->getQuery(true)
 				->select($db->quoteName('id', 'value'))
 				->select($db->quoteName('title', 'text'))
-
 				->where($db->quoteName('parent_id') . ' = ' . (int) $prjId)
-
-                ->from($db->quoteName('#__lang4dev_subprojects'))
+				->from($db->quoteName('#__lang4dev_subprojects'))
 				// ToDo: Use option in XML to select ASC/DESC
-				->order($db->quoteName('id') . ' DESC')
-				;
+				->order($db->quoteName('id') . ' DESC');
 
 			// Get the options.
 			$subprojects = $db->setQuery($query)->loadObjectList();
 
 		}
-		catch (\RuntimeException $e)
+		catch (RuntimeException $e)
 		{
 			Factory::getApplication()->enqueueMessage($e->getMessage(), 'error');
 		}
@@ -134,13 +137,13 @@ class SubprojectSelectField extends ListField
 //            $options[$i]->text = str_repeat('- ', !$options[$i]->level ? 0 : $options[$i]->level - 1) . $options[$i]->text;
 //        }
 
-        // Put "Select an option" on the top of the list.
+		// Put "Select an option" on the top of the list.
 		array_unshift($options, HTMLHelper::_('select.option', '0', Text::_('COM_LANG4DEV_SELECT_SUB_PROJECT_ALL')));
 
-        // Merge any additional options in the XML definition.
-        $options = array_merge(parent::getOptions(), $options);
+		// Merge any additional options in the XML definition.
+		$options = array_merge(parent::getOptions(), $options);
 
-        return $options;
+		return $options;
 	}
 }
 

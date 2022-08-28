@@ -15,9 +15,11 @@ use Joomla\CMS\Filesystem\Folder;
 
 use Finnern\Component\Lang4dev\Administrator\Helper\transIdLocations;
 use Joomla\String\Normalise;
+use RuntimeException;
+use function defined;
 
 // no direct access
-\defined('_JEXEC') or die;
+defined('_JEXEC') or die;
 
 /**
  * Search language constants (Items) in given folders
@@ -45,8 +47,8 @@ class searchTransStrings
 	{
 		// ToDo: check for uppercase and trailing '_'
 
-		$this->transStringLocations       = new transIdLocations();
-		$this->langIdPrefix = $langIdPrefix;
+		$this->transStringLocations = new transIdLocations();
+		$this->langIdPrefix         = $langIdPrefix;
 
 		// if ( !empty ($searchPaths)) ... ???
 		$this->searchPaths = $searchPaths;
@@ -55,6 +57,13 @@ class searchTransStrings
 	// Attention the removing of comments may lead to wrong
 	// Index in line for found '*/'
 	// find and collect strings in TEXT::_('<string>') which need to be translated
+	/**
+	 *
+	 * @return \Finnern\Component\Lang4dev\Administrator\Helper\transIdLocations
+	 *
+	 * @throws \Exception
+	 * @since version
+	 */
 	public function findAllTranslationStrings()
 	{
 		// ToDo: log $langIdPrefix, $searchPaths
@@ -94,7 +103,7 @@ class searchTransStrings
 			}
 
 		}
-		catch (\RuntimeException $e)
+		catch (RuntimeException $e)
 		{
 			$OutTxt = '';
 			$OutTxt .= 'Error executing findAllTranslationIds: "' . '<br>';
@@ -107,6 +116,13 @@ class searchTransStrings
 		return $this->transStringLocations; // ? a lot to return ?
 	}
 
+	/**
+	 * @param $searchPath
+	 *
+	 *
+	 * @throws \Exception
+	 * @since version
+	 */
 	public function searchTransStrings_in_Path($searchPath)
 	{
 		try
@@ -116,19 +132,19 @@ class searchTransStrings
 			foreach ($this->filesInDir($searchPath) as $fileName)
 			{
 				$filePath = $searchPath . DIRECTORY_SEPARATOR . $fileName;
-				$ext = pathinfo($filePath, PATHINFO_EXTENSION);
+				$ext      = pathinfo($filePath, PATHINFO_EXTENSION);
 
-                //--- prevent project sys files -----------------------------------
+				//--- prevent project sys files -----------------------------------
 
 				// ToDo: installPathFilename Is it set ? construct ND PROPERTY
-                if ($ext == 'php' && $filePath == $this->installPathFilename)
-                {
-                    continue;
-                }
+				if ($ext == 'php' && $filePath == $this->installPathFilename)
+				{
+					continue;
+				}
 
-                //--- scan content of valid  files -----------------------------------
+				//--- scan content of valid  files -----------------------------------
 
-                if ($ext == 'php')
+				if ($ext == 'php')
 				{
 					$this->searchTransStrings_in_PHP_file($fileName, $searchPath);
 				}
@@ -143,7 +159,7 @@ class searchTransStrings
 			}
 
 		}
-		catch (\RuntimeException $e)
+		catch (RuntimeException $e)
 		{
 			$OutTxt = '';
 			$OutTxt .= 'Error executing searchTransStrings_in_Path: "' . '<br>';
@@ -154,6 +170,14 @@ class searchTransStrings
 		}
 	}
 
+	/**
+	 * @param $folder
+	 *
+	 * @return array|bool
+	 *
+	 * @throws \Exception
+	 * @since version
+	 */
 	public function filesInDir($folder)
 	{
 		$files = [];
@@ -165,7 +189,7 @@ class searchTransStrings
 			$regEx = '\.php|\.xml$';
 			$files = Folder::files($folder, $regEx);
 		}
-		catch (\RuntimeException $e)
+		catch (RuntimeException $e)
 		{
 			$OutTxt = '';
 			$OutTxt .= 'Error executing filesInDir: "' . '<br>';
@@ -180,6 +204,14 @@ class searchTransStrings
 
 	// Multiple items in one line
 
+	/**
+	 * @param $fileName
+	 * @param $path
+	 *
+	 *
+	 * @throws \Exception
+	 * @since version
+	 */
 	public function searchTransStrings_in_PHP_file($fileName, $path)
 	{
 		$isInComment = false;
@@ -213,31 +245,31 @@ class searchTransStrings
 					//--- add items
 					foreach ($items as $item)
 					{
-						$item->file    = $fileName;
-						$item->path    = $path;
+						$item->file   = $fileName;
+						$item->path   = $path;
 						$item->lineNr = $lineNr;
 
 						$this->transStringLocations->addItem($item);
 					}
 
 					/**
-					$items = $this->searchEchoStrings_in_line_PHP($bareLine);
-
-					//--- add items
-					foreach ($items as $item)
-					{
-						$item->file    = $fileName;
-						$item->path    = $path;
-						$item->lineNr = $lineNr;
-
-						$this->transStringLocations->addItem($item);
-					}
-					/**/
+					 * $items = $this->searchEchoStrings_in_line_PHP($bareLine);
+					 *
+					 * //--- add items
+					 * foreach ($items as $item)
+					 * {
+					 * $item->file    = $fileName;
+					 * $item->path    = $path;
+					 * $item->lineNr = $lineNr;
+					 *
+					 * $this->transStringLocations->addItem($item);
+					 * }
+					 * /**/
 				}
 
 			}
 		}
-		catch (\RuntimeException $e)
+		catch (RuntimeException $e)
 		{
 			$OutTxt = 'Error executing searchTransIdsIn_PHP_file: "' . '<br>';
 			$OutTxt .= 'Error: "' . $e->getMessage() . '"' . '<br>';
@@ -249,6 +281,15 @@ class searchTransStrings
 		// return $this->transStringLocations;
 	}
 
+	/**
+	 * @param $line
+	 * @param $isInComment
+	 *
+	 * @return false|mixed|string
+	 *
+	 * @throws \Exception
+	 * @since version
+	 */
 	public function removeCommentPHP($line, &$isInComment)
 	{
 		$bareLine = $line;
@@ -256,27 +297,28 @@ class searchTransStrings
 		try
 		{
 			// No inside a '/*' comment
-			if ( ! $isInComment)
+			if (!$isInComment)
 			{
 				//--- check for comments ---------------------------------------
 
-				$doubleSlash = '//';
+				$doubleSlash   = '//';
 				$slashAsterisk = '/*';
 
-				$doubleSlashIdx = strpos ($line, $doubleSlash);
-				$slashAsteriskIdx = strpos ($line, $slashAsterisk);
+				$doubleSlashIdx   = strpos($line, $doubleSlash);
+				$slashAsteriskIdx = strpos($line, $slashAsterisk);
 
 				// comment exists, keep start of string
 				if ($doubleSlashIdx != false || $slashAsteriskIdx != false)
 				{
-					if ($doubleSlashIdx != false && $slashAsteriskIdx == false) {
-						$bareLine =  strstr ($line, $doubleSlash, true);
+					if ($doubleSlashIdx != false && $slashAsteriskIdx == false)
+					{
+						$bareLine = strstr($line, $doubleSlash, true);
 					}
 					else
 					{
 						if ($doubleSlashIdx == false && $slashAsteriskIdx != false)
 						{
-							$bareLine = strstr($line, $slashAsterisk, true);
+							$bareLine    = strstr($line, $slashAsterisk, true);
 							$isInComment = true;
 						}
 						else
@@ -284,10 +326,13 @@ class searchTransStrings
 							//--- both found ---------------------------------
 
 							// which one is first
-							if ($doubleSlashIdx < $slashAsteriskIdx) {
-								$bareLine =  strstr ($line, $doubleSlash, true);
-							} else {
-								$bareLine = strstr($line, $slashAsterisk, true);
+							if ($doubleSlashIdx < $slashAsteriskIdx)
+							{
+								$bareLine = strstr($line, $doubleSlash, true);
+							}
+							else
+							{
+								$bareLine    = strstr($line, $slashAsterisk, true);
 								$isInComment = true;
 							}
 
@@ -295,16 +340,17 @@ class searchTransStrings
 
 					}
 
-
 				} // No comment indicator
 
-			} else {
+			}
+			else
+			{
 				//--- Inside a '/*' comment
 
 				$bareLine = '';
 
-				$asteriskSlash = '*/';
-				$asteriskSlashIdx = strpos ($line, $asteriskSlash);
+				$asteriskSlash    = '*/';
+				$asteriskSlashIdx = strpos($line, $asteriskSlash);
 
 				// end found ?
 				if ($asteriskSlashIdx != false)
@@ -314,12 +360,12 @@ class searchTransStrings
 
 					// handle rest of string
 					$isInComment = false;
-					$bareLine = $this->removeCommentPHP($bareLine, $isInComment);
+					$bareLine    = $this->removeCommentPHP($bareLine, $isInComment);
 				}
 			}
 
 		}
-		catch (\RuntimeException $e)
+		catch (RuntimeException $e)
 		{
 			$OutTxt = '';
 			$OutTxt .= 'Error executing removeCommentPHP: "' . '<br>';
@@ -334,9 +380,17 @@ class searchTransStrings
 
 	// Multiple items in one line
 	// Must be cleaned from comments first
+	/**
+	 * @param $line
+	 *
+	 * @return array
+	 *
+	 * @throws \Exception
+	 * @since version
+	 */
 	public function searchTextStrings_in_line_PHP($line)
 	{
-		$items = [];
+		$items   = [];
 		$matches = [];
 
 		try
@@ -364,7 +418,7 @@ class searchTransStrings
 				{
 					$name = $this->createTransID($string);
 
-					if (strlen ($name) > 0)
+					if (strlen($name) > 0)
 					{
 						$colIdx = strpos($line, $string, $idx);
 
@@ -381,7 +435,7 @@ class searchTransStrings
 			}
 
 		}
-		catch (\RuntimeException $e)
+		catch (RuntimeException $e)
 		{
 			$OutTxt = '';
 			$OutTxt .= 'Error executing searchLangIdsInLinePHP: "' . '<br>';
@@ -397,9 +451,17 @@ class searchTransStrings
 	// Multiple items in one line
 	// Must be cleaned from comments first
 	// covers only strings in one line
+	/**
+	 * @param $line
+	 *
+	 * @return array
+	 *
+	 * @throws \Exception
+	 * @since version
+	 */
 	public function searchEchoStrings_in_line_PHP($line)
 	{
-		$items = [];
+		$items   = [];
 		$matches = [];
 
 		try
@@ -424,7 +486,7 @@ class searchTransStrings
 				{
 					$name = $this->createTransID($string);
 
-					if (strlen ($name) > 0)
+					if (strlen($name) > 0)
 					{
 						$colIdx = strpos($line, $string, $idx);
 
@@ -441,7 +503,7 @@ class searchTransStrings
 			}
 
 		}
-		catch (\RuntimeException $e)
+		catch (RuntimeException $e)
 		{
 			$OutTxt = '';
 			$OutTxt .= 'Error executing searchLangIdsInLinePHP: "' . '<br>';
@@ -456,8 +518,16 @@ class searchTransStrings
 
 	// looking for user text not translation IDs like COM_LANG4DEV_....
 	//
-    public function createTransID ($string)
-    {
+	/**
+	 * @param $string
+	 *
+	 * @return string
+	 *
+	 * @throws \Exception
+	 * @since version
+	 */
+	public function createTransID($string)
+	{
 		// $transId = '??? ' . $string;
 		$transId = '';
 
@@ -465,7 +535,8 @@ class searchTransStrings
 		{
 			// ToDo: Move to start of search ? or not needed at all
 			$prefix = $this->langIdPrefix;
-			if ( ! str_ends_with ($prefix, '_')) {
+			if (!str_ends_with($prefix, '_'))
+			{
 				$prefix = $prefix . '_';
 			}
 
@@ -474,8 +545,8 @@ class searchTransStrings
 
 			if ($isNotLikeTranslationID)
 			{
-				$underscore = Normalise::toUnderscoreSeparated($string);
-				$uppercase =strToUpper ($underscore);
+				$underscore     = Normalise::toUnderscoreSeparated($string);
+				$uppercase      = strToUpper($underscore);
 				$prefixAddition = $prefix . $uppercase;
 
 				// toDo ? any strange chars left ?
@@ -483,7 +554,7 @@ class searchTransStrings
 				$transId = $prefixAddition;
 			}
 		}
-		catch (\RuntimeException $e)
+		catch (RuntimeException $e)
 		{
 			$OutTxt = '';
 			$OutTxt .= 'Error executing createTransID: "' . $string . '<br>';
@@ -493,9 +564,17 @@ class searchTransStrings
 			$app->enqueueMessage($OutTxt, 'error');
 		}
 
-    	return $transId;
-    }
+		return $transId;
+	}
 
+	/**
+	 * @param $folder
+	 *
+	 * @return array|false
+	 *
+	 * @throws \Exception
+	 * @since version
+	 */
 	public function folderInDir($folder)
 	{
 		$folders = [];
@@ -507,7 +586,7 @@ class searchTransStrings
 			$folders = Folder::folders($folder);
 
 		}
-		catch (\RuntimeException $e)
+		catch (RuntimeException $e)
 		{
 			$OutTxt = '';
 			$OutTxt .= 'Error executing folderInDir: "' . '<br>';

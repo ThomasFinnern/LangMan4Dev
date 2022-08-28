@@ -1,17 +1,19 @@
 <?php
 /**
- * @package     Joomla.Administrator
- * @subpackage  com_lang4dev
+ * @package       Joomla.Administrator
+ * @subpackage    com_lang4dev
  *
  * @copyright (C) 2022-2022 Lang4dev Team
- * @license     GNU General Public License version 2 or later; see LICENSE.txt
+ * @license       GNU General Public License version 2 or later; see LICENSE.txt
  */
 
 namespace Finnern\Component\Lang4dev\Administrator\Controller;
 
-\defined('_JEXEC') or die;
+defined('_JEXEC') or die;
 
+use Exception;
 use Joomla\CMS\MVC\Controller\BaseController;
+use function defined;
 
 /**
  * Lang4dev master display controller.
@@ -36,9 +38,9 @@ class DisplayController extends BaseController
 	 *
 	 * @return  BaseController|bool  This object to support chaining.
 	 *
+	 * @throws  Exception
 	 * @since   __BUMP_VERSION__
 	 *
-	 * @throws  \Exception
 	 */
 	public function display($cachable = false, $urlparams = [])
 	{

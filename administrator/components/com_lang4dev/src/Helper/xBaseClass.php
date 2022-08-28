@@ -9,21 +9,20 @@
  * @license
  */
 
-
 namespace Finnern\Component\Lang4dev\Administrator\Helper;
 
 use Joomla\CMS\Factory;
 use Joomla\CMS\Filesystem\Folder;
 
 use Finnern\Component\Lang4dev\Administrator\Helper\langFiles;
+use function defined;
 
 // no direct access
-\defined('_JEXEC') or die;
+defined('_JEXEC') or die;
 
 /**
  * Collect contents of all translation files for one base folder (existing)
  * Write the changes set inlcuding
-
  * The files uses is limitet as *.ini are not useful
  *
  * @package Lang4dev
@@ -31,11 +30,5 @@ use Finnern\Component\Lang4dev\Administrator\Helper\langFiles;
 class langFilesSet
 {
 	public $fileTypes = 'php, xml';
-
-
-
-
-
-
 
 } // class

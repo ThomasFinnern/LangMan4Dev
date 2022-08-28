@@ -1,19 +1,20 @@
 <?php
 /**
- * @package     Lang4dev
+ * @package       Lang4dev
  * @subpackage
  *
  * @version
  * @copyright (C) 2022-2022 Lang4dev Team
- * @license   GPL2
+ * @license       GPL2
  */
 
 namespace Finnern\Component\Lang4dev\Administrator\Helper;
 
 use Joomla\CMS\Factory;
+use function defined;
 
 // no direct access
-\defined('_JEXEC') or die;
+defined('_JEXEC') or die;
 
 /**
  * Reads and writes user selected project id and subproject id from / to session
@@ -23,17 +24,20 @@ use Joomla\CMS\Factory;
  *
  * @package Lang4dev
  */
-
 class sessionProjectId
 {
 	protected $prjId = '-1';
 	protected $subPrjActive = '0';
 
+	/**
+	 *
+	 *
+	 * @since version
+	 */
+	public function clear()
+	{
 
-
-	public function clear() {
-
-		$prjId = '-1';
+		$prjId        = '-1';
 		$subPrjActive = '0';
 
 		return;
@@ -48,22 +52,27 @@ class sessionProjectId
 	public function setIds($prjId = '-1', $subPrjActive = '0')
 	{
 
-		$this->prjId = $prjId;
+		$this->prjId        = $prjId;
 		$this->subPrjActive = $subPrjActive;
 
 		$session = Factory::getSession();
-		$data = $session->set('_lang4dev.prjId', $prjId);
-		$data = $session->set('_lang4dev.subPrjActive', $subPrjActive);
+		$data    = $session->set('_lang4dev.prjId', $prjId);
+		$data    = $session->set('_lang4dev.subPrjActive', $subPrjActive);
 
 		return;
 	}
 
+	/**
+	 *
+	 *
+	 * @since version
+	 */
 	public function resetIds()
 	{
 		// default values
 		//$this->setIds();
 
-		$this->clear ();
+		$this->clear();
 
 		$session = Factory::getSession();
 		$session->clear('_lang4dev.prjId');
@@ -82,7 +91,7 @@ class sessionProjectId
 	{
 		//--- already set in class ? ---------------------
 
-		$prjId = $this->prjId;
+		$prjId        = $this->prjId;
 		$subPrjActive = $this->subPrjActive;
 
 		// Is not set
@@ -102,7 +111,7 @@ class sessionProjectId
 			{
 				//--- retrieve last created from DB ---------------------------------
 
-				$prjId = $this->highestProjectId_DB ();
+				$prjId        = $this->highestProjectId_DB();
 				$subPrjActive = 0; // view all
 			}
 		}
@@ -120,7 +129,7 @@ class sessionProjectId
 	{
 		$max = 0; // indicates nothing found in DB
 
-		$db = Factory::getDbo();
+		$db    = Factory::getDbo();
 		$query = $db->getQuery(true)
 			->select('MAX(id)')
 			->from($db->quoteName('#__lang4dev_projects'));
