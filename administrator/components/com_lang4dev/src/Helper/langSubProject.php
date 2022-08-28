@@ -117,7 +117,7 @@ class langSubProject extends langFiles
 			}
 			else
 			{
-				// else is not needed ?
+				// else should not be needed ?
 				$this->prjXmlPathFilename = $this->prjXmlPathFilename . "";
 			}
 		}
@@ -129,34 +129,37 @@ class langSubProject extends langFiles
 	{
 		$projectFileName = $this->prjId;
 
-		if (   $this->prjType == projectType::PRJ_TYPE_COMP_BACK_SYS
-			|| $this->prjType == projectType::PRJ_TYPE_COMP_BACK)
-		{
-			// $projectFileName = 'com_' . $this->prjId;
-			$projectFileName = substr($this->prjId, 4);
-		}
-
-		$projectFileName = $projectFileName . '.xml';
+//		if (   $this->prjType == projectType::PRJ_TYPE_COMP_BACK_SYS
+//			|| $this->prjType == projectType::PRJ_TYPE_COMP_BACK)
+//		{
+//			// $projectFileName = 'com_' . $this->prjId;
+//			$projectFileName = substr($this->prjId, 4);
+//		}
+//
+//		$projectFileName = $projectFileName . '.xml';
+		$projectFileName = substr($this->prjId, 4) . '.xml';
 
 		return $projectFileName;
 	}
 
-	// In first version the manifest file was searched,
-	// now the location of the manifest file is expected
-	// to be assigned already
+
 	//
 	// script- / install file, language files as list, transId
-	public function findPrjFiles()
+	public function findPrjFiles($isAddLangFileNames=true)
 	{
 
 		$isFilesFound = false;
 
+		$isManifestPathValid = false;
+		$isRootPathValid = false;
+
 		try
 		{
-
 			//--- check valid project root path ---------------------------------------------------
 
 			$isRootPathValid = $this->checkRootPath();
+
+			$isManifestPathValid = $this->checkManifestPath();
 
 			// xml may be in administrator / ... sub path
 			if (!$isRootPathValid)
@@ -165,7 +168,7 @@ class langSubProject extends langFiles
 
 				// sets $prjXmlFilePath
 				$isFileFound     = $this->searchXmlProjectFile($projectFileName, $this->prjRootPath); // $this->prjXmlFilePath); //
-				$isRootPathValid = $this->checkRootPath();
+				$isRootPathValid = $this->checkManifestPath();
 			}
 
 			// manifest found ?
@@ -175,21 +178,35 @@ class langSubProject extends langFiles
 
 				$isManifestPathValid = $this->checkManifestPath();
 
-				// manifest found ?
-				if ($isManifestPathValid)
+				if ( ! $isManifestPathValid)
 				{
-					//--- open manifest file -------------------------------------------------
 
-					// Manifest tells if files have to be searched inside component or old on joomla standard paths
-					$manifestLang = new manifestLangFiles ($this->prjXmlPathFilename);
+					$projectFileName = $this->projectFileName();
 
-					//--- project XML and script file -------------------------------------------------
+					$isFileFound = $this->searchXmlProjectFile($projectFileName, $this->prjRootPath); // $this->prjXmlFilePath); //
+					$isManifestPathValid = $this->checkManifestPath();
 
-					$this->projectXMLAndScriptFile($manifestLang);
+				}
+			}
 
-					//--- lang files list by manifest ----------------------------------------
+			// manifest found ?
+			if ($isManifestPathValid)
+			{
+				//--- open manifest file -------------------------------------------------
 
-					if ($this->isLangAtStdJoomla) {
+				// Manifest tells if files have to be searched inside component or old on joomla standard paths
+				$manifestLang = new manifestLangFiles ($this->prjXmlPathFilename);
+
+				//--- project XML and script file -------------------------------------------------
+
+				$this->projectXMLAndScriptFile($manifestLang);
+
+				//--- lang files list by manifest ----------------------------------------
+
+				if ($isAddLangFileNames)
+				{
+					if ($this->isLangAtStdJoomla)
+					{
 
 						// includes detectLangBasePath
 						$this->collectManifestLangFiles($manifestLang, $this->prjType);
@@ -198,16 +215,18 @@ class langSubProject extends langFiles
 						// search for late additions not mentioned in manifest
 						$this->extendManifestLangFilesList();
 
-					} else {
+					}
+					else
+					{
 
 						$this->prjXmlFilePath = $this->prjRootPath;
 						$this->detectLangBasePath($this->prjRootPath, $this->useLangSysIni);
 
 						$this->collectPrjFolderLangFiles();
 					}
-
 				}
 			}
+
 		}
 		catch (\RuntimeException $e)
 		{
@@ -627,7 +646,7 @@ class langSubProject extends langFiles
 	{
 		//--- project XML and script file -------------------------------------------------
 
-		// files config.xml and  to expect for sub project
+		// files config.xml and  to expect for subproject
 		[$isConfigXml, $isInstallPhp] = projectType::enabledByType($this->prjType);
 
 		if ($isInstallPhp)
@@ -648,7 +667,7 @@ class langSubProject extends langFiles
 		}
 
 		// manifest tells about defined list of lang files
-		$this->isLangAtStdJoomla = $manifestLang->isLangAtStdJoomla;
+		$this->isLangAtStdJoomla = $manifestLang->getIsLangAtStdJoomla();
 	}
 
 } // class

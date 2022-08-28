@@ -329,12 +329,12 @@ class langFileNamesSet
 		}
 		else
 		{
-			// ToDo: local developer project not ion server
+			// ToDo: local developer project not on server
 			//--- on local development folder ------------------------------
 
 //			$this->langBasePath =  $this->langBasePathJoomla ($prjType);
 
-			/**
+			/**/
 			if (count($xmlLangNames) > 0)
 			{
 				foreach ($xmlLangNames as $idx => $langFilePathInfo)

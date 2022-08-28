@@ -122,9 +122,9 @@ class manifestData
 	public function get ($name, $default) {
 
 //		return isset($this->manifest->$name) ? $this->manifest->$name : $default;
-		$name = $this->manifest->$name;
+		$result = $this->manifest->$name;
 		// return isset($this->manifest->$name) ? $this->manifest->$name : $default;
-		return $name;
+		return $result;
 	}
 
     // return null on wrong path

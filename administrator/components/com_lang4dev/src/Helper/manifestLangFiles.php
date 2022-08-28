@@ -207,51 +207,43 @@ class manifestLangFiles extends manifestData
 	}
 
 	// new: lang files within component
-	public function isLangAtStdJoomla ()
+	public function getIsLangAtStdJoomla ()
 	{
-		$this->isLangAtStdJoomla  = false;
+//		$this->isLangAtStdJoomla  = false;
+//
+//		try
+//		{
+//			// site
+//			$stdLanguages = $this->get('languages', []);
+//			if (count($stdLanguages) > 0)
+//			{
+//				// lang files path will be defined in XML and copied to joomla standard path not component
+//				$this->isLangAtStdJoomla = true;
+//
+//			}
+//
+//			// administration
+//			$administration = $this->get('administration', []);
+//			$stdLanguages   = $administration->languages;
+//			if (count($stdLanguages) > 0)
+//			{
+//				// lang files path will be defined in XML anf copied to joomla standard path
+//				$this->isLangAtStdJoomla = true;
+//
+//			}
+//		}
+//		catch (\RuntimeException $e)
+//		{
+//			$OutTxt = '';
+//			$OutTxt .= 'Error executing langFileOrigins: ' . '"<br>';
+//			$OutTxt .= 'Error: "' . $e->getMessage() . '"' . '<br>';
+//
+//			$app = Factory::getApplication();
+//			$app->enqueueMessage($OutTxt, 'error');
+//		}
 
-		try
-		{
-			$manifest = $this->manifest;
-
-			if (!empty ($manifest))
-			{
-				//--- old standard -----------------------------------------------
-				//<languages folder="site/com_joomgallery/languages">
-				//	<language tag="en-GB">en-GB/com_joomgallery.ini</language>
-				//</languages>
-
-				// site
-				$stdLanguages = $this->get('languages', []);
-				if (count($stdLanguages) > 0)
-				{
-					// lang files path will be defined in XML and copied to joomla standard path not component
-					$this->isLangAtStdJoomla = true;
-
-				}
-
-				// administration
-				$administration = $this->get('administration', []);
-				$stdLanguages   = $administration->languages;
-				if (count($stdLanguages) > 0)
-				{
-					// lang files path will be defined in XML anf copied to joomla standard path
-					$this->isLangAtStdJoomla = true;
-
-				}
-			}
-		}
-		catch (\RuntimeException $e)
-		{
-			$OutTxt = '';
-			$OutTxt .= 'Error executing langFileOrigins: ' . '"<br>';
-			$OutTxt .= 'Error: "' . $e->getMessage() . '"' . '<br>';
-
-			$app = Factory::getApplication();
-			$app->enqueueMessage($OutTxt, 'error');
-		}
-
+		$isLangAtStdJoomla = $this->langFileOrigins();
+		$isLangAtStdJoomla = $this->isLangAtStdJoomla;
 		return $this->isLangAtStdJoomla;
 	}
 

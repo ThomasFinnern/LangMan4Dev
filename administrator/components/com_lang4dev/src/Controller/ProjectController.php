@@ -188,6 +188,9 @@ class projectController extends FormController
             $subPrjModel = $this->getModel('Subproject');
 
             foreach ($subProjects as $subProject) {
+
+	            $subProject->findPrjFiles(false);
+
                 //  includes save
                 $isSaved &= $subPrjModel->MergeSubProject($subProject, $id);
 
