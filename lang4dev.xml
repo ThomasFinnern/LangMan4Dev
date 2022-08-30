@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<extension type="component" method="upgrade">
+	<name>COM_LANG4DEV</name>
+	<creationDate>15. Apr. 2022</creationDate>
+	<author>Thomas Finnern</author>
+	<authorEmail>lang4dev@tomfinnern.de</authorEmail>
+	<authorUrl>https://github.com/ThomasFinnern</authorUrl>
+	<copyright>(c) 2022-2022 Lang4dev Team</copyright>
+	<license>GNU General Public License version 2 or later;</license>
+	<version>0.0.0.2</version>
+	<description>COM_LANG4DEV_XML_DESCRIPTION</description>
+	<namespace path="src">Finnern\Component\Lang4dev</namespace>
+	
+	<!-- Script to run on installation -->
+	<scriptfile>install_langman4dev.php</scriptfile>
+
+	<install> <!-- Runs on install -->
+		<sql>
+			<file driver="mysql" charset="utf8">sql/install.mysql.utf8.sql</file>
+		</sql>
+	</install>
+	<uninstall> <!-- Runs on uninstall -->
+		<sql>
+			<file driver="mysql" charset="utf8">sql/uninstall.mysql.utf8.sql</file>
+		</sql>
+	</uninstall>
+	<!--update-->  <!-- Runs on update -->
+		<!--schemas>
+			<schemapath type="mysql">sql/updates/mysql</schemapath>
+		</schemas>
+	</update-->
+
+	<!-- Back-end files -->
+	<administration>
+		<menu view="lang4dev">COM_LANG4DEV</menu>
+		
+		<submenu>
+			<menu view="COM_LANG4DEV_MENU_CONTROL_PANEL"
+			      img="class:home"
+			      link="option=com_lang4dev">COM_LANG4DEV_MENU_CONTROL_PANEL
+			</menu>
+			<!--menu link="option=com_lang4dev">COM_LANG4DEV</menu-->
+			<menu view="COM_LANG4DEV_MENU_PROJECTS"
+			      img="class:home"
+			      link="option=com_lang4dev&amp;view=projects">COM_LANG4DEV_MENU_PROJECTS
+			</menu>
+			<menu view="COM_LANG4DEV_MENU_PRJ_TEXTS"
+			      img="class:itme"
+			      link="option=com_lang4dev&amp;view=prjtexts">COM_LANG4DEV_PRJ_TEXTS
+			</menu>
+			<menu view="COM_LANG4DEV_MENU_TRANSLATE"
+			      img="class:language"
+			      link="option=com_lang4dev&amp;view=translate">COM_LANG4DEV_MENU_TRANSLATE
+			</menu>
+			<!--menu view="COM_LANG4DEV_MENU_TRANSLATIONS"
+			      img="class:language"
+			      link="option=com_lang4dev&amp;view=translations">COM_LANG4DEV_MENU_TRANSLATIONS
+			</menu-->
+			<menu view="COM_LANG4DEV_MENU_MAINTENANCE"
+			      img="class:equalizer"
+			      link="option=com_lang4dev&amp;view=maintenance">COM_LANG4DEV_MENU_MAINTENANCE
+			</menu>
+			<menu view="COM_LANG4DEV_MENU_CONFIG"
+			      img="class:config"
+			      link="option=com_config&amp;view=component&amp;component=com_lang4dev">COM_LANG4DEV_MENU_CONFIG
+			</menu>
+			<!--menu view="COM_LANG4DEV_MENU_MAINTENANCE"
+			      img="class:equalizer"
+			      link="option=com_lang4dev&amp;view=maintenance">COM_LANG4DEV_MENU_MAINTENANCE
+			</menu-->
+			<!--menu view="COM_LANG4DEV_MENU_MAINTENANCE_1A" test comment 1
+			      img="class:equalizer"
+			      link="option=com_lang4dev&amp;view=maintenance">COM_LANG4DEV_MENU_MAINTENANCE_1B
+			</menu-->
+			<!--menu view="COM_LANG4DEV_MENU_MAINTENANCE2" test comment 2 -->
+
+		</submenu>
+
+		<files folder="administrator/components/com_lang4dev">
+			<filename>access.xml</filename>
+			<filename>changelog.xml</filename>
+			<filename>config.xml</filename>
+			<folder>forms</folder>
+			<filename>install_langman4dev.php</filename>
+			<filename>lang4dev.xml</filename>
+			<folder>language</folder>
+			<folder>services</folder>
+			<folder>src</folder>
+			<folder>sql</folder>
+			<folder>tmpl</folder>
+		</files>
+	</administration>
+	
+    <media folder="media/com_lang4dev" destination="com_lang4dev">
+		<folder>css</folder>
+		<folder>images</folder>
+		<folder>js</folder>
+    </media>
+	
+	<changelogurl>https://raw.githubusercontent.com/ThomasFinnern/J_LangMan4ExtDev/main/administrator/components/com_lang4dev/changelog.xml</changelogurl>
+	
+	<updateservers>
+		<server type="extension" name="Lang4Dev Updates">https://raw.githubusercontent.com/ThomasFinnern/J_LangMan4ExtDevProject/main/UpdateServer/Lang4dev_component_update.xml</server>
+	</updateservers>
+	
+	<dlid prefix="dlid=" suffix="" />
+</extension>
