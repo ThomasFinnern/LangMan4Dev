@@ -30,7 +30,7 @@ defined('_JEXEC') or die;
 class langFileNamesSet
 {
 	public $langBasePath = '';
-	public $baseName = '';
+//	public $baseName = '';
 	public $langIds = [];
 	public $langFileNamesSet = []; // [LangIds] [filename]
 
@@ -55,7 +55,7 @@ class langFileNamesSet
 	{
 
 		$this->langBasePath     = '';
-		$this->baseName         = '';
+		//$this->baseName         = '';
 		$this->langIds          = [];
 		$this->langFileNamesSet = [];
 
@@ -232,11 +232,11 @@ class langFileNamesSet
 
 	protected function collectPrjFolderLangFiles()
 	{
-
-		$isBaseNameSet = false;
+		//$isBaseNameSet = false;
+		$isFound = false;
 
 		$this->langIds = [];
-		$baseName      = '';
+		//$baseName      = '';
 
 		if ($this->useLangSysIni == true)
 		{
@@ -250,6 +250,7 @@ class langFileNamesSet
 
 		//--- lang ID in front ----------------------------------------
 
+		// ToDo: lang name may be in sub folders ?
 		if ($this->isLangIdPre2Name)
 		{
 
@@ -264,19 +265,19 @@ class langFileNamesSet
 				$this->langIds []                   = $langId;
 				$this->langFileNamesSet [$langId][] = $langFile;
 
-				// set base name once
-				if ($isBaseNameSet == false)
-				{
-					$this->baseName = $baseName;
-					$isBaseNameSet  = true;
-				}
+//				// set base name once
+//				if ($isBaseNameSet == false)
+//				{
+//					$this->baseName = $baseName;
+//					$isBaseNameSet  = true;
+//				}
 
+				$isFound = true;
 			}
 
 		}
 		else
 		{
-
 			//--- lang ID as folder name --------------------------------
 
 			// all folders
@@ -287,27 +288,34 @@ class langFileNamesSet
 
 				$subFolder = $this->langBasePath . DIRECTORY_SEPARATOR . $folderName;
 
-				// set base name once
-				if ($isBaseNameSet == false)
+				// all matching file names
+				$fileNames = Folder::files($subFolder, $regex);
+				foreach ($fileNames as $fileName)
 				{
-					$fileNames = Folder::files($subFolder, $regex);
+//					// set base name once
+//					if ($isBaseNameSet == false)
+//					{
+//						if ($fileNames != false)
+//						{
+//							$baseName       = $fileNames[0];
+//							$this->baseName = $baseName;
+//
+//							$isBaseNameSet = true;
+//						}
+//					}
 
-					if ($fileNames != false)
-					{
-						$baseName       = $fileNames[0];
-						$this->baseName = $baseName;
+//					$langFile = $subFolder . DIRECTORY_SEPARATOR . $baseName;
+					$langFile = $subFolder . DIRECTORY_SEPARATOR . $fileName;
 
-						$isBaseNameSet = true;
-					}
+					$this->langFileNamesSet [$langId][] = $langFile;
+
+					$isFound = true;
 				}
-
-				$langFile = $subFolder . DIRECTORY_SEPARATOR . $baseName;
-
-				$this->langFileNamesSet [$langId][] = $langFile;
 			}
 		}
 
-		return $isBaseNameSet;
+		//return $isBaseNameSet;
+		return $isFound;
 	}
 
 	// restrict to sub prj type
@@ -334,7 +342,7 @@ class langFileNamesSet
 		}
 		else
 		{
-			// On site, modul and plugin
+			// On site, module and plugin
 			$xmlLangNames = $manifestLang->stdLangFilePaths;
 
 		}
@@ -563,7 +571,7 @@ class langFileNamesSet
 	 *
 	 * @since version
 	 */
-	private function langBasePathJoomla($prjType)
+	public function langBasePathJoomla($prjType)
 	{
 		// most used is admin backend
 		$basePath = JPATH_ADMINISTRATOR . '/language';

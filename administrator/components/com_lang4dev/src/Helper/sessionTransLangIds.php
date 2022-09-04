@@ -155,6 +155,14 @@ class sessionTransLangIds
 				$mainLangId  = $l4dConfig->get('mainLangId');
 				$transLangId = $l4dConfig->get('transLangId');
 			}
+
+			// Not in config either
+			if (empty($mainLangId))
+			{
+				$mainLangId  = "en-GB";
+				$transLangId = "de-DE";
+			}
+
 		}
 
 		return [$mainLangId, $transLangId];

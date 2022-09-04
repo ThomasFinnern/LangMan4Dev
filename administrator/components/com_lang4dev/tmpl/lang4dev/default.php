@@ -137,16 +137,17 @@ function DisplayControlButtons($cmdButtons)
 
 }
 
-function renderLangIdTexts($form)
+function renderProjectSelection($form)
 {
 	?>
-	<div class="d-flex flex-row py-0 my-0">
-		<div class="mx-2 py-0 border border-primary">
-			<?php echo $form->renderField('selectSourceLangId'); ?>
+	<br>
+	<div class="d-flex flex-row py-0 my-0 justify-content-between">
+		<div class="mx-2 py-0 flex-fill ">
+			<?php echo $form->renderField('selectProject'); ?>
 		</div>
 
-		<div class="mx-2 py-0 border border-success">
-			<?php echo $form->renderField('selectTargetLangId'); ?>
+		<div class="mx-2 py-0 px-2 flex-fill ">
+			<?php echo $form->renderField('selectSubproject'); ?>
 		</div>
 
 	</div>
@@ -155,16 +156,19 @@ function renderLangIdTexts($form)
 	return;
 }
 
-function renderProjectSelection($form)
+
+function renderLangIdTexts($form)
 {
+	// mx-2 py-0, mx-2 py-0 px-2
 	?>
-	<div class="d-flex flex-row py-0 my-0">
-		<div class="mx-2 py-0 border border-primary">
-			<?php echo $form->renderField('selectProject'); ?>
+	<br>
+	<div class="d-flex flex-row py-0 my-0 justify-content-between">
+		<div class="mx-2 py-0 flex-fill ">
+			<?php echo $form->renderField('selectSourceLangId'); ?>
 		</div>
 
-		<div class="mx-2 py-0 border border-success">
-			<?php echo $form->renderField('selectSubproject'); ?>
+		<div class="mx-2 py-0 flex-fill ">
+			<?php echo $form->renderField('selectTargetLangId'); ?>
 		</div>
 
 	</div>
@@ -202,7 +206,8 @@ function renderProjectSelection($form)
 			</div>
 		</div>
 
-		<h2>Lang4Dev<?php echo '&nbsp;V' . $this->extensionVersion; ?></h2>
+		<br>
+		<h2><?php echo '&nbsp;&nbsp;'?>Lang4Dev<?php echo '&nbsp;V' . $this->extensionVersion; ?></h2>
 
 		<?php renderProjectSelection($this->form); ?>
 		<?php renderLangIdTexts($this->form); ?>

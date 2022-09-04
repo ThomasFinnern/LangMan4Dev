@@ -251,11 +251,28 @@ class langSubProject extends langFiles
 					}
 					else
 					{
+						$startPath = '';
 
-						$this->prjXmlFilePath = $this->prjRootPath;
-						$this->detectLangBasePath($this->prjRootPath, $this->useLangSysIni);
+						// is component installed or in develop folder
+						if ($manifestLang->isInstalled)
+						{
 
-						$this->collectPrjFolderLangFiles();
+							$startPath = $this->langBasePathJoomla($this->prjType);
+						}
+						else
+						{
+
+							$startPath = $this->prjXmlFilePath;
+							if ($this->prjType != projectType::PRJ_TYPE_COMP_SITE)
+							{
+								$startPath = $this->prjRootPath . "/" . $manifestLang->sitePathOnDevelopment;
+							}
+
+							$this->detectLangBasePath($startPath, $this->useLangSysIni);
+
+							$this->collectPrjFolderLangFiles();
+
+						}
 					}
 				}
 			}

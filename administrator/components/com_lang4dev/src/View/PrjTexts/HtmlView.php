@@ -135,7 +135,7 @@ class HtmlView extends BaseHtmlView
 
 		//--- show found file list -----------------------------------------
 
-		if ($this->isDebugBackend)
+		//if ($this->isDebugBackend)
 		{
 			//--- all projects filenames by lang ID  -----------------------------------------
 
@@ -163,7 +163,7 @@ class HtmlView extends BaseHtmlView
 
 		//--- test manifest file ----------------------------------------
 
-		if ($this->isDebugBackend)
+		//if ($this->isDebugBackend)
 		{
 			$prjXmlPathFilename = $project->subProjects[0]->prjXmlPathFilename; // . '/lang4dev.xml';
 

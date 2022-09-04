@@ -35,6 +35,9 @@ class manifestLangFiles extends manifestData
 	public $stdLangFilePaths = [];
 	public $adminLangFilePaths = [];
 
+	public $adminPathOnDevelopment = "";
+	public $sitePathOnDevelopment = "";
+
 	/**
 	 * @since __BUMP_VERSION__
 	 */

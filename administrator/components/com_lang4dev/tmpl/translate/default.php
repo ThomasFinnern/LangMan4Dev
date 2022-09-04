@@ -9,37 +9,38 @@ use Joomla\CMS\Router\Route;
 
 use Finnern\Component\Lang4dev\Administrator\Helper\langFile;
 
-function renderLangIdTexts($form)
+function renderProjectSelection($form)
 {
 	?>
-	<div class="d-flex flex-row py-0 my-0">
-		<div class="mx-2 py-0 border border-primary">
-			<?php echo $form->renderField('selectSourceLangId'); ?>
+	<br>
+	<div class="d-flex flex-row py-0 my-0 justify-content-between">
+		<div class="mx-2 py-0 flex-fill ">
+			<?php echo $form->renderField('selectProject'); ?>
 		</div>
 
-		<div class="mx-2 py-0 border border-success">
-			<?php echo $form->renderField('selectTargetLangId'); ?>
+		<div class="mx-2 py-0 px-2 flex-fill ">
+			<?php echo $form->renderField('selectSubproject'); ?>
 		</div>
 
-		<div class="mx-2 py-0 border border-warning">
-			<?php echo $form->renderField('createLangId'); ?>
-		</div>
 	</div>
 	<?php
 
 	return;
 }
 
-function renderProjectSelection($form)
+
+function renderLangIdTexts($form)
 {
+	// mx-2 py-0, mx-2 py-0 px-2
 	?>
-	<div class="d-flex flex-row py-0 my-0">
-		<div class="mx-2 py-0 border border-primary">
-			<?php echo $form->renderField('selectProject'); ?>
+	<br>
+	<div class="d-flex flex-row py-0 my-0 justify-content-between">
+		<div class="mx-2 py-0 flex-fill ">
+			<?php echo $form->renderField('selectSourceLangId'); ?>
 		</div>
 
-		<div class="mx-2 py-0 border border-success">
-			<?php echo $form->renderField('selectSubproject'); ?>
+		<div class="mx-2 py-0 flex-fill ">
+			<?php echo $form->renderField('selectTargetLangId'); ?>
 		</div>
 
 	</div>

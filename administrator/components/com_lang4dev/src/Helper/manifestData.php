@@ -25,6 +25,8 @@ class manifestData
 {
 	public $prjXmlFilePath = '';
 	public $prjXmlPathFilename = '';
+	public $adminPath = "";
+	public $sitePath = "";
 
 	// local development folder or installed component
 	public $isInstalled = false;
@@ -100,6 +102,8 @@ class manifestData
 					$app->enqueueMessage($OutTxt, 'error');
 				}
 
+				//--- developer folder or installed in joomla  -----------------------------------------------------------
+
 				if (str_starts_with($prjXmlPathFilename, JPATH_ROOT))
 				{
 					$this->isInstalled = true;
@@ -108,6 +112,24 @@ class manifestData
 				{
 					$this->isInstalled = false;
 				}
+
+				//--- extract values -----------------------------------------------------------
+
+				// extractDevBasePaths (admin/site)
+
+				// echo $xml->book[1]->title['lang'];
+
+				$administration = $this->get('administration', []);
+				$admFiles = $administration->files;
+				$testFiles = $admFiles['folder'][0];
+				$this->adminPath= $administration->files['folder'];
+
+				$siteFiles = $this->get('files', []);
+				$testFiles = $admFiles['folder'][0];
+
+				$this->sitePath = $siteFiles['folder'];
+
+
 			}
 			else
 			{
@@ -368,8 +390,13 @@ class manifestData
 		}
 		else
 		{
-			$lines[] = '( Manifest on dwevelopment path ) ';
+			$lines[] = '( Manifest on development path ) ';
 		}
+
+
+		$lines[] = 'adminPath: ' . $this->adminPath;
+		$lines[] = 'sitePath: ' . $this->sitePath;
+
 		$lines[] = '';
 
 		return $lines;

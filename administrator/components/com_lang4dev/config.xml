@@ -67,7 +67,7 @@
 				hr="true"
 		/>
 
-		<field
+		<!--field
 			name="Example_show_foo_name_label"
 			type="list"
 			label="COM_LANG4DEV_FIELD_TEST_SHOW_CATEGORY_LABEL"
@@ -76,9 +76,9 @@
 			>
 			<option value="0">JNO</option>
 			<option value="1">JYES</option>
-		</field>
+		</field-->
 
-		<field
+		<!--field
 			name="example_show_name"
 			type="radio"
 			label="COM_LANG4DEV_TEST_FIELD_PARAMS_NAME_LABEL"
@@ -88,7 +88,7 @@
 			>
 			<option value="0">JHIDE</option>
 			<option value="1">JSHOW</option>
-		</field>
+		</field-->
 
 	</fieldset>
 
@@ -124,14 +124,14 @@
 
 		<!-- ... block project ... -->
 
-		<field
+		<!--field
 				name="dummyProject"
 				type="text"
 				default="???? project"
 				label="COM_LANG4DEV_PROJECT_DUMMY"
 				description="COM_LANG4DEV_PROJECT_DUMMY_DESC"
 				class="">
-		</field>
+		</field-->
 	</fieldset>
 
 	<!-- ... Tab prjTextIds ................................. -->
@@ -191,14 +191,14 @@
 			<option value="1">JYES</option>
 		</field>
 
-		<field
+		<!--=field
 				name="dummyTransIds"
 				type="text"
 				default="???? TransIds"
 				label="COM_LANG4DEV_PRJ_TRANS_IDS_DUMMY"
 				description="COM_LANG4DEV_PRJ_TRANS_IDS_DUMMY_DESC"
 				class="">
-		</field>
+		</field-->
 	</fieldset>
 
 	<!-- ... Tab Translation ................................. -->
@@ -276,14 +276,14 @@
 			<option value="1">JYES</option>
 		</field>
 
-		<field
+		<!--field
 				name="dummyTranslation"
 				type="text"
 				default="??? dummy translation"
 				label="COM_LANG4DEV_PROJECT_DUMMY"
 				description="COM_LANG4DEV_PROJECT_DUMMY_DESC"
 				class="">
-		</field>
+		</field-->
 	</fieldset>
 
 	<!-- ... Tab Debug ................................. -->

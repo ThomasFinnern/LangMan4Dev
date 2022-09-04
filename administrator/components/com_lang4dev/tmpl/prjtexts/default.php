@@ -41,12 +41,13 @@ function renderHeaderPrjIdType($prjIdAndType = '', $fileNames = '', $path = '???
 function renderProjectSelection($form)
 {
 	?>
-	<div class="d-flex flex-row py-0 my-0">
-		<div class="mx-2 py-0 border border-primary">
+	<br>
+	<div class="d-flex flex-row py-0 my-0 justify-content-between">
+		<div class="mx-2 py-0 flex-fill ">
 			<?php echo $form->renderField('selectProject'); ?>
 		</div>
 
-		<div class="mx-2 py-0 border border-success">
+		<div class="mx-2 py-0 px-2 flex-fill ">
 			<?php echo $form->renderField('selectSubproject'); ?>
 		</div>
 
