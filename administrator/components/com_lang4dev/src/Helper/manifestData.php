@@ -25,8 +25,9 @@ class manifestData
 {
 	public $prjXmlFilePath = '';
 	public $prjXmlPathFilename = '';
-	public $adminPath = "";
-	public $sitePath = "";
+
+	public $defaultLangPath = "";
+	public $adminLangPath = "";
 
 	// local development folder or installed component
 	public $isInstalled = false;
@@ -49,6 +50,7 @@ class manifestData
 
 		}
 
+        return;
 	}
 
 	/**
@@ -115,20 +117,27 @@ class manifestData
 
 				//--- extract values -----------------------------------------------------------
 
-				// extractDevBasePaths (admin/site)
+				$xml = $this->manifest;
 
-				// echo $xml->book[1]->title['lang'];
+                //--- defaultLangPath -------------------------------
 
-				$administration = $this->get('administration', []);
-				$admFiles = $administration->files;
-				$testFiles = $admFiles['folder'][0];
-				$this->adminPath= $administration->files['folder'];
+                $this->defaultLangPath = '';
+                if (isset($xml->files)) {
+                    $files = $xml->files;
+                    if (isset ($files['folder'])) {
+                        $this->defaultLangPath = $files['folder'][0];
+                    }
+                }
 
-				$siteFiles = $this->get('files', []);
-				$testFiles = $admFiles['folder'][0];
+                //--- adminLangPath -------------------------------
 
-				$this->sitePath = $siteFiles['folder'];
-
+                $this->adminLangPath = '';
+                if (isset($xml->administration->files)) {
+                    $files = $xml->administration->files;
+                    if (isset ($files['folder'])) {
+                        $this->adminLangPath = $files['folder'][0];
+                    }
+                }
 
 			}
 			else
@@ -394,8 +403,8 @@ class manifestData
 		}
 
 
-		$lines[] = 'adminPath: ' . $this->adminPath;
-		$lines[] = 'sitePath: ' . $this->sitePath;
+		$lines[] = 'defaultLangPath: ' . $this->defaultLangPath;
+		$lines[] = 'adminLangPath: ' . $this->adminLangPath;
 
 		$lines[] = '';
 

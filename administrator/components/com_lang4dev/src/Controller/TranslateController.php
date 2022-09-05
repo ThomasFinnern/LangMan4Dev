@@ -174,11 +174,11 @@ class TranslateController extends AdminController
 			$input = Factory::getApplication()->input;
 			$data  = $input->post->get('jform', array(), 'array');
 
-			$targetLangId = $data ['createLangId'];
+			$targetLangId = $data ['selectTargetLangId'];
 			$sourceLangId = $data ['selectSourceLangId'];
 
 			// form lang file names (wrong lang ID)
-			$langPathFileNames = $input->get('langPathFileNames', array(), 'ARRAY');
+			$langPathFileNames = $input->get('mainLangFiles', array(), 'ARRAY');
 
 			// check for valid form ?
 			$isTargetVerified = $this->isValidLangIdName($targetLangId);

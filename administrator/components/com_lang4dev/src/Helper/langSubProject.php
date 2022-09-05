@@ -261,14 +261,14 @@ class langSubProject extends langFiles
 						}
 						else
 						{
-
-							$startPath = $this->prjXmlFilePath;
-							if ($this->prjType != projectType::PRJ_TYPE_COMP_SITE)
+							// on development folder read manifest data
+							$startPath = $manifestLang->defaultLangPath;
+							if ($this->prjType == projectType::PRJ_TYPE_COMP_BACK || $this->prjType == projectType::PRJ_TYPE_COMP_BACK_SYS)
 							{
-								$startPath = $this->prjRootPath . "/" . $manifestLang->sitePathOnDevelopment;
+								$startPath = $manifestLang->adminLangPath;
 							}
 
-							$this->detectLangBasePath($startPath, $this->useLangSysIni);
+							$this->detectLangBasePath($this->prjRootPath . "/" . $startPath, $this->useLangSysIni);
 
 							$this->collectPrjFolderLangFiles();
 

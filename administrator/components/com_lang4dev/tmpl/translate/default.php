@@ -176,6 +176,18 @@ function renderLangFileEditText($langId, $langFile, $subPrjPath,
 	return;
 }
 
+function renderMainfileList($mainLangFiles = [])
+{
+	foreach ($mainLangFiles as $mainLangFile)
+	{
+		$langPathFileName = str_replace('\\', '/', $mainLangFile->getlangPathFileName());
+		echo '<input type="hidden" name="mainLangFiles[]" value="'. $langPathFileName . '">';
+	}
+}
+
+
+
+
 ?>
 <form action="<?php echo Route::_('index.php?option=com_lang4dev&view=translate'); ?>" method="post" name="adminForm"
       id="item-form" class="form-validate">
@@ -257,6 +269,8 @@ function renderLangFileEditText($langId, $langFile, $subPrjPath,
 						}
 					}
 				}
+
+				renderMainfileList ($mainLangFiles);
 
 				?>
 			</div>
