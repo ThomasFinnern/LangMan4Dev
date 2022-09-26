@@ -11,6 +11,7 @@ namespace Finnern\Component\Lang4dev\Administrator\Helper;
 use Joomla\CMS\Factory;
 use Joomla\CMS\Filesystem\File;
 use Joomla\CMS\Filesystem\Folder;
+use Joomla\CMS\Language\Text;
 use RuntimeException;
 
 //use Finnern\Component\Lang4dev\Administrator\Helper\sysFilesContent;
@@ -20,11 +21,24 @@ class langSubProject extends langFiles
 {
 	public $prjId = '';
 	public $prjType = 0;
+
+	// ToDo: Separate std path (plugin/module -> ), admin path, site path
+
+	/**
+	 *
+	 * @var string
+	 * @since version
+	 */
 	public $prjRootPath = '';
 	public $prjXmlFilePath = '';
 
+	// is also admin
+	public $prjDefaultPath = '';
+	public $prjAdminPath = '';
+
 	public $prjXmlPathFilename = '';
 	public $installPathFilename = '';
+	public $configPathFilename = '';
 	public $langIdPrefix = '';
 
 	// external
@@ -60,13 +74,22 @@ class langSubProject extends langFiles
 		$this->prjXmlPathFilename = $prjXmlPathFilename;
 		$this->prjXmlFilePath     = dirname($prjXmlPathFilename);
 
-//	    $this->prjXmlFile = $prjXmlFile;
-//	    $this->prjScriptFile = $prjScriptFile;
+		// Admin path
 
 		if ($this->prjType == projectType::PRJ_TYPE_COMP_BACK_SYS)
 		{
 			$this->useLangSysIni = true;
 		}
+
+		//--- project XML and script file -------------------------------------------------
+
+		// ToDo: yyy read manifest file once for all !!!!
+
+		$manifestLang = new manifestLangFiles ($this->prjXmlPathFilename);
+		$this->projectXMLAndScriptFile($manifestLang);
+
+		$this->MainAndSitePath($manifestLang);
+
 	}
 
 	/**
@@ -349,17 +372,42 @@ class langSubProject extends langFiles
 			$langId = 'en-GB';
 		}
 
-		$langFileNames = $this->langFileNamesSet [$langId];
-
-		foreach ($langFileNames as $langFileName)
+		if (! empty ($this->langFileNamesSet [$langId]))
 		{
-			$fileName     = basename($langFileName);
-			$translations = $this->readLangFile($langFileName);
+			$langFileNames = $this->langFileNamesSet [$langId];
 
-			$this->langFilesData [$langId][$fileName] = $translations;
+			if (!empty ($langFileNames))
+			{
+				foreach ($langFileNames as $langFileName)
+				{
+					$fileName     = basename($langFileName);
+					$translations = $this->readLangFile($langFileName);
+
+					$this->langFilesData [$langId][$fileName] = $translations;
+				}
+			}
+			else
+			{
+				// ToDo: Is warning needed
+				$OutTxt = Text::_('No lang files for: ' . $langId . ' found');
+				$OutTxt .= 'Project: ' . $this->getPrjIdAndTypeText();
+				$app    = Factory::getApplication();
+				$app->enqueueMessage($OutTxt, 'warning');
+
+				// Needed ?
+				$this->langFilesData [$langId] = [];
+			}
+
+		} else {
+			// ToDo: Is warning needed
+			$OutTxt = Text::_('Empty langFileNamesSet[] for: ' . $langId . ' found');
+			$OutTxt .= 'Project: ' . $this->getPrjIdAndTypeText();
+			$app    = Factory::getApplication();
+			$app->enqueueMessage($OutTxt, 'warning');
+
+			// Needed ?
+			$this->langFilesData [$langId] = [];
 		}
-
-		// if (empty($langFiles [$langId]) 0=> return empty ? ...
 
 		return $this->langFilesData [$langId];
 	}
@@ -466,10 +514,21 @@ class langSubProject extends langFiles
 
 			// start path
 			$searchPath = $this->prjXmlFilePath;
+
+			if ($this->prjType == projectType::PRJ_TYPE_COMP_SITE)
+			{
+				// ToDo: on develop (not installed) path may be in manifest file,
+				// ToDo: to be retrieved before creating sub project ?
+				$searchPath = $this->prjRootPath;
+				// $basePath = JPATH_ROOT . '/language';
+				// JPATH_SITE . '/components/com_lang4dev'
+			}
+
 			if (empty($searchPath))
 			{
 				$searchPath = $this->prjRootPath;
 			}
+
 			$searchTransIdLocations->searchPaths = array($searchPath);
 
 			//--- do scan all not project files ------------------------------------
@@ -610,11 +669,14 @@ class langSubProject extends langFiles
 	{
 		$doubles = [];
 
-		// ToDo: each langFilesData[$langId] as $langFile get data not file name
-		foreach ($this->langFilesData[$langId] as $langFile)
+		if (! empty ($this->langFilesData [$langId]))
 		{
-			$fileName                     = baseName($langFile->getlangPathFileName());
-			$doubles[basename($fileName)] = $langFile->collectDoubles();
+			// ToDo: each langFilesData[$langId] as $langFile get data not file name
+			foreach ($this->langFilesData[$langId] as $langFile)
+			{
+				$fileName                     = baseName($langFile->getlangPathFileName());
+				$doubles[basename($fileName)] = $langFile->collectDoubles();
+			}
 		}
 
 		return $doubles;
@@ -806,9 +868,12 @@ class langSubProject extends langFiles
 
 		$fileNames = [];
 
-		foreach ($this->langFileNamesSet[$langId] as $filePathName)
+		if (! empty ($this->langFileNamesSet [$langId]))
 		{
-			$fileNames [] = basename($filePathName);
+			foreach ($this->langFileNamesSet[$langId] as $filePathName)
+			{
+				$fileNames [] = basename($filePathName);
+			}
 		}
 
 		return $fileNames;
@@ -834,6 +899,13 @@ class langSubProject extends langFiles
 
 		}
 
+		if ($isConfigXml)
+		{
+			// ToDo: getConfigFile instead of direct below
+			// $this->configPathFilename = $this->prjXmlFilePath . '/' . $manifestLang->getConfigFile();
+			$this->configPathFilename = $this->prjXmlFilePath . '/' . 'config.xml';
+		}
+
 		// lang id of project
 		$this->langIdPrefix = strtoupper($manifestLang->getName());
 
@@ -847,6 +919,25 @@ class langSubProject extends langFiles
 		// manifest tells about defined list of lang files
 		$this->isLangAtStdJoomla = $manifestLang->getIsLangAtStdJoomla();
 	}
+
+	private function MainAndSitePath (manifestLangFiles $manifestLang) {
+
+		// on server
+		if ($manifestLang->isInstalled)
+		{
+			// admin given over $prjXmlFilePath
+			$this->prjDefaultPath = $this->prjXmlFilePath;
+			$this->prjAdminPath = JPATH_COMPONENT_SITE;
+		} else {
+			// admin given over $prjXmlFilePath
+			$this->prjDefaultPath = $this->prjXmlFilePath;
+
+			$this->prjDefaultPath = $this->prjRootPath . '/'. $manifestLang->prjDefaultPath;
+			$this->prjAdminPath = $this->prjRootPath . '/'. $manifestLang->prjAdminPath;
+		}
+
+	}
+
 
 } // class
 

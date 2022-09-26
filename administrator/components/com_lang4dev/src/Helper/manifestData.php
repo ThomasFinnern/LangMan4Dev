@@ -29,6 +29,10 @@ class manifestData
 	public $defaultLangPath = "";
 	public $adminLangPath = "";
 
+	// is also admin
+	public $prjDefaultPath = '';
+	public $prjAdminPath = '';
+
 	// local development folder or installed component
 	public $isInstalled = false;
 
@@ -65,23 +69,23 @@ class manifestData
 	{
 		$isValidXml = false;
 
-		// use new file
-		if ($prjXmlPathFilename != '')
-		{
-			$this->prjXmlPathFilename = $prjXmlPathFilename;
-			$this->prjXmlFilePath     = dirname($prjXmlPathFilename);
-
-			// ToDo: clear old data
-		}
-		else
-		{
-
-			// use given path name
-			$prjXmlPathFilename = $this->prjXmlPathFilename;
-		}
-
 		try
 		{
+			// use new file
+			if ($prjXmlPathFilename != '')
+			{
+				$this->prjXmlPathFilename = $prjXmlPathFilename;
+				$this->prjXmlFilePath     = dirname($prjXmlPathFilename);
+
+				// ToDo: clear old data
+			}
+			else
+			{
+
+				// use given path name
+				$prjXmlPathFilename = $this->prjXmlPathFilename;
+			}
+
 			// file exists
 			if (File::exists($prjXmlPathFilename))
 			{
@@ -119,30 +123,52 @@ class manifestData
 
 				$xml = $this->manifest;
 
-                //--- defaultLangPath -------------------------------
+				//--- default main (site) path -------------------------------
+
+				$this->prjDefaultPath = "???MainPath";
+
+				if (isset($xml->files)) {
+					$files = $xml->files;
+					if (isset ($files['folder']))
+					{
+						$this->prjDefaultPath = $files['folder'][0];
+					}
+				}
+
+				//--- default admin path -------------------------------
+
+				$this->prjAdminPath = "???AdminPath";
+
+				if (isset($xml->administration->files)) {
+					$files = $xml->administration->files;
+					if (isset ($files['folder'])) {
+						$this->prjAdminPath = $files['folder'][0];
+					}
+				}
+
+
+				//--- defaultLangPath -------------------------------
 
                 $this->defaultLangPath = '';
                 if (isset($xml->files)) {
-                    $files = $xml->files;
-                    if (isset ($files['folder'])) {
-                        $this->defaultLangPath = $files['folder'][0];
-                    }
+
+						// add languages folder
+	                    $this->defaultLangPath = $this->prjDefaultPath . 'languages';
                 }
 
                 //--- adminLangPath -------------------------------
 
                 $this->adminLangPath = '';
                 if (isset($xml->administration->files)) {
-                    $files = $xml->administration->files;
-                    if (isset ($files['folder'])) {
-                        $this->adminLangPath = $files['folder'][0];
-                    }
+
+	                    // add languages folder
+	                    $this->adminLangPath = $this->prjAdminPath . 'languages';
                 }
 
 			}
 			else
 			{
-				$OutTxt = Text::_('COM_LANG4DEV_FILE_DOES_NOR_EXIST' . ': ' . $prjXmlPathFilename);
+				$OutTxt = Text::_('COM_LANG4DEV_FILE_DOES_NOT_EXIST' . ': ' . $prjXmlPathFilename);
 				$app    = Factory::getApplication();
 				$app->enqueueMessage($OutTxt, 'error');
 			}
@@ -359,6 +385,8 @@ class manifestData
 	 * }
 	 * /**/
 
+
+
 	public function __toTextItem($name = '')
 	{
 		return $name . '="' . $this->get($name, '') . '"';
@@ -402,8 +430,10 @@ class manifestData
 			$lines[] = '( Manifest on development path ) ';
 		}
 
+		$lines[] = 'default (site) path: ' . $this->prjDefaultPath;
+		$lines[] = 'admin path: ' . $this->prjAdminPath;
 
-		$lines[] = 'defaultLangPath: ' . $this->defaultLangPath;
+		$lines[] = 'defaultLangPath (site): ' . $this->defaultLangPath;
 		$lines[] = 'adminLangPath: ' . $this->adminLangPath;
 
 		$lines[] = '';

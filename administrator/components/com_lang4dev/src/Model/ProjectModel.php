@@ -971,11 +971,6 @@ class ProjectModel extends AdminModel
 				$oSubPrjPath->getRootManifestPath()
 			);
 
-			//--- project XML and script file -------------------------------------------------
-
-			$manifestLang = new manifestLangFiles ($oSubPrjPath->prjXmlPathFilename);
-			$langSubProject->projectXMLAndScriptFile($manifestLang);
-
 			//--- collect new sub project ------------------
 
 			$subProjects[] = $langSubProject;

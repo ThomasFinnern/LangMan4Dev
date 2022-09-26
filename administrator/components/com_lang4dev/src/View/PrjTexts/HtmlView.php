@@ -27,7 +27,7 @@ use Joomla\CMS\Router\Route;
 use Joomla\CMS\Toolbar\Toolbar;
 use Joomla\CMS\Toolbar\ToolbarHelper;
 
-use Finnern\Component\Lang4dev\Administrator\Helper\manifestData;
+//use Finnern\Component\Lang4dev\Administrator\Helper\manifestData;
 use Finnern\Component\Lang4dev\Administrator\Helper\manifestLangFiles;
 use Finnern\Component\Lang4dev\Administrator\Helper\sessionProjectId;
 use Finnern\Component\Lang4dev\Administrator\Helper\sessionTransLangIds;
@@ -135,7 +135,7 @@ class HtmlView extends BaseHtmlView
 
 		//--- show found file list -----------------------------------------
 
-		//if ($this->isDebugBackend)
+		if ($this->isDebugBackend)
 		{
 			//--- all projects filenames by lang ID  -----------------------------------------
 
@@ -163,7 +163,7 @@ class HtmlView extends BaseHtmlView
 
 		//--- test manifest file ----------------------------------------
 
-		//if ($this->isDebugBackend)
+		if ($this->isDebugBackend)
 		{
 			$prjXmlPathFilename = $project->subProjects[0]->prjXmlPathFilename; // . '/lang4dev.xml';
 

@@ -72,19 +72,19 @@ class langFiles extends langFileNamesSet
 
 		try
 		{
-
 			//--- collect translations of all files in sub project -----------------
 
-			foreach ($this->langFilesData[$langId] as $langFileData)
+			if (! empty ($this->langFilesData [$langId]))
 			{
+				foreach ($this->langFilesData[$langId] as $langFileData)
+				{
+					// array_push($translations,  array_values($langFileData->translations));
+					$translations = $translations + $langFileData->translations;
+				}
 
-				// array_push($translations,  array_values($langFileData->translations));
-				$translations = $translations + $langFileData->translations;
+				[$missing, $translated, $notUsed] =
+					$this->matchTranslations2Locations($codeTransIds, $translations);
 			}
-
-			[$missing, $translated, $notUsed] =
-				$this->matchTranslations2Locations($codeTransIds, $translations);
-
 		}
 		catch (RuntimeException $e)
 		{
