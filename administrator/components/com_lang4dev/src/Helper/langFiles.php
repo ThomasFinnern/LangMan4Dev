@@ -212,4 +212,38 @@ class langFiles extends langFileNamesSet
 		return $names;
 	}
 
+	/**
+	 *
+	 * @return array lines
+	 *
+	 * @since version
+	 */
+	public function __toText()
+	{
+
+		$lines = parent::__toText();
+
+		$lines[] = '--- langFiles ---------------------------';
+
+		foreach ($this->langFilesData as $langId => $langFiles)
+		{
+			$lines[] = '    [' . $langId . ']';
+
+			foreach ($langFiles as $langFile)
+			{
+				// $lines[] = '        ' . $langFile;
+
+				$langFileDataText = $langFile->__toText();
+				array_push($lines, ...$langFileDataText);
+
+			}
+		}
+
+//		$lines[] = '------------------------------------------------';
+
+		return $lines;
+	}
+
+
+
 } // class

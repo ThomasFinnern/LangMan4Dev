@@ -31,6 +31,7 @@ class langSubProject extends langFiles
 	 */
 	public $prjRootPath = '';
 	public $prjXmlFilePath = '';
+	public $langIdPrefix = '';
 
 	// is also admin
 	public $prjDefaultPath = '';
@@ -39,7 +40,6 @@ class langSubProject extends langFiles
 	public $prjXmlPathFilename = '';
 	public $installPathFilename = '';
 	public $configPathFilename = '';
-	public $langIdPrefix = '';
 
 	// external
 	// public $parentId = 0;
@@ -936,6 +936,73 @@ class langSubProject extends langFiles
 			$this->prjAdminPath = $this->prjRootPath . '/'. $manifestLang->prjAdminPath;
 		}
 
+	}
+
+	/**
+	 *
+	 * @return array lines
+	 *
+	 * @since version
+	 */
+	public function __toText()
+	{
+
+		$lines = parent::__toText();
+
+		$lines[] = '=== langFileNamesSet ===========================';
+
+
+		$lines [] = $this->getPrjIdAndTypeText();
+		$lines [] = '$prjId = "' . $this->prjId . '"';
+		$lines [] = '$prjType = "' . $this->prjType . '"';
+
+		$lines [] = '$prjRootPath = "' . $this->prjRootPath . '"';
+		$lines [] = '$prjXmlFilePath = "' . $this->prjXmlFilePath . '"';
+		$lines [] = '$langIdPrefix = "' . $this->langIdPrefix . '"';
+
+		$lines [] = '$prjDefaultPath = "' . $this->prjDefaultPath . '"';
+		$lines [] = '$prjAdminPath = "' . $this->prjAdminPath . '"';
+
+		$lines [] = '$prjXmlPathFilename = "' . $this->prjXmlPathFilename . '"';
+		$lines [] = '$installPathFilename = "' . $this->installPathFilename . '"';
+		$lines [] = '$configPathFilename = "' . $this->configPathFilename . '"';
+
+		$lines [] = '$useLangSysIni = "' . ($this->useLangSysIni ? 'true' : 'false') . '"';
+		$lines [] = '$isLangAtStdJoomla = "' . ($this->isLangAtStdJoomla ? 'true' : 'false') . '"';
+
+		$lines[] = '--- transIdLocations ---------------------------';
+		$lines[] = '            %                                     ';
+
+//		foreach ($this->langFilesData as $langFileData) {
+//
+//			$langFileDataText = $langFileData->__toText();
+//			array_push($lines, ...$langFileDataText);
+//
+//		}
+//
+		$lines[] = '--- transStringsLocations ---------------------------';
+		$lines[] = '            %                                     ';
+
+//		foreach ($this->langFilesData as $langFileData) {
+//
+//			$langFileDataText = $langFileData->__toText();
+//			array_push($lines, ...$langFileDataText);
+//
+//		}
+//
+
+		$lines[] = '--- transIdsClassified ---------------------------';
+		$lines[] = '            %                                     ';
+
+//		foreach ($this->langFilesData as $langFileData) {
+//
+//			$langFileDataText = $langFileData->__toText();
+//			array_push($lines, ...$langFileDataText);
+//
+//		}
+//
+
+		return $lines;
 	}
 
 

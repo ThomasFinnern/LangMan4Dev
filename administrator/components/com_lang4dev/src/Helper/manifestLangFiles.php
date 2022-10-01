@@ -277,9 +277,16 @@ class manifestLangFiles extends manifestData
 	public function __toText()
 	{
 
-		$lines = parent::__toText();
+		// $lines = [];
 
-		$lines[] = 'lang files ' . ($this->isLangAtStdJoomla ? ' joomla standard folders' : ' inside component');
+		$lines = parent::__toText();
+		//$parentLines = parent::__toText();
+		//array_push($lines, ...$parentLines);
+
+		$lines[] = '--- manifestLangFiles ---------------------------';
+
+		$lines[] = 'lang files '
+			. ($this->isLangAtStdJoomla ? ' joomla standard folders' : ' inside component');
 
 		if (count($this->stdLangFilePaths) > 0)
 		{
@@ -303,7 +310,4 @@ class manifestLangFiles extends manifestData
 	}
 
 } // class
-
-
-
 

@@ -33,7 +33,7 @@ defined('_JEXEC') or die;
 
 /**
  * Collect all translation files of one folder (existing) - write
- * The files uses is limitet as *.ini are not useful
+ * The files use is limited as *.ini are not useful
  *
  * ToDo: ? can we distinguish between header and comment to first item ?
  *
@@ -885,16 +885,22 @@ class langFile extends langPathFileName
 			$lines [] = $headerLine;
 		}
 
-		$lines [] = '--- $translations ------------------------';
+		$lines [] = '--- translations ------------------------';
 		foreach ($this->translations as $transId => $translation)
 		{
-			$lines [] = $transId . '="' . $translation . '"';
+			$lines [] = $transId . '=' . implode(', ', $translation->__toText());
 		}
 
-		$lines [] = '--- $translations doubles ------------------------';
+		$lines [] = '--- translations doubles ------------------------';
 		foreach ($this->translationDoubles as $transId => $translation)
 		{
-			$lines [] = $transId . '="' . $translation . '"';
+			$lines [] = $transId . '=' . implode(', ', $translation->__toText());
+		}
+
+		$lines [] = '--- translations surplus ------------------------';
+		foreach ($this->translationSurplus as $transId => $translation)
+		{
+			$lines [] = $transId . '=' . implode(', ', $translation->__toText());
 		}
 
 		$lines [] = '--- $trailer ------------------------';

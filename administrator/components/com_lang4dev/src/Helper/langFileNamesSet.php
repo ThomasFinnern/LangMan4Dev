@@ -526,45 +526,6 @@ class langFileNamesSet
 	}
 
 	/**
-	 *
-	 * @return array
-	 *
-	 * @since version
-	 */
-	public function __toText()
-	{
-
-		$lines = [];
-
-		$lines [] = '$basePath = "' . $this->langBasePath . '"';
-		$lines [] = '$baseName = "' . $this->baseName . '"';
-		$lines [] = '$useLangSysIni = "' . ($this->useLangSysIni ? 'true' : 'false') . '"';
-		$lines [] = '$isLangInFolders = "' . ($this->isLangInFolders ? 'true' : 'false') . '"';
-		$lines [] = '$isLangIdPre2Name = "' . ($this->isLangIdPre2Name ? 'true' : 'false') . '"';
-
-		$lines []    = '--- $langIds ------------------------';
-		$langIdsLine = '';
-		foreach ($this->langIds as $langId)
-		{
-			$langIdsLine .= $langId . ', ';
-		}
-		$lines [] = $langIdsLine;
-
-		$lines [] = '--- $sourceLangFiles ------------------------';
-		foreach ($this->langFileNamesSet as $LangId => $langFiles)
-		{
-			$lines [] = '[' . $LangId . ']';
-
-			foreach ($langFiles as $langFile)
-			{
-				$lines [] = '   * ' . $langFile;
-			}
-		}
-
-		return $lines;
-	}
-
-	/**
 	 * @param $prjType
 	 *
 	 * @return string
@@ -607,6 +568,47 @@ class langFileNamesSet
 		}
 
 		return $basePath;
+	}
+
+	/**
+	 *
+	 * @return array
+	 *
+	 * @since version
+	 */
+	public function __toText()
+	{
+
+		$lines = [];
+
+		$lines[] = '--- langFileNamesSet ---------------------------';
+
+		$lines [] = 'langBasePath = "' . $this->langBasePath . '"';
+		//$lines [] = '$baseName = "' . $this->baseName . '"';
+		$lines [] = 'useLangSysIni = "' . ($this->useLangSysIni ? 'true' : 'false') . '"';
+		$lines [] = 'isLangInFolders = "' . ($this->isLangInFolders ? 'true' : 'false') . '"';
+		$lines [] = 'isLangIdPre2Name = "' . ($this->isLangIdPre2Name ? 'true' : 'false') . '"';
+
+		$lines []    = '--- $langIds ------------------------';
+		$langIdsLine = '';
+		foreach ($this->langIds as $langId)
+		{
+			$langIdsLine .= $langId . ', ';
+		}
+		$lines [] = $langIdsLine;
+
+		$lines [] = '--- $sourceLangFiles ------------------------';
+		foreach ($this->langFileNamesSet as $langId => $langFiles)
+		{
+			$lines [] = '[' . $langId . ']';
+
+			foreach ($langFiles as $langFile)
+			{
+				$lines [] = '   * ' . $langFile;
+			}
+		}
+
+		return $lines;
 	}
 
 } // class

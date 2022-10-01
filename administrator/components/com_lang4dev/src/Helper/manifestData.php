@@ -153,7 +153,7 @@ class manifestData
                 if (isset($xml->files)) {
 
 						// add languages folder
-	                    $this->defaultLangPath = $this->prjDefaultPath . 'languages';
+	                    $this->defaultLangPath = $this->prjDefaultPath . '/language';
                 }
 
                 //--- adminLangPath -------------------------------
@@ -162,7 +162,7 @@ class manifestData
                 if (isset($xml->administration->files)) {
 
 	                    // add languages folder
-	                    $this->adminLangPath = $this->prjAdminPath . 'languages';
+	                    $this->adminLangPath = $this->prjAdminPath . '/language';
                 }
 
 			}
@@ -402,6 +402,8 @@ class manifestData
 	{
 
 		$lines = [];
+
+		$lines[] = '--- manifest file ---------------------------';
 
 		$lines[] = $this->__toTextItem('name');
 

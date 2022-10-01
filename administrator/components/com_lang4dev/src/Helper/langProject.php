@@ -20,15 +20,15 @@ class langProject
 {
 	public $prjName = '';
 	public $prjRootPath = '';
+	public $langIdPrefix = "";
 
 	public $subProjects = [];
-
-	public $isSysFileFound = false;
-	public $langIdPrefix = "";
 
 	//external
 	//public $twinId = "";
 	public $dbId = 0;
+
+//	public $isSysFileFound = false;
 
 	/**
 	 * @since __BUMP_VERSION__
@@ -412,6 +412,105 @@ class langProject
 
 		// return $isFilesFound;
 		return $classified;
+	}
+
+	/**
+	 *
+	 * @return array lines
+	 *
+	 * @since version
+	 */
+	public function __toText()
+	{
+
+		$lines[] = '<h4>--- langProject -------------------------------</h4>';
+
+		$lines [] = '$prjName = "' . $this->prjName . '"';
+		$lines [] = '$prjRootPath = "' . $this->prjRootPath . '"';
+		$lines [] = '$langIdPrefix = "' . $this->langIdPrefix . '"';
+		$lines [] = '$dbId = "' . $this->dbId . '"';
+
+		$lines[] = '------------------------------------------------';
+
+		foreach ($this->subProjects as $subProject)
+		{
+			$subProjectLines = $subProject->__toText();
+			array_push($lines, ...$subProjectLines);
+
+		}
+
+		$lines[] = '------------------------------------------------';
+
+		//--- show found file list -----------------------------------------
+
+		// All projects filenames by lang ID
+
+		$langFileSetsPrjs = $this->LangFileNamesCollection();
+
+		$lines[] = '--- Lang file list ----------------------------------';
+
+		foreach ($langFileSetsPrjs as $prjId => $langFileSets)
+		{
+			$lines[] = '[' . $prjId . ']';
+
+			foreach ($langFileSets as $langId => $langFiles)
+			{
+				$lines[] = '    [' . $langId . ']';
+
+				foreach ($langFiles as $langFile)
+				{
+					$lines[] = '        ' . $langFile;
+				}
+			}
+		}
+
+		$lines[] = '------------------------------------------------';
+
+		//--- show manifest content -----------------------------------------
+
+		$lines[] = '--- manifest content parts --------------------------';
+
+		// A subproject is defined
+		if ( ! empty ($this->subProjects[0]))
+		{
+			$prjXmlPathFilename = $this->subProjects[0]->prjXmlPathFilename; // . '/lang4dev.xml';
+
+			// $manifestData = new manifestData ($prjXmlPathFilename);
+			$manifestLang = new manifestLangFiles ($prjXmlPathFilename);
+			//$manifestText = implode("\n", $manifestData->__toText());
+			$manifestText = $manifestLang->__toText();
+			array_push($lines, ...$manifestText);
+
+		}
+
+		$lines[] = '------------------------------------------------<hr>';
+
+//
+//		//$lines [] = '$baseName = "' . $this->baseName . '"';
+//		$lines [] = '$useLangSysIni = "' . ($this->useLangSysIni ? 'true' : 'false') . '"';
+//		$lines [] = '$isLangInFolders = "' . ($this->isLangInFolders ? 'true' : 'false') . '"';
+//		$lines [] = '$isLangIdPre2Name = "' . ($this->isLangIdPre2Name ? 'true' : 'false') . '"';
+//
+//		$lines []    = '--- $langIds ------------------------';
+//		$langIdsLine = '';
+//		foreach ($this->langIds as $langId)
+//		{
+//			$langIdsLine .= $langId . ', ';
+//		}
+//		$lines [] = $langIdsLine;
+//
+//		$lines [] = '--- $sourceLangFiles ------------------------';
+//		foreach ($this->langFileNamesSet as $langId => $langFiles)
+//		{
+//			$lines [] = '[' . $langId . ']';
+//
+//			foreach ($langFiles as $langFile)
+//			{
+//				$lines [] = '   * ' . $langFile;
+//			}
+//		}
+
+		return $lines;
 	}
 
 } // class

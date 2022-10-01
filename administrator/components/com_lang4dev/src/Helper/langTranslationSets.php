@@ -1,4 +1,7 @@
 <?php
+
+// Not used ??
+
 /**
  * Intention (if needed)
  * Set of one translation item over all languages

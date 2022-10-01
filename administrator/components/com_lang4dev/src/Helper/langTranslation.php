@@ -82,4 +82,59 @@ class langTranslation
 		$this->isPrepared      = false;
 	}
 
-}
+	public function __toTextLine()
+	{
+		$lines = [];
+
+		//--- translation line -------------------------------
+
+		$transLine = $this->transId . '=' . $this->translationText;
+
+		if (strlen($this->commentBehind) > 0) {
+			$transLine .=  ' //' . $this->commentBehind;
+		}
+		$lines [] = '"' . $transLine . '"';
+
+		//--- comments before -------------------------------
+
+		if ($this->commentsBefore)
+		{
+			$lines [] = 'commentsBefore [] = "' . count($this->commentsBefore) . '"';
+		}
+
+		//---  -------------------------------
+
+		$lines [] = 'lineNr = "' . $this->lineNr . '"';
+		$lines [] = 'isPrepared = "' . ($this->isPrepared ? 'true' : 'false') . '"';
+
+		return implode(', ', $lines);
+	}
+
+	public function __toText()
+	{
+		$lines = [];
+
+		//--- comments before -------------------------------
+
+		foreach ($this->commentsBefore as $commentLine)
+		{
+			$lines [] = $commentLine;
+		}
+
+		//--- translation line -------------------------------
+
+		$transLine = $this->transId . '=' . $this->translationText;
+
+		if (strlen($this->commentBehind) > 0) {
+			$transLine .=  ' //' . $this->commentBehind;
+		}
+		$lines [] = '"' . $transLine . '"';
+
+
+		$lines [] = '$lineNr = "' . $this->lineNr . '"';
+		$lines [] = '$isPrepared = "' . ($this->isPrepared ? 'true' : 'false') . '"';
+
+		return $lines;
+	}
+
+} // class

@@ -146,9 +146,9 @@ class HtmlView extends BaseHtmlView
 			{
 				echo '[' . $prjId . ']' . '<br>';
 
-				foreach ($langFileSets as $LangId => $langFiles)
+				foreach ($langFileSets as $langId => $langFiles)
 				{
-					echo '&nbsp;&nbsp;&nbsp;[' . $LangId . ']' . '<br>';
+					echo '&nbsp;&nbsp;&nbsp;[' . $langId . ']' . '<br>';
 
 					foreach ($langFiles as $langFile)
 					{
