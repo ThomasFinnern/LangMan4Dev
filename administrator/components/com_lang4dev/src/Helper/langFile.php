@@ -138,7 +138,6 @@ class langFile extends langPathFileName
 			$OutTxt = '';
 			$OutTxt .= 'Error executing readFileContent: "' . '<br>';
 			$OutTxt .= 'File: "' . $filePath . '"<br>';
-			$OutTxt .= 'langId: "' . $langId . '"<br>';
 			$OutTxt .= 'Error: "' . $e->getMessage() . '"' . '<br>';
 
 			$app = Factory::getApplication();

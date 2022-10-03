@@ -108,6 +108,7 @@ class HtmlView extends BaseHtmlView
 
 		//--- define project -------------------------------------------------------------------
 
+        /** @var \Finnern\Component\Lang4dev\Administrator\Model\TranslateModel $model */
 		$model         = $this->getModel();
 		$this->project = $model->getProject($prjId, $subPrjActive);
 		$project       = $this->project;
@@ -121,7 +122,7 @@ class HtmlView extends BaseHtmlView
 		/**/
 
 		// script- / install file, language files as list
-		$project->findPrjFiles();
+		// not any more: $project->findPrjFiles();
 		// $project->detectLangFiles();
 
 		//--- collect content ---------------------------------------------------
@@ -218,7 +219,6 @@ class HtmlView extends BaseHtmlView
 				. '* source lang ID as list field of availables ? config ? project ... ? <br>'
 				. '* Target lang id as list field of ISO 639 list<br>'
 				. '* New lang id as list field of ISO 639 list<br>'
-				. '* use isLangAtStdJoomla in findPrjFiles<br>'
 				. '* use isLangAtStdJoomla in detectLangFiles<br>'
 				. '* use list of langIds to create a translation selection <br>'
 				. '*  <br>'

@@ -135,6 +135,7 @@ class projectController extends FormController
 			$prjId       = trim($data ['name']);
 			$prjRootPath = trim($data ['root_path']);
 
+            /** @var \Finnern\Component\Lang4dev\Administrator\Model\ProjectModel $model */
 			$prjModel = $this->getModel();
 
 			//--- path to project xml file ---------------------------------
@@ -203,12 +204,13 @@ class projectController extends FormController
 
 			//--- save subproject changes ---------------------------------
 
+            /** @var \Finnern\Component\Lang4dev\Administrator\Model\SubprojectModel $model */
 			$subPrjModel = $this->getModel('Subproject');
 
 			foreach ($subProjects as $subProject)
 			{
 
-				$subProject->findPrjFiles(false);
+				$subProject->RetrieveBaseManifestData();
 
 				//  includes save
 				$isSaved &= $subPrjModel->MergeSubProject($subProject, $id);

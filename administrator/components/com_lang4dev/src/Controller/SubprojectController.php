@@ -123,7 +123,7 @@ class subprojectController extends FormController
 		$subPrj->prjType     = $prjType;
 		$subPrj->prjRootPath = $rootPath;
 
-		$isFilesFound = $subPrj->findPrjFiles();
+		$isFilesFound = $subPrj->RetrieveBaseManifestData();
 
 		if ($isFilesFound)
 		{

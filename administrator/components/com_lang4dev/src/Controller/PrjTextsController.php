@@ -114,6 +114,7 @@ class PrjTextsController extends AdminController
 				$app = Factory::getApplication();
 				$app->enqueueMessage($OutTxt, 'error');
 
+                /** @var \Finnern\Component\Lang4dev\Administrator\Model\PrjTextsModel $model */
 				$model = $this->getModel();
 
 				$isOk = $model->rebuild();

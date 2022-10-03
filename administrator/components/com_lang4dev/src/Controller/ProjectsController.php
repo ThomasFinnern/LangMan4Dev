@@ -123,6 +123,7 @@ class projectsController extends FormController
 			}
 			else
 			{
+				/** @var \Finnern\Component\Lang4dev\Administrator\Model\ProjectModel $model */
 				$model = $this->getModel('project');
 
 				// Make sure the item ids are integers

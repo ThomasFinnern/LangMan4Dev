@@ -71,45 +71,6 @@ class langProject
 
 	// script- / install file, language files as list, transId
 
-	/**
-	 *
-	 * @return $this
-	 *
-	 * @throws \Exception
-	 * @since version
-	 */
-	public function findPrjFiles()
-	{
-
-		try
-		{
-
-			if (count($this->subProjects) > 0)
-			{
-				foreach ($this->subProjects as $subProject)
-				{
-					//
-					$isFilesFound = $subProject->findPrjFiles();
-
-				}
-
-				// from manifest file
-				$this->langIdPrefix = $this->subProjects[0]->langIdPrefix;
-			}
-		}
-		catch (RuntimeException $e)
-		{
-			$OutTxt = '';
-			$OutTxt .= 'Error executing findPrjFiles: "' . '<br>';
-			$OutTxt .= 'Error: "' . $e->getMessage() . '"' . '<br>';
-
-			$app = Factory::getApplication();
-			$app->enqueueMessage($OutTxt, 'error');
-		}
-
-		return $this;
-	}
-
 	// one file each sub (used mostly for eng_GB)
 
 	/**

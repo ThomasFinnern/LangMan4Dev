@@ -125,6 +125,7 @@ class subprojectsController extends FormController
 			}
 			else
 			{
+                /** @var \Finnern\Component\Lang4dev\Administrator\Model\SubprojectModel $model */
 				$model = $this->getModel('subproject');
 
 				// Make sure the item ids are integers
