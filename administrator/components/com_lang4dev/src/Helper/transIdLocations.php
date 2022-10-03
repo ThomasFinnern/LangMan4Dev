@@ -10,8 +10,10 @@
 
 namespace Finnern\Component\Lang4dev\Administrator\Helper;
 
+use Exception;
 use Joomla\CMS\Factory;
 use RuntimeException;
+
 use function defined;
 
 // no direct access
@@ -37,167 +39,151 @@ defined('_JEXEC') or die;
 class transIdLocations
 {
 
-	public $items = [];
+    public $items = [];
 
-	/**
-	 * @param $items
-	 */
-	public function __construct($items = [])
-	{
-		if (!empty ($items))
-		{
-			$this->items = $items;
-		}
-	}
+    /**
+     * @param $items
+     */
+    public function __construct($items = [])
+    {
+        if (!empty ($items)) {
+            $this->items = $items;
+        }
+    }
 
-	/**
-	 * @param $item
-	 *
-	 *
-	 * @since version
-	 */
-	public function addItem($item)
-	{
-		$name                 = $item->name;
-		$this->items[$name][] = $item;
-	}
+    /**
+     * @param $item
+     *
+     *
+     * @since version
+     */
+    public function addItem($item)
+    {
+        $name                 = $item->name;
+        $this->items[$name][] = $item;
+    }
 
-	/**
-	 * @param $name
-	 * @param $idx
-	 *
-	 * @return mixed
-	 *
-	 * @since version
-	 */
-	public function getItem($name, $idx)
-	{
-		return $this->items[$name][$idx];
-	}
+    /**
+     * @param $name
+     * @param $idx
+     *
+     * @return mixed
+     *
+     * @since version
+     */
+    public function getItem($name, $idx)
+    {
+        return $this->items[$name][$idx];
+    }
 
-	/**
-	 * @param $name
-	 *
-	 * @return mixed
-	 *
-	 * @since version
-	 */
-	public function getItems($name)
-	{
-		return $this->items[$name];
-	}
+    /**
+     * @param $name
+     *
+     * @return mixed
+     *
+     * @since version
+     */
+    public function getItems($name)
+    {
+        return $this->items[$name];
+    }
 
-	/**
-	 *
-	 * @return array
-	 *
-	 * @throws \Exception
-	 * @since version
-	 */
-	public function getItemNames()
-	{
-		$names = [];
+    /**
+     *
+     * @return array
+     *
+     * @throws Exception
+     * @since version
+     */
+    public function getItemNames()
+    {
+        $names = [];
 
-		try
-		{
+        try {
+            foreach ($this->items as $name => $val) {
+                $names [] = $name;
+            }
+        } catch (RuntimeException $e) {
+            $OutTxt = 'Error executing getItemNames: "' . '<br>';
+            $OutTxt .= 'Error: "' . $e->getMessage() . '"' . '<br>';
 
-			foreach ($this->items as $name => $val)
-			{
+            $app = Factory::getApplication();
+            $app->enqueueMessage($OutTxt, 'error');
+        }
 
-				$names [] = $name;
-			}
+        return $names;
+    }
 
-		}
-		catch (RuntimeException $e)
-		{
-			$OutTxt = 'Error executing getItemNames: "' . '<br>';
-			$OutTxt .= 'Error: "' . $e->getMessage() . '"' . '<br>';
+    /*
+     * should be called by names list => similar is in ??? sourceLangFiles
+     *
+    public function getMissingTransIds ($transIds_file){
 
-			$app = Factory::getApplication();
-			$app->enqueueMessage($OutTxt, 'error');
-		}
+        $missing = [];
 
-		return $names;
-	}
+        $transIds_search = $this->getItemNames ();
 
-	/*
-	 * should be called by names list => similar is in ??? sourceLangFiles
-	 *
-	public function getMissingTransIds ($transIds_file){
+        foreach ($transIds_search as $transId)
+        {
+            if (empty ($transIds_file[$transId])) {
 
-		$missing = [];
+                $missing [] = $transId;
+            }
+        }
 
-		$transIds_search = $this->getItemNames ();
+        return $missing;
+    }
+    /**/
 
-		foreach ($transIds_search as $transId)
-		{
-			if (empty ($transIds_file[$transId])) {
+    /**
+     *
+     * @return false|string
+     *
+     * @throws Exception
+     * @since version
+     */
+    public function _toText()
+    {
+        $text = '';
 
-				$missing [] = $transId;
-			}
-		}
+        try {
+            $text = json_encode($this->items);
+        } catch (RuntimeException $e) {
+            $OutTxt = 'Error executing _toText: "' . '<br>';
+            $OutTxt .= 'Error: "' . $e->getMessage() . '"' . '<br>';
 
-		return $missing;
-	}
-	/**/
+            $app = Factory::getApplication();
+            $app->enqueueMessage($OutTxt, 'error');
+        }
 
-	/**
-	 *
-	 * @return false|string
-	 *
-	 * @throws \Exception
-	 * @since version
-	 */
-	public function _toText()
-	{
-		$text = '';
+        return $text;
+    }
 
-		try
-		{
-			$text = json_encode($this->items);
-		}
-		catch (RuntimeException $e)
-		{
-			$OutTxt = 'Error executing _toText: "' . '<br>';
-			$OutTxt .= 'Error: "' . $e->getMessage() . '"' . '<br>';
+    /**
+     * @param $separator
+     *
+     * @return string
+     *
+     * @throws Exception
+     * @since version
+     */
+    public function _toTextNames($separator = ', ') // $separator ='/n'
+    {
+        $text = '';
 
-			$app = Factory::getApplication();
-			$app->enqueueMessage($OutTxt, 'error');
-		}
+        try {
+            $names = $this->getItemNames();
 
-		return $text;
-	}
+            $text = join($separator, $names);
+        } catch (RuntimeException $e) {
+            $OutTxt = 'Error executing _toTextNames: "' . '<br>';
+            $OutTxt .= 'Error: "' . $e->getMessage() . '"' . '<br>';
 
-	/**
-	 * @param $separator
-	 *
-	 * @return string
-	 *
-	 * @throws \Exception
-	 * @since version
-	 */
-	public function _toTextNames($separator = ', ') // $separator ='/n'
-	{
-		$text = '';
+            $app = Factory::getApplication();
+            $app->enqueueMessage($OutTxt, 'error');
+        }
 
-		try
-		{
-
-			$names = $this->getItemNames();
-
-			$text = join($separator, $names);
-
-		}
-		catch (RuntimeException $e)
-		{
-			$OutTxt = 'Error executing _toTextNames: "' . '<br>';
-			$OutTxt .= 'Error: "' . $e->getMessage() . '"' . '<br>';
-
-			$app = Factory::getApplication();
-			$app->enqueueMessage($OutTxt, 'error');
-		}
-
-		return $text;
-	}
+        return $text;
+    }
 
 }

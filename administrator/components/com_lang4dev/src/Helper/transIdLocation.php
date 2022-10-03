@@ -11,6 +11,7 @@
 namespace Finnern\Component\Lang4dev\Administrator\Helper;
 
 use Joomla\CMS\Factory;
+
 use function defined;
 
 // no direct access
@@ -26,27 +27,27 @@ defined('_JEXEC') or die;
  */
 class transIdLocation
 {
-	public $name = '';
-	public $file = '';
-	public $path = '';
-	public $lineNr = -1;
-	public $colIdx = -1;
+    public $name = '';
+    public $file = '';
+    public $path = '';
+    public $lineNr = -1;
+    public $colIdx = -1;
 
-	/**
-	 * @since __BUMP_VERSION__
-	 */
-	public function __construct(
-		$name = '',
-		$file = '',
-		$path = '',
-		$lineNr = -1,
-		$colIdx = -1)
-	{
-		$this->name   = $name;
-		$this->file   = $file;
-		$this->path   = $path;
-		$this->lineNr = $lineNr;
-		$this->colIdx = $colIdx;
-	}
+    /**
+     * @since __BUMP_VERSION__
+     */
+    public function __construct(
+        $name = '',
+        $file = '',
+        $path = '',
+        $lineNr = -1,
+        $colIdx = -1
+    ) {
+        $this->name   = $name;
+        $this->file   = $file;
+        $this->path   = $path;
+        $this->lineNr = $lineNr;
+        $this->colIdx = $colIdx;
+    }
 
 }

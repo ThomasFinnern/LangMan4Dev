@@ -34,6 +34,7 @@ use Joomla\CMS\Workflow\Workflow;
 use Joomla\Registry\Registry;
 use Joomla\String\StringHelper;
 use Joomla\Utilities\ArrayHelper;
+
 use function defined;
 
 // associations: use Finnern\Component\Lang4def\Administrator\Helper\Lang4devHelper;
@@ -45,42 +46,45 @@ use function defined;
  */
 class Lang4devModel extends AdminModel
 {
-	/**
-	 * The prefix to use with controller messages.
-	 *
-	 * @var    string
-	 * @since __BUMP_VERSION__
-	 */
-	protected $text_prefix = 'COM_LANG4DEV';
+    /**
+     * The prefix to use with controller messages.
+     *
+     * @var    string
+     * @since __BUMP_VERSION__
+     */
+    protected $text_prefix = 'COM_LANG4DEV';
 
-	/**
-	 * The type alias for this content type. Used for content version history.
-	 *
-	 * @var      string
-	 * @since __BUMP_VERSION__
-	 */
-	public $typeAlias = 'com_lang4dev.lang4dev';
+    /**
+     * The type alias for this content type. Used for content version history.
+     *
+     * @var      string
+     * @since __BUMP_VERSION__
+     */
+    public $typeAlias = 'com_lang4dev.lang4dev';
 
-	/**
-	 * Method to get the row form.
-	 *
-	 * @param   array    $data      Data for the form.
-	 * @param   boolean  $loadData  True if the form is to load its own data (default case), false if not.
-	 *
-	 * @return  JForm|boolean  A JForm object on success, false on failure
-	 *
-	 * @since __BUMP_VERSION__
-	 */
-	public function getForm($data = array(), $loadData = true)
-	{
-		$form = $this->loadForm('com_lang4dev.lang4dev', 'lang4dev', array('control' => 'jform', 'load_data' => $loadData));
+    /**
+     * Method to get the row form.
+     *
+     * @param   array    $data      Data for the form.
+     * @param   boolean  $loadData  True if the form is to load its own data (default case), false if not.
+     *
+     * @return  JForm|boolean  A JForm object on success, false on failure
+     *
+     * @since __BUMP_VERSION__
+     */
+    public function getForm($data = array(), $loadData = true)
+    {
+        $form = $this->loadForm(
+            'com_lang4dev.lang4dev',
+            'lang4dev',
+            array('control' => 'jform', 'load_data' => $loadData)
+        );
 
-		if (empty($form))
-		{
-			return false;
-		}
+        if (empty($form)) {
+            return false;
+        }
 
-		return $form;
-	}
+        return $form;
+    }
 
 }

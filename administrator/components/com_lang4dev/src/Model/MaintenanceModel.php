@@ -15,6 +15,7 @@ use JForm;
 use Joomla\CMS\Factory;
 use Joomla\CMS\MVC\Model\AdminModel;
 use Joomla\CMS\MVC\Model\BaseModel;
+
 use function defined;
 
 //use Joomla\CMS\MVC\Model\ListModel;
@@ -27,27 +28,30 @@ use function defined;
 class MaintenanceModel extends AdminModel
 {
 
-	/**
-	 * Method to get the row form.
-	 *
-	 * @param   array    $data      Data for the form.
-	 * @param   boolean  $loadData  True if the form is to load its own data (default case), false if not.
-	 *
-	 * @return  JForm|boolean  A JForm object on success, false on failure
-	 *
-	 * @since __BUMP_VERSION__
-	 */
-	public function getForm($data = array(), $loadData = true)
-	{
-		$form = $this->loadForm('com_lang4dev.maintenance', 'maintenance', array('control' => 'jform', 'load_data' => $loadData));
+    /**
+     * Method to get the row form.
+     *
+     * @param   array    $data      Data for the form.
+     * @param   boolean  $loadData  True if the form is to load its own data (default case), false if not.
+     *
+     * @return  JForm|boolean  A JForm object on success, false on failure
+     *
+     * @since __BUMP_VERSION__
+     */
+    public function getForm($data = array(), $loadData = true)
+    {
+        $form = $this->loadForm(
+            'com_lang4dev.maintenance',
+            'maintenance',
+            array('control' => 'jform', 'load_data' => $loadData)
+        );
 
-		if (empty($form))
-		{
-			return false;
-		}
+        if (empty($form)) {
+            return false;
+        }
 
-		return $form;
-	}
+        return $form;
+    }
 
 }
 

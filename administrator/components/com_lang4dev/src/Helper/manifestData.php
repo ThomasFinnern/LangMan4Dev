@@ -9,11 +9,13 @@
 
 namespace Finnern\Component\Lang4dev\Administrator\Helper;
 
+use Exception;
 use Joomla\CMS\Factory;
 use Joomla\CMS\Filesystem\File;
 use Joomla\CMS\Filesystem\Folder;
 use Joomla\CMS\Language\Text;
 use RuntimeException;
+
 use function defined;
 
 // no direct access
@@ -23,265 +25,232 @@ defined('_JEXEC') or die;
 
 class manifestData
 {
-	public $prjXmlFilePath = '';
-	public $prjXmlPathFilename = '';
+    public $prjXmlFilePath = '';
+    public $prjXmlPathFilename = '';
 
-	public $defaultLangPath = "";
-	public $adminLangPath = "";
+    public $defaultLangPath = "";
+    public $adminLangPath = "";
 
-	// is also admin
-	public $prjDefaultPath = '';
-	public $prjAdminPath = '';
+    // is also admin
+    public $prjDefaultPath = '';
+    public $prjAdminPath = '';
 
-	// local development folder or installed component
-	public $isInstalled = false;
+    // local development folder or installed component
+    public $isInstalled = false;
 
-	protected $manifest = false; // XML: false or SimpleXMLElement
+    protected $manifest = false; // XML: false or SimpleXMLElement
 
-	/**
-	 * @since __BUMP_VERSION__
-	 */
-	public function __construct($prjXmlPathFilename = '')
-	{
-		$this->prjXmlPathFilename = $prjXmlPathFilename;
-		$this->prjXmlFilePath     = ""; // dirname($prjXmlPathFilename);
+    /**
+     * @since __BUMP_VERSION__
+     */
+    public function __construct($prjXmlPathFilename = '')
+    {
+        $this->prjXmlPathFilename = $prjXmlPathFilename;
+        $this->prjXmlFilePath     = ""; // dirname($prjXmlPathFilename);
 
-		// filename given
-		if ($prjXmlPathFilename != '')
-		{
-
-			$this->readManifestData();
-
-		}
+        // filename given
+        if ($prjXmlPathFilename != '') {
+            $this->readManifestData();
+        }
 
         return;
-	}
+    }
 
-	/**
-	 * @param $prjXmlPathFilename
-	 *
-	 * @return bool
-	 *
-	 * @throws \Exception
-	 * @since version
-	 */
-	public function readManifestData($prjXmlPathFilename = '')
-	{
-		$isValidXml = false;
+    /**
+     * @param $prjXmlPathFilename
+     *
+     * @return bool
+     *
+     * @throws Exception
+     * @since version
+     */
+    public function readManifestData($prjXmlPathFilename = '')
+    {
+        $isValidXml = false;
 
-		try
-		{
-			// use new file
-			if ($prjXmlPathFilename != '')
-			{
-				$this->prjXmlPathFilename = $prjXmlPathFilename;
-				$this->prjXmlFilePath     = dirname($prjXmlPathFilename);
+        try {
+            // use new file
+            if ($prjXmlPathFilename != '') {
+                $this->prjXmlPathFilename = $prjXmlPathFilename;
+                $this->prjXmlFilePath     = dirname($prjXmlPathFilename);
+                // ToDo: clear old data
+            } else {
+                // use given path name
+                $prjXmlPathFilename = $this->prjXmlPathFilename;
+            }
 
-				// ToDo: clear old data
-			}
-			else
-			{
+            // file exists
+            if (File::exists($prjXmlPathFilename)) {
+                //// keep as alternative example, used in RSG" installer . Can't remeber why simplexml_load_file was not used
+                //$context = stream_context_create(array('http' => array('header' => 'Accept: application/xml')));
+                //$this->manifest = $xml = file_get_contents($prjXmlPathFilename, false, $context);
 
-				// use given path name
-				$prjXmlPathFilename = $this->prjXmlPathFilename;
-			}
+                // Read the file to see if it's a valid component XML file
+                $this->manifest = simplexml_load_file($prjXmlPathFilename);
 
-			// file exists
-			if (File::exists($prjXmlPathFilename))
-			{
-				//// keep as alternative example, used in RSG" installer . Can't remeber why simplexml_load_file was not used
-				//$context = stream_context_create(array('http' => array('header' => 'Accept: application/xml')));
-				//$this->manifest = $xml = file_get_contents($prjXmlPathFilename, false, $context);
+                // error reading ?
+                if (!empty($this->manifest)) {
+                    $isValidXml = true;
+                } else {
+                    $OutTxt = Text::_('COM_LANG4DEV_FILE_IS_NOT_AN_XML_DOCUMENT' . ': ' . $prjXmlPathFilename);
+                    $app    = Factory::getApplication();
+                    $app->enqueueMessage($OutTxt, 'error');
+                }
 
-				// Read the file to see if it's a valid component XML file
-				$this->manifest = simplexml_load_file($prjXmlPathFilename);
+                //--- developer folder or installed in joomla  -----------------------------------------------------------
 
-				// error reading ?
-				if (!empty($this->manifest))
-				{
-					$isValidXml = true;
-				}
-				else
-				{
-					$OutTxt = Text::_('COM_LANG4DEV_FILE_IS_NOT_AN_XML_DOCUMENT' . ': ' . $prjXmlPathFilename);
-					$app    = Factory::getApplication();
-					$app->enqueueMessage($OutTxt, 'error');
-				}
+                if (str_starts_with($prjXmlPathFilename, JPATH_ROOT)) {
+                    $this->isInstalled = true;
+                } else {
+                    $this->isInstalled = false;
+                }
 
-				//--- developer folder or installed in joomla  -----------------------------------------------------------
+                //--- extract values -----------------------------------------------------------
 
-				if (str_starts_with($prjXmlPathFilename, JPATH_ROOT))
-				{
-					$this->isInstalled = true;
-				}
-				else
-				{
-					$this->isInstalled = false;
-				}
+                $xml = $this->manifest;
 
-				//--- extract values -----------------------------------------------------------
+                //--- default main (site) path -------------------------------
 
-				$xml = $this->manifest;
+                $this->prjDefaultPath = "???MainPath";
 
-				//--- default main (site) path -------------------------------
+                if (isset($xml->files)) {
+                    $files = $xml->files;
+                    if (isset ($files['folder'])) {
+                        $this->prjDefaultPath = $files['folder'][0];
+                    }
+                }
 
-				$this->prjDefaultPath = "???MainPath";
+                //--- default admin path -------------------------------
 
-				if (isset($xml->files)) {
-					$files = $xml->files;
-					if (isset ($files['folder']))
-					{
-						$this->prjDefaultPath = $files['folder'][0];
-					}
-				}
+                $this->prjAdminPath = "???AdminPath";
 
-				//--- default admin path -------------------------------
+                if (isset($xml->administration->files)) {
+                    $files = $xml->administration->files;
+                    if (isset ($files['folder'])) {
+                        $this->prjAdminPath = $files['folder'][0];
+                    }
+                }
 
-				$this->prjAdminPath = "???AdminPath";
-
-				if (isset($xml->administration->files)) {
-					$files = $xml->administration->files;
-					if (isset ($files['folder'])) {
-						$this->prjAdminPath = $files['folder'][0];
-					}
-				}
-
-
-				//--- defaultLangPath -------------------------------
+                //--- defaultLangPath -------------------------------
 
                 $this->defaultLangPath = '';
                 if (isset($xml->files)) {
-
-						// add languages folder
-	                    $this->defaultLangPath = $this->prjDefaultPath . '/language';
+                    // add languages folder
+                    $this->defaultLangPath = $this->prjDefaultPath . '/language';
                 }
 
                 //--- adminLangPath -------------------------------
 
                 $this->adminLangPath = '';
                 if (isset($xml->administration->files)) {
-
-	                    // add languages folder
-	                    $this->adminLangPath = $this->prjAdminPath . '/language';
+                    // add languages folder
+                    $this->adminLangPath = $this->prjAdminPath . '/language';
                 }
+            } else {
+                $OutTxt = Text::_('COM_LANG4DEV_FILE_DOES_NOT_EXIST' . ': ' . $prjXmlPathFilename);
+                $app    = Factory::getApplication();
+                $app->enqueueMessage($OutTxt, 'error');
+            }
+        } catch (RuntimeException $e) {
+            $OutTxt = '';
+            $OutTxt .= 'Error executing readManifestData: "' . $prjXmlPathFilename . '"<br>';
+            $OutTxt .= 'Error: "' . $e->getMessage() . '"' . '<br>';
 
-			}
-			else
-			{
-				$OutTxt = Text::_('COM_LANG4DEV_FILE_DOES_NOT_EXIST' . ': ' . $prjXmlPathFilename);
-				$app    = Factory::getApplication();
-				$app->enqueueMessage($OutTxt, 'error');
-			}
+            $app = Factory::getApplication();
+            $app->enqueueMessage($OutTxt, 'error');
+        }
 
-		}
-		catch (RuntimeException $e)
-		{
-			$OutTxt = '';
-			$OutTxt .= 'Error executing readManifestData: "' . $prjXmlPathFilename . '"<br>';
-			$OutTxt .= 'Error: "' . $e->getMessage() . '"' . '<br>';
+        return $isValidXml;
+    }
 
-			$app = Factory::getApplication();
-			$app->enqueueMessage($OutTxt, 'error');
-		}
+    // info cast to string / int .. when using it (otherwise array is returned)
 
-		return $isValidXml;
-	}
-
-	// info cast to string / int .. when using it (otherwise array is returned)
-
-	/**
-	 * @param $name
-	 * @param $default
-	 *
-	 * @return mixed
-	 *
-	 * @since version
-	 */
-	public function get($name, $default)
-	{
-
+    /**
+     * @param $name
+     * @param $default
+     *
+     * @return mixed
+     *
+     * @since version
+     */
+    public function get($name, $default)
+    {
 //		return isset($this->manifest->$name) ? $this->manifest->$name : $default;
-		$result = $this->manifest->$name;
+        $result = $this->manifest->$name;
 
-		// return isset($this->manifest->$name) ? $this->manifest->$name : $default;
-		return $result;
-	}
+        // return isset($this->manifest->$name) ? $this->manifest->$name : $default;
+        return $result;
+    }
 
-	// return null on wrong path
+    // return null on wrong path
 
-	/**
-	 * @param $names
-	 * @param $default
-	 *
-	 * @return bool|mixed
-	 *
-	 * @since version
-	 */
-	public function getByPath($names, $default)
-	{
-		$result = $default;
+    /**
+     * @param $names
+     * @param $default
+     *
+     * @return bool|mixed
+     *
+     * @since version
+     */
+    public function getByPath($names, $default)
+    {
+        $result = $default;
 
-		if (!is_array($names))
-		{
-			$name = array($names);
-		}
+        if (!is_array($names)) {
+            $name = array($names);
+        }
 
-		$base = $this->manifest;
-		foreach ($names as $name)
-		{
+        $base = $this->manifest;
+        foreach ($names as $name) {
+            $base = isset($this->manifest->$name) ? $this->manifest->$name : null;
 
-			$base = isset($this->manifest->$name) ? $this->manifest->$name : null;
+            if ($base == null) {
+                break;
+            }
+        }
 
-			if ($base == null)
-			{
-				break;
-			}
-		}
+        if ($base != null) {
+            $result = $base;
+        }
 
-		if ($base != null)
-		{
-			$result = $base;
-		}
+        return $result;
+    }
 
-		return $result;
-	}
+    /**
+     *
+     * @return string
+     *
+     * @since version
+     */
+    public function getSriptFile()
+    {
+        return (string)$this->get('scriptfile', '');
+    }
 
-	/**
-	 *
-	 * @return string
-	 *
-	 * @since version
-	 */
-	public function getSriptFile()
-	{
-		return (string) $this->get('scriptfile', '');
-	}
+    /**
+     *
+     * @return string
+     *
+     * @since version
+     */
+    public function getName()
+    {
+        return (string)$this->get('name', '');
+    }
 
-	/**
-	 *
-	 * @return string
-	 *
-	 * @since version
-	 */
-	public function getName()
-	{
-		return (string) $this->get('name', '');
-	}
+    // info cast to string / int .. when using it (otherwise array is returned)
 
-	// info cast to string / int .. when using it (otherwise array is returned)
-
-	/**
-	 * @param $name
-	 *
-	 * @return null
-	 *
-	 * @since version
-	 */
-	public function getXml($name)
-	{
-
-		return isset($this->manifest->$name) ? $this->manifest->$name : null;
-	}
+    /**
+     * @param $name
+     *
+     * @return null
+     *
+     * @since version
+     */
+    public function getXml($name)
+    {
+        return isset($this->manifest->$name) ? $this->manifest->$name : null;
+    }
 
 
 
@@ -346,102 +315,96 @@ class manifestData
 //		}
 //	}
 
-	/**
-	 * public function subProjectsByManifest ($oSubPrjPath){
-	 *
-	 * $subProjects = [];
-	 *
-	 * // ToDo: create small manifest class and extract all necessary infos
-	 *
-	 *
-	 * //---
-	 * $manifestPath = $oSubPrjPath->getRootManifestPath ();
-	 * if (file_exists ($manifestPath))
-	 * {
-	 *
-	 * // content of file
-	 * $context = stream_context_create(array('http' => array('header' => 'Accept: application/xml')));
-	 * $xml     = file_get_contents($manifestPath, false, $context);
-	 *
-	 * // Data is valid
-	 * if ($xml)
-	 * {
-	 * //--- read xml to json ---------------------------------------------------
-	 *
-	 * $manifestByXml = simplexml_load_string($xml);
-	 *
-	 * if (!empty ($manifestByXml))
-	 * {
-	 * //Encode the SimpleXMLElement object into a JSON string.
-	 * $jsonString = json_encode($manifestByXml);
-	 * //Convert it back into an associative array
-	 * $jsonArray = json_decode($jsonString, true);
-	 *
-	 * }
-	 * }
-	 * }
-	 *
-	 * return $subProjects;
-	 * }
-	 * /**/
+    /**
+     * public function subProjectsByManifest ($oSubPrjPath){
+     *
+     * $subProjects = [];
+     *
+     * // ToDo: create small manifest class and extract all necessary infos
+     *
+     *
+     * //---
+     * $manifestPath = $oSubPrjPath->getRootManifestPath ();
+     * if (file_exists ($manifestPath))
+     * {
+     *
+     * // content of file
+     * $context = stream_context_create(array('http' => array('header' => 'Accept: application/xml')));
+     * $xml     = file_get_contents($manifestPath, false, $context);
+     *
+     * // Data is valid
+     * if ($xml)
+     * {
+     * //--- read xml to json ---------------------------------------------------
+     *
+     * $manifestByXml = simplexml_load_string($xml);
+     *
+     * if (!empty ($manifestByXml))
+     * {
+     * //Encode the SimpleXMLElement object into a JSON string.
+     * $jsonString = json_encode($manifestByXml);
+     * //Convert it back into an associative array
+     * $jsonArray = json_decode($jsonString, true);
+     *
+     * }
+     * }
+     * }
+     *
+     * return $subProjects;
+     * }
+     * /**/
 
+    public function __toTextItem($name = '')
+    {
+        return $name . '="' . $this->get($name, '') . '"';
+    }
 
+    /**
+     *
+     * @return array
+     *
+     * @since version
+     */
+    public function __toText()
+    {
+        $lines = [];
 
-	public function __toTextItem($name = '')
-	{
-		return $name . '="' . $this->get($name, '') . '"';
-	}
+        $lines[] = '--- manifest file ---------------------------';
 
-	/**
-	 *
-	 * @return array
-	 *
-	 * @since version
-	 */
-	public function __toText()
-	{
+        $lines[] = $this->__toTextItem('name');
 
-		$lines = [];
+        //$test->name         = (string) $xml->name;
 
-		$lines[] = '--- manifest file ---------------------------';
+        $lines[] = $this->__toTextItem('author');
+        $lines[] = $this->__toTextItem('authorEmail');
+        $lines[] = $this->__toTextItem('authorUrl');
+        $lines[] = $this->__toTextItem('creationDate');
+        $lines[] = $this->__toTextItem('description');
+        $lines[] = $this->__toTextItem('libraryname');
+        $lines[] = $this->__toTextItem('packagename');
+        $lines[] = $this->__toTextItem('packager');
+        $lines[] = $this->__toTextItem('packagerurl');
+        $lines[] = $this->__toTextItem('scriptfile');
+        $lines[] = $this->__toTextItem('update');
+        $lines[] = $this->__toTextItem('version');
 
-		$lines[] = $this->__toTextItem('name');
+        $lines[] = '';
+        if ($this->isInstalled) {
+            $lines[] = '( Manifest is within joomla ) ';
+        } else {
+            $lines[] = '( Manifest on development path ) ';
+        }
 
-		//$test->name         = (string) $xml->name;
+        $lines[] = 'default (site) path: ' . $this->prjDefaultPath;
+        $lines[] = 'admin path: ' . $this->prjAdminPath;
 
-		$lines[] = $this->__toTextItem('author');
-		$lines[] = $this->__toTextItem('authorEmail');
-		$lines[] = $this->__toTextItem('authorUrl');
-		$lines[] = $this->__toTextItem('creationDate');
-		$lines[] = $this->__toTextItem('description');
-		$lines[] = $this->__toTextItem('libraryname');
-		$lines[] = $this->__toTextItem('packagename');
-		$lines[] = $this->__toTextItem('packager');
-		$lines[] = $this->__toTextItem('packagerurl');
-		$lines[] = $this->__toTextItem('scriptfile');
-		$lines[] = $this->__toTextItem('update');
-		$lines[] = $this->__toTextItem('version');
+        $lines[] = 'defaultLangPath (site): ' . $this->defaultLangPath;
+        $lines[] = 'adminLangPath: ' . $this->adminLangPath;
 
-		$lines[] = '';
-		if ($this->isInstalled)
-		{
-			$lines[] = '( Manifest is within joomla ) ';
-		}
-		else
-		{
-			$lines[] = '( Manifest on development path ) ';
-		}
+        $lines[] = '';
 
-		$lines[] = 'default (site) path: ' . $this->prjDefaultPath;
-		$lines[] = 'admin path: ' . $this->prjAdminPath;
-
-		$lines[] = 'defaultLangPath (site): ' . $this->defaultLangPath;
-		$lines[] = 'adminLangPath: ' . $this->adminLangPath;
-
-		$lines[] = '';
-
-		return $lines;
-	}
+        return $lines;
+    }
 
 } // class
 

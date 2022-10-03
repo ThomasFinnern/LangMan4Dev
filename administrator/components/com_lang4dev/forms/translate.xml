@@ -39,14 +39,13 @@
 
 	<!-- subproject selection -->
 	<field
-		id="selectSubproject"
-		name="selectSubproject"
-		type="SubprojectSelect"
-		label="COM_LANG4DEV_SELECT_SUB_PROJECT"
-		description="COM_LANG4DEV_SELECT_SUB_PROJECT_DESC"
-		onchange="Joomla.submitform('translate.selectProject', this.form)"
+			id="selectSubproject"
+			name="selectSubproject"
+			type="SubprojectSelect"
+			label="COM_LANG4DEV_SELECT_SUB_PROJECT"
+			description="COM_LANG4DEV_SELECT_SUB_PROJECT_DESC"
+			onchange="Joomla.submitform('translate.selectProject', this.form)"
 	/>
-
 
 
 </form>

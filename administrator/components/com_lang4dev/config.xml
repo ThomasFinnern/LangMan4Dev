@@ -3,9 +3,9 @@
 	<!-- ... Tab General ................................. -->
 
 	<fieldset
-		name="tab01"
-		label="COM_LANG4DEV_CONFIG_TAB_GENERAL"
-		description="COM_LANG4DEV_CONFIG_TAB_GENERAL_DESC"
+			name="tab01"
+			label="COM_LANG4DEV_CONFIG_TAB_GENERAL"
+			description="COM_LANG4DEV_CONFIG_TAB_GENERAL_DESC"
 	>
 		<!-- needed when more entries are general ...
 				field name="intro_text"
@@ -114,11 +114,11 @@
 				class="text text-danger"
 				showon="isDevelop:1"
 		>
-			<option value="0">* </option>
-			<option value="1">* </option>
-			<option value="2">* </option>
-			<option value="3">* </option>
-			<option value="4">* </option>
+			<option value="0">*</option>
+			<option value="1">*</option>
+			<option value="2">*</option>
+			<option value="3">*</option>
+			<option value="4">*</option>
 		</field>
 
 
@@ -156,11 +156,11 @@
 				class="text text-danger"
 				showon="isDevelop:1"
 		>
-			<option value="0">* </option>
-			<option value="1">* </option>
-			<option value="2">* </option>
-			<option value="3">* </option>
-			<option value="4">* </option>
+			<option value="0">*</option>
+			<option value="1">*</option>
+			<option value="2">*</option>
+			<option value="3">*</option>
+			<option value="4">*</option>
 		</field>
 
 
@@ -223,11 +223,11 @@
 				class="text text-danger"
 				showon="isDevelop:1"
 		>
-			<option value="0">* </option>
-			<option value="1">* </option>
-			<option value="2">* </option>
-			<option value="3">* </option>
-			<option value="4">* </option>
+			<option value="0">*</option>
+			<option value="1">*</option>
+			<option value="2">*</option>
+			<option value="3">*</option>
+			<option value="4">*</option>
 		</field>
 
 
@@ -293,7 +293,9 @@
 			label="COM_LANG4DEV_CONFIG_TAB_DEBUG"
 			description="COM_LANG4DEV_CONFIG_TAB_DEBUG_DESC"
 	>
-		<field type="spacer" name="test_inner_02" hr="true" />
+		<field type="spacer"
+		       name="test_inner_02"
+		       hr="true"/>
 		<!-- ... block  ... -->
 
 		<field
@@ -306,7 +308,7 @@
 				layout="joomla.form.field.radio.switcher"
 				filter="integer"
 				validate="options"
-			>
+		>
 			<option value="0">JNO</option>
 			<option value="1">JYES</option>
 		</field>
@@ -340,28 +342,28 @@
 		</field>
 
 	</fieldset>
-	
-	
+
+
 	<!-- ... Tab Permissions ................................. -->
 
 	<fieldset
-		name="permissions"
-		label="JCONFIG_PERMISSIONS_LABEL"
-		description="JCONFIG_PERMISSIONS_DESC"
-		>
+			name="permissions"
+			label="JCONFIG_PERMISSIONS_LABEL"
+			description="JCONFIG_PERMISSIONS_DESC"
+	>
 
 		<!-- ... block  ... -->
 
 		<!-- field name="note31" type="note" class="alert alert-dark" close="true" label="LOREMIPSUM" description="02_LOREMIPSUM_DESC" /-->
 
 		<field
-			name="rules"
-			type="rules"
-			label="JCONFIG_PERMISSIONS_LABEL"
-			validate="rules"
-			filter="rules"
-			component="com_lang4dev"
-			section="component"
+				name="rules"
+				type="rules"
+				label="JCONFIG_PERMISSIONS_LABEL"
+				validate="rules"
+				filter="rules"
+				component="com_lang4dev"
+				section="component"
 		/>
 
 	</fieldset>

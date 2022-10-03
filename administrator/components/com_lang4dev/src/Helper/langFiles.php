@@ -11,12 +11,14 @@
 
 namespace Finnern\Component\Lang4dev\Administrator\Helper;
 
+use Exception;
 use Joomla\CMS\Factory;
 use Joomla\CMS\Filesystem\File;
 use Joomla\CMS\Filesystem\Folder;
 
 use Finnern\Component\Lang4dev\Administrator\Helper\langFile;
 use RuntimeException;
+
 use function defined;
 
 // no direct access
@@ -34,216 +36,187 @@ class langFiles extends langFileNamesSet
 {
 //	public $requiredLangIds = [];
 
-	/** @var array<langfile> */
-	protected $langFilesData = []; // [$langId] -> translations from langFiles read and file names
+    /** @var array<langfile> */
+    protected $langFilesData = []; // [$langId] -> translations from langFiles read and file names
 
-	/**
-	 * matchTranslationsFile2Locations
-	 *
-	 * Joke: sort like Cinderella put the good ones in the pot, the bad ones in the crop
-	 *
-	 * Each input name is sorted into one of three types
-	 *  * missing:    transId item is not defined in lang file
-	 *  * translated: transId item has a translation item matching in lang file
-	 *  * notUsed:    not used translations in lang file
-	 *
-	 * @param $codeTransIds
-	 *
-	 *
-	 * @since version
-	 */
-	//public function separateFilesByTransIds ($codeTransIds)
-	/**
-	 * @param $codeTransIds
-	 * @param $langId
-	 *
-	 * @return array
-	 *
-	 * @throws \Exception
-	 * @since version
-	 */
-	public function matchTranslationsFile2Locations($codeTransIds, $langId = "en-GB",)
-	{
-		$missing    = [];
-		$translated = [];
-		$notUsed    = [];
+    /**
+     * matchTranslationsFile2Locations
+     *
+     * Joke: sort like Cinderella put the good ones in the pot, the bad ones in the crop
+     *
+     * Each input name is sorted into one of three types
+     *  * missing:    transId item is not defined in lang file
+     *  * translated: transId item has a translation item matching in lang file
+     *  * notUsed:    not used translations in lang file
+     *
+     * @param $codeTransIds
+     *
+     *
+     * @since version
+     */
+    //public function separateFilesByTransIds ($codeTransIds)
+    /**
+     * @param $codeTransIds
+     * @param $langId
+     *
+     * @return array
+     *
+     * @throws Exception
+     * @since version
+     */
+    public function matchTranslationsFile2Locations($codeTransIds, $langId = "en-GB",)
+    {
+        $missing    = [];
+        $translated = [];
+        $notUsed    = [];
 
-		$translations = [];
+        $translations = [];
 
-		try
-		{
-			//--- collect translations of all files in sub project -----------------
+        try {
+            //--- collect translations of all files in sub project -----------------
 
-			if (! empty ($this->langFilesData [$langId]))
-			{
-				foreach ($this->langFilesData[$langId] as $langFileData)
-				{
-					// array_push($translations,  array_values($langFileData->translations));
-					$translations = $translations + $langFileData->translations;
-				}
+            if (!empty ($this->langFilesData [$langId])) {
+                foreach ($this->langFilesData[$langId] as $langFileData) {
+                    // array_push($translations,  array_values($langFileData->translations));
+                    $translations = $translations + $langFileData->translations;
+                }
 
-				[$missing, $translated, $notUsed] =
-					$this->matchTranslations2Locations($codeTransIds, $translations);
-			}
-		}
-		catch (RuntimeException $e)
-		{
-			$OutTxt = 'Error executing ' . __CLASS__ . '::' . __FUNCTION__ . ': "' . '<br>';
-			$OutTxt .= 'Error: "' . $e->getMessage() . '"' . '<br>';
+                [$missing, $translated, $notUsed] =
+                    $this->matchTranslations2Locations($codeTransIds, $translations);
+            }
+        } catch (RuntimeException $e) {
+            $OutTxt = 'Error executing ' . __CLASS__ . '::' . __FUNCTION__ . ': "' . '<br>';
+            $OutTxt .= 'Error: "' . $e->getMessage() . '"' . '<br>';
 
-			$app = Factory::getApplication();
-			$app->enqueueMessage($OutTxt, 'error');
-		}
+            $app = Factory::getApplication();
+            $app->enqueueMessage($OutTxt, 'error');
+        }
 
-		return [$missing, $translated, $notUsed];
-	}
+        return [$missing, $translated, $notUsed];
+    }
 
-	/**
-	 * seperateByTransIds
-	 *
-	 * Joke: sort like Cinderella put the good ones in the pot, the bad ones in the crop
-	 *
-	 * Each input name is sorted into one of three types
-	 *  * missing:    transId item is not defined in lang file
-	 *  * translated: transId item has a translation item matching in lang file
-	 *  * notUsed:    not used translations in lang file
-	 *
-	 * @param $codeTransIds
-	 *
-	 *
-	 * @since version
-	 */
-	//public function separateByTransIds ($codeTransIds , $translations) {
-	/**
-	 * @param $codeTransIds
-	 * @param $translations
-	 *
-	 * @return array[]
-	 *
-	 * @throws \Exception
-	 * @since version
-	 */
-	public function matchTranslations2Locations($codeTransIds, $translations)
-	{
+    /**
+     * seperateByTransIds
+     *
+     * Joke: sort like Cinderella put the good ones in the pot, the bad ones in the crop
+     *
+     * Each input name is sorted into one of three types
+     *  * missing:    transId item is not defined in lang file
+     *  * translated: transId item has a translation item matching in lang file
+     *  * notUsed:    not used translations in lang file
+     *
+     * @param $codeTransIds
+     *
+     *
+     * @since version
+     */
+    //public function separateByTransIds ($codeTransIds , $translations) {
+    /**
+     * @param $codeTransIds
+     * @param $translations
+     *
+     * @return array[]
+     *
+     * @throws Exception
+     * @since version
+     */
+    public function matchTranslations2Locations($codeTransIds, $translations)
+    {
+        $missing    = [];
+        $translated = [];
+        $notUsed    = [];
 
-		$missing    = [];
-		$translated = [];
-		$notUsed    = [];
+        try {
+            //--- missing and translated ------------------------------------
 
-		try
-		{
+            foreach ($codeTransIds as $codeTransId) {
+                // ID is missing
+                if (empty ($translations[$codeTransId])) {
+                    $missing[] = $codeTransId;
+                } else {
+                    // ID is translated
+                    $translated[] = $codeTransId;
+                }
+            }
 
-			//--- missing and translated ------------------------------------
+            //--- not used in code ------------------------------------
 
-			foreach ($codeTransIds as $codeTransId)
-			{
+            foreach ($this->getItemNames($translations) as $TransId) {
+                // ID is not used
+                if (!in_array($TransId, $translated)) {
+                    $notUsed[] = $TransId;
+                }
+            }
+        } catch (RuntimeException $e) {
+            $OutTxt = 'Error executing ' . __CLASS__ . '::' . __FUNCTION__ . ': "' . '<br>';
+            $OutTxt .= 'Error: "' . $e->getMessage() . '"' . '<br>';
 
-				// ID is missing
-				if (empty ($translations[$codeTransId]))
-				{
-					$missing[] = $codeTransId;
-				}
-				else
-				{
-					// ID is translated
-					$translated[] = $codeTransId;
-				}
-			}
+            $app = Factory::getApplication();
+            $app->enqueueMessage($OutTxt, 'error');
+        }
 
-			//--- not used in code ------------------------------------
+        // sort once
+        sort($missing);
+        sort($translated);
+        sort($notUsed);
 
-			foreach ($this->getItemNames($translations) as $TransId)
-			{
-				// ID is not used
-				if (!in_array($TransId, $translated))
-				{
-					$notUsed[] = $TransId;
-				}
-			}
+        return [$missing, $translated, $notUsed];
+    }
 
-		}
-		catch (RuntimeException $e)
-		{
-			$OutTxt = 'Error executing ' . __CLASS__ . '::' . __FUNCTION__ . ': "' . '<br>';
-			$OutTxt .= 'Error: "' . $e->getMessage() . '"' . '<br>';
+    /**
+     * @param $translations
+     *
+     * @return array
+     *
+     * @throws Exception
+     * @since version
+     */
+    public function getItemNames($translations)
+    {
+        $names = [];
 
-			$app = Factory::getApplication();
-			$app->enqueueMessage($OutTxt, 'error');
-		}
+        try {
+            // ToDo: cache it for second use, reset cache after assign /read
+            foreach ($translations as $transId => $translation) {
+                $names [] = $transId;
+            }
+        } catch (RuntimeException $e) {
+            $OutTxt = 'Error executing getItemNames: "' . '<br>';
+            $OutTxt .= 'Error: "' . $e->getMessage() . '"' . '<br>';
 
-		// sort once
-		sort($missing);
-		sort($translated);
-		sort($notUsed);
+            $app = Factory::getApplication();
+            $app->enqueueMessage($OutTxt, 'error');
+        }
 
-		return [$missing, $translated, $notUsed];
-	}
+        return $names;
+    }
 
-	/**
-	 * @param $translations
-	 *
-	 * @return array
-	 *
-	 * @throws \Exception
-	 * @since version
-	 */
-	public function getItemNames($translations)
-	{
-		$names = [];
+    /**
+     *
+     * @return array lines
+     *
+     * @since version
+     */
+    public function __toText()
+    {
+        $lines = parent::__toText();
 
-		try
-		{
-			// ToDo: cache it for second use, reset cache after assign /read
-			foreach ($translations as $transId => $translation)
-			{
-				$names [] = $transId;
-			}
+        $lines[] = '--- langFiles ---------------------------';
 
-		}
-		catch (RuntimeException $e)
-		{
-			$OutTxt = 'Error executing getItemNames: "' . '<br>';
-			$OutTxt .= 'Error: "' . $e->getMessage() . '"' . '<br>';
+        foreach ($this->langFilesData as $langId => $langFiles) {
+            $lines[] = '    [' . $langId . ']';
 
-			$app = Factory::getApplication();
-			$app->enqueueMessage($OutTxt, 'error');
-		}
+            foreach ($langFiles as $langFile) {
+                // $lines[] = '        ' . $langFile;
 
-		return $names;
-	}
-
-	/**
-	 *
-	 * @return array lines
-	 *
-	 * @since version
-	 */
-	public function __toText()
-	{
-
-		$lines = parent::__toText();
-
-		$lines[] = '--- langFiles ---------------------------';
-
-		foreach ($this->langFilesData as $langId => $langFiles)
-		{
-			$lines[] = '    [' . $langId . ']';
-
-			foreach ($langFiles as $langFile)
-			{
-				// $lines[] = '        ' . $langFile;
-
-				$langFileDataText = $langFile->__toText();
-				array_push($lines, ...$langFileDataText);
-
-			}
-		}
+                $langFileDataText = $langFile->__toText();
+                array_push($lines, ...$langFileDataText);
+            }
+        }
 
 //		$lines[] = '------------------------------------------------';
 
-		return $lines;
-	}
-
-
+        return $lines;
+    }
 
 } // class

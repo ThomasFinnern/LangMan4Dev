@@ -11,96 +11,113 @@ use Finnern\Component\Lang4dev\Administrator\Helper\langFile;
 
 function renderProjectSelection($form)
 {
-	?>
+    ?>
 	<br>
 	<div class="d-flex flex-row py-0 my-0 justify-content-between">
 		<div class="mx-2 py-0 flex-fill ">
-			<?php echo $form->renderField('selectProject'); ?>
+            <?php
+            echo $form->renderField('selectProject'); ?>
 		</div>
 
 		<div class="mx-2 py-0 px-2 flex-fill ">
-			<?php echo $form->renderField('selectSubproject'); ?>
+            <?php
+            echo $form->renderField('selectSubproject'); ?>
 		</div>
 
 	</div>
-	<?php
+    <?php
 
-	return;
+    return;
 }
-
 
 function renderLangIdTexts($form)
 {
-	// mx-2 py-0, mx-2 py-0 px-2
-	?>
+    // mx-2 py-0, mx-2 py-0 px-2
+    ?>
 	<br>
 	<div class="d-flex flex-row py-0 my-0 justify-content-between">
 		<div class="mx-2 py-0 flex-fill ">
-			<?php echo $form->renderField('selectSourceLangId'); ?>
+            <?php
+            echo $form->renderField('selectSourceLangId'); ?>
 		</div>
 
 		<div class="mx-2 py-0 flex-fill ">
-			<?php echo $form->renderField('selectTargetLangId'); ?>
+            <?php
+            echo $form->renderField('selectTargetLangId'); ?>
 		</div>
 
 	</div>
-	<?php
+    <?php
 
-	return;
+    return;
 }
 
 function renderCheckAll($form)
 {
-	?>
+    ?>
 	<div class="d-flex flex-row">
 		<div class="mx-2 p-2">
 
 			<input class="form-check-input" id="checkall-toggle" type="checkbox" name="checkall-toggle" value=""
-			       title="<?php echo Text::_('JGLOBAL_CHECK_ALL'); ?>" onclick="Joomla.checkAll(this)">
-			<label for="checkall-toggle"><?php echo Text::_('COM_LANG4DEV_CHECK_ALL_LANG_FILE_EDITS'); ?></label>
+			       title="<?php
+                   echo Text::_('JGLOBAL_CHECK_ALL'); ?>" onclick="Joomla.checkAll(this)">
+			<label for="checkall-toggle"><?php
+                echo Text::_('COM_LANG4DEV_CHECK_ALL_LANG_FILE_EDITS'); ?></label>
 			<br>
 
 		</div>
 	</div>
-	<?php
+    <?php
 
-	return;
+    return;
 }
 
 function renderCheckLangEdited($subPrjActive, $idx, $checked = false)
 {
-	?>
+    ?>
 	<div class="d-flex flex-row">
 		<div class="py-2">
 
-			<?php // public static function id($rowNum, $recId, $checkedOut = false, $name = 'cid', $stub = 'cb', $title = '', $formId = null)
-			?>
+            <?php
+            // public static function id($rowNum, $recId, $checkedOut = false, $name = 'cid', $stub = 'cb', $title = '', $formId = null)
+            ?>
 
-			<?php echo HTMLHelper::_('grid.id', $idx, $subPrjActive, false, 'cid', 'cb', $subPrjActive); ?>
+            <?php
+            echo HTMLHelper::_('grid.id', $idx, $subPrjActive, false, 'cid', 'cb', $subPrjActive); ?>
 
 			<!--input class="form-check-input cache-entry" type="checkbox"
-		       id="cb<?php echo $idx; ?>" name="cid[]" value="<?php echo $subPrjActive; ?>"-->
-			<label class="form-check-label" for="cb<?php echo $idx; ?>">
-				<?php echo Text::_('COM_LANG4DEV_CHECK_FOR_SAVE_OF_EDIT_FILE'); ?>
+		       id="cb<?php
+            echo $idx; ?>" name="cid[]" value="<?php
+            echo $subPrjActive; ?>"-->
+			<label class="form-check-label" for="cb<?php
+            echo $idx; ?>">
+                <?php
+                echo Text::_('COM_LANG4DEV_CHECK_FOR_SAVE_OF_EDIT_FILE'); ?>
 			</label>
 
 		</div>
 	</div>
-	<?php
+    <?php
 
-	return;
+    return;
 }
 
-function renderLangFileEditText($langId, $langFile, $subPrjPath,
-	$isMain = false, $isEditAndSaveMainTranslationFile = false, $editIdx = 0,)
-{
-
-	?>
+function renderLangFileEditText(
+    $langId,
+    $langFile,
+    $subPrjPath,
+    $isMain = false,
+    $isEditAndSaveMainTranslationFile = false,
+    $editIdx = 0,
+) {
+    ?>
 	<div class="card bg-light border">
 		<h3 class="card-header bg-white">
-			<?php echo $langId; ?> &nbsp;
+            <?php
+            echo $langId; ?> &nbsp;
 			<div class="fs-4 fw-normal">
-				<?php echo $subPrjPath; ?>
+                <?php
+                echo $subPrjPath; ?>
 			</div>
 		</h3>
 
@@ -108,185 +125,190 @@ function renderLangFileEditText($langId, $langFile, $subPrjPath,
 
 			<div class="card-text">
 
-				<?php
-				// ToDo: enable edit of main language by config
-				if (!$isMain || $isEditAndSaveMainTranslationFile)
-				{
-					$subPrjActive = $langId;
-					renderCheckLangEdited($subPrjActive, $editIdx, $checked = false);
-				}
+                <?php
+                // ToDo: enable edit of main language by config
+                if (!$isMain || $isEditAndSaveMainTranslationFile) {
+                    $subPrjActive = $langId;
+                    renderCheckLangEdited($subPrjActive, $editIdx, $checked = false);
+                }
 
-				$linesArray = $langFile->translationLinesArray();
-				$langText   = '';
+                $linesArray = $langFile->translationLinesArray();
+                $langText   = '';
 
-				// ksort($linesArray);
-				foreach ($linesArray as $line)
-				{
+                // ksort($linesArray);
+                foreach ($linesArray as $line) {
+                    // ToDo: use implode
+                    $langText .= $line . '&#10;';
+                    //$langText .= $line . '\n';
+                }
 
-					// ToDo: use implode
-					$langText .= $line . '&#10;';
-					//$langText .= $line . '\n';
-				}
+                if ($isMain) {
+                    //--- source (edit) text -------------------------------------------
 
-				if ($isMain)
-				{
-					//--- source (edit) text -------------------------------------------
+                    // readonly if not deselected on config
+                    $readonly = $isEditAndSaveMainTranslationFile ? '' : "readonly";
+                    ?>
 
-					// readonly if not deselected on config
-					$readonly = $isEditAndSaveMainTranslationFile ? '' : "readonly";
-					?>
-
-					<textarea id="<?php echo $langId . '_' . $editIdx . '_main'; ?>"
+					<textarea id="<?php
+                    echo $langId . '_' . $editIdx . '_main'; ?>"
 					          name="langsEdited[]" rows="12" class="bg-primary  text-white textarea_main"
 					          style="overflow-x: scroll; min-width: 100%; overflow-wrap: normal; "
 
-			                  <?php echo $readonly; ?>
-			        ><?php echo $langText; ?></textarea>
+			                  <?php
+                              echo $readonly; ?>
+			        ><?php
+                        echo $langText; ?></textarea>
 
-					<?php if ($isEditAndSaveMainTranslationFile): ?>
-					<input type="text" name="langPathFileNames[]"
-					       value="<?php echo $langFile->getLangPathFileName(); ?>" hidden/>
-				<?php endif; ?>
+                    <?php
+                    if ($isEditAndSaveMainTranslationFile): ?>
+						<input type="text" name="langPathFileNames[]"
+						       value="<?php
+                               echo $langFile->getLangPathFileName(); ?>" hidden/>
+                    <?php
+                    endif; ?>
 
-					<?php
-
-				}
-				else
-				{
-
-					//--- target edit text -------------------------------------------
-					?>
-					<textarea id="<?php echo $langId . '_' . $editIdx . '_target'; ?>"
+                    <?php
+                } else {
+                    //--- target edit text -------------------------------------------
+                    ?>
+					<textarea id="<?php
+                    echo $langId . '_' . $editIdx . '_target'; ?>"
 					          name="langsText[]" rows="12" class="bg-white text-dark textarea_target"
 					          style="overflow-x: scroll; min-width: 100%; "
-					><?php echo $langText; ?></textarea>
+					><?php
+                        echo $langText; ?></textarea>
 					<input type="text" name="langPathFileNames[]"
-					       value="<?php echo $langFile->getLangPathFileName(); ?>" hidden/>
+					       value="<?php
+                           echo $langFile->getLangPathFileName(); ?>" hidden/>
 
-					<?php
-				}
-				?>
+                    <?php
+                }
+                ?>
 			</div>
 		</div>
 	</div>
 
 
-	<?php
+    <?php
 
-	return;
+    return;
 }
 
 function renderMainfileList($mainLangFiles = [])
 {
-	foreach ($mainLangFiles as $mainLangFile)
-	{
-		$langPathFileName = str_replace('\\', '/', $mainLangFile->getlangPathFileName());
-		echo '<input type="hidden" name="mainLangFiles[]" value="'. $langPathFileName . '">';
-	}
+    foreach ($mainLangFiles as $mainLangFile) {
+        $langPathFileName = str_replace('\\', '/', $mainLangFile->getlangPathFileName());
+        echo '<input type="hidden" name="mainLangFiles[]" value="' . $langPathFileName . '">';
+    }
 }
 
-
-
-
 ?>
-<form action="<?php echo Route::_('index.php?option=com_lang4dev&view=translate'); ?>" method="post" name="adminForm"
+<form action="<?php
+echo Route::_('index.php?option=com_lang4dev&view=translate'); ?>" method="post" name="adminForm"
       id="item-form" class="form-validate">
 
-	<?php renderProjectSelection($this->form); ?>
+    <?php
+    renderProjectSelection($this->form); ?>
 
-	<?php renderLangIdTexts($this->form); ?>
+    <?php
+    renderLangIdTexts($this->form); ?>
 
-	<?php renderCheckAll($this->form); ?>
+    <?php
+    renderCheckAll($this->form); ?>
 
-	<?php
+    <?php
 
-	$subProjects = $this->project->subProjects;
+    $subProjects = $this->project->subProjects;
 
-	foreach ($subProjects as $subProject)
-	{
+    foreach ($subProjects as $subProject) {
+        $title = $subProject->prjId . ': ' . $subProject->getPrjTypeText();
+        // style="width: 18rem; bg-light .bg-transparent bg-secondary text-white
 
-		$title = $subProject->prjId . ': ' . $subProject->getPrjTypeText();
-		// style="width: 18rem; bg-light .bg-transparent bg-secondary text-white
-
-		?>
+        ?>
 		<div class="card ">
 			<h2 class="card-header " style="background-color: #ced4da;">
-				<?php echo $title; ?>
+                <?php
+                echo $title; ?>
 			</h2>
 
 			<div class="card-body">
-				<?php
+                <?php
 
-				$editIdx = 0;
+                $editIdx = 0;
 
-				//--- all main files ----------------------------------
+                //--- all main files ----------------------------------
 
-				$mainLangFiles = $subProject->getLangFilesData($this->mainLangId);
+                $mainLangFiles = $subProject->getLangFilesData($this->mainLangId);
 
-				foreach ($mainLangFiles as $mainLangFile)
-				{
-					$subPrjPath = $mainLangFile->getlangSubPrjPathFileName();
+                foreach ($mainLangFiles as $mainLangFile) {
+                    $subPrjPath = $mainLangFile->getlangSubPrjPathFileName();
 
-					//--- render main file first -------------------------------------------------------
+                    //--- render main file first -------------------------------------------------------
 
-					renderLangFileEditText($this->mainLangId, $mainLangFile, $subPrjPath,
-						true, $this->isEditAndSaveMainTranslationFile, $editIdx);
-					$editIdx++;
+                    renderLangFileEditText(
+                        $this->mainLangId,
+                        $mainLangFile,
+                        $subPrjPath,
+                        true,
+                        $this->isEditAndSaveMainTranslationFile,
+                        $editIdx
+                    );
+                    $editIdx++;
 
-					//--- all matching translation lang files ----------------------------------
+                    //--- all matching translation lang files ----------------------------------
 
-					$mainLangFileName = basename($subPrjPath);
+                    $mainLangFileName = basename($subPrjPath);
 
-					foreach ($subProject->getLangIds() as $langId)
-					{
-						// main is already rendered
-						if ($langId != $this->mainLangId)
-						{
-							// matches translation or show all
-							if ($langId == $this->transLangId || $this->isShowTranslationOfAllIds)
-							{
-								$transLangFiles = $subProject->getLangFilesData($langId);
+                    foreach ($subProject->getLangIds() as $langId) {
+                        // main is already rendered
+                        if ($langId != $this->mainLangId) {
+                            // matches translation or show all
+                            if ($langId == $this->transLangId || $this->isShowTranslationOfAllIds) {
+                                $transLangFiles = $subProject->getLangFilesData($langId);
 
-								//--- find matching name with actual lang ID -------------------
+                                //--- find matching name with actual lang ID -------------------
 
-								foreach ($transLangFiles as $transLangFile)
-								{
-									$transLangFileName = basename($transLangFile->getLangPathFileName());
+                                foreach ($transLangFiles as $transLangFile) {
+                                    $transLangFileName = basename($transLangFile->getLangPathFileName());
 
-									if ($transLangFileName == $mainLangFileName)
-									{
-										$subPrjPath = $transLangFile->getlangSubPrjPathFileName();
+                                    if ($transLangFileName == $mainLangFileName) {
+                                        $subPrjPath = $transLangFile->getlangSubPrjPathFileName();
 
-										//--- render translation files -------------------------------------------------------
+                                        //--- render translation files -------------------------------------------------------
 
-										renderLangFileEditText($langId, $transLangFile, $subPrjPath,
-											false, $this->isEditAndSaveMainTranslationFile, $editIdx);
-										$editIdx++;
+                                        renderLangFileEditText(
+                                            $langId,
+                                            $transLangFile,
+                                            $subPrjPath,
+                                            false,
+                                            $this->isEditAndSaveMainTranslationFile,
+                                            $editIdx
+                                        );
+                                        $editIdx++;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
 
-									}
-								}
-							}
-						}
-					}
-				}
+                renderMainfileList($mainLangFiles);
 
-				renderMainfileList ($mainLangFiles);
-
-				?>
+                ?>
 			</div>
 
 		</div>
-		<?php
+        <?php
+    }
 
-	}
-
-	?>
+    ?>
 
 
 	<hr>
 
 	<input type="hidden" name="task" value=""/>
-	<?php echo HTMLHelper::_('form.token'); ?>
+    <?php
+    echo HTMLHelper::_('form.token'); ?>
 </form>
 
 

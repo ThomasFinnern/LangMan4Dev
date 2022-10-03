@@ -12,6 +12,7 @@ namespace Finnern\Component\Lang4dev\Administrator\Helper;
 
 use Joomla\CMS\Component\ComponentHelper;
 use Joomla\CMS\Factory;
+
 use function defined;
 
 // no direct access
@@ -33,139 +34,132 @@ defined('_JEXEC') or die;
  */
 class sessionTransLangIds
 {
-	protected $mainLangId = '??-??';
-	protected $transLangId = '??-??';
+    protected $mainLangId = '??-??';
+    protected $transLangId = '??-??';
 
-	/**
-	 *
-	 *
-	 * @since version
-	 */
-	public function clear()
-	{
+    /**
+     *
+     *
+     * @since version
+     */
+    public function clear()
+    {
+        $mainLangId  = '??-??';
+        $transLangId = '??-??';
 
-		$mainLangId  = '??-??';
-		$transLangId = '??-??';
+        return;
+    }
 
-		return;
-	}
+    /**
+     * setIds
+     *
+     * @return
+     * @since __BUMP_VERSION__
+     */
+    public function setIds($mainLangId = '??-??', $transLangId = '??-??')
+    {
+        $this->mainLangId  = $mainLangId;
+        $this->transLangId = $transLangId;
 
-	/**
-	 * setIds
-	 *
-	 * @return
-	 * @since __BUMP_VERSION__
-	 */
-	public function setIds($mainLangId = '??-??', $transLangId = '??-??')
-	{
+        $session = Factory::getSession();
+        $data    = $session->set('_lang4dev.mainLangId', $mainLangId);
+        $data    = $session->set('_lang4dev.transLangId', $transLangId);
 
-		$this->mainLangId  = $mainLangId;
-		$this->transLangId = $transLangId;
+        return;
+    }
 
-		$session = Factory::getSession();
-		$data    = $session->set('_lang4dev.mainLangId', $mainLangId);
-		$data    = $session->set('_lang4dev.transLangId', $transLangId);
+    /**
+     * @param $mainLangId
+     *
+     *
+     * @since version
+     */
+    public function setMainIds($mainLangId = '??-??')
+    {
+        $this->mainLangId = $mainLangId;
 
-		return;
-	}
+        $session = Factory::getSession();
+        $data    = $session->set('_lang4dev.mainLangId', $mainLangId);
 
-	/**
-	 * @param $mainLangId
-	 *
-	 *
-	 * @since version
-	 */
-	public function setMainIds($mainLangId = '??-??')
-	{
-		$this->mainLangId = $mainLangId;
+        return;
+    }
 
-		$session = Factory::getSession();
-		$data    = $session->set('_lang4dev.mainLangId', $mainLangId);
+    /**
+     * @param $transLangId
+     *
+     *
+     * @since version
+     */
+    public function setTransIds($transLangId = '??-??')
+    {
+        $this->transLangId = $transLangId;
 
-		return;
-	}
+        $session = Factory::getSession();
+        $data    = $session->set('_lang4dev.transLangId', $transLangId);
 
-	/**
-	 * @param $transLangId
-	 *
-	 *
-	 * @since version
-	 */
-	public function setTransIds($transLangId = '??-??')
-	{
-		$this->transLangId = $transLangId;
+        return;
+    }
 
-		$session = Factory::getSession();
-		$data    = $session->set('_lang4dev.transLangId', $transLangId);
+    /**
+     *
+     *
+     * @since version
+     */
+    public function resetIds()
+    {
+        // default values
+        //$this->setIds();
 
-		return;
-	}
+        $this->clear();
 
-	/**
-	 *
-	 *
-	 * @since version
-	 */
-	public function resetIds()
-	{
-		// default values
-		//$this->setIds();
+        $session = Factory::getSession();
+        $session->clear('_lang4dev.mainLangId');
+        $session->clear('_lang4dev.transLangId');
 
-		$this->clear();
+        return;
+    }
 
-		$session = Factory::getSession();
-		$session->clear('_lang4dev.mainLangId');
-		$session->clear('_lang4dev.transLangId');
+    /**
+     * getIds
+     *
+     * @return string [] project id, subproject id
+     * @since __BUMP_VERSION__
+     */
+    public function getIds()
+    {
+        //--- already set in class ? ---------------------
 
-		return;
-	}
+        $mainLangId  = $this->mainLangId;
+        $transLangId = $this->transLangId;
 
-	/**
-	 * getIds
-	 *
-	 * @return string [] project id, subproject id
-	 * @since __BUMP_VERSION__
-	 */
-	public function getIds()
-	{
-		//--- already set in class ? ---------------------
+        // Is not set
+        if ($mainLangId == '??-??') {
+            //--- try session if set ---------------------------------
 
-		$mainLangId  = $this->mainLangId;
-		$transLangId = $this->transLangId;
+            $session    = Factory::getSession();
+            $mainLangId = $session->get('_lang4dev.mainLangId', null);
+            if ($mainLangId != null) {
+                $transLangId = $session->get('_lang4dev.transLangId', '0');
+            }
 
-		// Is not set
-		if ($mainLangId == '??-??')
-		{
-			//--- try session if set ---------------------------------
+            // Is not set (in control) => use config
+            if (empty($mainLangId)) {
+                //--- retrieve default from config ---------------------------------
 
-			$session    = Factory::getSession();
-			$mainLangId = $session->get('_lang4dev.mainLangId', null);
-			if ($mainLangId != null)
-			{
-				$transLangId = $session->get('_lang4dev.transLangId', '0');
-			}
+                $l4dConfig = ComponentHelper::getComponent('com_lang4dev')->getParams();
 
-			// Is not set (in control) => use config
-			if (empty($mainLangId))
-			{
-				//--- retrieve default from config ---------------------------------
+                $mainLangId  = $l4dConfig->get('mainLangId');
+                $transLangId = $l4dConfig->get('transLangId');
+            }
 
-				$l4dConfig = ComponentHelper::getComponent('com_lang4dev')->getParams();
+            // Not in config either
+            if (empty($mainLangId)) {
+                $mainLangId  = "en-GB";
+                $transLangId = "de-DE";
+            }
+        }
 
-				$mainLangId  = $l4dConfig->get('mainLangId');
-				$transLangId = $l4dConfig->get('transLangId');
-			}
-
-			// Not in config either
-			if (empty($mainLangId))
-			{
-				$mainLangId  = "en-GB";
-				$transLangId = "de-DE";
-			}
-
-		}
-
-		return [$mainLangId, $transLangId];
-	}
+        return [$mainLangId, $transLangId];
+    }
 
 }

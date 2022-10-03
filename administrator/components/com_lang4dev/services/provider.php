@@ -33,38 +33,38 @@ use Finnern\Component\Lang4dev\Administrator\Helper\AssociationsHelper;
  * @since  __BUMP_VERSION__
  */
 return new class implements ServiceProviderInterface {
-	/**
-	 * Registers the service provider with a DI container.
-	 *
-	 * @param   Container  $container  The DI container.
-	 *
-	 * @return  void
-	 *
-	 * @since   __BUMP_VERSION__
-	 */
-	public function register(Container $container)
-	{
+    /**
+     * Registers the service provider with a DI container.
+     *
+     * @param   Container  $container  The DI container.
+     *
+     * @return  void
+     *
+     * @since   __BUMP_VERSION__
+     */
+    public function register(Container $container)
+    {
 //		$container->set(AssociationExtensionInterface::class, new AssociationsHelper);
 
 //		$container->registerServiceProvider(new CategoryFactory('\\Finnern\\Component\\Lang4dev'));
-		$container->registerServiceProvider(new MVCFactory('\\Finnern\\Component\\Lang4dev'));
-		$container->registerServiceProvider(new ComponentDispatcherFactory('\\Finnern\\Component\\Lang4dev'));
+        $container->registerServiceProvider(new MVCFactory('\\Finnern\\Component\\Lang4dev'));
+        $container->registerServiceProvider(new ComponentDispatcherFactory('\\Finnern\\Component\\Lang4dev'));
 //		$container->registerServiceProvider(new RouterFactory('\\Finnern\\Component\\Lang4dev'));
 
-		$container->set(
-			ComponentInterface::class,
-			function (Container $container) {
-				$component = new Lang4devComponent($container->get(ComponentDispatcherFactoryInterface::class));
+        $container->set(
+            ComponentInterface::class,
+            function (Container $container) {
+                $component = new Lang4devComponent($container->get(ComponentDispatcherFactoryInterface::class));
 
-				$component->setRegistry($container->get(Registry::class));
+                $component->setRegistry($container->get(Registry::class));
 
-				$component->setMVCFactory($container->get(MVCFactoryInterface::class));
+                $component->setMVCFactory($container->get(MVCFactoryInterface::class));
 //				$component->setCategoryFactory($container->get(CategoryFactoryInterface::class));
 //				$component->setAssociationExtension($container->get(AssociationExtensionInterface::class));
 //				$component->setRouterFactory($container->get(RouterFactoryInterface::class));
 
-				return $component;
-			}
-		);
-	}
+                return $component;
+            }
+        );
+    }
 };

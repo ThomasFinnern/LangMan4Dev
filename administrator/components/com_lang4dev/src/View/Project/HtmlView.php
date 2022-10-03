@@ -26,6 +26,7 @@ use Joomla\CMS\Toolbar\ToolbarHelper;
 
 //use Finnern\Component\Lang4dev\Administrator\Helper\Lang4devHelper;
 use Joomla\Component\Content\Administrator\Extension\ContentComponent;
+
 use function defined;
 
 /**
@@ -35,167 +36,166 @@ use function defined;
  */
 class HtmlView extends BaseHtmlView
 {
-	/**
-	 * The \Form object
-	 *
-	 * @var  Form
-	 */
-	protected $form;
+    /**
+     * The \Form object
+     *
+     * @var  Form
+     */
+    protected $form;
 
-	/**
-	 * An array of items
-	 *
-	 * @var  array
-	 */
-	protected $items;
+    /**
+     * An array of items
+     *
+     * @var  array
+     */
+    protected $items;
 
-	/**
-	 * The model state
-	 *
-	 * @var  JObject
-	 */
-	protected $state;
+    /**
+     * The model state
+     *
+     * @var  JObject
+     */
+    protected $state;
 
-	/**
-	 * Flag if an association exists
-	 *
-	 * @var  boolean
-	 */
-	protected $assoc;
+    /**
+     * Flag if an association exists
+     *
+     * @var  boolean
+     */
+    protected $assoc;
 
-	/**
-	 * The actions the user is authorised to perform
-	 *
-	 * @var  JObject
-	 */
-	protected $canDo;
+    /**
+     * The actions the user is authorised to perform
+     *
+     * @var  JObject
+     */
+    protected $canDo;
 
-	/**
-	 * Is there a content type associated with this gallery alias
-	 *
-	 * @var    boolean
-	 * @since __BUMP_VERSION__
-	 */
-	protected $checkTags = false;
+    /**
+     * Is there a content type associated with this gallery alias
+     *
+     * @var    boolean
+     * @since __BUMP_VERSION__
+     */
+    protected $checkTags = false;
 
-	protected $isDebugBackend;
-	protected $isDevelop;
+    protected $isDebugBackend;
+    protected $isDevelop;
 
-	/**
-	 * Method to display the view.
-	 *
-	 * @param   string  $tpl  A template file to load. [optional]
-	 *
-	 * @return  mixed  A string if successful, otherwise an \Exception object.
-	 *
-	 * @since __BUMP_VERSION__
-	 */
-	public function display($tpl = null)
-	{
-		//--- config --------------------------------------------------------------------
+    /**
+     * Method to display the view.
+     *
+     * @param   string  $tpl  A template file to load. [optional]
+     *
+     * @return  mixed  A string if successful, otherwise an \Exception object.
+     *
+     * @since __BUMP_VERSION__
+     */
+    public function display($tpl = null)
+    {
+        //--- config --------------------------------------------------------------------
 
-		$l4dConfig = ComponentHelper::getComponent('com_lang4dev')->getParams();
-		//$compo_params = ComponentHelper::getComponent('com_lang4dev')->getParams();
-		$this->isDebugBackend = $l4dConfig->get('isDebugBackend');
-		$this->isDevelop      = $l4dConfig->get('isDevelop');
+        $l4dConfig = ComponentHelper::getComponent('com_lang4dev')->getParams();
+        //$compo_params = ComponentHelper::getComponent('com_lang4dev')->getParams();
+        $this->isDebugBackend = $l4dConfig->get('isDebugBackend');
+        $this->isDevelop      = $l4dConfig->get('isDevelop');
 
-		//--- Form --------------------------------------------------------------------
+        //--- Form --------------------------------------------------------------------
 
-		$this->form  = $this->get('Form');
-		$this->item  = $this->get('Item');
-		$this->state = $this->get('State');
+        $this->form  = $this->get('Form');
+        $this->item  = $this->get('Item');
+        $this->state = $this->get('State');
 
-		//$section = $this->state->get('gallery.section') ? $this->state->get('gallery.section') . '.' : '';
-		//$this->canDo = ContentHelper::getActions($this->state->get('gallery.component'), $section . 'gallery', $this->item->id);
-		$this->canDo = ContentHelper::getActions('com_lang4dev', 'project', $this->item->id);
+        //$section = $this->state->get('gallery.section') ? $this->state->get('gallery.section') . '.' : '';
+        //$this->canDo = ContentHelper::getActions($this->state->get('gallery.component'), $section . 'gallery', $this->item->id);
+        $this->canDo = ContentHelper::getActions('com_lang4dev', 'project', $this->item->id);
 //        $this->assoc = $this->get('Assoc');
 
-		// Check for errors.
-		if (count($errors = $this->get('Errors')))
-		{
-			throw new GenericDataException(implode("\n", $errors), 500);
-		}
+        // Check for errors.
+        if (count($errors = $this->get('Errors'))) {
+            throw new GenericDataException(implode("\n", $errors), 500);
+        }
 
-		// different toolbar on different layouts
-		$Layout = Factory::getApplication()->input->get('layout');
-		$this->addToolbar($Layout);
+        // different toolbar on different layouts
+        $Layout = Factory::getApplication()->input->get('layout');
+        $this->addToolbar($Layout);
 
-		Factory::getApplication()->input->set('hidemainmenu', true);
+        Factory::getApplication()->input->set('hidemainmenu', true);
 
-		return parent::display($tpl);
-	}
+        return parent::display($tpl);
+    }
 
-	/**
-	 * Add the page title and toolbar.
-	 *
-	 * @return  void
-	 *
-	 * @since __BUMP_VERSION__
-	 */
-	protected function addToolbar($Layout)
-	{
-		//$canDo = \Joomla\Component\Content\Administrator\Helper\ContentHelper::getActions('com_content', 'category', $this->state->get('filter.category_id'));
-		$canDo = true;
-		$user  = Factory::getUser();
+    /**
+     * Add the page title and toolbar.
+     *
+     * @return  void
+     *
+     * @since __BUMP_VERSION__
+     */
+    protected function addToolbar($Layout)
+    {
+        //$canDo = \Joomla\Component\Content\Administrator\Helper\ContentHelper::getActions('com_content', 'category', $this->state->get('filter.category_id'));
+        $canDo = true;
+        $user  = Factory::getUser();
 
-		// Get the toolbar object instance
-		$toolbar = Toolbar::getInstance('toolbar');
+        // Get the toolbar object instance
+        $toolbar = Toolbar::getInstance('toolbar');
 
-		// on develop show open tasks if existing
-		if (!empty ($this->isDevelop))
-		{
-			echo '<span style="color:red">'
-				. '<b>Tasks:</b> <br>'
-				. '* description to each input parameter "_DESC"<br>'
-				. '* <br>'
-				. '* <br>'
+        // on develop show open tasks if existing
+        if (!empty ($this->isDevelop)) {
+            echo '<span style="color:red">'
+                . '<b>Tasks:</b> <br>'
+                . '* description to each input parameter "_DESC"<br>'
+                . '* <br>'
+                . '* <br>'
 //				. '* <br>'
 //				. '* <br>'
 //				. '* <br>'
 //				. '* <br>'
-				. '</span><br><br>';
-		}
+                . '</span><br><br>';
+        }
 
-		switch ($Layout)
-		{
-			case 'edit':
-			default:
-				ToolBarHelper::title(Text::_('COM_LANG4DEV_EDIT_PROJECT', 'project'));
+        switch ($Layout) {
+            case 'edit':
+            default:
+                ToolBarHelper::title(Text::_('COM_LANG4DEV_EDIT_PROJECT', 'project'));
 
-				//--- apply, save and close ... -----------------------------------
+                //--- apply, save and close ... -----------------------------------
 
-				ToolBarHelper::apply('project.apply');
-				ToolBarHelper::save('project.save');
+                ToolBarHelper::apply('project.apply');
+                ToolBarHelper::save('project.save');
 
-				$toolbar->delete('projects.delete')
-					->text('JTOOLBAR_DELETE')
-					->message('JGLOBAL_CONFIRM_DELETE')
-					->listCheck(true);
+                $toolbar->delete('projects.delete')
+                    ->text('JTOOLBAR_DELETE')
+                    ->message('JGLOBAL_CONFIRM_DELETE')
+                    ->listCheck(true);
 
-				//--- cancel  -----------------------------------
+                //--- cancel  -----------------------------------
 
-				//ToolBarHelper::save2new('image.save2new');
-				if (empty($this->item->id))
-				{
-					ToolBarHelper::cancel('project.cancel', 'JTOOLBAR_CLOSE');
-				}
-				else
-				{
-					ToolBarHelper::cancel('project.cancel', 'JTOOLBAR_CLOSE');
-				}
+                //ToolBarHelper::save2new('image.save2new');
+                if (empty($this->item->id)) {
+                    ToolBarHelper::cancel('project.cancel', 'JTOOLBAR_CLOSE');
+                } else {
+                    ToolBarHelper::cancel('project.cancel', 'JTOOLBAR_CLOSE');
+                }
 
-				ToolbarHelper::custom('project.detectDetails', 'icon-refresh', '', 'COM_LANG4DEV_DETECT_DETAILS', false);
+                ToolbarHelper::custom(
+                    'project.detectDetails',
+                    'icon-refresh',
+                    '',
+                    'COM_LANG4DEV_DETECT_DETAILS',
+                    false
+                );
 
-				// Options button.
-				if (Factory::getApplication()->getIdentity()->authorise('core.admin', 'com_lang4dev'))
-				{
-					$toolbar->preferences('com_lang4dev');
-				}
+                // Options button.
+                if (Factory::getApplication()->getIdentity()->authorise('core.admin', 'com_lang4dev')) {
+                    $toolbar->preferences('com_lang4dev');
+                }
 
-				break;
-		}  // switch
+                break;
+        }  // switch
 
-	}
+    }
 
 }
 

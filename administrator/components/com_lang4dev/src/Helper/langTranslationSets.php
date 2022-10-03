@@ -15,6 +15,7 @@
 namespace Finnern\Component\Lang4dev\Administrator\Helper;
 
 use Joomla\CMS\Factory;
+
 use function defined;
 
 // no direct access
@@ -32,30 +33,30 @@ defined('_JEXEC') or die;
  */
 class langTranslationSet
 {
-	/**
-	 * @var mixed|string
-	 * @since version
-	 */
-	public $name = '';
-	public $translationsets = [];
-	public $path = '';
+    /**
+     * @var mixed|string
+     * @since version
+     */
+    public $name = '';
+    public $translationsets = [];
+    public $path = '';
 
-	// ? expected languages for save
-	// public langIdsRequired;
+    // ? expected languages for save
+    // public langIdsRequired;
 
-	/**
-	 * @since __BUMP_VERSION__
-	 */
-	function __construct(
-		$name = '',
-		$lineNr = -1,
-		$colIdx = -1)
-	{
-		$this->name = $name;
+    /**
+     * @since __BUMP_VERSION__
+     */
+    function __construct(
+        $name = '',
+        $lineNr = -1,
+        $colIdx = -1
+    ) {
+        $this->name = $name;
 
-		$this->translationsets = [];
-	}
+        $this->translationsets = [];
+    }
 
-	// ToDo: get langIds ...
+    // ToDo: get langIds ...
 
 }

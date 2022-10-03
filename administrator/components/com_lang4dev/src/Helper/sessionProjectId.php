@@ -11,6 +11,7 @@
 namespace Finnern\Component\Lang4dev\Administrator\Helper;
 
 use Joomla\CMS\Factory;
+
 use function defined;
 
 // no direct access
@@ -26,117 +27,112 @@ defined('_JEXEC') or die;
  */
 class sessionProjectId
 {
-	protected $prjId = '-1';
-	protected $subPrjActive = '0';
+    protected $prjId = '-1';
+    protected $subPrjActive = '0';
 
-	/**
-	 *
-	 *
-	 * @since version
-	 */
-	public function clear()
-	{
+    /**
+     *
+     *
+     * @since version
+     */
+    public function clear()
+    {
+        $prjId        = '-1';
+        $subPrjActive = '0';
 
-		$prjId        = '-1';
-		$subPrjActive = '0';
+        return;
+    }
 
-		return;
-	}
+    /**
+     * setIds
+     *
+     * @return
+     * @since __BUMP_VERSION__
+     */
+    public function setIds($prjId = '-1', $subPrjActive = '0')
+    {
+        $this->prjId        = $prjId;
+        $this->subPrjActive = $subPrjActive;
 
-	/**
-	 * setIds
-	 *
-	 * @return
-	 * @since __BUMP_VERSION__
-	 */
-	public function setIds($prjId = '-1', $subPrjActive = '0')
-	{
+        $session = Factory::getSession();
+        $data    = $session->set('_lang4dev.prjId', $prjId);
+        $data    = $session->set('_lang4dev.subPrjActive', $subPrjActive);
 
-		$this->prjId        = $prjId;
-		$this->subPrjActive = $subPrjActive;
+        return;
+    }
 
-		$session = Factory::getSession();
-		$data    = $session->set('_lang4dev.prjId', $prjId);
-		$data    = $session->set('_lang4dev.subPrjActive', $subPrjActive);
+    /**
+     *
+     *
+     * @since version
+     */
+    public function resetIds()
+    {
+        // default values
+        //$this->setIds();
 
-		return;
-	}
+        $this->clear();
 
-	/**
-	 *
-	 *
-	 * @since version
-	 */
-	public function resetIds()
-	{
-		// default values
-		//$this->setIds();
+        $session = Factory::getSession();
+        $session->clear('_lang4dev.prjId');
+        $session->clear('_lang4dev.subPrjActive');
 
-		$this->clear();
+        return;
+    }
 
-		$session = Factory::getSession();
-		$session->clear('_lang4dev.prjId');
-		$session->clear('_lang4dev.subPrjActive');
+    /**
+     * getIds
+     *
+     * @return integer [] project id, subproject id
+     * @since __BUMP_VERSION__
+     */
+    public function getIds()
+    {
+        //--- already set in class ? ---------------------
 
-		return;
-	}
+        $prjId        = $this->prjId;
+        $subPrjActive = $this->subPrjActive;
 
-	/**
-	 * getIds
-	 *
-	 * @return integer [] project id, subproject id
-	 * @since __BUMP_VERSION__
-	 */
-	public function getIds()
-	{
-		//--- already set in class ? ---------------------
+        // Is not set
+        if ($prjId < 0) {
+            //--- try session if set ---------------------------------
 
-		$prjId        = $this->prjId;
-		$subPrjActive = $this->subPrjActive;
+            $session = Factory::getSession();
+            $prjId   = (int)$session->get('_lang4dev.prjId', '-1');
+            if ($prjId > 0) {
+                $subPrjActive = (int)$session->get('_lang4dev.subPrjActive', '0');
+            }
 
-		// Is not set
-		if ($prjId < 0)
-		{
-			//--- try session if set ---------------------------------
+            // Is not set (in control) => use latest
+            if ($prjId <= 0) {
+                //--- retrieve last created from DB ---------------------------------
 
-			$session = Factory::getSession();
-			$prjId   = (int) $session->get('_lang4dev.prjId', '-1');
-			if ($prjId > 0)
-			{
-				$subPrjActive = (int) $session->get('_lang4dev.subPrjActive', '0');
-			}
+                $prjId        = $this->highestProjectId_DB();
+                $subPrjActive = 0; // view all
+            }
+        }
 
-			// Is not set (in control) => use latest
-			if ($prjId <= 0)
-			{
-				//--- retrieve last created from DB ---------------------------------
+        return [$prjId, $subPrjActive];
+    }
 
-				$prjId        = $this->highestProjectId_DB();
-				$subPrjActive = 0; // view all
-			}
-		}
+    /**
+     *
+     * @return integer highest ID of created projects
+     *
+     * @since version
+     */
+    private function highestProjectId_DB()
+    {
+        $max = 0; // indicates nothing found in DB
 
-		return [$prjId, $subPrjActive];
-	}
+        $db    = Factory::getDbo();
+        $query = $db->getQuery(true)
+            ->select('MAX(id)')
+            ->from($db->quoteName('#__lang4dev_projects'));
+        $db->setQuery($query);
+        $max = $db->loadResult();
 
-	/**
-	 *
-	 * @return integer highest ID of created projects
-	 *
-	 * @since version
-	 */
-	private function highestProjectId_DB()
-	{
-		$max = 0; // indicates nothing found in DB
-
-		$db    = Factory::getDbo();
-		$query = $db->getQuery(true)
-			->select('MAX(id)')
-			->from($db->quoteName('#__lang4dev_projects'));
-		$db->setQuery($query);
-		$max = $db->loadResult();
-
-		return (int) $max;
-	}
+        return (int)$max;
+    }
 
 }

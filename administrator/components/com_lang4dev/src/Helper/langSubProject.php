@@ -8,6 +8,7 @@
 
 namespace Finnern\Component\Lang4dev\Administrator\Helper;
 
+use Exception;
 use Joomla\CMS\Factory;
 use Joomla\CMS\Filesystem\File;
 use Joomla\CMS\Filesystem\Folder;
@@ -19,136 +20,128 @@ use RuntimeException;
 
 class langSubProject extends langFiles
 {
-	public $prjId = '';
-	public $prjType = 0;
+    public $prjId = '';
+    public $prjType = 0;
 
-	// ToDo: Separate std path (plugin/module -> ), admin path, site path
+    // ToDo: Separate std path (plugin/module -> ), admin path, site path
 
-	/**
-	 *
-	 * @var string
-	 * @since version
-	 */
-	public $prjRootPath = '';
-	public $prjXmlFilePath = '';
-	public $langIdPrefix = '';
+    /**
+     *
+     * @var string
+     * @since version
+     */
+    public $prjRootPath = '';
+    public $prjXmlFilePath = '';
+    public $langIdPrefix = '';
 
-	// is also admin
-	public $prjDefaultPath = '';
-	public $prjAdminPath = '';
+    // is also admin
+    public $prjDefaultPath = '';
+    public $prjAdminPath = '';
 
-	public $prjXmlPathFilename = '';
-	public $installPathFilename = '';
-	public $configPathFilename = '';
+    public $prjXmlPathFilename = '';
+    public $installPathFilename = '';
+    public $configPathFilename = '';
 
-	// external
-	// public $parentId = 0;
-	// public $twinId = '';
+    // external
+    // public $parentId = 0;
+    // public $twinId = '';
 
-	// !!! ToDo: text_prefix !!!
-	// public $text_prefix;
+    // !!! ToDo: text_prefix !!!
+    // public $text_prefix;
 
-	// public $useLangSysIni = false;
-	public $isLangAtStdJoomla = false;
-	public $isManifestRead = false;
+    // public $useLangSysIni = false;
+    public $isLangAtStdJoomla = false;
+    public $isManifestRead = false;
 
-	protected $transIdLocations = [];
-	protected $transStringsLocations = [];
-	protected $transIdsClassified;
+    protected $transIdLocations = [];
+    protected $transStringsLocations = [];
+    protected $transIdsClassified;
 
-	/**
-	 * @param $prjId
-	 * @param $prjType
-	 * @param $prjRootPath
-	 * @param $prjXmlPathFilename
-	 */
-	public function __construct($prjId = '',
-		$prjType = projectType::PRJ_TYPE_NONE,
-		$prjRootPath = '',
-		$prjXmlPathFilename = '')
-	{
-		parent::__construct();
+    /**
+     * @param $prjId
+     * @param $prjType
+     * @param $prjRootPath
+     * @param $prjXmlPathFilename
+     */
+    public function __construct(
+        $prjId = '',
+        $prjType = projectType::PRJ_TYPE_NONE,
+        $prjRootPath = '',
+        $prjXmlPathFilename = ''
+    ) {
+        parent::__construct();
 
-		$this->prjType            = $prjType;
-		$this->prjId              = $prjId;
-		$this->prjRootPath        = $prjRootPath;
-		$this->prjXmlPathFilename = $prjXmlPathFilename;
-		$this->prjXmlFilePath     = dirname($prjXmlPathFilename);
+        $this->prjType            = $prjType;
+        $this->prjId              = $prjId;
+        $this->prjRootPath        = $prjRootPath;
+        $this->prjXmlPathFilename = $prjXmlPathFilename;
+        $this->prjXmlFilePath     = dirname($prjXmlPathFilename);
 
-		// Admin path
+        // Admin path
 
-		if ($this->prjType == projectType::PRJ_TYPE_COMP_BACK_SYS)
-		{
-			$this->useLangSysIni = true;
-		}
+        if ($this->prjType == projectType::PRJ_TYPE_COMP_BACK_SYS) {
+            $this->useLangSysIni = true;
+        }
 
-		//--- project XML and script file -------------------------------------------------
+        //--- project XML and script file -------------------------------------------------
 
-		// ToDo: yyy read manifest file once for all !!!!
+        // ToDo: yyy read manifest file once for all !!!!
 
-		$this->isManifestRead = $this->RetrieveBaseManifestData ();
+        $this->isManifestRead = $this->RetrieveBaseManifestData();
+    }
 
-	}
+    public function RetrieveBaseManifestData()
+    {
+        $isManifestRead = false;
 
-	public function RetrieveBaseManifestData()
-	{
-		$isManifestRead = false;
+        try {
+            $isRootPathValid = $this->checkRootPath();
 
-		try
-		{
-			$isRootPathValid = $this->checkRootPath();
+            if (!$isRootPathValid) {
+                // search for project xml file and define root path with it
 
-			if (!$isRootPathValid)
-			{
-				// search for project xml file and define root path with it
+                $projectFileName = $this->projectFileName();
 
-				$projectFileName = $this->projectFileName();
+                // sets $prjXmlFilePath
+                $isFileFound = $this->searchXmlProjectFile(
+                    $projectFileName,
+                    $this->prjRootPath
+                ); // $this->prjXmlFilePath); //
 
-				// sets $prjXmlFilePath
-				$isFileFound = $this->searchXmlProjectFile($projectFileName, $this->prjRootPath); // $this->prjXmlFilePath); //
+                $isRootPathValid = $this->checkRootPath();
+            }
 
-				$isRootPathValid = $this->checkRootPath();
-			}
+            if ($isRootPathValid) {
+                $isManifestPathValid = $this->checkManifestPath();
 
-			if ($isRootPathValid)
-			{
+                if ($isManifestPathValid) {
+                    //--- open manifest file ----------------------------------------------------------
 
-				$isManifestPathValid = $this->checkManifestPath();
+                    // Manifest tells if files have to be searched inside component or old on joomla standard paths
+                    $manifestLang = new manifestLangFiles ($this->prjXmlPathFilename);
 
-				if ($isManifestPathValid)
-				{
-					//--- open manifest file ----------------------------------------------------------
+                    //--- project XML and script file -------------------------------------------------
 
-					// Manifest tells if files have to be searched inside component or old on joomla standard paths
-					$manifestLang = new manifestLangFiles ($this->prjXmlPathFilename);
+                    $this->projectXMLAndScriptFile($manifestLang);
 
-					//--- project XML and script file -------------------------------------------------
+                    //--- base paths to default and admin ---------------------------------------------
 
-					$this->projectXMLAndScriptFile($manifestLang);
-
-					//--- base paths to default and admin ---------------------------------------------
-
-					$this->DefaultAndAdminPath($manifestLang);
+                    $this->DefaultAndAdminPath($manifestLang);
 
                     /*----------------------------------------------------------
                      lang file list
                     ----------------------------------------------------------*/
 
                     // is component installed (or on develop folder)
-                    if ($manifestLang->isInstalled)
-                    {
+                    if ($manifestLang->isInstalled) {
                         //--- component on joomla server folder ---------------------------------------
 
                         // lang inside component ?
-                        if ( ! $this->isLangAtStdJoomla) {
-
+                        if (!$this->isLangAtStdJoomla) {
                             //--- lang files in component folder ------------------------------------------
 
                             $startPath = $this->langBasePathJoomla($this->prjType);
-
-
                         } else {
-
                             //--- lang files in standard joomla folder -------------------------------------
 
                             // includes detectLangBasePath
@@ -156,148 +149,115 @@ class langSubProject extends langFiles
 
                             // search for late additions not mentioned in manifest
                             $this->extendManifestLangFilesList();
-
                         }
-
-                    }
-                    else {
+                    } else {
                         //--- component on develop folder ---------------------------------------
 
                         // lang inside component ?
-                        if ( ! $this->isLangAtStdJoomla) {
-
+                        if (!$this->isLangAtStdJoomla) {
                             //--- lang files in component folder ------------------------------------------
 
                             // on development folder read manifest data
                             $startPath = $manifestLang->defaultLangPath;
-                            if ($this->prjType == projectType::PRJ_TYPE_COMP_BACK || $this->prjType == projectType::PRJ_TYPE_COMP_BACK_SYS)
-                            {
+                            if ($this->prjType == projectType::PRJ_TYPE_COMP_BACK || $this->prjType == projectType::PRJ_TYPE_COMP_BACK_SYS) {
                                 $startPath = $manifestLang->adminLangPath;
                             }
 
                             $this->detectLangBasePath($this->prjRootPath . "/" . $startPath, $this->useLangSysIni);
 
                             $this->collectPrjFolderLangFiles();
-
-
                         } else {
-
                             //--- lang files in standard joomla folder ------------------------------------------
 
                             // read
                             $this->collectManifestLangFiles_OnDevelop($manifestLang, $this->prjType);
-
                         }
-
-
-
-
-
-
-
-
-
                     }
-				}
-			}
-		}
-		catch (RuntimeException $e)
-		{
-			$OutTxt = '';
-			$OutTxt .= 'Error executing RetrieveBaseManifestData: "' . '<br>';
-			$OutTxt .= 'Error: "' . $e->getMessage() . '"' . '<br>';
+                }
+            }
+        } catch (RuntimeException $e) {
+            $OutTxt = '';
+            $OutTxt .= 'Error executing RetrieveBaseManifestData: "' . '<br>';
+            $OutTxt .= 'Error: "' . $e->getMessage() . '"' . '<br>';
 
-			$app = Factory::getApplication();
-			$app->enqueueMessage($OutTxt, 'error');
-		}
+            $app = Factory::getApplication();
+            $app->enqueueMessage($OutTxt, 'error');
+        }
 
-		return $isManifestRead;
-	}
+        return $isManifestRead;
+    }
 
-	/**
-	 *
-	 * @return bool
-	 *
-	 * @since version
-	 */
-	private function checkRootPath()
-	{
-		$isOk = false;
+    /**
+     *
+     * @return bool
+     *
+     * @since version
+     */
+    private function checkRootPath()
+    {
+        $isOk = false;
 
-		// continue when path has enough characters
-		if (strlen($this->prjRootPath) > 5)
-		{
-			if (is_dir($this->prjRootPath))
-			{
-				$isOk = true;
-			}
-			else
-			{
-				// try root path of component
-				if (str_starts_with($this->prjRootPath, '/',) || str_starts_with($this->prjRootPath, '\\',))
-				{
-					$testPath = JPATH_ROOT . $this->prjRootPath;
-				}
-				else
-				{
-					$testPath = JPATH_ROOT . '/' . $this->prjRootPath;
-				}
+        // continue when path has enough characters
+        if (strlen($this->prjRootPath) > 5) {
+            if (is_dir($this->prjRootPath)) {
+                $isOk = true;
+            } else {
+                // try root path of component
+                if (str_starts_with($this->prjRootPath, '/',) || str_starts_with($this->prjRootPath, '\\',)) {
+                    $testPath = JPATH_ROOT . $this->prjRootPath;
+                } else {
+                    $testPath = JPATH_ROOT . '/' . $this->prjRootPath;
+                }
 
-				if (is_dir($testPath))
-				{
+                if (is_dir($testPath)) {
+                    $isOk = true;
 
-					$isOk = true;
+                    // ToDo: keep root path without JPATH_ROOT part.
+                    // Needs a access function of the prjRootPath
+                    // with flag it is on server (instead of PC)
+                    $this->prjRootPath = $testPath;
+                }
+            }
+        }
 
-					// ToDo: keep root path without JPATH_ROOT part.
-					// Needs a access function of the prjRootPath
-					// with flag it is on server (instead of PC)
-					$this->prjRootPath = $testPath;
-				}
-			}
-		}
+        return $isOk;
+    }
 
-		return $isOk;
-	}
+    /**
+     *
+     * @return bool
+     *
+     * @since version
+     */
+    private function checkManifestPath()
+    {
+        $isManifestPathValid = false;
 
-	/**
-	 *
-	 * @return bool
-	 *
-	 * @since version
-	 */
-	private function checkManifestPath()
-	{
-		$isManifestPathValid = false;
+        // continue when path has enough characters
+        if (strlen($this->prjXmlPathFilename) > 5) {
+            if (is_file($this->prjXmlPathFilename)) {
+                $isManifestPathValid = true;
 
-		// continue when path has enough characters
-		if (strlen($this->prjXmlPathFilename) > 5)
-		{
-			if (is_file($this->prjXmlPathFilename))
-			{
-				$isManifestPathValid = true;
+                // ToDo: create path from ....
+                $this->prjXmlFilePath = dirname($this->prjXmlPathFilename);
+            } else {
+                // else should not be needed ?
+                $this->prjXmlPathFilename = $this->prjXmlPathFilename . "";
+            }
+        }
 
-				// ToDo: create path from ....
-				$this->prjXmlFilePath = dirname($this->prjXmlPathFilename);
-			}
-			else
-			{
-				// else should not be needed ?
-				$this->prjXmlPathFilename = $this->prjXmlPathFilename . "";
-			}
-		}
+        return $isManifestPathValid;
+    }
 
-		return $isManifestPathValid;
-	}
-
-	/**
-	 *
-	 * @return string
-	 *
-	 * @since version
-	 */
-	private function projectFileName()
-	{
-		$projectFileName = $this->prjId;
+    /**
+     *
+     * @return string
+     *
+     * @since version
+     */
+    private function projectFileName()
+    {
+        $projectFileName = $this->prjId;
 
 //		if (   $this->prjType == projectType::PRJ_TYPE_COMP_BACK_SYS
 //			|| $this->prjType == projectType::PRJ_TYPE_COMP_BACK)
@@ -307,430 +267,392 @@ class langSubProject extends langFiles
 //		}
 //
 //		$projectFileName = $projectFileName . '.xml';
-		$projectFileName = substr($this->prjId, 4) . '.xml';
-
-		return $projectFileName;
-	}
-
-
-	//
-	// script- / install file, language files as list, transId
-	/**
-	 * @param $isAddLangFileNames
-	 *
-	 * @return false
-	 *
-	 * @throws \Exception
-	 * @since version
-	 */
-
-
-	/**
-	 *
-	 * @return array
-	 *
-	 * @since version
-	 */
-	public function getLangIds()
-	{
-		$langIds = [];
-
-		foreach ($this->langFilesData as $langId => $langFile)
-		{
-			$langIds [] = $langId;
-		}
-
-		return $langIds;
-	}
-
-	// get translations from langFiles (read) and keep file names
-
-	/**
-	 * @param $langId
-	 * @param $isReadOriginal
-	 *
-	 * @return langFile
-	 *
-	 * @since version
-	 */
-	public function getLangFilesData($langId = 'en-GB', $isReadOriginal = false)
-	{
-
-		// if not cached or $isReadOriginal
-		if (empty($this->langFileNamesSet [$langId]) || $isReadOriginal)
-		{
-			return $this->readLangFiles($langId = 'en-GB', $isReadOriginal = false);
-		}
-
-		return $this->langFilesData [$langId];
-	}
-
-	// read translations from langFiles and keep file names
-
-	/**
-	 * @param $langId
-	 *
-	 * @return langFile
-	 *
-	 * @since version
-	 */
-	public function readLangFiles($langId = 'en-GB')
-	{
-		if ($langId == '')
-		{
-			$langId = 'en-GB';
-		}
-
-		if (! empty ($this->langFileNamesSet [$langId]))
-		{
-			$langFileNames = $this->langFileNamesSet [$langId];
-
-			if (!empty ($langFileNames))
-			{
-				foreach ($langFileNames as $langFileName)
-				{
-					$fileName     = basename($langFileName);
-					$translations = $this->readLangFile($langFileName);
-
-					$this->langFilesData [$langId][$fileName] = $translations;
-				}
-			}
-			else
-			{
-				// ToDo: Is warning needed
-				$OutTxt = Text::_('No lang files for: ' . $langId . ' found');
-				$OutTxt .= 'Project: ' . $this->getPrjIdAndTypeText();
-				$app    = Factory::getApplication();
-				$app->enqueueMessage($OutTxt, 'warning');
-
-				// Needed ?
-				$this->langFilesData [$langId] = [];
-			}
-
-		} else {
-			// ToDo: Is warning needed
-			$OutTxt = Text::_('Empty langFileNamesSet[] for: ' . $langId . ' found');
-			$OutTxt .= 'Project: ' . $this->getPrjIdAndTypeText();
-			$app    = Factory::getApplication();
-			$app->enqueueMessage($OutTxt, 'warning');
-
-			// Needed ?
-			$this->langFilesData [$langId] = [];
-		}
-
-		return $this->langFilesData [$langId];
-	}
-
-	// read translations from langFile and keep file name
-
-	/**
-	 * @param $langFileName
-	 *
-	 * @return langFile
-	 *
-	 * @since version
-	 */
-	public function readLangFile($langFileName)
-	{
-		$langFileData = new langFile ();
-		$langFileData->readFileContent($langFileName);
-
-		return $langFileData;
-	}
-
-	/**
-	 * @param $useLangSysIni
-	 *
-	 * @return array|mixed
-	 *
-	 * @since version
-	 */
-	public function scanCode4TransIdsLocations($useLangSysIni = false)
-	{
-
-		$searchTransIdLocations = new searchTransIdLocations ($this->langIdPrefix);
-
-		$searchTransIdLocations->useLangSysIni       = $this->useLangSysIni;
-		$searchTransIdLocations->prjXmlPathFilename  = $this->prjXmlPathFilename;
-		$searchTransIdLocations->installPathFilename = $this->installPathFilename;
-
-		// $searchTransIdLocations->langIdPrefix = $this->langIdPrefix;
-
-		// sys file selected
-		if ($useLangSysIni || $this->useLangSysIni)
-		{
-			//--- scan project files  ------------------------------------
-
-			// scan project XML
-			$searchTransIdLocations->searchTransIds_in_XML_file(
-				baseName($this->prjXmlPathFilename), dirname($this->prjXmlPathFilename));
-
-			// scan install file
-			$searchTransIdLocations->searchTransIds_in_PHP_file(
-				baseName($this->installPathFilename), dirname($this->installPathFilename));
-		}
-		else
-		{
-			//--- scan all not project files ------------------------------------
-
-			// start path
-			$searchPath = $this->prjXmlFilePath;
-			if (empty($searchPath))
-			{
-				$searchPath = $this->prjRootPath;
-			}
-			$searchTransIdLocations->searchPaths = array($searchPath);
-
-			//--- do scan all not project files ------------------------------------
-
-			$searchTransIdLocations->findAllTranslationIds();
-		}
-
-		$this->transIdLocations = $searchTransIdLocations->transIdLocations->items;
-
-		return $this->transIdLocations;
-	}
-
-	/**
-	 * @param $useLangSysIni
-	 *
-	 * @return array|mixed
-	 *
-	 * @since version
-	 */
-	public function scanCode4TransStringsLocations($useLangSysIni = false)
-	{
-
-		$searchTransIdLocations = new searchTransStrings ($this->langIdPrefix);
-
-		$searchTransIdLocations->useLangSysIni       = $this->useLangSysIni;
-		$searchTransIdLocations->prjXmlPathFilename  = $this->prjXmlPathFilename;
-		$searchTransIdLocations->installPathFilename = $this->installPathFilename;
-
-		// sys file selected
-		if ($useLangSysIni || $this->useLangSysIni)
-		{
-
-			//--- scan project files  ------------------------------------
-
-			// scan install file
-			$searchTransIdLocations->searchTransStrings_in_PHP_file(
-				baseName($this->installPathFilename), dirname($this->installPathFilename));
-		}
-		else
-		{
-			//--- scan all not project files ------------------------------------
-
-			// start path
-			$searchPath = $this->prjXmlFilePath;
-
-			if ($this->prjType == projectType::PRJ_TYPE_COMP_SITE)
-			{
-				// ToDo: on develop (not installed) path may be in manifest file,
-				// ToDo: to be retrieved before creating sub project ?
-				$searchPath = $this->prjRootPath;
-				// $basePath = JPATH_ROOT . '/language';
-				// JPATH_SITE . '/components/com_lang4dev'
-			}
-
-			if (empty($searchPath))
-			{
-				$searchPath = $this->prjRootPath;
-			}
-
-			$searchTransIdLocations->searchPaths = array($searchPath);
-
-			//--- do scan all not project files ------------------------------------
-
-			$searchTransIdLocations->findAllTranslationStrings();
-		}
-
-		$this->transStringsLocations = $searchTransIdLocations->transStringLocations->items;
-
-		return $this->transStringsLocations;
-	}
-
-	/**
-	 *
-	 * @return array
-	 *
-	 * @throws \Exception
-	 * @since version
-	 */
-	public function getPrjTransIdLocations()
-	{
-		$names = [];
-
-		try
-		{
-
-			foreach ($this->transIdLocations as $name => $val)
-			{
-				$names [] = $name;
-			}
-
-		}
-		catch (RuntimeException $e)
-		{
-			$OutTxt = 'Error executing getPrjTransIdLocations: "' . '<br>';
-			$OutTxt .= 'Error: "' . $e->getMessage() . '"' . '<br>';
-
-			$app = Factory::getApplication();
-			$app->enqueueMessage($OutTxt, 'error');
-		}
-
-		return $names;
-	}
-
-	/**
-	 * @param $isScanOriginal
-	 *
-	 * @return array|mixed
-	 *
-	 * @since version
-	 */
-	public function getTransIdLocations($isScanOriginal = false)
-	{
-		// if not cached or $isReadOriginal
-		if (empty($this->transIdLocations) || $isScanOriginal)
-		{
-
-			$this->scanCode4TransIdsLocations($this->useLangSysIni);
-		}
-
-		return $this->transIdLocations;
-	}
-
-	/**
-	 * @param $isScanOriginal
-	 *
-	 * @return array|mixed
-	 *
-	 * @since version
-	 */
-	public function getTransStringsLocations($isScanOriginal = false)
-	{
-		// if not cached or $isReadOriginal
-		if (empty($this->transStringsLocations) || $isScanOriginal)
-		{
-
-			$this->scanCode4TransStringsLocations($this->useLangSysIni);
-		}
-
-		return $this->transStringsLocations;
-	}
-
-	/**
-	 * @param $langId
-	 * @param $isDoClassifyTransIds
-	 *
-	 * @return array
-	 *
-	 * @since version
-	 */
-	public function getTransIdsClassified($langId = "en-GB", $isDoClassifyTransIds = false)
-	{
-
-		if (empty($this->transIdsClassified) || $isDoClassifyTransIds)
-		{
-
-			return $this->classifyTransIds($langId);
-		}
-
-		return $this->transIdsClassified;
-	}
-
-	/**
-	 * @param $langId
-	 *
-	 * @return array
-	 *
-	 * @throws \Exception
-	 * @since version
-	 */
-	public function classifyTransIds($langId = "en-GB")
-	{
-		//
-		$codeTransIds = $this->getPrjTransIdLocations();
-
-		[$missing, $same, $notUsed] = $this->matchTranslationsFile2Locations($codeTransIds, $langId);
-
-		$transIdsClassified            = [];
-		$transIdsClassified['missing'] = $missing;
-		$transIdsClassified['same']    = $same;
-		$transIdsClassified['notUsed'] = $notUsed;
-
-		$transIdsClassified['doubles'] = $this->collectDoubles($langId);
-
-		$this->transIdsClassified = $transIdsClassified;
-
-		return $this->transIdsClassified;
-	}
-
-	/**
-	 * @param $langId
-	 *
-	 * @return array
-	 *
-	 * @since version
-	 */
-	private function collectDoubles($langId = "en-GB")
-	{
-		$doubles = [];
-
-		if (! empty ($this->langFilesData [$langId]))
-		{
-			// ToDo: each langFilesData[$langId] as $langFile get data not file name
-			foreach ($this->langFilesData[$langId] as $langFile)
-			{
-				$fileName                     = baseName($langFile->getlangPathFileName());
-				$doubles[basename($fileName)] = $langFile->collectDoubles();
-			}
-		}
-
-		return $doubles;
-	}
-
-	/**
-	 *
-	 * @return string
-	 *
-	 * @since version
-	 */
-	public function getPrjTypeText()
-	{
-
-		return projectType::getPrjTypeText($this->prjType);
-
-	}
-
-	/**
-	 *
-	 * @return string
-	 *
-	 * @since version
-	 */
-	public function getPrjIdAndTypeText()
-	{
-
-		return $this->prjId . ': ' . $this->getPrjTypeText();
-	}
-
-	/**
-	 * @param $mainLangId
-	 *
-	 *
-	 * @throws \Exception
-	 * @since version
-	 */
-	public function alignTranslationsByMain($mainLangId)
-	{
-
-		$mainTrans = [];
-
-		try
-		{
-
+        $projectFileName = substr($this->prjId, 4) . '.xml';
+
+        return $projectFileName;
+    }
+
+
+    //
+    // script- / install file, language files as list, transId
+    /**
+     * @param $isAddLangFileNames
+     *
+     * @return false
+     *
+     * @throws Exception
+     * @since version
+     */
+
+    /**
+     *
+     * @return array
+     *
+     * @since version
+     */
+    public function getLangIds()
+    {
+        $langIds = [];
+
+        foreach ($this->langFilesData as $langId => $langFile) {
+            $langIds [] = $langId;
+        }
+
+        return $langIds;
+    }
+
+    // get translations from langFiles (read) and keep file names
+
+    /**
+     * @param $langId
+     * @param $isReadOriginal
+     *
+     * @return langFile
+     *
+     * @since version
+     */
+    public function getLangFilesData($langId = 'en-GB', $isReadOriginal = false)
+    {
+        // if not cached or $isReadOriginal
+        if (empty($this->langFileNamesSet [$langId]) || $isReadOriginal) {
+            return $this->readLangFiles($langId = 'en-GB', $isReadOriginal = false);
+        }
+
+        return $this->langFilesData [$langId];
+    }
+
+    // read translations from langFiles and keep file names
+
+    /**
+     * @param $langId
+     *
+     * @return langFile
+     *
+     * @since version
+     */
+    public function readLangFiles($langId = 'en-GB')
+    {
+        if ($langId == '') {
+            $langId = 'en-GB';
+        }
+
+        if (!empty ($this->langFileNamesSet [$langId])) {
+            $langFileNames = $this->langFileNamesSet [$langId];
+
+            if (!empty ($langFileNames)) {
+                foreach ($langFileNames as $langFileName) {
+                    $fileName     = basename($langFileName);
+                    $translations = $this->readLangFile($langFileName);
+
+                    $this->langFilesData [$langId][$fileName] = $translations;
+                }
+            } else {
+                // ToDo: Is warning needed
+                $OutTxt = Text::_('No lang files for: ' . $langId . ' found');
+                $OutTxt .= 'Project: ' . $this->getPrjIdAndTypeText();
+                $app    = Factory::getApplication();
+                $app->enqueueMessage($OutTxt, 'warning');
+
+                // Needed ?
+                $this->langFilesData [$langId] = [];
+            }
+        } else {
+            // ToDo: Is warning needed
+            $OutTxt = Text::_('Empty langFileNamesSet[] for: ' . $langId . ' found');
+            $OutTxt .= 'Project: ' . $this->getPrjIdAndTypeText();
+            $app    = Factory::getApplication();
+            $app->enqueueMessage($OutTxt, 'warning');
+
+            // Needed ?
+            $this->langFilesData [$langId] = [];
+        }
+
+        return $this->langFilesData [$langId];
+    }
+
+    // read translations from langFile and keep file name
+
+    /**
+     * @param $langFileName
+     *
+     * @return langFile
+     *
+     * @since version
+     */
+    public function readLangFile($langFileName)
+    {
+        $langFileData = new langFile ();
+        $langFileData->readFileContent($langFileName);
+
+        return $langFileData;
+    }
+
+    /**
+     * @param $useLangSysIni
+     *
+     * @return array|mixed
+     *
+     * @since version
+     */
+    public function scanCode4TransIdsLocations($useLangSysIni = false)
+    {
+        $searchTransIdLocations = new searchTransIdLocations ($this->langIdPrefix);
+
+        $searchTransIdLocations->useLangSysIni       = $this->useLangSysIni;
+        $searchTransIdLocations->prjXmlPathFilename  = $this->prjXmlPathFilename;
+        $searchTransIdLocations->installPathFilename = $this->installPathFilename;
+
+        // $searchTransIdLocations->langIdPrefix = $this->langIdPrefix;
+
+        // sys file selected
+        if ($useLangSysIni || $this->useLangSysIni) {
+            //--- scan project files  ------------------------------------
+
+            // scan project XML
+            $searchTransIdLocations->searchTransIds_in_XML_file(
+                baseName($this->prjXmlPathFilename),
+                dirname($this->prjXmlPathFilename)
+            );
+
+            // scan install file
+            $searchTransIdLocations->searchTransIds_in_PHP_file(
+                baseName($this->installPathFilename),
+                dirname($this->installPathFilename)
+            );
+        } else {
+            //--- scan all not project files ------------------------------------
+
+            // start path
+            $searchPath = $this->prjXmlFilePath;
+            if (empty($searchPath)) {
+                $searchPath = $this->prjRootPath;
+            }
+            $searchTransIdLocations->searchPaths = array($searchPath);
+
+            //--- do scan all not project files ------------------------------------
+
+            $searchTransIdLocations->findAllTranslationIds();
+        }
+
+        $this->transIdLocations = $searchTransIdLocations->transIdLocations->items;
+
+        return $this->transIdLocations;
+    }
+
+    /**
+     * @param $useLangSysIni
+     *
+     * @return array|mixed
+     *
+     * @since version
+     */
+    public function scanCode4TransStringsLocations($useLangSysIni = false)
+    {
+        $searchTransIdLocations = new searchTransStrings ($this->langIdPrefix);
+
+        $searchTransIdLocations->useLangSysIni       = $this->useLangSysIni;
+        $searchTransIdLocations->prjXmlPathFilename  = $this->prjXmlPathFilename;
+        $searchTransIdLocations->installPathFilename = $this->installPathFilename;
+
+        // sys file selected
+        if ($useLangSysIni || $this->useLangSysIni) {
+            //--- scan project files  ------------------------------------
+
+            // scan install file
+            $searchTransIdLocations->searchTransStrings_in_PHP_file(
+                baseName($this->installPathFilename),
+                dirname($this->installPathFilename)
+            );
+        } else {
+            //--- scan all not project files ------------------------------------
+
+            // start path
+            $searchPath = $this->prjXmlFilePath;
+
+            if ($this->prjType == projectType::PRJ_TYPE_COMP_SITE) {
+                // ToDo: on develop (not installed) path may be in manifest file,
+                // ToDo: to be retrieved before creating sub project ?
+                $searchPath = $this->prjRootPath;
+                // $basePath = JPATH_ROOT . '/language';
+                // JPATH_SITE . '/components/com_lang4dev'
+            }
+
+            if (empty($searchPath)) {
+                $searchPath = $this->prjRootPath;
+            }
+
+            $searchTransIdLocations->searchPaths = array($searchPath);
+
+            //--- do scan all not project files ------------------------------------
+
+            $searchTransIdLocations->findAllTranslationStrings();
+        }
+
+        $this->transStringsLocations = $searchTransIdLocations->transStringLocations->items;
+
+        return $this->transStringsLocations;
+    }
+
+    /**
+     *
+     * @return array
+     *
+     * @throws Exception
+     * @since version
+     */
+    public function getPrjTransIdLocations()
+    {
+        $names = [];
+
+        try {
+            foreach ($this->transIdLocations as $name => $val) {
+                $names [] = $name;
+            }
+        } catch (RuntimeException $e) {
+            $OutTxt = 'Error executing getPrjTransIdLocations: "' . '<br>';
+            $OutTxt .= 'Error: "' . $e->getMessage() . '"' . '<br>';
+
+            $app = Factory::getApplication();
+            $app->enqueueMessage($OutTxt, 'error');
+        }
+
+        return $names;
+    }
+
+    /**
+     * @param $isScanOriginal
+     *
+     * @return array|mixed
+     *
+     * @since version
+     */
+    public function getTransIdLocations($isScanOriginal = false)
+    {
+        // if not cached or $isReadOriginal
+        if (empty($this->transIdLocations) || $isScanOriginal) {
+            $this->scanCode4TransIdsLocations($this->useLangSysIni);
+        }
+
+        return $this->transIdLocations;
+    }
+
+    /**
+     * @param $isScanOriginal
+     *
+     * @return array|mixed
+     *
+     * @since version
+     */
+    public function getTransStringsLocations($isScanOriginal = false)
+    {
+        // if not cached or $isReadOriginal
+        if (empty($this->transStringsLocations) || $isScanOriginal) {
+            $this->scanCode4TransStringsLocations($this->useLangSysIni);
+        }
+
+        return $this->transStringsLocations;
+    }
+
+    /**
+     * @param $langId
+     * @param $isDoClassifyTransIds
+     *
+     * @return array
+     *
+     * @since version
+     */
+    public function getTransIdsClassified($langId = "en-GB", $isDoClassifyTransIds = false)
+    {
+        if (empty($this->transIdsClassified) || $isDoClassifyTransIds) {
+            return $this->classifyTransIds($langId);
+        }
+
+        return $this->transIdsClassified;
+    }
+
+    /**
+     * @param $langId
+     *
+     * @return array
+     *
+     * @throws Exception
+     * @since version
+     */
+    public function classifyTransIds($langId = "en-GB")
+    {
+        //
+        $codeTransIds = $this->getPrjTransIdLocations();
+
+        [$missing, $same, $notUsed] = $this->matchTranslationsFile2Locations($codeTransIds, $langId);
+
+        $transIdsClassified            = [];
+        $transIdsClassified['missing'] = $missing;
+        $transIdsClassified['same']    = $same;
+        $transIdsClassified['notUsed'] = $notUsed;
+
+        $transIdsClassified['doubles'] = $this->collectDoubles($langId);
+
+        $this->transIdsClassified = $transIdsClassified;
+
+        return $this->transIdsClassified;
+    }
+
+    /**
+     * @param $langId
+     *
+     * @return array
+     *
+     * @since version
+     */
+    private function collectDoubles($langId = "en-GB")
+    {
+        $doubles = [];
+
+        if (!empty ($this->langFilesData [$langId])) {
+            // ToDo: each langFilesData[$langId] as $langFile get data not file name
+            foreach ($this->langFilesData[$langId] as $langFile) {
+                $fileName                     = baseName($langFile->getlangPathFileName());
+                $doubles[basename($fileName)] = $langFile->collectDoubles();
+            }
+        }
+
+        return $doubles;
+    }
+
+    /**
+     *
+     * @return string
+     *
+     * @since version
+     */
+    public function getPrjTypeText()
+    {
+        return projectType::getPrjTypeText($this->prjType);
+    }
+
+    /**
+     *
+     * @return string
+     *
+     * @since version
+     */
+    public function getPrjIdAndTypeText()
+    {
+        return $this->prjId . ': ' . $this->getPrjTypeText();
+    }
+
+    /**
+     * @param $mainLangId
+     *
+     *
+     * @throws Exception
+     * @since version
+     */
+    public function alignTranslationsByMain($mainLangId)
+    {
+        $mainTrans = [];
+
+        try {
 //			// for each other call
 //			foreach ($this->langFilesData as $langId => $temp)
 //			{
@@ -741,246 +663,215 @@ class langSubProject extends langFiles
 //				}
 //			}
 
-			$mainLangFilesData = $this->langFilesData[$mainLangId];
+            $mainLangFilesData = $this->langFilesData[$mainLangId];
 
-			$transLangIds = $this->getLangIds();
+            $transLangIds = $this->getLangIds();
 
-			// all other lang ids
-			foreach ($transLangIds as $transLangId)
-			{
-				// Not main language
-				if ($transLangId != $mainLangId)
-				{
+            // all other lang ids
+            foreach ($transLangIds as $transLangId) {
+                // Not main language
+                if ($transLangId != $mainLangId) {
+                    //--- all main lang files -----------------------------------------------
 
-					//--- all main lang files -----------------------------------------------
+                    $transFilesData = $this->langFilesData[$transLangId];
 
-					$transFilesData = $this->langFilesData[$transLangId];
+                    foreach ($mainLangFilesData as $mainFileData) {
+                        //--- create matching translation file name -----------------------------------------------
 
-					foreach ($mainLangFilesData as $mainFileData)
-					{
-						//--- create matching translation file name -----------------------------------------------
+                        $mainLangFileName = $mainFileData->getlangPathFileName();
+                        $mainTrans        = $mainFileData->translations;
 
-						$mainLangFileName = $mainFileData->getlangPathFileName();
-						$mainTrans        = $mainFileData->translations;
+                        $matchTransFileName = $this->matchingNameByTransId(
+                            $mainLangId,
+                            $mainLangFileName,
+                            $transLangId
+                        );
 
-						$matchTransFileName = $this->matchingNameByTransId($mainLangId, $mainLangFileName, $transLangId);
+                        // look up the matching translation
+                        foreach ($transFilesData as $transFileData) {
+                            $actTransFileName = $transFileData->getlangPathFileName();
 
-						// look up the matching translation
-						foreach ($transFilesData as $transFileData)
-						{
-							$actTransFileName = $transFileData->getlangPathFileName();
+                            // toDo: should not be needed
+                            $actTransFileName = str_replace('\\', '/', $actTransFileName);
+                            if ($actTransFileName == $matchTransFileName) {
+                                // align order of items in matching translation
+                                $transFileData->alignTranslationsByMain($mainTrans);
+                            }
+                        }
+                    } // main files
+                }
+            } // for translation ids
 
-							// toDo: should not be needed
-							$actTransFileName = str_replace('\\', '/', $actTransFileName);
-							if ($actTransFileName == $matchTransFileName)
-							{
+        } catch (RuntimeException $e) {
+            $OutTxt = '';
+            $OutTxt .= 'Error executing alignTranslationsByMain: "' . '<br>';
+            $OutTxt .= 'Error: "' . $e->getMessage() . '"' . '<br>';
 
-								// align order of items in matching translation
-								$transFileData->alignTranslationsByMain($mainTrans);
-							}
-						}
+            $app = Factory::getApplication();
+            $app->enqueueMessage($OutTxt, 'error');
+        }
 
-					} // main files
-				}
-			} // for translation ids
+        return; // $isFilesFound;
+        // ToDo: ....
+    }
 
-		}
-		catch (RuntimeException $e)
-		{
-			$OutTxt = '';
-			$OutTxt .= 'Error executing alignTranslationsByMain: "' . '<br>';
-			$OutTxt .= 'Error: "' . $e->getMessage() . '"' . '<br>';
+    /**
+     * @param $projectFileName
+     * @param $searchPath
+     *
+     * @return bool
+     *
+     * @throws Exception
+     * @since version
+     */
+    public function searchXmlProjectFile($projectFileName, $searchPath)
+    {
+        $isFileFound = false;
 
-			$app = Factory::getApplication();
-			$app->enqueueMessage($OutTxt, 'error');
-		}
+        if ($searchPath) {
+            // expected path and file name
+            $prjXmlPathFilename = $searchPath . '/' . $projectFileName;
 
-		return; // $isFilesFound;
-		// ToDo: ....
-	}
+            try {
+                //--- ? path to file given ? --------------------------------------
+                // d:\Entwickl\2022\_github\LangMan4Dev\administrator\components\com_lang4dev\lang4dev.xml
 
-	/**
-	 * @param $projectFileName
-	 * @param $searchPath
-	 *
-	 * @return bool
-	 *
-	 * @throws \Exception
-	 * @since version
-	 */
-	public function searchXmlProjectFile($projectFileName, $searchPath)
-	{
+                if (is_file($prjXmlPathFilename)) {
+                    $this->prjXmlFilePath     = $searchPath;
+                    $this->prjXmlPathFilename = $prjXmlPathFilename;
+                    $isFileFound              = true;
+                } else {
+                    #--- All sub folders in folder -------------------------------------
 
-		$isFileFound = false;
+                    foreach (Folder::folders($searchPath) as $folderName) {
+                        $subFolder = $searchPath . '/' . $folderName;
 
-		if ($searchPath)
-		{
-			// expected path and file name
-			$prjXmlPathFilename = $searchPath . '/' . $projectFileName;
+                        $isPathFound = $this->searchXmlProjectFile($projectFileName, $subFolder);
 
-			try
-			{
+                        if ($isPathFound) {
+                            break;
+                        }
+                    }
+                }
+            } catch (RuntimeException $e) {
+                $OutTxt = '';
+                $OutTxt .= 'Error executing searchXmlProjectFile: "' . '<br>';
+                $OutTxt .= 'Error: "' . $e->getMessage() . '"' . '<br>';
 
-				//--- ? path to file given ? --------------------------------------
-				// d:\Entwickl\2022\_github\LangMan4Dev\administrator\components\com_lang4dev\lang4dev.xml
+                $app = Factory::getApplication();
+                $app->enqueueMessage($OutTxt, 'error');
+            }
+        }
 
-				if (is_file($prjXmlPathFilename))
-				{
+        return $isFileFound;
+    }
 
-					$this->prjXmlFilePath     = $searchPath;
-					$this->prjXmlPathFilename = $prjXmlPathFilename;
-					$isFileFound              = true;
+    /**
+     * @param $langId
+     *
+     * @return array
+     *
+     * @since version
+     */
+    public function getLangFileNames($langId)
+    {
+        $fileNames = [];
 
-				}
-				else
-				{
-					#--- All sub folders in folder -------------------------------------
+        if (!empty ($this->langFileNamesSet [$langId])) {
+            foreach ($this->langFileNamesSet[$langId] as $filePathName) {
+                $fileNames [] = basename($filePathName);
+            }
+        }
 
-					foreach (Folder::folders($searchPath) as $folderName)
-					{
+        return $fileNames;
+    }
 
-						$subFolder = $searchPath . '/' . $folderName;
+    /**
+     * @param   manifestLangFiles  $manifestLang
+     *
+     *
+     * @since version
+     */
+    public function projectXMLAndScriptFile(manifestLangFiles $manifestLang): void
+    {
+        //--- project XML and script file -------------------------------------------------
 
-						$isPathFound = $this->searchXmlProjectFile($projectFileName, $subFolder);
+        // files config.xml and  to expect for subproject
+        [$isConfigXml, $isInstallPhp] = projectType::enabledByType($this->prjType);
 
-						if ($isPathFound)
-						{
-							break;
-						}
-					}
+        if ($isInstallPhp) {
+            $this->installPathFilename = $this->prjXmlFilePath . '/' . $manifestLang->getSriptFile();
+            // ToDo: function checkInstallFile ();
 
-				}
-			}
-			catch (RuntimeException $e)
-			{
-				$OutTxt = '';
-				$OutTxt .= 'Error executing searchXmlProjectFile: "' . '<br>';
-				$OutTxt .= 'Error: "' . $e->getMessage() . '"' . '<br>';
+        }
 
-				$app = Factory::getApplication();
-				$app->enqueueMessage($OutTxt, 'error');
-			}
-		}
+        if ($isConfigXml) {
+            // ToDo: getConfigFile instead of direct below
+            // $this->configPathFilename = $this->prjXmlFilePath . '/' . $manifestLang->getConfigFile();
+            $this->configPathFilename = $this->prjXmlFilePath . '/' . 'config.xml';
+        }
 
-		return $isFileFound;
-	}
+        // lang id of project
+        $this->langIdPrefix = strtoupper($manifestLang->getName());
 
-	/**
-	 * @param $langId
-	 *
-	 * @return array
-	 *
-	 * @since version
-	 */
-	public function getLangFileNames($langId)
-	{
+        //--- pre check type -----------------
 
-		$fileNames = [];
+        if ($this->prjType == projectType::PRJ_TYPE_COMP_BACK_SYS) {
+            $this->useLangSysIni = true;
+        }
 
-		if (! empty ($this->langFileNamesSet [$langId]))
-		{
-			foreach ($this->langFileNamesSet[$langId] as $filePathName)
-			{
-				$fileNames [] = basename($filePathName);
-			}
-		}
+        // manifest tells about defined list of lang files
+        $this->isLangAtStdJoomla = $manifestLang->getIsLangAtStdJoomla();
+    }
 
-		return $fileNames;
-	}
+    private function DefaultAndAdminPath(manifestLangFiles $manifestLang)
+    {
+        // on server
+        if ($manifestLang->isInstalled) {
+            // admin given over $prjXmlFilePath
+            $this->prjDefaultPath = JPATH_COMPONENT_SITE;
+            $this->prjAdminPath   = $this->prjXmlFilePath;
+        } else {
+            // admin given over $prjXmlFilePath
+            $this->prjDefaultPath = $this->prjXmlFilePath;
 
-	/**
-	 * @param   manifestLangFiles  $manifestLang
-	 *
-	 *
-	 * @since version
-	 */
-	public function projectXMLAndScriptFile(manifestLangFiles $manifestLang): void
-	{
-		//--- project XML and script file -------------------------------------------------
+            $this->prjDefaultPath = $this->prjRootPath . '/' . $manifestLang->prjDefaultPath;
+            $this->prjAdminPath   = $this->prjRootPath . '/' . $manifestLang->prjAdminPath;
+        }
+    }
 
-		// files config.xml and  to expect for subproject
-		[$isConfigXml, $isInstallPhp] = projectType::enabledByType($this->prjType);
+    /**
+     *
+     * @return array lines
+     *
+     * @since version
+     */
+    public function __toText()
+    {
+        $lines = parent::__toText();
 
-		if ($isInstallPhp)
-		{
-			$this->installPathFilename = $this->prjXmlFilePath . '/' . $manifestLang->getSriptFile();
-			// ToDo: function checkInstallFile ();
+        $lines[] = '=== langFileNamesSet ===========================';
 
-		}
+        $lines [] = $this->getPrjIdAndTypeText();
+        $lines [] = '$prjId = "' . $this->prjId . '"';
+        $lines [] = '$prjType = "' . $this->prjType . '"';
 
-		if ($isConfigXml)
-		{
-			// ToDo: getConfigFile instead of direct below
-			// $this->configPathFilename = $this->prjXmlFilePath . '/' . $manifestLang->getConfigFile();
-			$this->configPathFilename = $this->prjXmlFilePath . '/' . 'config.xml';
-		}
+        $lines [] = '$prjRootPath = "' . $this->prjRootPath . '"';
+        $lines [] = '$prjXmlFilePath = "' . $this->prjXmlFilePath . '"';
+        $lines [] = '$langIdPrefix = "' . $this->langIdPrefix . '"';
 
-		// lang id of project
-		$this->langIdPrefix = strtoupper($manifestLang->getName());
+        $lines [] = '$prjDefaultPath = "' . $this->prjDefaultPath . '"';
+        $lines [] = '$prjAdminPath = "' . $this->prjAdminPath . '"';
 
-		//--- pre check type -----------------
+        $lines [] = '$prjXmlPathFilename = "' . $this->prjXmlPathFilename . '"';
+        $lines [] = '$installPathFilename = "' . $this->installPathFilename . '"';
+        $lines [] = '$configPathFilename = "' . $this->configPathFilename . '"';
 
-		if ($this->prjType == projectType::PRJ_TYPE_COMP_BACK_SYS)
-		{
-			$this->useLangSysIni = true;
-		}
+        $lines [] = '$useLangSysIni = "' . ($this->useLangSysIni ? 'true' : 'false') . '"';
+        $lines [] = '$isLangAtStdJoomla = "' . ($this->isLangAtStdJoomla ? 'true' : 'false') . '"';
 
-		// manifest tells about defined list of lang files
-		$this->isLangAtStdJoomla = $manifestLang->getIsLangAtStdJoomla();
-	}
-
-	private function DefaultAndAdminPath (manifestLangFiles $manifestLang) {
-
-		// on server
-		if ($manifestLang->isInstalled)
-		{
-			// admin given over $prjXmlFilePath
-			$this->prjDefaultPath = JPATH_COMPONENT_SITE;
-			$this->prjAdminPath = $this->prjXmlFilePath;
-		} else {
-			// admin given over $prjXmlFilePath
-			$this->prjDefaultPath = $this->prjXmlFilePath;
-
-			$this->prjDefaultPath = $this->prjRootPath . '/'. $manifestLang->prjDefaultPath;
-			$this->prjAdminPath = $this->prjRootPath . '/'. $manifestLang->prjAdminPath;
-		}
-
-	}
-
-	/**
-	 *
-	 * @return array lines
-	 *
-	 * @since version
-	 */
-	public function __toText()
-	{
-
-		$lines = parent::__toText();
-
-		$lines[] = '=== langFileNamesSet ===========================';
-
-
-		$lines [] = $this->getPrjIdAndTypeText();
-		$lines [] = '$prjId = "' . $this->prjId . '"';
-		$lines [] = '$prjType = "' . $this->prjType . '"';
-
-		$lines [] = '$prjRootPath = "' . $this->prjRootPath . '"';
-		$lines [] = '$prjXmlFilePath = "' . $this->prjXmlFilePath . '"';
-		$lines [] = '$langIdPrefix = "' . $this->langIdPrefix . '"';
-
-		$lines [] = '$prjDefaultPath = "' . $this->prjDefaultPath . '"';
-		$lines [] = '$prjAdminPath = "' . $this->prjAdminPath . '"';
-
-		$lines [] = '$prjXmlPathFilename = "' . $this->prjXmlPathFilename . '"';
-		$lines [] = '$installPathFilename = "' . $this->installPathFilename . '"';
-		$lines [] = '$configPathFilename = "' . $this->configPathFilename . '"';
-
-		$lines [] = '$useLangSysIni = "' . ($this->useLangSysIni ? 'true' : 'false') . '"';
-		$lines [] = '$isLangAtStdJoomla = "' . ($this->isLangAtStdJoomla ? 'true' : 'false') . '"';
-
-		$lines[] = '--- transIdLocations ---------------------------';
-		$lines[] = '            %                                     ';
+        $lines[] = '--- transIdLocations ---------------------------';
+        $lines[] = '            %                                     ';
 
 //		foreach ($this->langFilesData as $langFileData) {
 //
@@ -989,8 +880,8 @@ class langSubProject extends langFiles
 //
 //		}
 //
-		$lines[] = '--- transStringsLocations ---------------------------';
-		$lines[] = '            %                                     ';
+        $lines[] = '--- transStringsLocations ---------------------------';
+        $lines[] = '            %                                     ';
 
 //		foreach ($this->langFilesData as $langFileData) {
 //
@@ -1000,8 +891,8 @@ class langSubProject extends langFiles
 //		}
 //
 
-		$lines[] = '--- transIdsClassified ---------------------------';
-		$lines[] = '            %                                     ';
+        $lines[] = '--- transIdsClassified ---------------------------';
+        $lines[] = '            %                                     ';
 
 //		foreach ($this->langFilesData as $langFileData) {
 //
@@ -1011,8 +902,8 @@ class langSubProject extends langFiles
 //		}
 //
 
-		return $lines;
-	}
+        return $lines;
+    }
 
 } // class
 

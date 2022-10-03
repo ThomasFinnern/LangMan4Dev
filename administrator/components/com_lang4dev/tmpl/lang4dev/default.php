@@ -26,21 +26,25 @@ HTMLHelper::_('stylesheet', 'com_lang4dev/backend/controlPanel.css', array('vers
 // command buttons
 class cmdButton
 {
-	public $link;
-	public $textTitle;
-	public $textInfo;
-	public $classIcons;
-	public $classButton;
+    public $link;
+    public $textTitle;
+    public $textInfo;
+    public $classIcons;
+    public $classButton;
 
-	public function __construct($link = '?', $textTitle = '?', $textInfo = '?',
-		$classIcons = array('?', '?'), $classButton = '?')
-	{
-		$this->link        = $link;
-		$this->textTitle   = $textTitle;
-		$this->textInfo    = $textInfo;
-		$this->classIcons  = $classIcons;
-		$this->classButton = $classButton;
-	}
+    public function __construct(
+        $link = '?',
+        $textTitle = '?',
+        $textInfo = '?',
+        $classIcons = array('?', '?'),
+        $classButton = '?'
+    ) {
+        $this->link        = $link;
+        $this->textTitle   = $textTitle;
+        $this->textInfo    = $textInfo;
+        $this->classIcons  = $classIcons;
+        $this->classButton = $classButton;
+    }
 
 }
 
@@ -48,31 +52,31 @@ $cmdButtons = [];
 
 // projects
 $cmdButtons[] = new cmdButton(
-	Route::_('index.php?option=com_lang4dev&view=projects'),
-	Text::_('COM_LANG4DEV_PROJECTS'),
-	Text::_('COM_LANG4DEV_PROJECTS_DESC') . '                        ',
-	array('fas fa-tasks', 'icon-flag'),
+    Route::_('index.php?option=com_lang4dev&view=projects'),
+    Text::_('COM_LANG4DEV_PROJECTS'),
+    Text::_('COM_LANG4DEV_PROJECTS_DESC') . '                        ',
+    array('fas fa-tasks', 'icon-flag'),
 //    array('icon-equalizer', 'icon-edit'),
-	'viewProjects'
+    'viewProjects'
 );
 
 // project texts
 $cmdButtons[] = new cmdButton(
-	Route::_('index.php?option=com_lang4dev&view=prjtexts'),
-	Text::_('COM_LANG4DEV_PRJ_TEXTS'),
-	Text::_('COM_LANG4DEV_PRJ_TEXTS_DESC') . '                        ',
+    Route::_('index.php?option=com_lang4dev&view=prjtexts'),
+    Text::_('COM_LANG4DEV_PRJ_TEXTS'),
+    Text::_('COM_LANG4DEV_PRJ_TEXTS_DESC') . '                        ',
 //    array('icon-forward', 'icon-list'),
-	array('icon-code', 'icon-list'),
-	'viewPrjTexts'
+    array('icon-code', 'icon-list'),
+    'viewPrjTexts'
 );
 
 // translate
 $cmdButtons[] = new cmdButton(
-	Route::_('index.php?option=com_lang4dev&view=translate'),
-	Text::_('COM_LANG4DEV_TRANSLATE'),
-	Text::_('COM_LANG4DEV_TRANSLATE_DESC') . '                        ',
-	array('icon-forward', 'icon-flag'),
-	'viewTranslate'
+    Route::_('index.php?option=com_lang4dev&view=translate'),
+    Text::_('COM_LANG4DEV_TRANSLATE'),
+    Text::_('COM_LANG4DEV_TRANSLATE_DESC') . '                        ',
+    array('icon-forward', 'icon-flag'),
+    'viewTranslate'
 );
 
 /** ToDo: all in one joomla (german) translation
@@ -88,118 +92,123 @@ $cmdButtons[] = new cmdButton(
 
 // translations
 $cmdButtons[] = new cmdButton(
-	Route::_('index.php?option=com_lang4dev&view=maintenance'),
-	Text::_('COM_LANG4DEV_MAINTENANCE'),
-	Text::_('COM_LANG4DEV_MAINTENANCE_DESC') . '                        ',
-	array('icon-cog', 'icon-equalizer'),
-	'viewTranslations'
+    Route::_('index.php?option=com_lang4dev&view=maintenance'),
+    Text::_('COM_LANG4DEV_MAINTENANCE'),
+    Text::_('COM_LANG4DEV_MAINTENANCE_DESC') . '                        ',
+    array('icon-cog', 'icon-equalizer'),
+    'viewTranslations'
 );
 
 function DisplayButton($button)
 {
-	global $imageClass;
-	$imageClass = 'fas fa-list';
-	$imageClass = 'fas fa-image';
+    global $imageClass;
+    $imageClass = 'fas fa-list';
+    $imageClass = 'fas fa-image';
 
-	// <button type="button" class="btn btn-primary">Primary</button>
-	?>
+    // <button type="button" class="btn btn-primary">Primary</button>
+    ?>
 	<div class="rsg2-icon-button-container" style="border: #0a53be;">
 		<button type="button" class="btn ">
 
-			<a href="<?php echo $button->link; ?>" class="<?php echo $button->classButton; ?>">
+			<a href="<?php
+            echo $button->link; ?>" class="<?php
+            echo $button->classButton; ?>">
 				<figure class="lang4dev-icon">
-					<?php
-					foreach ($button->classIcons as $Idx => $imageClass)
-					{
-						echo '            <span class="' . $imageClass . ' icoMoon icoMoon0' . $Idx . '" style="font-size:30px;"></span>'; // style="font-size:30px;"
-					}
-					?>
+                    <?php
+                    foreach ($button->classIcons as $Idx => $imageClass) {
+                        echo '            <span class="' . $imageClass . ' icoMoon icoMoon0' . $Idx . '" style="font-size:30px;"></span>'; // style="font-size:30px;"
+                    }
+                    ?>
 					<figcaption class="rsg2-text">
-						<div class="maint-title"><strong><?php echo $button->textTitle; ?></strong></div>
-						<div class="maint-text"><?php echo $button->textInfo; ?></div>
+						<div class="maint-title"><strong><?php
+                                echo $button->textTitle; ?></strong></div>
+						<div class="maint-text"><?php
+                            echo $button->textInfo; ?></div>
 					</figcaption>
 				</figure>
 			</a>
 
 		</button>
 	</div>
-	<?php
+    <?php
 }
 
 function DisplayControlButtons($cmdButtons)
 {
-
-	foreach ($cmdButtons as $Button)
-	{
-
-		DisplayButton($Button);
-	}
-
+    foreach ($cmdButtons as $Button) {
+        DisplayButton($Button);
+    }
 }
 
 function renderProjectSelection($form)
 {
-	?>
+    ?>
 	<br>
 	<div class="d-flex flex-row py-0 my-0 justify-content-between">
 		<div class="mx-2 py-0 flex-fill ">
-			<?php echo $form->renderField('selectProject'); ?>
+            <?php
+            echo $form->renderField('selectProject'); ?>
 		</div>
 
 		<div class="mx-2 py-0 px-2 flex-fill ">
-			<?php echo $form->renderField('selectSubproject'); ?>
+            <?php
+            echo $form->renderField('selectSubproject'); ?>
 		</div>
 
 	</div>
-	<?php
+    <?php
 
-	return;
+    return;
 }
-
 
 function renderLangIdTexts($form)
 {
-	// mx-2 py-0, mx-2 py-0 px-2
-	?>
+    // mx-2 py-0, mx-2 py-0 px-2
+    ?>
 	<br>
 	<div class="d-flex flex-row py-0 my-0 justify-content-between">
 		<div class="mx-2 py-0 flex-fill ">
-			<?php echo $form->renderField('selectSourceLangId'); ?>
+            <?php
+            echo $form->renderField('selectSourceLangId'); ?>
 		</div>
 
 		<div class="mx-2 py-0 flex-fill ">
-			<?php echo $form->renderField('selectTargetLangId'); ?>
+            <?php
+            echo $form->renderField('selectTargetLangId'); ?>
 		</div>
 
 	</div>
-	<?php
+    <?php
 
-	return;
+    return;
 }
 
 ?>
 
-	<form action="<?php echo Route::_('index.php?option=com_lang4dev'); ?>"
+	<form action="<?php
+    echo Route::_('index.php?option=com_lang4dev'); ?>"
 	      method="post" name="adminForm" id="adminForm" class="form-validate">
 
 		<div class="main-horizontal-bar" style="display: flex; flex-direction: row; justify-content: flex-start;">
-			<?php
-			//--- Logo -----------------------------
-			DisplayLogo();
-			?>
+            <?php
+            //--- Logo -----------------------------
+            DisplayLogo();
+            ?>
 
 			<div class="main-vertical-stack"
 			     style="display: flex; flex-direction: column; justify-content: space-between">
 				<div class="vertical-header">
-					<h2><?php echo Text::_('COM_LANG4DEV_LANG4DEV'); ?></h2>
-					<strong><?php echo Text::_('COM_LANG4DEV_LANG4DEV_DESC'); ?></strong>
+					<h2><?php
+                        echo Text::_('COM_LANG4DEV_LANG4DEV'); ?></h2>
+					<strong><?php
+                        echo Text::_('COM_LANG4DEV_LANG4DEV_DESC'); ?></strong>
 				</div>
 				<div class="horizontal-buttons"
 				     style="display: flex; flex-direction: row; align-content: space-between; ">
-					<?php
-					//--- Control buttons ------------------
-					DisplayControlButtons($cmdButtons);
-					?>
+                    <?php
+                    //--- Control buttons ------------------
+                    DisplayControlButtons($cmdButtons);
+                    ?>
 				</div>
 				<div class="vertical-empty-part3" style="min-height: 20px;">
 				</div>
@@ -207,13 +216,18 @@ function renderLangIdTexts($form)
 		</div>
 
 		<br>
-		<h2><?php echo '&nbsp;&nbsp;'?>Lang4Dev<?php echo '&nbsp;V' . $this->extensionVersion; ?></h2>
+		<h2><?php
+            echo '&nbsp;&nbsp;' ?>Lang4Dev<?php
+            echo '&nbsp;V' . $this->extensionVersion; ?></h2>
 
-		<?php renderProjectSelection($this->form); ?>
-		<?php renderLangIdTexts($this->form); ?>
+        <?php
+        renderProjectSelection($this->form); ?>
+        <?php
+        renderLangIdTexts($this->form); ?>
 
 		<input type="hidden" name="task" value=""/>
-		<?php echo HTMLHelper::_('form.token'); ?>
+        <?php
+        echo HTMLHelper::_('form.token'); ?>
 
 	</form>
 
@@ -228,14 +242,20 @@ function renderLangIdTexts($form)
  */
 function DisplayLogo()
 {
-	echo '    <div class="lang4dev_logo">';
+    echo '    <div class="lang4dev_logo">';
 //	             echo HTMLHelper::_('image', 'com_lang4dev/RSG2_logo.big.png', Text::_('COM_LANG4DEV_MAIN_LOGO_ALT_TEXT'), null, true);
-	echo HTMLHelper::_('image', 'com_lang4dev/Lang4Dev_Logo.svg', Text::_('COM_LANG4DEV_MAIN_LOGO_ALT_TEXT'), null, true);
-	echo '     </div>';
+    echo HTMLHelper::_(
+        'image',
+        'com_lang4dev/Lang4Dev_Logo.svg',
+        Text::_('COM_LANG4DEV_MAIN_LOGO_ALT_TEXT'),
+        null,
+        true
+    );
+    echo '     </div>';
 //	echo '<p class="test">';
 //	echo '</p>
 
-	echo '<div class="clearfix"></div>';
+    echo '<div class="clearfix"></div>';
 }
 
 //--- Control buttons ------------------

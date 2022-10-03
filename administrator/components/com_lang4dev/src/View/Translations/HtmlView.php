@@ -21,6 +21,7 @@ use Joomla\CMS\MVC\View\GenericDataException;
 use Joomla\CMS\Router\Route;
 use Joomla\CMS\Toolbar\Toolbar;
 use Joomla\CMS\Toolbar\ToolbarHelper;
+
 use function defined;
 
 //use Finnern\Component\Lang4dev\Administrator\Helper\Lang4devHelper;
@@ -32,101 +33,98 @@ use function defined;
  */
 class HtmlView extends BaseHtmlView
 {
-	protected $isDebugBackend;
-	protected $isDevelop;
+    protected $isDebugBackend;
+    protected $isDevelop;
 
-	/**
-	 * Method to display the view.
-	 *
-	 * @param   string  $tpl  A template file to load. [optional]
-	 *
-	 * @return  mixed  A string if successful, otherwise an \Exception object.
-	 *
-	 * @since __BUMP_VERSION__
-	 */
-	public function display($tpl = null)
-	{
-		$Layout = Factory::getApplication()->input->get('layout');
-		//echo '$Layout: ' . $Layout . '<br>';
+    /**
+     * Method to display the view.
+     *
+     * @param   string  $tpl  A template file to load. [optional]
+     *
+     * @return  mixed  A string if successful, otherwise an \Exception object.
+     *
+     * @since __BUMP_VERSION__
+     */
+    public function display($tpl = null)
+    {
+        $Layout = Factory::getApplication()->input->get('layout');
+        //echo '$Layout: ' . $Layout . '<br>';
 
-		$l4dConfig            = ComponentHelper::getComponent('com_lang4dev')->getParams();
-		$this->isDebugBackend = $l4dConfig->get('isDebugBackend');
-		$this->isDevelop      = $l4dConfig->get('isDevelop');
+        $l4dConfig            = ComponentHelper::getComponent('com_lang4dev')->getParams();
+        $this->isDebugBackend = $l4dConfig->get('isDebugBackend');
+        $this->isDevelop      = $l4dConfig->get('isDevelop');
 
-		//---  --------------------------------------------------------------
-		/**
-		 * $Layout = Factory::getApplication()->input->get('layout');
-		 * Lang4devHelper::addSubmenu('config');
-		 * $this->sidebar = \JHtmlSidebar::render();
-		 **/
+        //---  --------------------------------------------------------------
+        /**
+         * $Layout = Factory::getApplication()->input->get('layout');
+         * Lang4devHelper::addSubmenu('config');
+         * $this->sidebar = \JHtmlSidebar::render();
+         **/
 
-		$this->addToolbar($Layout);
-		/**/
+        $this->addToolbar($Layout);
+        /**/
 
-		parent::display($tpl);
+        parent::display($tpl);
 
-		return;
-	}
+        return;
+    }
 
-	/**
-	 * Add the page title and toolbar.
-	 *
-	 * @return  void
-	 *
-	 * @since __BUMP_VERSION__
-	 */
-	protected function addToolbar($Layout)
-	{
-		// Get the toolbar object instance
-		$toolbar = Toolbar::getInstance('toolbar');
+    /**
+     * Add the page title and toolbar.
+     *
+     * @return  void
+     *
+     * @since __BUMP_VERSION__
+     */
+    protected function addToolbar($Layout)
+    {
+        // Get the toolbar object instance
+        $toolbar = Toolbar::getInstance('toolbar');
 
-		// on develop show open tasks if existing
-		if (!empty ($this->isDevelop))
-		{
-			echo '<span style="color:red">'
-				. '<b>Tasks:</b> <br>'
-				. '* <br>'
-				. '* <br>'
+        // on develop show open tasks if existing
+        if (!empty ($this->isDevelop)) {
+            echo '<span style="color:red">'
+                . '<b>Tasks:</b> <br>'
+                . '* <br>'
+                . '* <br>'
 //				. '* <br>'
 //				. '* <br>'
 //				. '* <br>'
 //				. '* <br>'
-				. '</span><br><br>';
-		}
+                . '</span><br><br>';
+        }
 
-		switch ($Layout)
-		{
-			/**
-			 * case 'RawView':
-			 * ToolBarHelper::title(Text::_('COM_Lang4dev_MAINTENANCE')
-			 * . ': ' . Text::_('COM_Lang4dev_CONFIGURATION_RAW_VIEW'), 'screwdriver');
-			 * ToolBarHelper::cancel('config.cancel_rawView', 'JTOOLBAR_CLOSE');
-			 *
-			 *
-			 * break;
-			 *
-			 * case 'RawEdit':
-			 * ToolBarHelper::title(Text::_('COM_Lang4dev_MAINTENANCE')
-			 * . ': ' . Text::_('COM_Lang4dev_CONFIGURATION_RAW_EDIT'), 'screwdriver');
-			 * ToolBarHelper::apply('config.apply_rawEdit');
-			 * ToolBarHelper::save('config.save_rawEdit');
-			 * ToolBarHelper::cancel('config.cancel_rawEdit', 'JTOOLBAR_CLOSE');
-			 * break;
-			 * /**/
-			default:
-				ToolBarHelper::cancel('lang4dev.cancel', 'JTOOLBAR_CLOSE');
-				break;
-		}
+        switch ($Layout) {
+            /**
+             * case 'RawView':
+             * ToolBarHelper::title(Text::_('COM_Lang4dev_MAINTENANCE')
+             * . ': ' . Text::_('COM_Lang4dev_CONFIGURATION_RAW_VIEW'), 'screwdriver');
+             * ToolBarHelper::cancel('config.cancel_rawView', 'JTOOLBAR_CLOSE');
+             *
+             *
+             * break;
+             *
+             * case 'RawEdit':
+             * ToolBarHelper::title(Text::_('COM_Lang4dev_MAINTENANCE')
+             * . ': ' . Text::_('COM_Lang4dev_CONFIGURATION_RAW_EDIT'), 'screwdriver');
+             * ToolBarHelper::apply('config.apply_rawEdit');
+             * ToolBarHelper::save('config.save_rawEdit');
+             * ToolBarHelper::cancel('config.cancel_rawEdit', 'JTOOLBAR_CLOSE');
+             * break;
+             * /**/
+            default:
+                ToolBarHelper::cancel('lang4dev.cancel', 'JTOOLBAR_CLOSE');
+                break;
+        }
 
-		// Set the title
-		ToolBarHelper::title(Text::_('COM_LANG4DEV_SUBMENU_TRANSLATIONS'), 'book');
+        // Set the title
+        ToolBarHelper::title(Text::_('COM_LANG4DEV_SUBMENU_TRANSLATIONS'), 'book');
 
-		// Options button.
-		if (Factory::getApplication()->getIdentity()->authorise('core.admin', 'com_lang4dev'))
-		{
-			$toolbar->preferences('com_lang4dev');
-		}
-	}
+        // Options button.
+        if (Factory::getApplication()->getIdentity()->authorise('core.admin', 'com_lang4dev')) {
+            $toolbar->preferences('com_lang4dev');
+        }
+    }
 
 }
 

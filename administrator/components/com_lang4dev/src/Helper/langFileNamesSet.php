@@ -11,11 +11,13 @@
 
 namespace Finnern\Component\Lang4dev\Administrator\Helper;
 
+use Exception;
 use Joomla\CMS\Factory;
 use Joomla\CMS\Filesystem\Folder;
 
 use Finnern\Component\Lang4dev\Administrator\Helper\projectType;
 use RuntimeException;
+
 use function defined;
 
 // no direct access
@@ -29,193 +31,165 @@ defined('_JEXEC') or die;
  */
 class langFileNamesSet
 {
-	public $langBasePath = '';
+    public $langBasePath = '';
 //	public $baseName = '';
-	public $langIds = [];
-	public $langFileNamesSet = []; // [LangIds] [filename]
+    public $langIds = [];
+    public $langFileNamesSet = []; // [LangIds] [filename]
 
     public $useLangSysIni = false;
-	protected $isLangInFolders = false; // lang file are divided in folders instead of containing the name in front
-	protected $isLangIdPre2Name = false; // ToDo: is this needed ?
+    protected $isLangInFolders = false; // lang file are divided in folders instead of containing the name in front
+    protected $isLangIdPre2Name = false; // ToDo: is this needed ?
 
-	/**
-	 * @param $basePath
-	 */
-	public function __construct($basePath = '')
-	{
-		$this->langBasePath = $basePath;
-	}
+    /**
+     * @param $basePath
+     */
+    public function __construct($basePath = '')
+    {
+        $this->langBasePath = $basePath;
+    }
 
-	/**
-	 *
-	 *
-	 * @since version
-	 */
-	public function clear()
-	{
+    /**
+     *
+     *
+     * @since version
+     */
+    public function clear()
+    {
+        $this->langBasePath = '';
+        //$this->baseName         = '';
+        $this->langIds          = [];
+        $this->langFileNamesSet = [];
 
-		$this->langBasePath     = '';
-		//$this->baseName         = '';
-		$this->langIds          = [];
-		$this->langFileNamesSet = [];
+        $this->useLangSysIni    = false;
+        $this->isLangInFolders  = false; // lang file are divided in folders instead of containing the name i front
+        $this->isLangIdPre2Name = false; // ToDo: is this needed ?
 
-		$this->useLangSysIni    = false;
-		$this->isLangInFolders  = false; // lang file are divided in folders instead of containing the name i front
-		$this->isLangIdPre2Name = false; // ToDo: is this needed ?
+    }
 
-	}
+    /**
+     * @param $basePath
+     * @param $useLangSysIni
+     *
+     * @return bool
+     *
+     * @throws Exception
+     * @since version
+     */
+    public function detectLangBasePath($basePath = '', $useLangSysIni = false)
+    {
+        if ($basePath == '') {
+            $basePath = $this->langBasePath;
+        } else {
+            $this->langBasePath = $basePath;
+        }
 
-	/**
-	 * @param $basePath
-	 * @param $useLangSysIni
-	 *
-	 * @return bool
-	 *
-	 * @throws \Exception
-	 * @since version
-	 */
-	public function detectLangBasePath($basePath = '', $useLangSysIni = false)
-	{
+        if ($basePath == '' or $basePath == '/' or $basePath == '\\') {
+            //--- path does not exist -------------------------------
 
-		if ($basePath == '')
-		{
+            $OutTxt = 'Warning: langFileNamesSet.detectBasePath: Base path invalid "' . $basePath . '"<br>';
 
-			$basePath = $this->langBasePath;
-		}
-		else
-		{
+            $app = Factory::getApplication();
+            $app->enqueueMessage($OutTxt, 'warning');
 
-			$this->langBasePath = $basePath;
-		}
+            return false;
+        }
 
-		if ($basePath == '' or $basePath == '/' or $basePath == '\\')
-		{
-			//--- path does not exist -------------------------------
+        if (!is_dir($basePath)) {
+            //--- path does not exist -------------------------------
 
-			$OutTxt = 'Warning: langFileNamesSet.detectBasePath: Base path invalid "' . $basePath . '"<br>';
+            $OutTxt = 'Warning: langFileNamesSet.detectBasePath: Base path does not exist "' . $basePath . '"<br>';
 
-			$app = Factory::getApplication();
-			$app->enqueueMessage($OutTxt, 'warning');
+            $app = Factory::getApplication();
+            $app->enqueueMessage($OutTxt, 'warning');
 
-			return false;
-		}
+            return false;
+        }
 
-		if (!is_dir($basePath))
-		{
-			//--- path does not exist -------------------------------
+        $this->useLangSysIni = $useLangSysIni;
+        $isPathFound         = $this->searchDir4LangID($basePath);
 
-			$OutTxt = 'Warning: langFileNamesSet.detectBasePath: Base path does not exist "' . $basePath . '"<br>';
+        // ToDo: may be done outside
+        if (!$isPathFound) {
+            //--- path does not exist -------------------------------
 
-			$app = Factory::getApplication();
-			$app->enqueueMessage($OutTxt, 'warning');
+            $OutTxt = 'Warning: langFileNamesSet.searchDir4LangID: Base path for lang names not found behind path  "' . $basePath . '"<br>';
 
-			return false;
-		}
+            $app = Factory::getApplication();
+            $app->enqueueMessage($OutTxt, 'warning');
+        }
 
-		$this->useLangSysIni = $useLangSysIni;
-		$isPathFound         = $this->searchDir4LangID($basePath);
+        return $isPathFound;
+    }
 
-		// ToDo: may be done outside
-		if (!$isPathFound)
-		{
+    /*
+        - language ID used in front of file:
+            a) if file name is found in folder there is no 'en-GB' in containing folder
+               ==> All files will contain lang ID in front and are kept in same folder
+            b) Lang Id may be found on file name in subfolder of Lang ID folder.
+               ==> has actual no influence so is ignored
+    */
 
-			//--- path does not exist -------------------------------
+    /**
+     * @param $searchPath
+     * @param $langId
+     *
+     * @return bool
+     *
+     * @since version
+     */
+    protected function searchDir4LangID($searchPath, $langId = 'en-GB')
+    {
+        $isPathFound = false;
 
-			$OutTxt = 'Warning: langFileNamesSet.searchDir4LangID: Base path for lang names not found behind path  "' . $basePath . '"<br>';
+        $end = '.ini';
+        if ($this->useLangSysIni) {
+            $end = '.sys.ini';
+        }
 
-			$app = Factory::getApplication();
-			$app->enqueueMessage($OutTxt, 'warning');
+        #--- All files (en-GB. ... .ini) in folder -------------------------------------
 
-		}
+        foreach (Folder::files($searchPath) as $fileName) {
+            if (str_starts_with($fileName, $langId)) {
+                if (str_ends_with($fileName, $end)) {
+                    $isPathFound        = true;
+                    $this->langBasePath = $searchPath;
 
-		return $isPathFound;
-	}
+                    //--- flags --------------------------------
 
-	/*
-		- language ID used in front of file:
-			a) if file name is found in folder there is no 'en-GB' in containing folder
-			   ==> All files will contain lang ID in front and are kept in same folder
-			b) Lang Id may be found on file name in subfolder of Lang ID folder.
-			   ==> has actual no influence so is ignored
-	*/
+                    $this->isLangInFolders  = false;
+                    $this->isLangIdPre2Name = true;
 
-	/**
-	 * @param $searchPath
-	 * @param $langId
-	 *
-	 * @return bool
-	 *
-	 * @since version
-	 */
-	protected function searchDir4LangID($searchPath, $langId = 'en-GB')
-	{
+                    break;
+                }
+            }
+        }
 
-		$isPathFound = false;
+        if (!$isPathFound) {
+            #--- All sub folders in folder -------------------------------------
 
-		$end = '.ini';
-		if ($this->useLangSysIni)
-		{
-			$end = '.sys.ini';
-		}
+            foreach (Folder::folders($searchPath) as $folderName) {
+                $subFolder = $searchPath . DIRECTORY_SEPARATOR . $folderName;
 
-		#--- All files (en-GB. ... .ini) in folder -------------------------------------
+                if (str_starts_with($folderName, $langId)) {
+                    $isPathFound        = true;
+                    $this->langBasePath = $searchPath;
 
-		foreach (Folder::files($searchPath) as $fileName)
-		{
-			if (str_starts_with($fileName, $langId))
-			{
+                    //--- flags --------------------------------
 
-				if (str_ends_with($fileName, $end))
-				{
-					$isPathFound        = true;
-					$this->langBasePath = $searchPath;
+                    $this->isLangInFolders  = true;
+                    $this->isLangIdPre2Name = false;
+                } else {
+                    $isPathFound = $this->searchDir4LangID($subFolder);
 
-					//--- flags --------------------------------
+                    if ($isPathFound) {
+                        break;
+                    }
+                }
+            }
+        }
 
-					$this->isLangInFolders  = false;
-					$this->isLangIdPre2Name = true;
-
-					break;
-				}
-			}
-		}
-
-		if (!$isPathFound)
-		{
-
-			#--- All sub folders in folder -------------------------------------
-
-			foreach (Folder::folders($searchPath) as $folderName)
-			{
-
-				$subFolder = $searchPath . DIRECTORY_SEPARATOR . $folderName;
-
-				if (str_starts_with($folderName, $langId))
-				{
-
-					$isPathFound        = true;
-					$this->langBasePath = $searchPath;
-
-					//--- flags --------------------------------
-
-					$this->isLangInFolders  = true;
-					$this->isLangIdPre2Name = false;
-
-				}
-				else
-				{
-					$isPathFound = $this->searchDir4LangID($subFolder);
-
-					if ($isPathFound)
-					{
-						break;
-					}
-				}
-			}
-		}
-
-		return $isPathFound;
-	}
+        return $isPathFound;
+    }
 
     /**
      * @param $prjType
@@ -242,52 +216,45 @@ class langFileNamesSet
     }
 
     /**
-	 * // ToDo: detectBasePath does not need to know about useLangSysIni, do it here ? or tell by construct
-	 * public function collectLangFiles () {
-	 *
-	 * $isFound = false;
-	 *
-	 * // try ?
-	 * $isFound = $this->collectFolderLangFiles ();
-	 *
-	 * return $isFound;
-	 * }
-	 * /**/
+     * // ToDo: detectBasePath does not need to know about useLangSysIni, do it here ? or tell by construct
+     * public function collectLangFiles () {
+     *
+     * $isFound = false;
+     *
+     * // try ?
+     * $isFound = $this->collectFolderLangFiles ();
+     *
+     * return $isFound;
+     * }
+     * /**/
 
-	protected function collectPrjFolderLangFiles()
-	{
-		//$isBaseNameSet = false;
-		$isFound = false;
+    protected function collectPrjFolderLangFiles()
+    {
+        //$isBaseNameSet = false;
+        $isFound = false;
 
-		$this->langIds = [];
-		//$baseName      = '';
+        $this->langIds = [];
+        //$baseName      = '';
 
-		if ($this->useLangSysIni == true)
-		{
-			$regex = '\.sys\.ini$';
-		}
-		else
-		{
-			// ToDo: regex with check for not .sys. before search string
-			$regex = '(?<!\.sys)\.ini$';
-		}
+        if ($this->useLangSysIni == true) {
+            $regex = '\.sys\.ini$';
+        } else {
+            // ToDo: regex with check for not .sys. before search string
+            $regex = '(?<!\.sys)\.ini$';
+        }
 
-		//--- lang ID in front ----------------------------------------
+        //--- lang ID in front ----------------------------------------
 
-		// ToDo: lang name may be in sub folders ?
-		if ($this->isLangIdPre2Name)
-		{
+        // ToDo: lang name may be in sub folders ?
+        if ($this->isLangIdPre2Name) {
+            $langFiles = Folder::files($this->langBasePath, $regex);
 
-			$langFiles = Folder::files($this->langBasePath, $regex);
+            // all files in dir
+            foreach ($langFiles as $langFile) {
+                [$langId, $baseName] = explode('.', $langFile, 2);
 
-			// all files in dir
-			foreach ($langFiles as $langFile)
-			{
-
-				[$langId, $baseName] = explode('.', $langFile, 2);
-
-				$this->langIds []                   = $langId;
-				$this->langFileNamesSet [$langId][] = $langFile;
+                $this->langIds []                   = $langId;
+                $this->langFileNamesSet [$langId][] = $langFile;
 
 //				// set base name once
 //				if ($isBaseNameSet == false)
@@ -296,26 +263,21 @@ class langFileNamesSet
 //					$isBaseNameSet  = true;
 //				}
 
-				$isFound = true;
-			}
+                $isFound = true;
+            }
+        } else {
+            //--- lang ID as folder name --------------------------------
 
-		}
-		else
-		{
-			//--- lang ID as folder name --------------------------------
+            // all folders
+            foreach (Folder::folders($this->langBasePath) as $folderName) {
+                $langId           = $folderName;
+                $this->langIds [] = $langId;
 
-			// all folders
-			foreach (Folder::folders($this->langBasePath) as $folderName)
-			{
-				$langId           = $folderName;
-				$this->langIds [] = $langId;
+                $subFolder = $this->langBasePath . DIRECTORY_SEPARATOR . $folderName;
 
-				$subFolder = $this->langBasePath . DIRECTORY_SEPARATOR . $folderName;
-
-				// all matching file names
-				$fileNames = Folder::files($subFolder, $regex);
-				foreach ($fileNames as $fileName)
-				{
+                // all matching file names
+                $fileNames = Folder::files($subFolder, $regex);
+                foreach ($fileNames as $fileName) {
 //					// set base name once
 //					if ($isBaseNameSet == false)
 //					{
@@ -329,30 +291,31 @@ class langFileNamesSet
 //					}
 
 //					$langFile = $subFolder . DIRECTORY_SEPARATOR . $baseName;
-					$langFile = $subFolder . DIRECTORY_SEPARATOR . $fileName;
+                    $langFile = $subFolder . DIRECTORY_SEPARATOR . $fileName;
 
-					$this->langFileNamesSet [$langId][] = $langFile;
+                    $this->langFileNamesSet [$langId][] = $langFile;
 
-					$isFound = true;
-				}
-			}
-		}
+                    $isFound = true;
+                }
+            }
+        }
 
-		//return $isBaseNameSet;
-		return $isFound;
-	}
+        //return $isBaseNameSet;
+        return $isFound;
+    }
 
-	// restrict to sub prj type
+    // restrict to sub prj type
 
-	/**
+    /**
      * Extract the names and folders from XML definition
+     *
      * @param $manifestLang
-	 * @param $prjType
-	 *
-	 *
-	 * @since version
-	 */
-	public function collectManifestLangFiles_OnJoomla($manifestLang, $prjType)
+     * @param $prjType
+     *
+     *
+     * @since version
+     */
+    public function collectManifestLangFiles_OnJoomla($manifestLang, $prjType)
     {
         $isCheck4Ini = false;
 
@@ -394,15 +357,16 @@ class langFileNamesSet
         return;
     }
 
-	/**
+    /**
      * Extract the names and folders from XML definition
-	 * @param $manifestLang
-	 * @param $prjType
-	 *
-	 *
-	 * @since version
-	 */
-	public function collectManifestLangFiles_OnDevelop($manifestLang, $prjType)
+     *
+     * @param $manifestLang
+     * @param $prjType
+     *
+     *
+     * @since version
+     */
+    public function collectManifestLangFiles_OnDevelop($manifestLang, $prjType)
     {
         $isCheck4Ini = false;
 
@@ -430,194 +394,170 @@ class langFileNamesSet
         /**/
     }
 
-	/**
-	 *
-	 *
-	 * @throws \Exception
-	 * @since version
-	 */
-	public function extendManifestLangFilesList()
-	{
+    /**
+     *
+     *
+     * @throws Exception
+     * @since version
+     */
+    public function extendManifestLangFilesList()
+    {
+        try {
+            if (count($this->langIds) > 0) {
+                //--- Select basis language / files to match others ----------------------
 
-		try
-		{
-			if (count($this->langIds) > 0)
-			{
-				//--- Select basis language / files to match others ----------------------
+                $firstLangId = $this->langIds[0];
+                $langFiles   = $this->langFileNamesSet [$firstLangId];
 
-				$firstLangId = $this->langIds[0];
-				$langFiles   = $this->langFileNamesSet [$firstLangId];
+                if (count($langFiles) > 0) {
+                    //--- basis folder -------------------------------------------------------
 
-				if (count($langFiles) > 0)
-				{
-					//--- basis folder -------------------------------------------------------
+                    $firstLangFile  = $langFiles [0];
+                    $langBaseFolder = dirname($firstLangFile, 2);
 
-					$firstLangFile  = $langFiles [0];
-					$langBaseFolder = dirname($firstLangFile, 2);
+                    //--- all lang IDs (en-GB ...) in folder -------------------------
 
-					//--- all lang IDs (en-GB ...) in folder -------------------------
+                    $folderLangIds = langPathFileName::allLangIds_FromSubFolderNames($langBaseFolder);
+                    foreach ($folderLangIds as $folderLangId) {
+                        //--- all not detected lang IDs -----------------------------------
 
-					$folderLangIds = langPathFileName::allLangIds_FromSubFolderNames($langBaseFolder);
-					foreach ($folderLangIds as $folderLangId)
-					{
-						//--- all not detected lang IDs -----------------------------------
+                        if (!in_array($folderLangId, $this->langIds) && $folderLangId != 'overrides') {
+                            // check for existence of matching lang ID file
+                            foreach ($langFiles as $baseLangFile) {
+                                //--- create matching name with actual lang ID -------------------
 
-						if (!in_array($folderLangId, $this->langIds) && $folderLangId != 'overrides')
-						{
-							// check for existence of matching lang ID file
-							foreach ($langFiles as $baseLangFile)
-							{
-								//--- create matching name with actual lang ID -------------------
+                                $matchLangFile = new langPathFileName ($baseLangFile);
 
-								$matchLangFile = new langPathFileName ($baseLangFile);
+                                // exchange lang ID in path and pre name
+                                $matchLangFile->setlangID($folderLangId);
 
-								// exchange lang ID in path and pre name
-								$matchLangFile->setlangID($folderLangId);
+                                $matchLangFilePathName = $matchLangFile->getlangPathFileName();
 
-								$matchLangFilePathName = $matchLangFile->getlangPathFileName();
+                                if (file_exists($matchLangFilePathName)) {
+                                    // first match ?
+                                    if (!in_array($folderLangId, $this->langIds)) {
+                                        $this->langIds [] = $folderLangId;
+                                    }
 
-								if (file_exists($matchLangFilePathName))
-								{
+                                    $this->langFileNamesSet [$folderLangId][] = $matchLangFilePathName;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        } catch (RuntimeException $e) {
+            $OutTxt = '';
+            $OutTxt .= 'Error executing extendManifestLangFilesList: "' . '<br>';
+            $OutTxt .= 'Error: "' . $e->getMessage() . '"' . '<br>';
 
-									// first match ?
-									if (!in_array($folderLangId, $this->langIds))
-									{
-										$this->langIds [] = $folderLangId;
-									}
+            $app = Factory::getApplication();
+            $app->enqueueMessage($OutTxt, 'error');
+        }
+    }
 
-									$this->langFileNamesSet [$folderLangId][] = $matchLangFilePathName;
-								}
+    // search for matching filename
 
-							}
-						}
-					}
+    /**
+     * @param $mainLangId
+     * @param $mainLangFileName
+     * @param $transLangId
+     *
+     * @return mixed|string
+     *
+     * @since version
+     */
+    public function matchingNameByTransId($mainLangId, $mainLangFileName, $transLangId)
+    {
+        // create empty lang file with just a filename
+        $langFile = new langfile(); // empty lang file
+        $langFile->setLangPathFileName($mainLangFileName);
 
-				}
-			}
+        // Exchange lang ID with source lang ID
+        $langFile->replaceLangId($transLangId);
 
-		}
-		catch (RuntimeException $e)
-		{
-			$OutTxt = '';
-			$OutTxt .= 'Error executing extendManifestLangFilesList: "' . '<br>';
-			$OutTxt .= 'Error: "' . $e->getMessage() . '"' . '<br>';
+        $matchLangFileName = $langFile->getLangPathFileName();
 
-			$app = Factory::getApplication();
-			$app->enqueueMessage($OutTxt, 'error');
-		}
+        return $matchLangFileName;
+    }
 
-	}
+    /**
+     * @param $prjType
+     *
+     * @return string
+     *
+     * @since version
+     */
+    public function langBasePathJoomla($prjType)
+    {
+        // most used is admin backend
+        $basePath = JPATH_ADMINISTRATOR . '/language';
 
-	// search for matching filename
+        switch ($prjType) {
+            case projectType::PRJ_TYPE_NONE:
+                break;
 
-	/**
-	 * @param $mainLangId
-	 * @param $mainLangFileName
-	 * @param $transLangId
-	 *
-	 * @return mixed|string
-	 *
-	 * @since version
-	 */
-	public function matchingNameByTransId($mainLangId, $mainLangFileName, $transLangId)
-	{
+            case projectType::PRJ_TYPE_COMP_BACK_SYS:
+                // admin
+                break;
 
-		// create empty lang file with just a filename
-		$langFile = new langfile(); // empty lang file
-		$langFile->setLangPathFileName($mainLangFileName);
+            case projectType::PRJ_TYPE_COMP_BACK:
+                // admin
+                break;
 
-		// Exchange lang ID with source lang ID
-		$langFile->replaceLangId($transLangId);
+            case projectType::PRJ_TYPE_COMP_SITE:
+                // site
+                $basePath = JPATH_ROOT . '/language';
+                break;
 
-		$matchLangFileName = $langFile->getLangPathFileName();
+            case projectType::PRJ_TYPE_MODEL:
+                // site
+                $basePath = JPATH_ROOT . '/language';
+                break;
 
-		return $matchLangFileName;
-	}
+            case projectType::PRJ_TYPE_PLUGIN:
+                // admin
+                break;
+        }
 
-	/**
-	 * @param $prjType
-	 *
-	 * @return string
-	 *
-	 * @since version
-	 */
-	public function langBasePathJoomla($prjType)
-	{
-		// most used is admin backend
-		$basePath = JPATH_ADMINISTRATOR . '/language';
+        return $basePath;
+    }
 
-		switch ($prjType)
-		{
+    /**
+     *
+     * @return array
+     *
+     * @since version
+     */
+    public function __toText()
+    {
+        $lines = [];
 
-			case projectType::PRJ_TYPE_NONE:
-				break;
+        $lines[] = '--- langFileNamesSet ---------------------------';
 
-			case projectType::PRJ_TYPE_COMP_BACK_SYS:
-				// admin
-				break;
+        $lines [] = 'langBasePath = "' . $this->langBasePath . '"';
+        //$lines [] = '$baseName = "' . $this->baseName . '"';
+        $lines [] = 'useLangSysIni = "' . ($this->useLangSysIni ? 'true' : 'false') . '"';
+        $lines [] = 'isLangInFolders = "' . ($this->isLangInFolders ? 'true' : 'false') . '"';
+        $lines [] = 'isLangIdPre2Name = "' . ($this->isLangIdPre2Name ? 'true' : 'false') . '"';
 
-			case projectType::PRJ_TYPE_COMP_BACK:
-				// admin
-				break;
+        $lines []    = '--- $langIds ------------------------';
+        $langIdsLine = '';
+        foreach ($this->langIds as $langId) {
+            $langIdsLine .= $langId . ', ';
+        }
+        $lines [] = $langIdsLine;
 
-			case projectType::PRJ_TYPE_COMP_SITE:
-				// site
-				$basePath = JPATH_ROOT . '/language';
-				break;
+        $lines [] = '--- $sourceLangFiles ------------------------';
+        foreach ($this->langFileNamesSet as $langId => $langFiles) {
+            $lines [] = '[' . $langId . ']';
 
-			case projectType::PRJ_TYPE_MODEL:
-				// site
-				$basePath = JPATH_ROOT . '/language';
-				break;
+            foreach ($langFiles as $langFile) {
+                $lines [] = '   * ' . $langFile;
+            }
+        }
 
-			case projectType::PRJ_TYPE_PLUGIN:
-				// admin
-				break;
-
-		}
-
-		return $basePath;
-	}
-
-	/**
-	 *
-	 * @return array
-	 *
-	 * @since version
-	 */
-	public function __toText()
-	{
-
-		$lines = [];
-
-		$lines[] = '--- langFileNamesSet ---------------------------';
-
-		$lines [] = 'langBasePath = "' . $this->langBasePath . '"';
-		//$lines [] = '$baseName = "' . $this->baseName . '"';
-		$lines [] = 'useLangSysIni = "' . ($this->useLangSysIni ? 'true' : 'false') . '"';
-		$lines [] = 'isLangInFolders = "' . ($this->isLangInFolders ? 'true' : 'false') . '"';
-		$lines [] = 'isLangIdPre2Name = "' . ($this->isLangIdPre2Name ? 'true' : 'false') . '"';
-
-		$lines []    = '--- $langIds ------------------------';
-		$langIdsLine = '';
-		foreach ($this->langIds as $langId)
-		{
-			$langIdsLine .= $langId . ', ';
-		}
-		$lines [] = $langIdsLine;
-
-		$lines [] = '--- $sourceLangFiles ------------------------';
-		foreach ($this->langFileNamesSet as $langId => $langFiles)
-		{
-			$lines [] = '[' . $langId . ']';
-
-			foreach ($langFiles as $langFile)
-			{
-				$lines [] = '   * ' . $langFile;
-			}
-		}
-
-		return $lines;
-	}
+        return $lines;
+    }
 
 } // class

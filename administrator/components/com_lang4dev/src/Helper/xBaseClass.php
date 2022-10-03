@@ -15,6 +15,7 @@ use Joomla\CMS\Factory;
 use Joomla\CMS\Filesystem\Folder;
 
 use Finnern\Component\Lang4dev\Administrator\Helper\langFiles;
+
 use function defined;
 
 // no direct access
@@ -29,6 +30,6 @@ defined('_JEXEC') or die;
  */
 class langFilesSet
 {
-	public $fileTypes = 'php, xml';
+    public $fileTypes = 'php, xml';
 
 } // class
