@@ -46,6 +46,8 @@ class manifestLangFiles extends manifestData
     public function __construct($prjXmlPathFilename = '')
     {
         parent::__construct($prjXmlPathFilename);
+
+
     }
 
     /**

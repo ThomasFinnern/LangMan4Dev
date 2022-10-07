@@ -23,6 +23,7 @@ class langProject
     public $prjRootPath = '';
     public $langIdPrefix = "";
 
+    /** @var langSubProject [] */
     public $subProjects = [];
 
     //external
@@ -63,7 +64,10 @@ class langProject
             $prjXmlFilePath
         );
 
-        $this->subProjects [] = $subPrj;
+        // project only used when project path exist
+        if (is_dir(dirname($subPrj->langBasePath))) {
+            $this->subProjects [] = $subPrj;
+        }
 
         return $subPrj;
     }
@@ -331,14 +335,15 @@ class langProject
      */
     public function __toText()
     {
-        $lines[] = '<h4>--- langProject -------------------------------</h4>';
+        $lines[] = '<h4>=== langProject ===============================</h4>';
 
         $lines [] = '$prjName = "' . $this->prjName . '"';
         $lines [] = '$prjRootPath = "' . $this->prjRootPath . '"';
         $lines [] = '$langIdPrefix = "' . $this->langIdPrefix . '"';
         $lines [] = '$dbId = "' . $this->dbId . '"';
+        $lines [] = '<br>';
 
-        $lines[] = '------------------------------------------------';
+        // $lines[] = '------------------------------------------------';
 
         foreach ($this->subProjects as $subProject) {
             $subProjectLines = $subProject->__toText();

@@ -27,12 +27,18 @@ defined('_JEXEC') or die;
  */
 class transIdLocation
 {
+    /** @var string */
     public $name = '';
+    /** @var string */
     public $file = '';
+    /** @var string */
     public $path = '';
+    /** @var int */
     public $lineNr = -1;
+    /** @var int */
     public $colIdx = -1;
 
+    // ToDo: constructor property promation PHP 8.x https://stitcher.io/blog/constructor-promotion-in-php-8
     /**
      * @since __BUMP_VERSION__
      */

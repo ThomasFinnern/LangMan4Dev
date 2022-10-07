@@ -152,7 +152,7 @@ class HtmlView extends BaseHtmlView
         //--- show project with sub projects ... ---------------------------------
 
         if ($this->isDebugBackend) {
-            echo '<h4>sub projects data</h4><br>';
+            echo '<br><h4>Project (sub) data</h4><br>';
 
             $projectText = implode("<br>", $this->project->__toText());
 

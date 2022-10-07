@@ -37,6 +37,8 @@ class manifestData
 
     // local development folder or installed component
     public $isInstalled = false;
+    /** @var bool */
+    public $isValidXml;
 
     protected $manifest = false; // XML: false or SimpleXMLElement
 
@@ -50,7 +52,7 @@ class manifestData
 
         // filename given
         if ($prjXmlPathFilename != '') {
-            $this->readManifestData();
+            $this->isValidXml = $this->readManifestData();
         }
 
         return;

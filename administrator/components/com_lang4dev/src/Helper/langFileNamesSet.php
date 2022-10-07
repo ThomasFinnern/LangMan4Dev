@@ -12,10 +12,10 @@
 namespace Finnern\Component\Lang4dev\Administrator\Helper;
 
 use Exception;
+use Finnern\Component\Lang4dev\Administrator\Helper\projectType;
 use Joomla\CMS\Factory;
 use Joomla\CMS\Filesystem\Folder;
 
-use Finnern\Component\Lang4dev\Administrator\Helper\projectType;
 use RuntimeException;
 
 use function defined;
@@ -31,13 +31,19 @@ defined('_JEXEC') or die;
  */
 class langFileNamesSet
 {
+    /** @var string */
     public $langBasePath = '';
 //	public $baseName = '';
+    /** @var array[string] */
     public $langIds = [];
+    /** @var array[string] string */
     public $langFileNamesSet = []; // [LangIds] [filename]
 
+    /** @var bool */
     public $useLangSysIni = false;
+    /** @var bool */
     protected $isLangInFolders = false; // lang file are divided in folders instead of containing the name in front
+    /** @var bool */
     protected $isLangIdPre2Name = false; // ToDo: is this needed ?
 
     /**
@@ -125,7 +131,7 @@ class langFileNamesSet
         - language ID used in front of file:
             a) if file name is found in folder there is no 'en-GB' in containing folder
                ==> All files will contain lang ID in front and are kept in same folder
-            b) Lang Id may be found on file name in subfolder of Lang ID folder.
+            b) Lang id may be found on file name in sub folder of Lang ID folder.
                ==> has actual no influence so is ignored
     */
 
@@ -199,7 +205,7 @@ class langFileNamesSet
      *
      * @since version
      */
-    public function getLangFilePaths($prjType, $manifestLang): mixed
+    public function manifestLangFilePaths($prjType, $manifestLang): mixed
     {
         /*--- lang file origin defined in manifest file -----------------------*/
 
@@ -268,16 +274,17 @@ class langFileNamesSet
         } else {
             //--- lang ID as folder name --------------------------------
 
-            // all folders
-            foreach (Folder::folders($this->langBasePath) as $folderName) {
-                $langId           = $folderName;
-                $this->langIds [] = $langId;
+            if (is_dir($this->langBasePath)) {
+                // all folders
+                foreach (Folder::folders($this->langBasePath) as $folderName) {
+                    $langId           = $folderName;
+                    $this->langIds [] = $langId;
 
-                $subFolder = $this->langBasePath . DIRECTORY_SEPARATOR . $folderName;
+                    $subFolder = $this->langBasePath . DIRECTORY_SEPARATOR . $folderName;
 
-                // all matching file names
-                $fileNames = Folder::files($subFolder, $regex);
-                foreach ($fileNames as $fileName) {
+                    // all matching file names
+                    $fileNames = Folder::files($subFolder, $regex);
+                    foreach ($fileNames as $fileName) {
 //					// set base name once
 //					if ($isBaseNameSet == false)
 //					{
@@ -291,11 +298,12 @@ class langFileNamesSet
 //					}
 
 //					$langFile = $subFolder . DIRECTORY_SEPARATOR . $baseName;
-                    $langFile = $subFolder . DIRECTORY_SEPARATOR . $fileName;
+                        $langFile = $subFolder . DIRECTORY_SEPARATOR . $fileName;
 
-                    $this->langFileNamesSet [$langId][] = $langFile;
+                        $this->langFileNamesSet [$langId][] = $langFile;
 
-                    $isFound = true;
+                        $isFound = true;
+                    }
                 }
             }
         }
@@ -319,7 +327,7 @@ class langFileNamesSet
     {
         $isCheck4Ini = false;
 
-        $xmlLangNames = $this->ManifestLangFilePaths($prjType, $manifestLang);
+        $xmlLangNames = $this->manifestLangFilePaths($prjType, $manifestLang);
 
         $langBasePath = $this->langBasePathJoomla($prjType);
 
@@ -370,7 +378,7 @@ class langFileNamesSet
     {
         $isCheck4Ini = false;
 
-        $xmlLangNames = $this->ManifestLangFilePaths($prjType, $manifestLang);
+        $xmlLangNames = $this->manifestLangFilePaths($prjType, $manifestLang);
 
         $langBasePath = $this->langBasePathJoomla($prjType);
 
@@ -519,6 +527,48 @@ class langFileNamesSet
                 // admin
                 break;
         }
+
+        return $basePath;
+    }
+
+    /**
+     * @param $prjType
+     *
+     * @return string
+     *
+     * @since version
+     */
+    public function langBasePathProject(string $prjXmlFilePath='', int $prjType=projectType::PRJ_TYPE_NONE)
+    {
+        // most used is xml path
+        $basePath = $prjXmlFilePath . '/language';
+
+        if ($prjType == projectType::PRJ_TYPE_COMP_SITE) {
+            //$basePath = str_replace($basePath, '/administrator', '');
+            $basePath = str_replace('/administrator', '', $basePath);
+        }
+
+//        switch ($prjType) {
+//            case projectType::PRJ_TYPE_COMP_SITE:
+//                // site
+//                $basePath = str_replace ($basePath, '/administrator', '');
+//                break;
+//
+//            case projectType::PRJ_TYPE_NONE:
+//                break;
+//
+//            case projectType::PRJ_TYPE_COMP_BACK_SYS:
+//                break;
+//
+//            case projectType::PRJ_TYPE_COMP_BACK:
+//                break;
+//
+//            case projectType::PRJ_TYPE_MODEL:
+//                break;
+//
+//            case projectType::PRJ_TYPE_PLUGIN:
+//                break;
+//        }
 
         return $basePath;
     }

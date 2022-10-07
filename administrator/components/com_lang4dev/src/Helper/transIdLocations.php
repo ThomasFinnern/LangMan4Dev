@@ -16,6 +16,8 @@ use RuntimeException;
 
 use function defined;
 
+use Finnern\Component\Lang4dev\Administrator\Helper\transIdLocation;
+
 // no direct access
 defined('_JEXEC') or die;
 
@@ -38,11 +40,11 @@ defined('_JEXEC') or die;
  */
 class transIdLocations
 {
-
+    /** @var array[string]array[transIdLocation] */
     public $items = [];
 
     /**
-     * @param $items
+     * @param array[string]transIdLocation $items
      */
     public function __construct($items = [])
     {
@@ -52,7 +54,7 @@ class transIdLocations
     }
 
     /**
-     * @param $item
+     * @param [string]transIdLocation $item
      *
      *
      * @since version
@@ -64,22 +66,23 @@ class transIdLocations
     }
 
     /**
-     * @param $name
-     * @param $idx
+     * @param string $name
+     * @param int $idx
      *
-     * @return mixed
+     * @return [string]array[transIdLocation]
      *
      * @since version
      */
     public function getItem($name, $idx)
     {
+        // ToDo: fallback if not exist
         return $this->items[$name][$idx];
     }
 
     /**
      * @param $name
      *
-     * @return mixed
+     * @return array[transIdLocation]
      *
      * @since version
      */
@@ -90,7 +93,7 @@ class transIdLocations
 
     /**
      *
-     * @return array
+     * @return array[string]
      *
      * @throws Exception
      * @since version

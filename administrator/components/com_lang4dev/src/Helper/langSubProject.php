@@ -20,26 +20,31 @@ use RuntimeException;
 
 class langSubProject extends langFiles
 {
+    /** @var int */
     public $prjId = '';
+    /** @var int */
     public $prjType = 0;
 
     // ToDo: Separate std path (plugin/module -> ), admin path, site path
 
-    /**
-     *
-     * @var string
-     * @since version
-     */
+    /** @var string */
     public $prjRootPath = '';
+    /** @var string */
     public $prjXmlFilePath = '';
+    /** @var string */
     public $langIdPrefix = '';
 
     // is also admin
+    /** @var string */
     public $prjDefaultPath = '';
+    /** @var string */
     public $prjAdminPath = '';
 
+    /** @var string */
     public $prjXmlPathFilename = '';
+    /** @var string */
     public $installPathFilename = '';
+    /** @var string */
     public $configPathFilename = '';
 
     // external
@@ -50,12 +55,17 @@ class langSubProject extends langFiles
     // public $text_prefix;
 
     // public $useLangSysIni = false;
+    /** @var bool */
     public $isLangAtStdJoomla = false;
+    /** @var bool */
     public $isManifestRead = false;
 
+    /** @var array[string]array[transIdLocation] */
     protected $transIdLocations = [];
-    protected $transStringsLocations = [];
+    /** @var array[string]array[transIdLocation] */
     protected $transIdsClassified;
+    // ToDo: ** @var array[string]array[transIdLocation] */
+    protected $transStringsLocations = [];
 
     /**
      * @param $prjId
@@ -83,12 +93,33 @@ class langSubProject extends langFiles
             $this->useLangSysIni = true;
         }
 
-        //--- project XML and script file -------------------------------------------------
+        //--- lang paths, project XML and script file -------------------------------------------------
 
         // ToDo: yyy read manifest file once for all !!!!
 
         $this->isManifestRead = $this->RetrieveBaseManifestData();
+
+        //--- collect existing lang file names ----------------------------------------------------------
+
+        // ToDo see function below
+        if ($this->isManifestRead) {
+            $this->collectExistingLangFileNames();
+        }
+
     }
+
+    private function collectExistingLangFileNames()
+    {
+
+        // ToDo: move parts from RetrieveBaseManifestData to here
+
+
+
+
+    }
+
+
+
 
     public function RetrieveBaseManifestData()
     {
@@ -115,10 +146,13 @@ class langSubProject extends langFiles
                 $isManifestPathValid = $this->checkManifestPath();
 
                 if ($isManifestPathValid) {
+
                     //--- open manifest file ----------------------------------------------------------
 
                     // Manifest tells if files have to be searched inside component or old on joomla standard paths
                     $manifestLang = new manifestLangFiles ($this->prjXmlPathFilename);
+
+                    $isManifestRead = $manifestLang->isValidXml;
 
                     //--- project XML and script file -------------------------------------------------
 
@@ -129,26 +163,36 @@ class langSubProject extends langFiles
                     $this->DefaultAndAdminPath($manifestLang);
 
                     /*----------------------------------------------------------
-                     lang file list
+                    lang file list
                     ----------------------------------------------------------*/
 
                     // is component installed (or on develop folder)
                     if ($manifestLang->isInstalled) {
+
                         //--- component on joomla server folder ---------------------------------------
 
                         // lang inside component ?
                         if (!$this->isLangAtStdJoomla) {
                             //--- lang files in component folder ------------------------------------------
 
-                            $startPath = $this->langBasePathJoomla($this->prjType);
+                            $startPath = $this->langBasePathProject($this->prjXmlFilePath,  $this->prjType);
+                            // project only used when project path exist
+                            if (is_dir(dirname($startPath))) {
+                                $this->detectLangBasePath($startPath, $this->useLangSysIni);
+
+                                $this->collectPrjFolderLangFiles();
+                            }
                         } else {
                             //--- lang files in standard joomla folder -------------------------------------
 
                             // includes detectLangBasePath
                             $this->collectManifestLangFiles_OnJoomla($manifestLang, $this->prjType);
 
-                            // search for late additions not mentioned in manifest
-                            $this->extendManifestLangFilesList();
+                            // project only used when project path exist
+                            if (is_dir(dirname($this->langBasePath))) {
+                                // search for late additions not mentioned in manifest
+                                $this->extendManifestLangFilesList();
+                            }
                         }
                     } else {
                         //--- component on develop folder ---------------------------------------
@@ -163,14 +207,19 @@ class langSubProject extends langFiles
                                 $startPath = $manifestLang->adminLangPath;
                             }
 
-                            $this->detectLangBasePath($this->prjRootPath . "/" . $startPath, $this->useLangSysIni);
+                            // project only used when project path exist
+                            if (is_dir(dirname($startPath))) {
+                                $this->detectLangBasePath($this->prjRootPath . "/" . $startPath, $this->useLangSysIni);
 
-                            $this->collectPrjFolderLangFiles();
+                                $this->collectPrjFolderLangFiles();
+                            }
                         } else {
                             //--- lang files in standard joomla folder ------------------------------------------
 
                             // read
-                            $this->collectManifestLangFiles_OnDevelop($manifestLang, $this->prjType);
+                            if (is_dir(dirname($this->langBasePath))) {
+                                $this->collectManifestLangFiles_OnDevelop($manifestLang, $this->prjType);
+                            }
                         }
                     }
                 }
@@ -324,7 +373,7 @@ class langSubProject extends langFiles
     // read translations from langFiles and keep file names
 
     /**
-     * @param $langId
+     * @param string $langId
      *
      * @return langFile
      *
@@ -422,8 +471,19 @@ class langSubProject extends langFiles
         } else {
             //--- scan all not project files ------------------------------------
 
-            // start path
-            $searchPath = $this->prjXmlFilePath;
+            // standard
+            if ($this->prjType != projectType::PRJ_TYPE_COMP_BACK_SYS && $this->prjType != projectType::PRJ_TYPE_COMP_BACK) {
+
+                //--- site, module or plugin --------------------------------------
+
+                $searchPath = $this->prjDefaultPath;
+            } else {
+
+                //--- backend ------------------------
+
+                $searchPath = $this->prjAdminPath;
+            }
+
             if (empty($searchPath)) {
                 $searchPath = $this->prjRootPath;
             }
@@ -466,15 +526,17 @@ class langSubProject extends langFiles
         } else {
             //--- scan all not project files ------------------------------------
 
-            // start path
-            $searchPath = $this->prjXmlFilePath;
+            // standard
+            if ($this->prjType != projectType::PRJ_TYPE_COMP_BACK_SYS && $this->prjType != projectType::PRJ_TYPE_COMP_BACK) {
 
-            if ($this->prjType == projectType::PRJ_TYPE_COMP_SITE) {
-                // ToDo: on develop (not installed) path may be in manifest file,
-                // ToDo: to be retrieved before creating sub project ?
-                $searchPath = $this->prjRootPath;
-                // $basePath = JPATH_ROOT . '/language';
-                // JPATH_SITE . '/components/com_lang4dev'
+                //--- site, module or plugin --------------------------------------
+
+                $searchPath = $this->prjDefaultPath;
+            } else {
+
+                //--- backend ------------------------
+
+                $searchPath = $this->prjAdminPath;
             }
 
             if (empty($searchPath)) {
@@ -829,7 +891,7 @@ class langSubProject extends langFiles
         // on server
         if ($manifestLang->isInstalled) {
             // admin given over $prjXmlFilePath
-            $this->prjDefaultPath = JPATH_COMPONENT_SITE;
+            $this->prjDefaultPath = str_replace('/administrator', '', $this->prjXmlFilePath);;
             $this->prjAdminPath   = $this->prjXmlFilePath;
         } else {
             // admin given over $prjXmlFilePath
@@ -848,9 +910,8 @@ class langSubProject extends langFiles
      */
     public function __toText()
     {
-        $lines = parent::__toText();
 
-        $lines[] = '=== langFileNamesSet ===========================';
+        $lines[] = '<h5>--- langSubProject ---------------------------</h5>';
 
         $lines [] = $this->getPrjIdAndTypeText();
         $lines [] = '$prjId = "' . $this->prjId . '"';
@@ -869,6 +930,9 @@ class langSubProject extends langFiles
 
         $lines [] = '$useLangSysIni = "' . ($this->useLangSysIni ? 'true' : 'false') . '"';
         $lines [] = '$isLangAtStdJoomla = "' . ($this->isLangAtStdJoomla ? 'true' : 'false') . '"';
+
+        $parentLines = parent::__toText();
+        array_push($lines, ...$parentLines);
 
         $lines[] = '--- transIdLocations ---------------------------';
         $lines[] = '            %                                     ';
