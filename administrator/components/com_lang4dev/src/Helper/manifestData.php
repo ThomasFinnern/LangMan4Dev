@@ -34,6 +34,8 @@ class manifestData
     // is also admin
     public $prjDefaultPath = '';
     public $prjAdminPath = '';
+    public $isDefaultPathDefined = '';
+    public $isAdminPathDefined = '';
 
     // local development folder or installed component
     public $isInstalled = false;
@@ -113,23 +115,27 @@ class manifestData
 
                 //--- default main (site) path -------------------------------
 
-                $this->prjDefaultPath = "???MainPath";
+                $this->prjDefaultPath = '>>Site_not_defined';
+                $this->isDefaultPathDefined = false;
 
                 if (isset($xml->files)) {
                     $files = $xml->files;
                     if (isset ($files['folder'])) {
                         $this->prjDefaultPath = $files['folder'][0];
+                        $this->isDefaultPathDefined = true;
                     }
                 }
 
                 //--- default admin path -------------------------------
 
-                $this->prjAdminPath = "???AdminPath";
+                $this->prjAdminPath = ">>Admin_not_defined";
+                $this->isAdminPathDefined = false;
 
                 if (isset($xml->administration->files)) {
                     $files = $xml->administration->files;
                     if (isset ($files['folder'])) {
                         $this->prjAdminPath = $files['folder'][0];
+                        $this->isAdminPathDefined = true;
                     }
                 }
 

@@ -60,6 +60,8 @@ class langSubProject extends langFiles
     /** @var bool */
     public $isManifestRead = false;
 
+    public $isLangPathDefined = false;
+
     /** @var array[string]array[transIdLocation] */
     protected $transIdLocations = [];
     /** @var array[string]array[transIdLocation] */
@@ -202,14 +204,14 @@ class langSubProject extends langFiles
                             //--- lang files in component folder ------------------------------------------
 
                             // on development folder read manifest data
-                            $startPath = $manifestLang->defaultLangPath;
+                            $startPath = $this->prjRootPath . "/" . $manifestLang->defaultLangPath;
                             if ($this->prjType == projectType::PRJ_TYPE_COMP_BACK || $this->prjType == projectType::PRJ_TYPE_COMP_BACK_SYS) {
-                                $startPath = $manifestLang->adminLangPath;
+                                $startPath = $this->prjRootPath . "/" . $manifestLang->adminLangPath;
                             }
 
                             // project only used when project path exist
                             if (is_dir(dirname($startPath))) {
-                                $this->detectLangBasePath($this->prjRootPath . "/" . $startPath, $this->useLangSysIni);
+                                $this->detectLangBasePath($startPath, $this->useLangSysIni);
 
                                 $this->collectPrjFolderLangFiles();
                             }
@@ -890,13 +892,11 @@ class langSubProject extends langFiles
     {
         // on server
         if ($manifestLang->isInstalled) {
-            // admin given over $prjXmlFilePath
+            // admin given by component in joomla over $prjXmlFilePath
             $this->prjDefaultPath = str_replace('/administrator', '', $this->prjXmlFilePath);;
             $this->prjAdminPath   = $this->prjXmlFilePath;
         } else {
-            // admin given over $prjXmlFilePath
-            $this->prjDefaultPath = $this->prjXmlFilePath;
-
+            // default/admin given by manifest file or auto paths
             $this->prjDefaultPath = $this->prjRootPath . '/' . $manifestLang->prjDefaultPath;
             $this->prjAdminPath   = $this->prjRootPath . '/' . $manifestLang->prjAdminPath;
         }
