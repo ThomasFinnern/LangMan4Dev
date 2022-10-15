@@ -236,11 +236,9 @@ class langFileNamesSet
 
     protected function collectPrjFolderLangFiles()
     {
-        //$isBaseNameSet = false;
         $isFound = false;
 
         $this->langIds = [];
-        //$baseName      = '';
 
         if ($this->useLangSysIni == true) {
             $regex = '\.sys\.ini$';
@@ -262,13 +260,6 @@ class langFileNamesSet
                 $this->langIds []                   = $langId;
                 $this->langFileNamesSet [$langId][] = $langFile;
 
-//				// set base name once
-//				if ($isBaseNameSet == false)
-//				{
-//					$this->baseName = $baseName;
-//					$isBaseNameSet  = true;
-//				}
-
                 $isFound = true;
             }
         } else {
@@ -285,19 +276,7 @@ class langFileNamesSet
                     // all matching file names
                     $fileNames = Folder::files($subFolder, $regex);
                     foreach ($fileNames as $fileName) {
-//					// set base name once
-//					if ($isBaseNameSet == false)
-//					{
-//						if ($fileNames != false)
-//						{
-//							$baseName       = $fileNames[0];
-//							$this->baseName = $baseName;
-//
-//							$isBaseNameSet = true;
-//						}
-//					}
 
-//					$langFile = $subFolder . DIRECTORY_SEPARATOR . $baseName;
                         $langFile = $subFolder . DIRECTORY_SEPARATOR . $fileName;
 
                         $this->langFileNamesSet [$langId][] = $langFile;
@@ -308,7 +287,6 @@ class langFileNamesSet
             }
         }
 
-        //return $isBaseNameSet;
         return $isFound;
     }
 
@@ -325,7 +303,8 @@ class langFileNamesSet
      */
     public function collectManifestLangFiles_OnJoomla($manifestLang, $prjType)
     {
-        $isCheck4Ini = false;
+        $isLangPathDefined = false;
+        $this->langIds = [];
 
         $xmlLangNames = $this->manifestLangFilePaths($prjType, $manifestLang);
 
@@ -360,9 +339,11 @@ class langFileNamesSet
                     }
                 }
             }
+
+            $isLangPathDefined = count ($this->langIds) > 0;
         }
 
-        return;
+        return $isLangPathDefined;
     }
 
     /**
@@ -463,6 +444,24 @@ class langFileNamesSet
             $app->enqueueMessage($OutTxt, 'error');
         }
     }
+
+
+    /**
+     * Extract the lang folder from XML definition by type
+     *
+     * @param $manifestLang
+     * @param $prjType
+     *
+     *
+     * @since version
+     */
+    public function YYYcollectManifestLangFolder_OnDevelop($manifestLang, $basePath = '', $prjType)
+    {
+
+
+
+    }
+
 
     // search for matching filename
 

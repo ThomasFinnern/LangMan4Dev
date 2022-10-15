@@ -65,7 +65,7 @@ class langProject
         );
 
         // project only used when project path exist
-        if (is_dir(dirname($subPrj->langBasePath))) {
+        if ($subPrj->isLangPathDefined) {
             $this->subProjects [] = $subPrj;
         }
 
