@@ -2,13 +2,24 @@
 	<changelog>
 		<element>com_lang4dev</element>
 		<type>component</type>
-		<version>0.0.1.4</version>
-		<date>2022-03-04</date>
-		<addition>
-			<item>Creation of first sources</item>
-		</addition>
+		<version>0.0.0.2</version>
+		<date>2022-08-30</date>
 		<note>
-			<item>A long wayto go</item>
+			<item>Initial Version</item>
 		</note>
 	</changelog>
+	<changelog>
+		<element>com_lang4dev</element>
+		<type>component</type>
+		<version>0.20.0.0</version>
+		<date>2022-10-15</date>
+		<fix>
+			<item>Finding location of lang files adjusted to information in manifest file</item>
+		</fix>
+		<note>
+			<item></item>
+		</note>
+	</changelog>
+	
+	
 </changelogs>
