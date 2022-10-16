@@ -10,7 +10,7 @@ CREATE TABLE IF NOT EXISTS `#__lang4dev_projects`
 	`name`             varchar(255)                                           NOT NULL DEFAULT '',
 
 	`alias`            varchar(400) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NOT NULL DEFAULT '',
-	`notes`            text                                                   NOT NULL DEFAULT '',
+	`notes`            text                                                   NOT NULL,
 	`root_path`        varchar(255)                                           NOT NULL DEFAULT '',
 	`prjType`          int                                                    NOT NULL DEFAULT 0,
 
@@ -42,7 +42,7 @@ CREATE TABLE IF NOT EXISTS `#__lang4dev_projects`
   DEFAULT CHARSET = utf8mb4
   DEFAULT COLLATE = utf8mb4_unicode_ci;
 
-ALTER TABLE `#__lang4dev_projects`
+ALTER TABLE  IF NOT EXISTS `#__lang4dev_projects`
 	ADD COLUMN `title` varchar(255) NOT NULL DEFAULT '' AFTER `id`;
 
 -- INSERT INTO `#__lang4dev_projects` (`name`,`alias`,`note`, `base_path`) VALUES
@@ -65,7 +65,7 @@ CREATE TABLE IF NOT EXISTS `#__lang4dev_subprojects`
 	`root_path`           varchar(255)                                           NOT NULL DEFAULT '',
 
 	`prefix`              varchar(255)                                           NOT NULL DEFAULT '',
-	`notes`               text                                                   NOT NULL DEFAULT '',
+	`notes`               text                                                   NOT NULL,
 
 	`prjXmlPathFilename`  varchar(255)                                           NOT NULL DEFAULT '',
 	`installPathFilename` varchar(255)                                           NOT NULL DEFAULT '',
@@ -75,7 +75,7 @@ CREATE TABLE IF NOT EXISTS `#__lang4dev_subprojects`
 
 --    `lang_path_type` en_GB sub folder or not  '',
 	`lang_path_type`      varchar(255)                                           NOT NULL DEFAULT '',
-	`lang_ids`            text                                                   NOT NULL DEFAULT '',
+	`lang_ids`            text                                                   NOT NULL,
 
 	`params`              text                                                   NOT NULL,
 	`ordering`            int unsigned                                           NOT NULL DEFAULT '0',
