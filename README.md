@@ -8,8 +8,21 @@ Started Feb 2022
 
 ## Use cases:
 
-1) Developer translations
-   1) Developer may use Translation IDs like COM_LANG4DEV_... in the TEXT::_('...') definition and place where these are expected.  
+1) **Developer translation IDs**
+This component will match languages IDs like COM_LANG4DEV_... defined in *.ini file against code occurences
+
+* Matches translation IDs defined in *.ini file against code occurences
+* Provides lines with missing Translation Ids for copy into *.ini
+* Supports AD HOC Text written insisde Text::_('...') but no ID is found in *.ini
+
+
+
+
+
+   1) Project texts
+          
+
+   1) Developer may use Translation IDs like COM_LANG4DEV_... in the TEXT::_('...') definition and place them where these are expected.  
     This component will collect all and provide prepared lines to include in the lang files
    2) Write plain text in the TEXT::_('...') definition.  
     This component will collect all and provide prepared lines to include in the lang files. the lang IDS have to be adjusted though   
@@ -21,6 +34,9 @@ Started Feb 2022
   
 1) In general the translation of joomla! *.ini files to another language shall be possible
     * This is the long term intention of this component 
+
+2) **Translation support**
+
 
 ## limitations
   * This component may allow to replace language files of foreign components but will not exchange lang items in the code of foreign components 
