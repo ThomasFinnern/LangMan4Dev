@@ -11,6 +11,15 @@
 	<changelog>
 		<element>com_lang4dev</element>
 		<type>component</type>
+		<version>0.10.02.0</version>
+		<date>2022-09-30</date>
+		<note>
+			<item>?first release</item>
+		</note>
+	</changelog>
+	<changelog>
+		<element>com_lang4dev</element>
+		<type>component</type>
 		<version>0.20.0.0</version>
 		<date>2022-10-15</date>
 		<fix>
