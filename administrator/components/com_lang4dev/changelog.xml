@@ -23,10 +23,10 @@
 		<version>0.20.0.0</version>
 		<date>2022-10-15</date>
 		<fix>
-			<item>Finding location of lang files adjusted to information in manifest file</item>
+			<item>Finding location of language files adjusted to information in manifest file</item>
 		</fix>
 		<note>
-			<item></item>
+			<item>next release !!!</item>
 		</note>
 	</changelog>
 	
