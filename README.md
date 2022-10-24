@@ -11,90 +11,24 @@ Started Feb 2022
 1) **Developer translation IDs**
 This component will match languages IDs like COM_LANG4DEV_... defined in *.ini file against code occurences
 
-* Matches translation IDs defined in *.ini file against code occurences
-* Provides lines with missing Translation Ids for copy into *.ini
-* Supports AD HOC Text written insisde Text::_('...') but no ID is found in *.ini
+   * Matches translation IDs defined in *.ini file against code occurences
+   * Provides lines with missing Translation Ids for copy into *.ini
+   * Supports AD HOC Translation IDs written insisde Text::_('...') but ID is not found in *.ini
 
+   The results are ID lists [matching, missing, surplus] and lines with mising IDS which can be copied nto the *.ini file direct
 
-
-
-
-   1) Project texts
-          
-
-   1) Developer may use Translation IDs like COM_LANG4DEV_... in the TEXT::_('...') definition and place them where these are expected.  
-    This component will collect all and provide prepared lines to include in the lang files
-   2) Write plain text in the TEXT::_('...') definition.  
-    This component will collect all and provide prepared lines to include in the lang files. the lang IDS have to be adjusted though   
-      
-1) Component user translations
-    * The user of another component should be able to do the translation himself
-    He can add his own country language files. These are presented in a top bottom compare view where the items lines are prepeared and aligned in main file order
-    The user will get a plain textarea to edit the items  
-  
-1) In general the translation of joomla! *.ini files to another language shall be possible
-    * This is the long term intention of this component 
+   See more in [Project texts](#Project-texts)
 
 2) **Translation support**
 
+   From original "en-GB" *.ini files translation files like "de-DE" can be created. They contain the same translation IDs but the translations string is empty
+
+3) **Component user translations** (intention)  
+    The user of another component should be able to do the translation himself. He can add his own country language files. These are presented in a top bottom compare view where the items lines are prepeared and aligned in main file order. 
+    The user will get aprepared textarea with translation IDs and empty translation strings. He can save these changed files 
 
 ## limitations
   * This component may allow to replace language files of foreign components but will not exchange lang items in the code of foreign components 
-
-### Rules for translation files
-
-- Keep Comments
-- Keep en-en file content order for other languages
-- Not translated lines will be commented at start of line *
-
-Base files:
-
-- May be kept sorted
-
-Database Project
-
-- old source
-
-⇒ Paths E. may be extra) component paths
-
-=D auto load
-
-• • •
-
-Base files:
-
-• • •
-
-• • •
-
-? renamed items => can't be be handled
-
-### Database
-
-... to be continued
-
-### Base files
-
-Collected files for extended but fast search. These may origin in older version or manual added files
-
-==> Additional files to search
-
-- Copy of previous versions
-- Manual user files
-- Scan 4 core translations
-
-  - one file per long
-  - update button
-
-? Import: keep separate or
-
-collect as is
-
-a) 4 delta
-
-- file layout in folders
-
-or side by side
 
 ## Draft of possible functions
 
