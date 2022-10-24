@@ -103,15 +103,11 @@
 		<folder>js</folder>
 	</media>
 
-	<changelogurl>
-		https://raw.githubusercontent.com/ThomasFinnern/J_LangMan4ExtDev/main/administrator/components/com_lang4dev/changelog.xml
-	</changelogurl>
+	<changelogurl>https://raw.githubusercontent.com/ThomasFinnern/J_LangMan4ExtDev/main/administrator/components/com_lang4dev/changelog.xml</changelogurl>
 
 	<updateservers>
 		<server type="extension"
-		        name="Lang4Dev Updates">
-			https://raw.githubusercontent.com/ThomasFinnern/J_LangMan4ExtDevProject/main/UpdateServer/Lang4dev_component_update.xml
-		</server>
+		        name="Lang4Dev Updates">https://raw.githubusercontent.com/ThomasFinnern/J_LangMan4ExtDevProject/main/UpdateServer/Lang4dev_component_update.xml</server>
 	</updateservers>
 
 	<dlid prefix="dlid="
