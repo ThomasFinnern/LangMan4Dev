@@ -1,6 +1,6 @@
 # J_LangMan4ExtDev
 
-Joomla! language manager for extension developers
+Joomla! language manager for extension developers  
 Started Feb 2022
 
 **Supports translation ID handling for joomla extension developers**
