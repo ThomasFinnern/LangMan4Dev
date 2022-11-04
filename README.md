@@ -34,6 +34,14 @@ See more in [lang4dev documentation](https://github.com/ThomasFinnern/J_LangMan4
 
 ### ideas for functions in future
 
+#### Missing project types
+
+* packages
+* indirect packages -> component includes modules and plugins but dows not tell as such
+* templates try out, never tested
+* joomla en-gb -> de-DE type of complete translations
+
+
 #### Different folders for en-GB and nn-MM project
 
    One project for the source and a twin project for the destination translation files
