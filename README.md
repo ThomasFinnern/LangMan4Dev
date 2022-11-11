@@ -14,7 +14,7 @@ This component will match language translation IDs like COM_LANG4DEV_... defined
 
    * Matches translation IDs defined in *.ini file against code occurences
    * Provides lines with missing Translation Ids for copy into *.ini
-   * Supports AD HOC Translation IDs written insisde Text::_('...') but ID is not found in *.ini
+   * Supports list of "AD HOC" plain text written in Text::_('...') instead of a translation ID 
 
    The results are ID lists [matching, missing, surplus] and lines with mising IDS which can be copied nto the *.ini file direct
 
