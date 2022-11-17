@@ -32,6 +32,11 @@ See more in [lang4dev documentation](https://github.com/ThomasFinnern/J_LangMan4
 
   *This component allows to replace language files of foreign components but will not exchange lang items in the code of foreign components
 
+### Ideas for program improvements
+
+* Optimise search from middle by first character instead of read all items at once (option later)
+* Update button in project texts
+
 ### ideas for functions in future
 
 #### Missing project types
@@ -40,7 +45,6 @@ See more in [lang4dev documentation](https://github.com/ThomasFinnern/J_LangMan4
 * indirect packages -> component includes modules and plugins but dows not tell as such
 * templates try out, never tested
 * joomla en-gb -> de-DE type of complete translations
-
 
 #### Different folders for en-GB and nn-MM project
 
@@ -57,7 +61,7 @@ A Source file copy may support check for changes within one text definition
 
 #### Translation collection
 
-collect old translation or translations from different sources into one collection
+Collect old translation or translations from different sources into one collection
 Refer to this collection if translation is not found
    "en-GB"="de-DE"
    "Exit"="Ausgang"
@@ -69,6 +73,4 @@ Refer to this collection if translation is not found
 
 #### Auto translations ? access to Leo api ? google.ie => user login
 
-### Ideas for program improvements
 
--Optimise search from middle by first character instead of read all items at once (option later) *
