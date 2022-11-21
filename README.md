@@ -30,14 +30,16 @@ See more in [lang4dev documentation](https://github.com/ThomasFinnern/J_LangMan4
 
 ## Limitations
 
-  *This component allows to replace language files of foreign components but will not exchange lang items in the code of foreign components
+  * This component allows to replace language files of foreign components but will not exchange lang items in the code of foreign components
+
+## Possible improvements in the future
 
 ### Ideas for program improvements
 
 * Optimise search from middle by first character instead of read all items at once (option later)
 * Update button in project texts
 
-### ideas for functions in future
+### Ideas for functions in future
 
 #### Missing project types
 
