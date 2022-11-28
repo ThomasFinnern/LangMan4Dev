@@ -1,13 +1,14 @@
 <?xml version="1.0" encoding="utf-8" ?>
-<extension type="component" method="upgrade">
+<extension type="component"
+           method="upgrade">
 	<name>COM_LANG4DEV</name>
-	<creationDate>15. Apr. 2022</creationDate>
+	<creationDate>15. Oct. 2022</creationDate>
 	<author>Thomas Finnern</author>
 	<authorEmail>lang4dev@tomfinnern.de</authorEmail>
 	<authorUrl>https://github.com/ThomasFinnern</authorUrl>
 	<copyright>(c) 2022-2022 Lang4dev Team</copyright>
 	<license>GNU General Public License version 2 or later;</license>
-	<version>0.0.0.2</version>
+	<version>0.20.0.0</version>
 	<description>COM_LANG4DEV_XML_DESCRIPTION</description>
 	<namespace path="src">Finnern\Component\Lang4dev</namespace>
 	
@@ -91,7 +92,8 @@
 		</files>
 	</administration>
 	
-    <media folder="media/com_lang4dev" destination="com_lang4dev">
+	<media folder="media/com_lang4dev"
+	       destination="com_lang4dev">
 		<folder>css</folder>
 		<folder>images</folder>
 		<folder>js</folder>
@@ -100,8 +102,10 @@
 	<changelogurl>https://raw.githubusercontent.com/ThomasFinnern/J_LangMan4ExtDev/main/administrator/components/com_lang4dev/changelog.xml</changelogurl>
 	
 	<updateservers>
-		<server type="extension" name="Lang4Dev Updates">https://raw.githubusercontent.com/ThomasFinnern/J_LangMan4ExtDevProject/main/UpdateServer/Lang4dev_component_update.xml</server>
+		<server type="extension"
+		        name="Lang4Dev Updates">https://raw.githubusercontent.com/ThomasFinnern/J_LangMan4ExtDevProject/main/UpdateServer/Lang4dev_component_update.xml</server>
 	</updateservers>
 	
-	<dlid prefix="dlid=" suffix="" />
+	<dlid prefix="dlid="
+	      suffix=""/>
 </extension>

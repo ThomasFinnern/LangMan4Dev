@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @package       Joomla.Administrator
  * @subpackage    com_lang4dev
@@ -23,135 +24,132 @@ use Joomla\CMS\Installer\InstallerScript;
  */
 class Com_Lang4devInstallerScript extends InstallerScript
 {
-	/**
-	 * Minimum Joomla version to check
-	 *
-	 * @var    string
-	 * @since  __BUMP_VERSION__
-	 */
-	private $minimumJoomlaVersion = '4.0';
+    /**
+     * Minimum Joomla version to check
+     *
+     * @var    string
+     * @since  __BUMP_VERSION__
+     */
+    private $minimumJoomlaVersion = '4.0';
 
-	/**
-	 * Minimum PHP version to check
-	 *
-	 * @var    string
-	 * @since  __BUMP_VERSION__
-	 */
-	private $minimumPHPVersion = JOOMLA_MINIMUM_PHP;
+    /**
+     * Minimum PHP version to check
+     *
+     * @var    string
+     * @since  __BUMP_VERSION__
+     */
+    private $minimumPHPVersion = JOOMLA_MINIMUM_PHP;
 
-	/**
-	 * Method to install the extension
-	 *
-	 * @param   InstallerAdapter  $parent  The class calling this method
-	 *
-	 * @return  boolean  True on success
-	 *
-	 * @since  __BUMP_VERSION__
-	 */
-	public function install($parent): bool
-	{
-		echo Text::_('COM_LANG4DEV_INSTALLERSCRIPT_INSTALL');
+    /**
+     * Method to install the extension
+     *
+     * @param   InstallerAdapter  $parent  The class calling this method
+     *
+     * @return  boolean  True on success
+     *
+     * @since  __BUMP_VERSION__
+     */
+    public function install($parent): bool
+    {
+        echo Text::_('COM_LANG4DEV_INSTALLERSCRIPT_INSTALL');
 
-		return true;
-	}
+        return true;
+    }
 
-	/**
-	 * Method to uninstall the extension
-	 *
-	 * @param   InstallerAdapter  $parent  The class calling this method
-	 *
-	 * @return  boolean  True on success
-	 *
-	 * @since  __BUMP_VERSION__
-	 */
-	public function uninstall($parent): bool
-	{
-		echo Text::_('COM_LANG4DEV_INSTALLERSCRIPT_UNINSTALL');
+    /**
+     * Method to uninstall the extension
+     *
+     * @param   InstallerAdapter  $parent  The class calling this method
+     *
+     * @return  boolean  True on success
+     *
+     * @since  __BUMP_VERSION__
+     */
+    public function uninstall($parent): bool
+    {
+        echo Text::_('COM_LANG4DEV_INSTALLERSCRIPT_UNINSTALL');
 
-		return true;
-	}
+        return true;
+    }
 
-	/**
-	 * Method to update the extension
-	 *
-	 * @param   InstallerAdapter  $parent  The class calling this method
-	 *
-	 * @return  boolean  True on success
-	 *
-	 * @since  __BUMP_VERSION__
-	 *
-	 */
-	public function update($parent): bool
-	{
-		echo Text::_('COM_LANG4DEV_INSTALLERSCRIPT_UPDATE');
+    /**
+     * Method to update the extension
+     *
+     * @param   InstallerAdapter  $parent  The class calling this method
+     *
+     * @return  boolean  True on success
+     *
+     * @since  __BUMP_VERSION__
+     *
+     */
+    public function update($parent): bool
+    {
+        echo Text::_('COM_LANG4DEV_INSTALLERSCRIPT_UPDATE');
 
-		$this->addDashboardMenu('lang4dev', 'lang4dev');
+        $this->addDashboardMenu('lang4dev', 'lang4dev');
 
-		return true;
-	}
+        return true;
+    }
 
-	/**
-	 * Function called before extension installation/update/removal procedure commences
-	 *
-	 * @param   string            $type    The type of change (install, update or discover_install, not uninstall)
-	 * @param   InstallerAdapter  $parent  The class calling this method
-	 *
-	 * @return  boolean  True on success
-	 *
-	 * @throws Exception
-	 * @since  __BUMP_VERSION__
-	 *
-	 */
-	public function preflight($type, $parent): bool
-	{
-		if ($type !== 'uninstall')
-		{
-			// Check for the minimum PHP version before continuing
-			if (!empty($this->minimumPHPVersion) && version_compare(PHP_VERSION, $this->minimumPHPVersion, '<'))
-			{
-				Log::add(
-					Text::sprintf('JLIB_INSTALLER_MINIMUM_PHP', $this->minimumPHPVersion),
-					Log::WARNING,
-					'jerror'
-				);
+    /**
+     * Function called before extension installation/update/removal procedure commences
+     *
+     * @param   string            $type    The type of change (install, update or discover_install, not uninstall)
+     * @param   InstallerAdapter  $parent  The class calling this method
+     *
+     * @return  boolean  True on success
+     *
+     * @throws Exception
+     * @since  __BUMP_VERSION__
+     *
+     */
+    public function preflight($type, $parent): bool
+    {
+        if ($type !== 'uninstall') {
+            // Check for the minimum PHP version before continuing
+            if (!empty($this->minimumPHPVersion) && version_compare(PHP_VERSION, $this->minimumPHPVersion, '<')) {
+                Log::add(
+                    Text::sprintf('JLIB_INSTALLER_MINIMUM_PHP', $this->minimumPHPVersion),
+                    Log::WARNING,
+                    'jerror'
+                );
 
-				return false;
-			}
+                return false;
+            }
 
-			// Check for the minimum Joomla version before continuing
-			if (!empty($this->minimumJoomlaVersion) && version_compare(JVERSION, $this->minimumJoomlaVersion, '<'))
-			{
-				Log::add(
-					Text::sprintf('JLIB_INSTALLER_MINIMUM_JOOMLA', $this->minimumJoomlaVersion),
-					Log::WARNING,
-					'jerror'
-				);
+            // Check for the minimum Joomla version before continuing
+            if (!empty($this->minimumJoomlaVersion) && version_compare(JVERSION, $this->minimumJoomlaVersion, '<')) {
+                Log::add(
+                    Text::sprintf('JLIB_INSTALLER_MINIMUM_JOOMLA', $this->minimumJoomlaVersion),
+                    Log::WARNING,
+                    'jerror'
+                );
 
-				return false;
-			}
-		}
+                return false;
+            }
+        }
 
-		echo Text::_('COM_LANG4DEV_INSTALLERSCRIPT_PREFLIGHT');
+        echo Text::_('COM_LANG4DEV_INSTALLERSCRIPT_PREFLIGHT');
 
-		return true;
-	}
+        return true;
+    }
 
-	/**
-	 * Function called after extension installation/update/removal procedure commences
-	 *
-	 * @param   string            $type    The type of change (install, update or discover_install, not uninstall)
-	 * @param   InstallerAdapter  $parent  The class calling this method
-	 *
-	 * @return  boolean  True on success
-	 *
-	 * @since  __BUMP_VERSION__
-	 *
-	 */
-	public function postflight($type, $parent)
-	{
-		echo Text::_('COM_LANG4DEV_INSTALLERSCRIPT_POSTFLIGHT');
+    /**
+     * Function called after extension installation/update/removal procedure commences
+     *
+     * @param   string            $type    The type of change (install, update or discover_install, not uninstall)
+     * @param   InstallerAdapter  $parent  The class calling this method
+     *
+     * @return  boolean  True on success
+     *
+     * @since  __BUMP_VERSION__
+     *
+     */
+    public function postflight($type, $parent)
+    {
+        echo Text::_('COM_LANG4DEV_INSTALLERSCRIPT_POSTFLIGHT');
 
-		return true;
-	}
+        return true;
+    }
 
 }
