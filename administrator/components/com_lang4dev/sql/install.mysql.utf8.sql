@@ -1,4 +1,8 @@
-# noinspection SqlNoDataSourceInspectionForFile
+
+
+
+
+
 
 --
 -- main projects
@@ -7,6 +11,7 @@
 CREATE TABLE IF NOT EXISTS `#__lang4dev_projects`
 (
 	`id`               int                                                    NOT NULL AUTO_INCREMENT,
+	`title`            varchar(255)                                           NOT NULL DEFAULT '',
 	`name`             varchar(255)                                           NOT NULL DEFAULT '',
 
 	`alias`            varchar(400) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NOT NULL DEFAULT '',
@@ -42,12 +47,6 @@ CREATE TABLE IF NOT EXISTS `#__lang4dev_projects`
   DEFAULT CHARSET = utf8mb4
   DEFAULT COLLATE = utf8mb4_unicode_ci;
 
-ALTER TABLE  IF NOT EXISTS `#__lang4dev_projects`
-	ADD COLUMN `title` varchar(255) NOT NULL DEFAULT '' AFTER `id`;
-
--- INSERT INTO `#__lang4dev_projects` (`name`,`alias`,`note`, `base_path`) VALUES
--- ('com_lang4dev','com_lang4dev','Test data pointing to this component paths',
--- 'administrator/components/com_lang4dev');
 
 
 --
