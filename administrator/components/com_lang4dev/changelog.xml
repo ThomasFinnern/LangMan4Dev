@@ -14,7 +14,7 @@
 		<version>0.10.02.0</version>
 		<date>2022-09-30</date>
 		<note>
-			<item>?first release</item>
+			<item>!!! NOT !!! first release</item>
 		</note>
 	</changelog>
 	<changelog>
@@ -26,7 +26,7 @@
 			<item>Finding location of language files adjusted to information in manifest file</item>
 		</fix>
 		<note>
-			<item>next release !!!</item>
+			<item>First release</item>
 		</note>
 	</changelog>
 	
