@@ -108,7 +108,7 @@ function renderLangFileEditText(
     $subPrjPath,
     $isMain = false,
     $isEditAndSaveMainTranslationFile = false,
-    $editIdx = 0,
+    $editIdx = 0
 ) {
     ?>
 	<div class="card bg-light border">
