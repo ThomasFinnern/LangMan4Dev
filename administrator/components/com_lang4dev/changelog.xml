@@ -29,6 +29,15 @@
 			<item>First release</item>
 		</note>
 	</changelog>
+	<changelog>
+		<element>com_lang4dev</element>
+		<type>component</type>
+		<version>0.20.1.0</version>
+		<date>2022-12-18</date>
+		<fix>
+			<item>Fixes additional comma in function call for PHP 7.4</item>
+		</fix>
+	</changelog>
 	
 	
 </changelogs>
