@@ -100,6 +100,9 @@ echo Route::_('index.php?option=com_lang4dev&view=subproject&layout=edit&id=' . 
                             echo $this->form->renderField('parent_id');
                             echo $this->form->renderField('twin_id');
 
+                            echo $this->form->renderField('lang_ids');
+                            // echo $this->form->renderField('params'); // to json ?
+
                             ?>
 
 							<!--/div-->

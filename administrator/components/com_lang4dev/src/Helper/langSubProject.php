@@ -204,11 +204,8 @@ class langSubProject extends langFiles
                         }
 
                     } else {
+
                         //--- component on develop folder ---------------------------------------
-
-                        //
-
-
 
                         // lang inside component ?
                         if (!$this->isLangAtStdJoomla) {

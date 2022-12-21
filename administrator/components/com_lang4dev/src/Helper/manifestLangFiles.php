@@ -40,6 +40,8 @@ class manifestLangFiles extends manifestData
     public $adminPathOnDevelopment = "";
     public $sitePathOnDevelopment = "";
 
+    private $isLangOriginRead = false;
+
     /**
      * @since __BUMP_VERSION__
      */
@@ -135,6 +137,8 @@ class manifestLangFiles extends manifestData
                 //	<language tag="en-GB">en-GB/com_joomgallery.ini</language>
                 //</languages>
 
+                $this->isLangOriginRead = true;
+
                 $stdLanguages = $this->get('languages', []);
                 if (count($stdLanguages) > 0) {
                     // lang files path will be defined in XML and copied to joomla standard path not component
@@ -212,41 +216,9 @@ class manifestLangFiles extends manifestData
      */
     public function getIsLangAtStdJoomla()
     {
-//		$this->isLangAtStdJoomla  = false;
-//
-//		try
-//		{
-//			// site
-//			$stdLanguages = $this->get('languages', []);
-//			if (count($stdLanguages) > 0)
-//			{
-//				// lang files path will be defined in XML and copied to joomla standard path not component
-//				$this->isLangAtStdJoomla = true;
-//
-//			}
-//
-//			// administration
-//			$administration = $this->get('administration', []);
-//			$stdLanguages   = $administration->languages;
-//			if (count($stdLanguages) > 0)
-//			{
-//				// lang files path will be defined in XML anf copied to joomla standard path
-//				$this->isLangAtStdJoomla = true;
-//
-//			}
-//		}
-//		catch (\RuntimeException $e)
-//		{
-//			$OutTxt = '';
-//			$OutTxt .= 'Error executing langFileOrigins: ' . '"<br>';
-//			$OutTxt .= 'Error: "' . $e->getMessage() . '"' . '<br>';
-//
-//			$app = Factory::getApplication();
-//			$app->enqueueMessage($OutTxt, 'error');
-//		}
-
-        $isLangAtStdJoomla = $this->langFileOrigins();
-        $isLangAtStdJoomla = $this->isLangAtStdJoomla;
+        if ( ! $this->isLangOriginRead) {
+            $this->langFileOrigins();
+        }
 
         return $this->isLangAtStdJoomla;
     }

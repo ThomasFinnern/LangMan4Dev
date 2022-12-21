@@ -65,6 +65,7 @@ CREATE TABLE IF NOT EXISTS `#__lang4dev_subprojects`
 
 	`prefix`              varchar(255)                                           NOT NULL DEFAULT '',
 	`notes`               text                                                   NOT NULL,
+	`isLangAtStdJoomla`   int NOT NULL DEFAULT 0
 
 	`prjXmlPathFilename`  varchar(255)                                           NOT NULL DEFAULT '',
 	`installPathFilename` varchar(255)                                           NOT NULL DEFAULT '',
@@ -72,10 +73,8 @@ CREATE TABLE IF NOT EXISTS `#__lang4dev_subprojects`
 	`parent_id`           int                                                    NOT NULL DEFAULT 0,
 	`twin_id`             int                                                    NOT NULL DEFAULT 0,
 
---    `lang_path_type` en_GB sub folder or not  '',
 	`lang_path_type`      varchar(255)                                           NOT NULL DEFAULT '',
 	`lang_ids`            text                                                   NOT NULL,
-
 	`params`              text                                                   NOT NULL,
 	`ordering`            int unsigned                                           NOT NULL DEFAULT '0',
 
@@ -96,20 +95,7 @@ CREATE TABLE IF NOT EXISTS `#__lang4dev_subprojects`
 	`version`             int unsigned                                           NOT NULL DEFAULT 1,
 
 	PRIMARY KEY (`id`),
-#  UNIQUE KEY `UK_name` (`name`),
-#  KEY `id` (`id`)
 	KEY `idx_access` (`access`)
 ) ENGINE = InnoDB
   DEFAULT CHARSET = utf8mb4
   DEFAULT COLLATE = utf8mb4_unicode_ci;
-
-ALTER TABLE `#__lang4dev_subprojects`
-	ADD COLUMN `isLangAtStdJoomla` int NOT NULL DEFAULT 0 AFTER `notes`;
-
-
--- INSERT INTO `#__lang4dev_subprojects` (`name`,`alias`,`note`, `base_path`) VALUES
--- ('com_lang4dev','com_lang4dev','Test data pointing to this component paths',
--- 'administrator/components/com_lang4dev'),
--- ('com_lang4dev','com_lang4dev','Test data pointing to this component paths',
--- 'administrator/components/com_lang4dev');
-

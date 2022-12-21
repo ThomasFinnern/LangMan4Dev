@@ -57,15 +57,23 @@
 
 	<field name="isLangAtStdJoomla"
 	       type="radio"
+	       default="0"
 	       label="COM_LANG4DEV_SUBPROJECT_LANG_LOCATION_JOOMLA_STANDARD"
 	       description="COM_LANG4DEV_SUBPROJECT_LANG_LOCATION_JOOMLA_STANDARD_DESC"
-	/>
-
+	       layout="joomla.form.field.radio.switcher"
+	       filter="integer"
+	       validate="options"
+	>
+	       <option value="1">JYES</option>
+	       <option value="0">JNO</option>
+	</field>
+		
 	<field
 			name="notes"
 			type="textarea"
 			label="COM_LANG4DEV_SUBPROJECT_NOTES"
 			description="COM_LANG4DEV_SUBPROJECT_NOTES_DESC"
+			
 			size="40"
 			maxlength="255"
 	/>
@@ -101,6 +109,31 @@
 
 	<!-- lang_path_type -->
 	<!-- lang_ids -->
+
+	<field
+			name="lang_ids"
+			type="textarea"
+			label="COM_LANG4DEV_LANG_IDS"
+			description="COM_LANG4DEV_LANG_IDS_DESC"
+			size="40"
+			maxlength="255"
+			default=""
+	/>
+
+	<field
+			name="params"
+			type="textarea"
+			label="COM_LANG4DEV_PARAMS"
+			description="COM_LANG4DEV_PARAMS_DESC"
+			size="40"
+			maxlength="255"
+			default=""
+	/>
+
+
+
+
+
 
 	<field
 			name="extension"

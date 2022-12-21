@@ -64,7 +64,7 @@ class langFiles extends langFileNamesSet
      * @throws Exception
      * @since version
      */
-    public function matchTranslationsFile2Locations($codeTransIds, $langId = "en-GB",)
+    public function matchTranslationsFile2Locations($codeTransIds, $langId = "en-GB")
     {
         $missing    = [];
         $translated = [];

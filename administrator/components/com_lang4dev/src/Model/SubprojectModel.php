@@ -582,7 +582,7 @@ class SubprojectModel extends AdminModel
     protected function prepareTable($table)
     {
         $date        = Factory::getDate()->toSql();
-        $table->name = htmlspecialchars_decode($table->name, ENT_QUOTES);
+        // $table->name = htmlspecialchars_decode($table->name, ENT_QUOTES);
 
         if (empty($table->id)) {
             // $table->generateAlias ();
@@ -1018,10 +1018,16 @@ class SubprojectModel extends AdminModel
         $isSaved = $this->save($data);
 
         if (!$isSaved) {
-            $errFound = $this->getErrors();
+            $errsFound = $this->getErrors();
 
-            $OutTxt = 'error on mergeSubProject_DB: "' . $errFound . '"\n'
-                . 'Could not save into DB : "' . $data ['title'] . '"';
+            $OutTxt = 'error on mergeSubProject_DB: ';
+
+            foreach ($errsFound as $errFound) {
+
+                $OutTxt .=  '"' . json_encode($errFound) . '"\n';
+            }
+            $OutTxt .=  'Could not save into DB : "' . $data ['title'] . '"';
+
             $app    = Factory::getApplication();
             $app->enqueueMessage($OutTxt, 'error');
         }
@@ -1067,10 +1073,16 @@ class SubprojectModel extends AdminModel
         $isSaved = $this->save($data);
 
         if (!$isSaved) {
-            $errFound = $this->getErrors();
+            $errsFound = $this->getErrors();
 
-            $OutTxt = 'error on createSubProject_DB: "' . $errFound . '"\n'
-                . 'Could not save into DB : "' . $data ['title'] . '"';
+            $OutTxt = 'error on createSubProject_DB: ';
+
+            foreach ($errsFound as $errFound) {
+
+                $OutTxt .=  '"' . json_encode($errFound) . '"\n';
+            }
+            $OutTxt .=  'Could not save into DB : "' . $data ['title'] . '"';
+
             $app    = Factory::getApplication();
             $app->enqueueMessage($OutTxt, 'error');
         }
