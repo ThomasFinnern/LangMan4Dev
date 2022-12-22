@@ -57,12 +57,10 @@
 
 	<field name="isLangAtStdJoomla"
 	       type="radio"
-	       default="0"
+	       default="1"
 	       label="COM_LANG4DEV_SUBPROJECT_LANG_LOCATION_JOOMLA_STANDARD"
 	       description="COM_LANG4DEV_SUBPROJECT_LANG_LOCATION_JOOMLA_STANDARD_DESC"
 	       layout="joomla.form.field.radio.switcher"
-	       filter="integer"
-	       validate="options"
 	>
 	       <option value="1">JYES</option>
 	       <option value="0">JNO</option>

@@ -156,7 +156,7 @@ class langFileNamesSet
 
         $this->isLangInFolders  = false;
 
-		// check4LangIdPreName
+		// Files with Pre lang id found ? then path is ak
 	    $isPathFound = $this->check4LangIdPreName($searchPath, $langId, $end, $isPathFound);
 
 	    if (!$isPathFound) {
@@ -204,9 +204,11 @@ class langFileNamesSet
 	 */
 	public function check4LangIdPreName($searchPath, $langId, string $end, bool $isPathFound): bool
 	{
+		$isPathFound = false;
+
 		#--- All files (en-GB. ... .ini) in folder -------------------------------------
 
-		$this->isLangInFolders = false;
+		$this->isLangIdPre2Name = false;
 
 		foreach (Folder::files($searchPath) as $fileName)
 		{
@@ -241,25 +243,40 @@ class langFileNamesSet
 	 */
 	public function check4LangIdInFolderNames($searchPath, $langId, string $end, bool $isPathFound): bool
 	{
-		#--- All sub folders in folder -------------------------------------
+		$isPathFound = false;
+
+		#--- Search Lang ID as sub folders in -------------------------------------
 
 		foreach (Folder::folders($searchPath) as $folderName)
 		{
-			$subFolder = $searchPath . "/" . $folderName;
-
-			if (str_starts_with($folderName, $langId))
+			// base found ?
+			if ($folderName == $langId)
 			{
+
+				$isPathFound        = true;
+
+				$this->isLangInFolders = true;
 				$this->langBasePath = $searchPath;
 
 				//--- flags --------------------------------
 
-				$this->check4LangIdPreName($searchPath, $langId, $end, $isPathFound);
+				$subFolder = $searchPath . "/" . $folderName;
+				$this->check4LangIdPreName($subFolder, $langId, $end, $isPathFound);
 
-				$this->isLangInFolders = true;
-				// $this->isLangIdPre2Name = false;
+				break;
 			}
-			else
+
+		}
+
+		#--- Search in each sub folder -------------------------------------
+
+		if (!$isPathFound)
+		{
+			foreach (Folder::folders($searchPath) as $folderName)
 			{
+				$subFolder = $searchPath . "/" . $folderName;
+
+				// search in sub folder
 				$isPathFound = $this->searchDir4LangID($subFolder);
 
 				if ($isPathFound)
@@ -268,6 +285,7 @@ class langFileNamesSet
 				}
 			}
 		}
+
 
 		return $isPathFound;
 	}

@@ -144,6 +144,10 @@ class SubprojectTable extends Table
             $this->note = '';
         }
 
+        if (empty($this->lang_ids)) {
+            $this->lang_ids = '';
+        }
+
         if (empty($this->params)) {
             $this->params = '{}';
         }
