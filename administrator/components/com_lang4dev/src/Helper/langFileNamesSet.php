@@ -327,7 +327,7 @@ class langFileNamesSet
                 [$langId, $baseName] = explode('.', $langFile, 2);
 
                 $this->langIds []                   = $langId;
-                $this->langFileNamesSet [$langId][] = $langFile;
+                $this->langFileNamesSet [$langId][] = $this->langBasePath . '/' . $langFile;
 
                 $isFound = true;
             }
@@ -340,7 +340,7 @@ class langFileNamesSet
                     $langId           = $folderName;
                     $this->langIds [] = $langId;
 
-                    $subFolder = $this->langBasePath . DIRECTORY_SEPARATOR . $folderName;
+                    $subFolder = $this->langBasePath . '/' . $folderName;
 
                     // all matching file names
                     $fileNames = Folder::files($subFolder, $regex);
