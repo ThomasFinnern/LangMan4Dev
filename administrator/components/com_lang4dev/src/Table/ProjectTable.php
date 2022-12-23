@@ -44,6 +44,7 @@ class ProjectTable extends Table
 
         parent::__construct('#__lang4dev_projects', 'id', $db);
 
+	    $this->created = Factory::getDate()->toSql();
         $this->access = (int)Factory::getApplication()->get('access');
     }
 
@@ -69,7 +70,79 @@ class ProjectTable extends Table
         return parent::bind($array, $ignore);
     }
 
-    /**
+	/**
+	 * Stores a Project.
+	 *
+	 * @param   boolean  $updateNulls  True to update fields even if they are null.
+	 *
+	 * @return  boolean  True on success, false on failure.
+	 *
+	 * @since __BUMP_VERSION__
+	 */
+	public function store($updateNulls = true)
+	{
+		$date   = Factory::getDate()->toSql();
+		$userId = Factory::getUser()->id;
+
+		// Set created date if not set.
+		if (!(int) $this->created) {
+			$this->created = $date;
+		}
+
+		if ($this->id) {
+			// Existing item
+			$this->modified_by = $userId;
+			$this->modified    = $date;
+		} else {
+			// Field created_by field can be set by the user, so we don't touch it if it's set.
+			if (empty($this->created_by)) {
+				$this->created_by = $userId;
+			}
+
+			if (!(int) $this->modified) {
+				$this->modified = $date;
+			}
+
+			if (empty($this->modified_by)) {
+				$this->modified_by = $userId;
+			}
+
+			// Text must be preset
+			if ($this->note == null) {
+				$this->note = '';
+			}
+
+
+		}
+
+//		// Verify that the alias is unique
+//		$table = Table::getInstance('ContactTable', __NAMESPACE__ . '\\', array('dbo' => $this->getDbo()));
+//
+//		if ($table->load(array('alias' => $this->alias, 'catid' => $this->catid)) && ($table->id != $this->id || $this->id == 0)) {
+//			// Is the existing contact trashed?
+//			$this->setError(Text::_('COM_CONTACT_ERROR_UNIQUE_ALIAS'));
+//
+//			if ($table->published === -2) {
+//				$this->setError(Text::_('COM_CONTACT_ERROR_UNIQUE_ALIAS_TRASHED'));
+//			}
+//
+//			return false;
+//		}
+
+//		// Verify that the alias is unique
+//		$table = new static($this->getDbo());
+//
+//		if ($table->load(array('alias' => $this->alias)) && ($table->id != $this->id || $this->id == 0)) {
+//			$this->setError(Text::_('COM_LANG4DEV_ERROR_UNIQUE_ALIAS'));
+//
+//			return false;
+//		}
+
+		return parent::store($updateNulls);
+	}
+
+
+	/**
      * Overloaded check method to ensure data integrity.
      *
      * @return  boolean  True on success.
@@ -79,7 +152,10 @@ class ProjectTable extends Table
      */
     public function check()
     {
-        try {
+	    $date   = Factory::getDate()->toSql();
+	    $userId = Factory::getUser()->id;
+
+	    try {
             parent::check();
         } catch (Exception $e) {
             $this->setError($e->getMessage());
@@ -89,25 +165,27 @@ class ProjectTable extends Table
 
         // Check for valid name.
         if (trim($this->name) == '') {
-            throw new UnexpectedValueException(sprintf('The name is empty'));
+            throw new UnexpectedValueException(sprintf('The project name is empty')); // COM_CONTACT_WARNING_PROVIDE_VALID_NAME
         }
 
-        //--- alias -------------------------------------------------------------
+	    // Set name
+	    $this->name = htmlspecialchars_decode($this->name, ENT_QUOTES);
 
-        // ToDo: aliase must be singular see below store ?
-        if (empty($this->alias)) {
-            $this->alias = $this->title;
-        }
+	    // Check for valid name.
+	    if (trim($this->title) == '') {
+		    throw new UnexpectedValueException(sprintf('The title is empty')); // COM_CONTACT_WARNING_PROVIDE_VALID_TITLE
+	    }
 
-        $this->alias = ApplicationHelper::stringURLSafe($this->alias, $this->language);
+	    $this->title = htmlspecialchars_decode($this->title, ENT_QUOTES);
 
-        // just minuses -A use date
-        if (trim(str_replace('-', '', $this->alias)) == '') {
-            $this->alias = Factory::getDate()->format('Y-m-d-H-i-s');
-        }
+	    //--- alias -------------------------------------------------------------
 
-//        //--- twin id: check if twin exists -------------------------------------
-//
+	    // Generate a valid alias
+	    $this->generateAlias();
+
+
+        //--- twin id: check if twin exists -------------------------------------
+
 //        $this->twin_id = (int)$this->twin_id;
 //
 //        // Nested does not allow parent_id = 0, override this.
@@ -139,85 +217,33 @@ class ProjectTable extends Table
 //        }        else         {
 //            $this->description = '';
 //        }
-        if (empty($this->note)) {
-            $this->note = '';
-        }
 
         if (empty($this->params)) {
             $this->params = '{}';
         }
 
-        if (!(int)$this->checked_out_time) {
-            $this->checked_out_time = null;
-        }
+	    if (!(int)$this->checked_out_time) {
+		    $this->checked_out_time = null;
+	    }
 
-        // if (!(int) $this->publish_up)
-        // {
-        // $this->publish_up = null;
-        // }
+	    // Set created date if not set.
+	    if (!(int) $this->created) {
+		    $this->created = $date;
+	    }
 
-        // if (!(int) $this->publish_down)
-        // {
-        // $this->publish_down = null;
-        // }
+	    if (empty($this->created_by)) {
+		    $this->created_by = $userId;
+	    }
+
+	    if (!(int) $this->modified) {
+		    $this->modified = $this->created;
+	    }
+
+	    if (empty($this->modified_by)) {
+		    $this->modified_by = $this->created_by;
+	    }
 
         return true;
-    }
-
-    /**
-     * Stores a Project.
-     *
-     * @param   boolean  $updateNulls  True to update fields even if they are null.
-     *
-     * @return  boolean  True on success, false on failure.
-     *
-     * @since __BUMP_VERSION__
-     */
-    public function store($updateNulls = false)
-    {
-        $date = Factory::getDate();
-        $app  = Factory::getApplication();
-        $user = $app->getIdentity();
-
-        if ($this->id) {
-            // Existing item
-            $this->modified    = $date->toSql();
-            $this->modified_by = $user->get('id');
-        } else {
-            // New tag. A tag created and created_by field can be set by the user,
-            // so we don't touch either of these if they are set.
-            if (!(int)$this->created) {
-                $this->created = $date->toSql();
-            }
-
-            if (empty($this->created_by)) {
-                $this->created_by = $user->get('id');
-            }
-
-            if (!(int)$this->modified) {
-                $this->modified = $this->created;
-            }
-
-            if (empty($this->modified_by)) {
-                $this->modified_by = $this->created_by;
-            }
-
-            // Text must be preset
-            if ($this->note == null) {
-                $this->note = '';
-            }
-        }
-
-        // Verify that the alias is unique
-        $table = new static($this->getDbo());
-
-        if ($table->load(array('alias' => $this->alias)) && ($table->id != $this->id || $this->id == 0)) {
-            $this->setError(Text::_('COM_LANG4DEV_ERROR_UNIQUE_ALIAS'));
-
-            return false;
-        }
-
-        return parent::store($updateNulls);
     }
 
     /**
@@ -243,5 +269,27 @@ class ProjectTable extends Table
 
         return $return;
     }
+
+	/**
+	 * Generate a valid alias from title / date.
+	 * Remains public to be able to check for duplicated alias before saving
+	 *
+	 * @return  string
+	 */
+	public function generateAlias()
+	{
+		if (empty($this->alias)) {
+			$this->alias = $this->name;
+		}
+
+		$this->alias = ApplicationHelper::stringURLSafe($this->alias, $this->language);
+
+		if (trim(str_replace('-', '', $this->alias)) == '') {
+			$this->alias = Factory::getDate()->format('Y-m-d-H-i-s');
+		}
+
+		return $this->alias;
+	}
+
 
 } // class

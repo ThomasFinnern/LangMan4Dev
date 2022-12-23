@@ -44,6 +44,7 @@ class SubprojectTable extends Table
 
         parent::__construct('#__lang4dev_subprojects', 'id', $db);
 
+	    $this->created = Factory::getDate()->toSql();
         $this->access = (int)Factory::getApplication()->get('access');
     }
 
