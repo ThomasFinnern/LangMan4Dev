@@ -53,6 +53,12 @@ class langPathFileName
     public $isIdPreceded = false;
     public $isSysFile = false;  # lang file type (normal/sys)
 
+	// ToDo: ? on dev / server
+	// public $isLangAtStdJoomla = false; // not inside component folder
+
+	// ToDo: on old joomla style or on extension local  
+	// public $isOnServer = false; // not inside component folder see function isLangAtStdJoomla()
+	
     // ToDo: base path variable
     // ToDo: get without base path ? base path as parameter ?
 
@@ -127,6 +133,24 @@ class langPathFileName
         return basename($this->langPathFileName);
     }
 
+    /**
+     * without starting lang id ([en-GB.]com_lang4dev.ini
+     * @return string
+     *
+     * @since version
+     */
+    public function getlangBaseFileName()
+    {
+	    $baseFileName = '';
+
+	   [$fileName, $langId, $isIdPreceded, $isSysFile] =
+		    self::extractNameParts($this->langPathFileName);
+
+	    $baseFileName = $this->createLangBaseFileName($fileName, $langId, $isSysFile);
+
+		return $baseFileName;
+    }
+
     // base path below language file (where project xml is expected)
 
     /**
@@ -169,6 +193,10 @@ class langPathFileName
     {
         // clean up backslashes
         $this->langPathFileName = str_replace('\\', '/', $langPathFileName);
+
+	    // ToDo: ? on dev / server on old joomla style or on extension local  
+	    //$this->isLangAtStdJoomla = false; // not inside component folder
+		
 
         if ($langPathFileName != '') {
             // assign flags like is sys, langId retrieved from file path name
@@ -246,7 +274,7 @@ class langPathFileName
 
         // remove langId from file name
         if ($isIdPreceded) {
-            $fileName = substr($fileName, 5);
+            $fileName = substr($fileName, 6);
         }
 
         // sys file
@@ -258,8 +286,8 @@ class langPathFileName
         } else {
             $fileName = substr($fileName, 0, -4);
         }
-
-        return [$fileName, $langId, $isIdPreceded, $isSysFile];
+		
+	    return [$fileName, $langId, $isIdPreceded, $isSysFile];
     }
 
     /**
@@ -269,21 +297,21 @@ class langPathFileName
      * @throws Exception
      * @since version
      */
-    public function isSystemLangPath()
+    public function isLangAtStdJoomla()
     {
-        $isSystemLangPath = false;
+        $isLangAtStdJoomla = false;
 
         $prjPath = self::extractProjectPath($this->langPathFileName);
 
         if (str_starts_with($prjPath, str_replace('\\', '/', JPATH_ADMINISTRATOR))) { // . '/' .'languages')) {
-            $isSystemLangPath = true;
+            $isLangAtStdJoomla = true;
         }
 
         if (str_starts_with($prjPath, str_replace('\\', '/', JPATH_ROOT))) { // . '/' .'languages')) {
-            $isSystemLangPath = true;
+            $isLangAtStdJoomla = true;
         }
 
-        return $isSystemLangPath;
+        return $isLangAtStdJoomla;
     }
 
     /**
@@ -295,6 +323,7 @@ class langPathFileName
     {
         [$fileName, $this->langId, $this->isIdPreceded, $this->isSysFile] =
             self::extractNameParts($this->langPathFileName);
+		
     }
 
     /**
@@ -308,38 +337,72 @@ class langPathFileName
      *
      * @since version
      */
-    public static function createLangPathFileName($fileName, $prjPath, $langId, $isIdPreceded, $isSysFile)
+    public static function createLangBaseFileName($fileName, $langId, $isSysFile)
     {
-        $langPathFileName = '';
+        $langBaseFileName = '';
 
         // try
         {
-            $langPath = $prjPath . '/language/' . $langId . '/';
-
-            // pre add lang id
-            if ($isIdPreceded) {
-                $langPath .= $langId . '.';
-            }
-
-            $langPath .= $fileName;
+	        $langBaseFileName = $fileName;
 
             // pre add lang id
             if ($isSysFile) {
-                $langPath .= '.sys';
+	            $langBaseFileName .= '.sys';
             }
 
-            $langPath .= '.ini';
+	        $langBaseFileName .= '.ini';
 
-            // clean up backslashes
-            $langPathFileName = str_replace('\\', '/', $langPath);
         }
 
         // catch
 
-        return $langPathFileName;
+        return $langBaseFileName;
     }
 
-    // use local filename insead of external one
+	/**
+	 * @param $fileName
+	 * @param $prjPath
+	 * @param $langId
+	 * @param $isIdPreceded
+	 * @param $isSysFile
+	 *
+	 * @return array|string|string[]
+	 *
+	 * @since version
+	 */
+	public static function createLangPathFileName($fileName, $prjPath, $langId, $isIdPreceded, $isSysFile)
+	{
+		$langPathFileName = '';
+
+		// try
+		{
+
+			$langPath = $prjPath . '/language/' . $langId . '/';
+
+			// pre add lang id
+			if ($isIdPreceded) {
+				$langPath .= $langId . '.';
+			}
+
+			$langPath .= $fileName;
+
+			// pre add lang id
+			if ($isSysFile) {
+				$langPath .= '.sys';
+			}
+
+			$langPath .= '.ini';
+
+			// clean up backslashes
+			$langPathFileName = str_replace('\\', '/', $langPath);
+		}
+
+		// catch
+
+		return $langPathFileName;
+	}
+
+	// use local filename insead of external one
 
     /**
      * @param $isMustExist

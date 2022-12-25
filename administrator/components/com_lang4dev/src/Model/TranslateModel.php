@@ -134,7 +134,7 @@ class TranslateModel extends AdminModel
 
             $subPrj->installPathFilename = $dbSub->installPathFilename;
             $subPrj->langIdPrefix        = $dbSub->prefix;
-            $subPrj->isLangAtStdJoomla   = $dbSub->isLangAtStdJoomla;
+	        // Not needed ? 2022.12.25 $subPrj->isLangAtStdJoomla   = $dbSub->isLangAtStdJoomla;
         }
 
         return $project;

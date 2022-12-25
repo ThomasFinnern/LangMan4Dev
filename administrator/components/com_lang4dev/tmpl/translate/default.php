@@ -257,7 +257,7 @@ echo Route::_('index.php?option=com_lang4dev&view=translate'); ?>" method="post"
 
                     //--- all matching translation lang files ----------------------------------
 
-                    $mainLangFileName = basename($subPrjPath);
+                    $mainLangFileName = $mainLangFile->getlangBaseFileName();
 
                     foreach ($subProject->getLangIds() as $langId) {
                         // main is already rendered
@@ -269,7 +269,7 @@ echo Route::_('index.php?option=com_lang4dev&view=translate'); ?>" method="post"
                                 //--- find matching name with actual lang ID -------------------
 
                                 foreach ($transLangFiles as $transLangFile) {
-                                    $transLangFileName = basename($transLangFile->getLangPathFileName());
+                                    $transLangFileName = $transLangFile->getlangBaseFileName();
 
                                     if ($transLangFileName == $mainLangFileName) {
                                         $subPrjPath = $transLangFile->getlangSubPrjPathFileName();

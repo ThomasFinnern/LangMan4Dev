@@ -30,6 +30,8 @@ use function defined;
  *
  * @since __BUMP_VERSION__
  */
+
+// ToDo: create one base model ProjectBaseModel for PrjTextsModel and TranslateModel to derive from ==> DRY method
 class PrjTextsModel extends AdminModel
 {
     /**
@@ -117,6 +119,7 @@ class PrjTextsModel extends AdminModel
 
             $subPrj->installPathFilename = $dbSub->installPathFilename;
             $subPrj->langIdPrefix        = $dbSub->prefix;
+	        // Not needed ? 2022.12.25 $subPrj->isLangAtStdJoomla   = $dbSub->isLangAtStdJoomla;
         }
 
         return $project;
@@ -143,6 +146,7 @@ class PrjTextsModel extends AdminModel
                 ->select($db->quoteName('prjId'))
                 ->select($db->quoteName('subPrjType'))
                 ->select($db->quoteName('prefix'))
+                ->select($db->quoteName('isLangAtStdJoomla'))
                 ->select($db->quoteName('root_path'))
                 ->select($db->quoteName('prjXmlPathFilename'))
                 ->select($db->quoteName('installPathFilename'))

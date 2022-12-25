@@ -103,7 +103,8 @@ class langProject
 //		            $subProject->readLangFile($langId, $isReadOriginal);
 //	            }
 
-                $subProject->readLangFiles($langId);
+	            $subProject->readLangFiles($langId);
+	            // $isFilesRead = true;
             }
         } catch (RuntimeException $e) {
             $OutTxt = '';
@@ -140,6 +141,7 @@ class langProject
                     $this->readLangFiles($langId);
                 }
             }
+	        // $isFilesRead = true;
         } catch (RuntimeException $e) {
             $OutTxt = '';
             $OutTxt .= 'Error executing readAllLangFiles: "' . '<br>';

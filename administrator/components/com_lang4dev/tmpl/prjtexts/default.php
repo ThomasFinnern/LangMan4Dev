@@ -345,8 +345,9 @@ function renderMissingPreparedTransIds ($missing, $comment = '')
                 $dummyLangFilePathName = $subProject->langBasePath . '/' . $this->mainLangId . '/' . 'dumyyName.ini';
                 $oLangPathFileName     = new langPathFileName ($dummyLangFilePathName);
 
-                $postId = ""; //  = " (C) ";  // lang files inside component
-                if ($oLangPathFileName->isSystemLangPath()) {
+                $postId = ""; //  = " (C) ";
+                // lang files outside component
+                if ($oLangPathFileName->isLangAtStdJoomla()) {
                     $postId = " (J) ";  // lang files inside joomla base lang path
                 }
 

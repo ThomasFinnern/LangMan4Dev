@@ -51,10 +51,6 @@ class HtmlView extends BaseHtmlView
 
     protected $isDebugBackend;
     protected $isDevelop;
-    protected $isDoCommentIds;
-
-    //protected $langFiles = [];
-
     protected $mainLangId;
     protected $transLangId;
     protected $isShowTranslationOfAllIds;
