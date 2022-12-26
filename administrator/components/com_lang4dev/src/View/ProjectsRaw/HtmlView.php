@@ -7,7 +7,7 @@
  * @license       GNU General Public License version 2 or later; see LICENSE.txt
  */
 
-namespace Finnern\Component\Lang4dev\Administrator\View\Translate;
+namespace Finnern\Component\Lang4dev\Administrator\View\ProjectsRaw;
 
 defined('_JEXEC') or die;
 
@@ -16,7 +16,7 @@ require_once(__DIR__ . '/../../Helper/selectProject.php');
 use Finnern\Component\Lang4dev\Administrator\Helper\manifestLangFiles;
 use Finnern\Component\Lang4dev\Administrator\Helper\sessionProjectId;
 use Finnern\Component\Lang4dev\Administrator\Helper\sessionTransLangIds;
-use Finnern\Component\Lang4dev\Administrator\Model\TranslateModel;
+use Finnern\Component\Lang4dev\Administrator\Model\ProjectsRawModel;
 use Joomla\CMS\Component\ComponentHelper;
 use Joomla\CMS\Form\Form;
 use Joomla\CMS\Helper\ContentHelper;
@@ -34,7 +34,7 @@ use function defined;
 use function Finnern\Component\Lang4dev\Administrator\Helper\selectProject;
 
 /**
- * View class for a list of lang4dev.
+ * View class for a raw json list of a selected project .
  *
  * @since __BUMP_VERSION__
  */
@@ -105,7 +105,7 @@ class HtmlView extends BaseHtmlView
 
         //--- define project -------------------------------------------------------------------
 
-        /** @var TranslateModel $model */
+        /** @var ProjectsRawModel $model */
         $model         = $this->getModel();
         $this->project = $model->getProject($prjId, $subPrjActive);
         $project       = $this->project;
@@ -157,22 +157,22 @@ class HtmlView extends BaseHtmlView
         //--- test manifest file ----------------------------------------
 
         if ($this->isDebugBackend) {
-			if ( ! empty ($project->subProjects[0]))
-			{
-				$prjXmlPathFilename = $project->subProjects[0]->prjXmlPathFilename; // . '/lang4dev.xml';
+	        if ( ! empty ($project->subProjects[0]))
+	        {
+		        $prjXmlPathFilename = $project->subProjects[0]->prjXmlPathFilename; // . '/lang4dev.xml';
 
-	            // $manifestData = new manifestData ($prjXmlPathFilename);
-	            $manifestLang = new manifestLangFiles ($prjXmlPathFilename);
-	            //$manifestText = implode("\n", $manifestData->__toText());
-	            $manifestText = implode("<br>", $manifestLang->__toText());
 
-	            //--- show manifest content -----------------------------------------
+		        // $manifestData = new manifestData ($prjXmlPathFilename);
+		        $manifestLang = new manifestLangFiles ($prjXmlPathFilename);
+		        //$manifestText = implode("\n", $manifestData->__toText());
+		        $manifestText = implode("<br>", $manifestLang->__toText());
 
-	            echo '<h4>manifest content parts</h4>';
-	            echo $manifestText . '<br>';
-	            echo '<hr>';
-			}
+		        //--- show manifest content -----------------------------------------
 
+		        echo '<h4>manifest content parts</h4>';
+		        echo $manifestText . '<br>';
+		        echo '<hr>';
+	        }
         }
 
         //---  --------------------------------------------------------------
@@ -208,13 +208,6 @@ class HtmlView extends BaseHtmlView
         if (!empty ($this->isDevelop)) {
             echo '<span style="color:red">'
                 . '<b>Tasks: </b><br>'
-                . '* lang_ids by sub project ->existing <br>'
-                . '* function getProject is double in prjText and more  model ? own class<br>'
-                . '* source lang ID as list field of availables ? config ? project ... ? <br>'
-                . '* Target lang id as list field of ISO 639 list<br>'
-                . '* New lang id as list field of ISO 639 list<br>'
-                . '* use isLangAtStdJoomla in detectLangFiles<br>'
-                . '* use list of langIds to create a translation selection <br>'
                 . '*  <br>'
 //				. '* <br>'
 //				. '* <br>'
@@ -243,41 +236,12 @@ class HtmlView extends BaseHtmlView
             default:
                 ToolBarHelper::cancel('lang4dev.cancel', 'JTOOLBAR_CLOSE');
 
-                ToolbarHelper::custom(
-                    'translate.selectSourceLangId',
-                    'icon-flag',
-                    '',
-                    'COM_LANG4DEV_TRANS_SELECT_SOURCE_LANG_ID',
-                    false
-                );
-                ToolbarHelper::custom(
-                    'translate.selectTargetLangId',
-                    'icon-edit',
-                    '',
-                    'COM_LANG4DEV_TRANS_SELECT_TARGET_LANG_ID',
-                    false
-                );
-
-                ToolbarHelper::custom(
-                    'translate.createLangId',
-                    'icon-copy',
-                    '',
-                    'COM_LANG4DEV_TRANSLATE_NEW_LANG_FILES',
-                    false
-                );
-                ToolbarHelper::custom(
-                    'translate.saveLangEdits',
-                    'icon-save',
-                    '',
-                    'COM_LANG4DEV_TRANSLATE_SAVE_EDITED_LANG_FILES',
-                    false
-                ); /// ToDo: true);
 
                 break;
         }
 
         // Set the title
-        ToolBarHelper::title(Text::_('COM_LANG4DEV_SUBMENU_TRANSLATE'), 'flag');
+        ToolBarHelper::title(Text::_('PROJECTS_RAW'), 'flag');
 
         // Options button.
         if (Factory::getApplication()->getIdentity()->authorise('core.admin', 'com_lang4dev')) {

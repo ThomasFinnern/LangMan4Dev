@@ -88,7 +88,7 @@ echo Route::_('index.php?option=com_lang4dev&view=subprojects'); ?>"
     <?php
     else : ?>
 
-		<table class="table" id="subprojetsList">
+		<table class="table table-sm" id="subprojetsList">
 			<caption id="captionTable" class="sr-only">
                 <?php
                 echo Text::_('COM_LANG4DEV_TABLE_CAPTION'); ?>, <?php
@@ -117,48 +117,55 @@ echo Route::_('index.php?option=com_lang4dev&view=subprojects'); ?>"
 				</th>
 
 				<th scope="col" style="width:3%" class="text-center d-none d-md-table-cell">
-	                    <span class="small"
-	                          title="<?php
-                              echo $this->escape("Remove when order is fixed"); ?>">
-	                        <?php
-                            echo Text::_('JGRID_HEADING_ORDERING'); ?>
-	                    </span>
+                    <span class="small" >
+                        <?php
+                        echo Text::_('JGRID_HEADING_ORDERING'); ?>
+                    </span>
 				</th>
 
 
-				<th scope="col" style="width:3%" class="text-center d-none d-md-table-cell">
-                        <span class="small"
-                              title="<?php
-                              echo $this->escape("Remove when order is fixed"); ?>">
+                <th scope="col" style="width:3%" class="text-center d-none d-md-table-cell">
+                    <span class="small" >
+                        <?php
+                        echo Text::_('JGRID_HEADING_ID'); ?>
+                    </span>
+                </th>
+
+                <th scope="col" style="width:3%" class="text-center d-none d-md-table-cell">
+                    <span class="small"
+                          title="<?php
+                          echo $this->escape("Remove when order is fixed"); ?>">
+                        <?php
+                        echo Text::_('COM_LANG4DEV_SUBPROJECT_PARENT'); ?>
+                    </span>
+                </th>
+
+                <th scope="col" style="width:3%" class="text-center d-none d-md-table-cell">
+                        <span class="small" >
                             <?php
-                            echo Text::_('COM_LANG4DEV_SUBPROJECT_PARENT'); ?>
+                            echo Text::_('COM_LANG4DEV_SUBPROJECT_TYPE'); ?>
                         </span>
-				</th>
+                </th>
 
 
-				<th>
+                <th scope="col" >
                     <?php
                     echo Text::_('JGLOBAL_TITLE'); ?>
 				</th>
 
-				<th>
-                    <?php
-                    echo Text::_('JGRID_HEADING_ID'); ?>
-				</th>
 
-
-				<th>
+				<th scope="col" >
                     <?php
                     echo Text::_('COM_LANG4DEV_SUBPROJECT_PREFIX'); ?>
 				</th>
 
-				<th>
+				<th scope="col" >
                     <?php
                     echo Text::_('COM_LANG4DEV_SUBPROJECT_LANG_LOCATION_JOOMLA_STANDARD_SHORT'); ?>
 				</th>
 
 
-				<th>
+				<th scope="col" >
                     <?php
                     echo Text::_('COM_LANG4DEV_SUBPROJECT_ROOT_PATH'); ?>
 				</th>
@@ -167,16 +174,20 @@ echo Route::_('index.php?option=com_lang4dev&view=subprojects'); ?>"
 			</tr>
 			</thead>
 
-			<tbody <?php
-            if ($saveOrder) : ?> class="js-draggable" data-url="<?php
-            echo $saveOrderingUrl; ?>" data-direction="<?php
-            echo strtolower($listDirn); ?>" data-nested="false"<?php
-            endif; ?>>
+			<tbody
+                <?php if ($saveOrder) : ?>
+                    class="js-draggable"
+                    data-url="<?php echo $saveOrderingUrl; ?>"
+                    data-direction="<?php echo strtolower($listDirn); ?>"
+                    data-nested="false"
+                <?php endif; ?>
+            >
             <?php
             foreach ($this->items as $i => $item) : ?>
 
                 <?php
-                // Get permissions
+                //--- Get permissions -----------------------------
+
                 $canEdit    = $user->authorise('core.edit', $extension . '.project.' . $item->id);
                 $canCheckin = $user->authorise(
                         'core.admin',
@@ -188,7 +199,9 @@ echo Route::_('index.php?option=com_lang4dev&view=subprojects'); ?>"
                     ) && $item->created_by == $userId;
                 $canChange  = $user->authorise('core.edit.state', $extension . '.project.' . $item->id) && $canCheckin;
 
-                $editLink = Route::_('index.php?option=com_lang4dev&task=subproject.edit&id=' . $item->id);
+	            //--- Data -----------------------------
+
+	            $editLink = Route::_('index.php?option=com_lang4dev&task=subproject.edit&id=' . $item->id);
                 //$editLink = Route::_('index.php?option=com_lang4dev&view=subproject&layout=edit&id=' . $item->id);
                 // $editGalleryLink = Route::_("index.php?option=com_lang4dev&task=gallery.edit&id=" . $item->gallery_id);
 
@@ -198,10 +211,11 @@ echo Route::_('index.php?option=com_lang4dev&view=subprojects'); ?>"
                     $modified_by = $created_by;
                 }
 
-                ?>
+	            ?>
 
-				<tr class="row<?php
-                echo $i % 2; ?>">
+                <!-- --- Table ------------------------------->
+
+                <tr class="row<?php echo $i % 2; ?>">
 					<td class="text-center d-none d-md-table-cell">
                         <?php
                         echo HTMLHelper::_('grid.id', $i, $item->id); ?>
@@ -230,24 +244,50 @@ echo Route::_('index.php?option=com_lang4dev&view=subprojects'); ?>"
                         <?php
                         endif; ?>
 					</td>
-					<td class="small d-none d-md-table-cell">
-                        <?php
-                        echo $item->ordering; ?>
+
+                    <!-- --- Ordering ... ------------------------------->
+
+                    <td class="small d-none d-md-table-cell">
+                        <?php echo $item->ordering; ?>
 					</td>
 
-					<td class="small d-none d-md-table-cell">
-                        <?php
-                        echo $item->parent_id; ?>
-					</td>
+                    <td class="small d-none d-md-table-cell">
+		                <?php
+		                echo $item->id; ?>
+                    </td>
 
-					<td class="small d-none d-md-table-cell">
-                        <?php
-                        echo $i . ':<br>' . $item->title; ?>
-					</td>
+                    <td class="small d-none d-md-table-cell">
+		                <?php echo $item->parent_id; ?>
+                    </td>
 
-					<th scope="row">
-                        <?php
-                        if ($item->checked_out) : ?>
+                    <td class="small d-none d-md-table-cell">
+		                <?php
+                        echo $item->subPrjType;
+                        ?>
+                    </td>
+
+                    <!-- --- title ... ------------------------------->
+
+                    <td class="small d-none d-md-table-cell">
+		                <?php if ($canEdit || $canEditOwn) : ?>
+			                <?php
+			                $editIcon = $item->checked_out ? '' : '<span class="fa fa-pencil-square mr-2" aria-hidden="true"></span>'; ?>
+                            <a class="hasTooltip" href="<?php
+			                echo $editLink; ?>"
+                               title="<?php
+			                   echo Text::_('JACTION_EDIT'); ?> <?php
+			                   echo $this->escape(addslashes($item->title)); ?>">
+				                <?php
+				                echo $editIcon; ?>
+				                <?php
+				                echo $this->escape(trim($item->title)); ?></a>
+		                <?php
+		                else : ?>
+			                <?php
+			                echo $this->escape(trim($item->title)); ?>
+		                <?php endif; ?>
+
+                        <?php if ($item->checked_out) : ?>
                             <?php
                             echo HTMLHelper::_(
                                 'jgrid.checkedout',
@@ -257,47 +297,24 @@ echo Route::_('index.php?option=com_lang4dev&view=subprojects'); ?>"
                                 'subprojects.',
                                 $canCheckin
                             ); ?>
-                        <?php
-                        endif; ?>
-                        <?php
-                        if ($canEdit || $canEditOwn) : ?>
-                            <?php
-                            $editIcon = $item->checked_out ? '' : '<span class="fa fa-pencil-square mr-2" aria-hidden="true"></span>'; ?>
-							<a class="hasTooltip" href="<?php
-                            echo $editLink; ?>"
-							   title="<?php
-                               echo Text::_('JACTION_EDIT'); ?> <?php
-                               echo $this->escape(addslashes($item->title)); ?>">
-                                <?php
-                                echo $editIcon; ?>
-                                <?php
-                                echo $this->escape($item->title); ?></a>
-                        <?php
-                        else : ?>
-                            <?php
-                            echo $this->escape($item->title); ?>
-                        <?php
-                        endif; ?>
+                        <?php endif; ?>
 
-						<span class="small" title="<?php
-                        echo $this->escape(""); ?>">
+						<span class="small" >
 							<?php
                             if (empty($item->note)) : ?>
-                                <?php
-                                echo Text::sprintf('JGLOBAL_LIST_ALIAS', $this->escape($item->alias)); ?>
+                                <?php echo Text::sprintf('JGLOBAL_LIST_ALIAS', trim($this->escape($item->alias))); ?>
                             <?php
                             else : ?>
                                 <?php
                                 echo Text::sprintf(
                                     'JGLOBAL_LIST_ALIAS_NOTE',
-                                    $this->escape($item->alias),
-                                    $this->escape($item->note)
+                                    $this->escape(trim($item->alias)),
+                                    $this->escape(trim($item->note))
                                 ); ?>
                             <?php
                             endif; ?>
 						</span>
-					</th>
-
+					</td>
 
 					<td class="small d-none d-md-table-cell">
                         <?php

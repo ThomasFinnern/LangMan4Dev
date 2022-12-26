@@ -14,7 +14,7 @@ defined('_JEXEC') or die;
 use Exception;
 use Finnern\Component\Lang4dev\Administrator\Helper\sessionProjectId;
 use Finnern\Component\Lang4dev\Administrator\Helper\sessionTransLangIds;
-use Finnern\Component\Lang4dev\Administrator\Model\PrjTextsModel;
+use Finnern\Component\Lang4dev\Administrator\Model\ProjectsRawModel;
 use JInput;
 use Joomla\CMS\Application\CMSApplication;
 use Joomla\CMS\Factory;
@@ -32,7 +32,7 @@ use function defined;
  *
  * @since __BUMP_VERSION__
  */
-class PrjTextsController extends AdminController
+class ProjectsRawController extends AdminController
 {
     /**
      * Constructor.
@@ -62,7 +62,7 @@ class PrjTextsController extends AdminController
      *
      * @since __BUMP_VERSION__
      */
-    public function getModel($name = 'PrjTexts', $prefix = 'Administrator', $config = array('ignore_request' => true))
+    public function getModel($name = 'ProjectsRaw', $prefix = 'Administrator', $config = array('ignore_request' => true))
     {
         return parent::getModel($name, $prefix, $config);
     }
@@ -74,65 +74,6 @@ class PrjTextsController extends AdminController
      *
      * @since __BUMP_VERSION__
      */
-
-    // ToDo: is needed ?
-    /**
-     *
-     * @return false|void
-     *
-     * @throws Exception
-     * @since version
-     */
-    public function Search4PrjTexts()
-    {
-        $isOk = false;
-
-        $msg     = "PrjTextController.Search4PrjTexts: ";
-        $msgType = 'notice';
-
-        Session::checkToken() or die(Text::_('JINVALID_TOKEN'));
-
-        $canAdmin = Factory::getApplication()->getIdentity()->authorise('core.manage', 'com_lang4dev');
-        if (!$canAdmin) {
-            $msg     .= Text::_('JERROR_ALERTNOAUTHOR');
-            $msgType = 'warning';
-            // replace newlines with html line breaks.
-            str_replace('\n', '<br>', $msg);
-        } else {
-            try {
-                // Message when used  ....
-
-                $OutTxt = '';
-                $OutTxt .= 'Error executing rebuild: "' . '<br>';
-                //$OutTxt .= 'Error: "' . $e->getMessage() . '"' . '<br>';
-
-                $app = Factory::getApplication();
-                $app->enqueueMessage($OutTxt, 'error');
-
-                /** @var PrjTextsModel $model */
-                $model = $this->getModel();
-
-                $isOk = $model->rebuild();
-                if ($isOk) {
-                    $msg .= Text::_('COM_LANG4DEV_GALLERIES_REBUILD_SUCCESS');
-                } else {
-                    $msg .= Text::_('COM_LANG4DEV_GALLERIES_REBUILD_FAILURE') . ': ' . $model->getError();
-                }
-            } catch (RuntimeException $e) {
-                $OutTxt = '';
-                $OutTxt .= 'Error executing rebuild: "' . '<br>';
-                $OutTxt .= 'Error: "' . $e->getMessage() . '"' . '<br>';
-
-                $app = Factory::getApplication();
-                $app->enqueueMessage($OutTxt, 'error');
-            }
-        }
-
-        $link = 'index.php?option=com_lang4dev&view=galleries&layout=galleries_tree';
-        $this->setRedirect($link, $msg, $msgType);
-
-        return $isOk;
-    }
 
     /**
      *
@@ -164,11 +105,11 @@ class PrjTextsController extends AdminController
             $sessionProjectId->setIds($prjId, $subPrjActive);
         }
 
-        $OutTxt = "Project for prjTexts has changed:";
+        $OutTxt = "Project for ProjectsRaw has changed:";
         $app    = Factory::getApplication();
         $app->enqueueMessage($OutTxt, 'info');
 
-        $link = 'index.php?option=com_lang4dev&view=prjTexts';
+        $link = 'index.php?option=com_lang4dev&view=projectsraw';
         $this->setRedirect($link);
 
         return true;
@@ -204,11 +145,11 @@ class PrjTextsController extends AdminController
             $sessionTransLangIds->setIds($mainLangId, $transLangId);
         }
 
-        $OutTxt = "Lang Id for PrjText has changed:";
+        $OutTxt = "Lang Id for prjText has changed:";
         $app    = Factory::getApplication();
         $app->enqueueMessage($OutTxt, 'info');
 
-        $link = 'index.php?option=com_lang4dev&view=prjtexts';
+        $link = 'index.php?option=com_lang4dev&view=projectsraw';
         $this->setRedirect($link);
 
         return true;
