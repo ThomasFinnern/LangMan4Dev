@@ -316,44 +316,46 @@ class langFileNamesSet
             $regex = '(?<!\.sys)\.ini$';
         }
 
-        //--- lang ID in front ----------------------------------------
+	    //--- lang ID as folder name --------------------------------
 
-        // ToDo: lang name may be in sub folders ?
-        if ($this->isLangIdPre2Name) {
-            $langFiles = Folder::files($this->langBasePath, $regex);
+	    if ($this->isLangInFolders) {
 
-            // all files in dir
-            foreach ($langFiles as $langFile) {
-                [$langId, $baseName] = explode('.', $langFile, 2);
+	        if (is_dir($this->langBasePath)) {
+		        // all folders
+		        foreach (Folder::folders($this->langBasePath) as $folderName) {
+			        $langId           = $folderName;
+			        $this->langIds [] = $langId;
 
-                $this->langIds []                   = $langId;
-                $this->langFileNamesSet [$langId][] = $this->langBasePath . '/' . $langFile;
+			        $subFolder = $this->langBasePath . '/' . $folderName;
 
-                $isFound = true;
-            }
+			        // all matching file names
+			        $fileNames = Folder::files($subFolder, $regex);
+			        foreach ($fileNames as $fileName) {
+
+				        $langFile = $subFolder . DIRECTORY_SEPARATOR . $fileName;
+
+				        $this->langFileNamesSet [$langId][] = $langFile;
+
+				        $isFound = true;
+			        }
+		        }
+	        }
         } else {
-            //--- lang ID as folder name --------------------------------
+	        //--- lang in one folder ----------------------------------------
 
-            if (is_dir($this->langBasePath)) {
-                // all folders
-                foreach (Folder::folders($this->langBasePath) as $folderName) {
-                    $langId           = $folderName;
-                    $this->langIds [] = $langId;
+		    // ToDo: extract only files with extension name when in standard folder ?
 
-                    $subFolder = $this->langBasePath . '/' . $folderName;
+	        $langFiles = Folder::files($this->langBasePath, $regex);
 
-                    // all matching file names
-                    $fileNames = Folder::files($subFolder, $regex);
-                    foreach ($fileNames as $fileName) {
+	        // all files in dir
+	        foreach ($langFiles as $langFile) {
+		        [$langId, $baseName] = explode('.', $langFile, 2);
 
-                        $langFile = $subFolder . DIRECTORY_SEPARATOR . $fileName;
+		        $this->langIds []                   = $langId;
+		        $this->langFileNamesSet [$langId][] = $this->langBasePath . '/' . $langFile;
 
-                        $this->langFileNamesSet [$langId][] = $langFile;
-
-                        $isFound = true;
-                    }
-                }
-            }
+		        $isFound = true;
+	        }
         }
 
         return $isFound;

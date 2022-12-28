@@ -17,8 +17,15 @@ function renderProjectSelection($form)
             <?php
             echo $form->renderField('selectProject'); ?>
 		</div>
-	</div>
-    <?php
+
+        <div class="mx-2 py-0 px-2 flex-fill ">
+            <?php
+            echo $form->renderField('selectSubproject'); ?>
+        </div>
+
+    </div>
+
+	<?php
 
     return;
 }
