@@ -114,11 +114,19 @@ class langSubProject extends langFiles
     {
 
         // ToDo: move parts from RetrieveBaseManifestData to here
+	    // is component installed (or on develop folder)
+	    if ($manifestLang->isInstalled)
+	    {
+
+
+	    } else {
 
 
 
+	    }
 
-    }
+
+	}
 
 
 
@@ -131,6 +139,9 @@ class langSubProject extends langFiles
         $this->isLangPathDefined = false;
 
         try {
+            //--- root path exist ? ----------------------------------------------------------
+
+	        // Checks given path or matching path on joomla installation for existence
             $isRootPathValid = $this->checkRootPath();
 
             if (!$isRootPathValid) {
@@ -148,9 +159,12 @@ class langSubProject extends langFiles
             }
 
             if ($isRootPathValid) {
-                $isManifestPathValid = $this->checkManifestPath();
 
-                if ($isManifestPathValid) {
+	            //--- manifest file exists ? ----------------------------------------------------------
+
+	            $isManifestFileExist = $this->checkManifestFile();
+
+                if ($isManifestFileExist) {
 
                     //--- open manifest file ----------------------------------------------------------
 
@@ -165,6 +179,7 @@ class langSubProject extends langFiles
 
                     //--- base paths to default and admin ---------------------------------------------
 
+	                // prjDefaultPath, prjAdminPath
                     $this->DefaultAndAdminPath($manifestLang);
 
                     /*----------------------------------------------------------
@@ -176,7 +191,7 @@ class langSubProject extends langFiles
 
                         //--- component on joomla server folder ---------------------------------------
 
-                        // lang inside component ?
+                        // new standard: lang inside component ?
                         if (!$this->isLangAtStdJoomla) {
                             //--- lang files in component folder ------------------------------------------
 
@@ -190,7 +205,7 @@ class langSubProject extends langFiles
                                 $this->collectPrjFolderLangFiles();
                             }
                         } else {
-                            //--- lang files in standard joomla folder -------------------------------------
+                            //--- lang files in joomla standard folder -------------------------------------
 
                             // old style .... '<languages>' xml element exists
 
@@ -256,6 +271,7 @@ class langSubProject extends langFiles
     }
 
     /**
+     * Checks given path or matching path on joomla installation for existence
      *
      * @return bool
      *
@@ -263,14 +279,16 @@ class langSubProject extends langFiles
      */
     private function checkRootPath()
     {
-        $isOk = false;
+        $isRootPathValid = false;
 
-        // continue when path has enough characters
+        // path has enough characters ?
         if (strlen($this->prjRootPath) > 5) {
+
+            // given dir exists (path on develop folder)
             if (is_dir($this->prjRootPath)) {
-                $isOk = true;
+                $isRootPathValid = true;
             } else {
-                // try root path of component
+                // try root path of component on server (joomla installation)
                 if (str_starts_with($this->prjRootPath, '/',) || str_starts_with($this->prjRootPath, '\\',)) {
                     $testPath = JPATH_ROOT . $this->prjRootPath;
                 } else {
@@ -278,7 +296,7 @@ class langSubProject extends langFiles
                 }
 
                 if (is_dir($testPath)) {
-                    $isOk = true;
+                    $isRootPathValid = true;
 
                     // ToDo: keep root path without JPATH_ROOT part.
                     // Needs a access function of the prjRootPath
@@ -288,33 +306,52 @@ class langSubProject extends langFiles
             }
         }
 
-        return $isOk;
+        return $isRootPathValid;
     }
 
     /**
+     * Checks given path to file or file path on joomla installation for existence
      *
      * @return bool
      *
      * @since version
      */
-    private function checkManifestPath()
+    private function checkManifestFile()
     {
-        $isManifestPathValid = false;
+        $isManifestFileExist = false;
 
-        // continue when path has enough characters
+        // path has enough characters ?
         if (strlen($this->prjXmlPathFilename) > 5) {
+        
+            // given file exists (path on develop folder)
             if (is_file($this->prjXmlPathFilename)) {
-                $isManifestPathValid = true;
+                $isManifestFileExist = true;
 
-                // ToDo: create path from ....
+                // save base path to file
                 $this->prjXmlFilePath = dirname($this->prjXmlPathFilename);
             } else {
-                // else should not be needed ?
-                $this->prjXmlPathFilename = $this->prjXmlPathFilename . "";
+
+                // try root path of component on server (joomla installation)
+                if (str_starts_with($this->prjXmlPathFilename, '/',) || str_starts_with($this->prjXmlPathFilename, '\\',)) {
+                    $testFile = JPATH_ROOT . $this->prjXmlPathFilename;
+                } else {
+                    $testFile = JPATH_ROOT . '/' . $this->prjXmlPathFilename;
+                }
+
+                if (is_dir($testFile)) {
+                    $isRootPathValid = true;
+
+                    // save changed path with file
+                    $this->prjXmlPathFilename = $testFile;
+                    // save base path to file
+                    $this->prjXmlFilePath = dirname($this->prjXmlPathFilename);
+
+                }
+
             }
         }
 
-        return $isManifestPathValid;
+        return $isManifestFileExist;
     }
 
     /**
