@@ -200,15 +200,14 @@ class langSubProject extends langFiles
                             // project only used when project path exist
                             if (is_dir(dirname($startPath))) {
 
-	                            $XbasePath = $this->langBasePath;
+	                            // subproject valid ? project only used when lang path exist
+	                            $this->isLangPathDefined = $this->detectLangBasePath($startPath, $this->useLangSysIni);
 
-                                // subproject valid ? project only used when lang path exist
-                                $this->isLangPathDefined = $this->detectLangBasePath($startPath, $this->useLangSysIni);
-
-								$YbasePath = $this->langBasePath;
-
-                                $this->collectPrjFolderLangFiles();
-                            }
+	                            if ($this->isLangPathDefined)
+	                            {
+		                            $this->collectPrjFolderLangFiles();
+	                            }
+							}
                         } else {
                             //--- lang files in joomla standard folder -------------------------------------
 
@@ -227,7 +226,7 @@ class langSubProject extends langFiles
 
                         //--- component on develop folder ---------------------------------------
 
-                        // lang inside component ?
+	                    // new standard: lang inside component ?
                         if (!$this->isLangAtStdJoomla) {
                             //--- lang files in component folder ------------------------------------------
 
@@ -239,8 +238,14 @@ class langSubProject extends langFiles
 
                             // project only used when project path exist
                             if (is_dir(dirname($startPath))) {
-                                $this->langBasePath = $startPath;
-                                $this->isLangPathDefined = $this->collectPrjFolderLangFiles();
+
+	                            // subproject valid ? project only used when lang path exist
+	                            $this->isLangPathDefined = $this->detectLangBasePath($startPath, $this->useLangSysIni);
+
+								if ($this->isLangPathDefined)
+								{
+									$this->collectPrjFolderLangFiles();
+								}
                             }
 
 
@@ -323,14 +328,14 @@ class langSubProject extends langFiles
      */
     private function checkManifestFile()
     {
-        $isManifestFileExist = false;
+        $isManifestFileFound = false;
 
         // path has enough characters ?
         if (strlen($this->prjXmlPathFilename) > 5) {
         
             // given file exists (path on develop folder)
             if (is_file($this->prjXmlPathFilename)) {
-                $isManifestFileExist = true;
+                $isManifestFileFound = true;
 
                 // save base path to file
                 $this->prjXmlFilePath = dirname($this->prjXmlPathFilename);
@@ -356,7 +361,7 @@ class langSubProject extends langFiles
             }
         }
 
-        return $isManifestFileExist;
+        return $isManifestFileFound;
     }
 
     /**

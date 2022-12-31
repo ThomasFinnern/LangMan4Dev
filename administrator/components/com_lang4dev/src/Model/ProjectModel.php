@@ -37,7 +37,7 @@ use Joomla\CMS\Workflow\Workflow;
 use Joomla\Registry\Registry;
 use Joomla\String\StringHelper;
 use Joomla\Utilities\ArrayHelper;
-use Finnern\Component\Lang4dev\Administrator\Helper\subPrjPath;
+//use Finnern\Component\Lang4dev\Administrator\Helper\basePrjPathFinder;
 use JTableCategory;
 
 use function defined;
@@ -941,27 +941,27 @@ class ProjectModel extends AdminModel
     }
 
     /**
-     * @param $oSubPrjPath
+     * @param $basePrjPath
      *
-     * @return array
+     * @return langSubProject []
      *
      * @since version
      */
-    public function subProjectsByPrjId($oSubPrjPath)
+    public function subProjectsByPrjId($basePrjPath) : array // : langSubProject []
     {
         $subProjects = [];
 
         // List of integers (com has an array of three)
-        $prjTypes = projectType::prjTypesByProjectId($oSubPrjPath->prjId);
+        $prjTypes = projectType::prjTypesByProjectId($basePrjPath->prjId);
 
         foreach ($prjTypes as $prjType) {
             //--- new sub project -------------------------------------------------
 
             $langSubProject = new langSubProject (
-                $oSubPrjPath->prjId,
+                $basePrjPath->prjId,
                 $prjType,
-                $oSubPrjPath->getRootPath(),
-                $oSubPrjPath->getRootManifestPath()
+                $basePrjPath->getRootPath(),
+                $basePrjPath->getManifestPathFilename()
             );
 
             //--- collect new sub project ------------------

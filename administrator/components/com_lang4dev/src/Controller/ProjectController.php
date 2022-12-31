@@ -29,7 +29,7 @@ use Joomla\Utilities\ArrayHelper;
 
 use Finnern\Component\Lang4dev\Administrator\Helper\langProject;
 use Finnern\Component\Lang4dev\Administrator\Helper\projectType;
-use Finnern\Component\Lang4dev\Administrator\Helper\subPrjPath;
+use Finnern\Component\Lang4dev\Administrator\Helper\basePrjPathFinder;
 use Lang4dev\Component\Lang4dev\Administrator\Model\GalleryModel;
 
 use function defined;
@@ -139,14 +139,14 @@ class projectController extends FormController
             //--- path to project xml file ---------------------------------
 
             // detect path by project name or root path is given
-            $oSubPrjPath = new subPrjPath($prjId, $prjRootPath);
+            $basePrjPath = new basePrjPathFinder($prjId, $prjRootPath);
 
-            //--- improve user path (too short, including root ...) ----------
+            //--- update changed user path (too short, including root ...) ----------
 
             $isChanged = false;
 
-            if ($oSubPrjPath->isRootValid) {
-                $subPrjPath = $oSubPrjPath->getSubPrjPath();
+            if ($basePrjPath->isRootValid) {
+                $subPrjPath = $basePrjPath->getSubPrjPath();
                 if ($prjRootPath != $subPrjPath) {
                     $prjRootPath = $subPrjPath;
 
@@ -187,10 +187,12 @@ class projectController extends FormController
                 return;
             }
 
-            //--- extract subprojects ---------------------------------
+            //---------------------------------------------------------
+            // extract subprojects
+	        //---------------------------------------------------------
 
-            $subProjects = $prjModel->subProjectsByPrjId($oSubPrjPath);
-            // ToDo: add $subProjects = $prjModel->subProjectsByManifest ($oSubPrjPath);
+            $subProjects = $prjModel->subProjectsByPrjId($basePrjPath);
+            // ToDo: add $subProjects = $prjModel->subProjectsByManifest ($basePrjPath);
 
             //--- save subproject changes ---------------------------------
 
@@ -220,7 +222,7 @@ class projectController extends FormController
             if (count($subProjects) > 0 && $id > 0) {
                 $OutTxt = "detectDetails for project has finished successful:";
                 $app    = Factory::getApplication();
-                $app->enqueueMessage($OutTxt, 'warning');
+                $app->enqueueMessage($OutTxt, 'info');
             } else {
                 if ($id < 1) {
                     // error DB save

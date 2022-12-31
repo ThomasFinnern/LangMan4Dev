@@ -13,15 +13,20 @@ use Joomla\CMS\Factory;
 use Joomla\CMS\Filesystem\File;
 use Joomla\CMS\Filesystem\Folder;
 
-class subPrjPath
-{
-    protected $rootPath = '';   // complete from path origin on
-    // protected $rootManifestPath = '';   // complete from path origin on
-    protected $subPrjPath = ''; // user known path, behind JPATH_ROOT on server
-    public $prjId = ''; // helper for detecting the path
 
-    public $isRootValid;
-    public $isJoomlaPath;
+class basePrjPathFinder
+{
+    protected $rootPath = '';   // detected complete from path origin on
+	protected $prjXmlPathFilename = ''; // detected manifest file path
+	protected $subPrjPath = ''; // user known path, may be behind JPATH_ROOT on server
+
+    public $prjId = ''; // project id 'com_...' helper for detecting the path
+
+
+    public $isRootValid = false;
+
+	public $isManifestFileFound = false;
+	public $isInstalled = false;
 
     /**
      * @since __BUMP_VERSION__
@@ -35,11 +40,19 @@ class subPrjPath
         if ($prjId != '') {
             [
                 $this->isRootValid,
-                $this->isJoomlaPath,
+                $this->isInstalled,
                 $this->rootPath,
                 $this->subPrjPath
             ]
                 = $this->detectRootPath();
+
+			//--- detect manifest file -------------------------------------------
+
+			if ($this->isRootValid) {
+				$prjXmlFilename = strtolower(substr($this->prjId, 4)) . '.xml';
+				$this->isManifestFileFound = $this->searchManifestFilePath($this->rootPath, $prjXmlFilename);
+			}
+
         }
     }
 
@@ -71,9 +84,9 @@ class subPrjPath
      *
      * @since version
      */
-    public function getRootManifestPath()
+    public function getManifestPathFilename()
     {
-        return $this->rootPath . '/' . strtolower(substr($this->prjId, 4)) . '.xml';
+        return $this->prjXmlPathFilename;
     }
 
     /**
@@ -87,19 +100,20 @@ class subPrjPath
     private function detectRootPath($prjId = '', $subPrjPath = '')
     {
         $isRootFound  = false;
-        $isJoomlaPath = false;
+        $isInstalled = false;
         $rootPath     = '';
 
-        // local or external ?
+        // previous setting expected ?
         if ($prjId == '') {
             $prjId = $this->prjId;
         }
 
+	    // previous setting expected ?
         if ($subPrjPath == '') {
             $subPrjPath = $this->subPrjPath;
         }
 
-        //--- path accidentally a filename -------------------------
+        //--- path accidentally a filename (XML?) -------------------------
 
         if (File::exists($subPrjPath)) {
             $subPrjPath = dirname($subPrjPath);
@@ -109,21 +123,37 @@ class subPrjPath
 
         $rootPath = $subPrjPath;
         if ($rootPath != '') {
+
+			// standard
             if (Folder::exists($rootPath)) {
-                $isRootFound = true;
+
+				$isRootFound = true;
+
             } else {
                 //--- fast lane for sources in joomla installation -------------------------
 
-                // path already defined and within joomla
-                $rootPath = JPATH_ROOT . '/' . $subPrjPath;
+	            // try root path of component on server (joomla installation)
+	            if (str_starts_with($subPrjPath, '/',) || str_starts_with($subPrjPath, '\\',))
+	            {
+		            $rootPath = JPATH_ROOT . $subPrjPath;
+	            } else {
+		            $rootPath = JPATH_ROOT . '/' . $subPrjPath;
+	            }
+
+				// normalize
+	            $rootPath   = str_replace('\\', '/', $rootPath);
+
+	            // path already defined and within joomla
                 if (Folder::exists($rootPath)) {
                     $isRootFound  = true;
-                    $isJoomlaPath = true;
+                    $isInstalled = true;
                 }
             }
         }
 
-        // path not given but project in admin components
+	    //--- path on server by project ID -------------------------
+
+	    // path not given but project ID can be found on joomla server folder
         if (!$isRootFound) {
             // detect sub path also
             if ($subPrjPath == '') {
@@ -151,10 +181,12 @@ class subPrjPath
 
             if (Folder::exists($rootPath)) {
                 $isRootFound = true;
+	            $isInstalled = true;
             }
         }
 
-        // detect if joomla path is part of source
+        //--- detect if joomla path is part of source ------------------------
+
         if ($isRootFound) {
             // use found path
             if ($subPrjPath == '') {
@@ -168,7 +200,7 @@ class subPrjPath
 
             // Is a path within joomla installation found ?
             if (str_starts_with(strtolower($rootPath_slash), strtolower($jroot_slash))) {
-                $isJoomlaPath = true;
+                $isInstalled = true;
             }
 
             // reduce path to project path within joomla directory
@@ -176,9 +208,10 @@ class subPrjPath
                 // remove joomla root path
                 $j_pathLength = strlen($jroot_slash);
                 $subPrjPath   = substr($subPrjPath_slash, $j_pathLength + 1);
-            } else {
-                // $subPrjPath   = $subPrjPath_slash; // ToDo: shall we use converted ?
             }
+//			else {
+//                // $basePrjPathFinder   = $subPrjPath_slash; // ToDo: shall we use converted ?
+//            }
         }
 
         // path already defined and outside joomla
@@ -191,15 +224,53 @@ class subPrjPath
             }
         }
 
-        // next check .... ???
-        if (!$isRootFound) {
-            // root path is not defined jet
-            if ($subPrjPath == '') {
-            } else {
-            }
-        }
+//        // next check .... ???
+//        if (!$isRootFound) {
+//            // root path is not defined jet
+//            if ($basePrjPathFinder == '') {
+//            } else {
+//            }
+//        }
 
-        return [$isRootFound, $isJoomlaPath, $rootPath, $subPrjPath];
+		$this->isInstalled = $isInstalled;
+        return [$isRootFound, $isInstalled, $rootPath, $subPrjPath];
     }
 
+	private function searchManifestFilePath($rootPath, $prjXmlFilename)
+	{
+		$isManifestFileFound = false;
+
+		// root path is valid before
+		$prjXmlPathFilename = $rootPath . '/' . $prjXmlFilename;
+
+		if (is_file($prjXmlPathFilename))
+		{
+
+			$isManifestFileFound      = true;
+			$this->prjXmlPathFilename = $prjXmlPathFilename;
+
+		}
+
+		#--- Search in each sub folder -------------------------------------
+
+		// example project file already/still only in rootPath/administrator/component/ subfolder
+
+		if (!$isManifestFileFound)
+		{
+			foreach (Folder::folders($rootPath) as $folderName)
+			{
+				$subFolder = $rootPath . "/" . $folderName;
+
+				$isManifestFileFound = $this->searchManifestFilePath($subFolder, $prjXmlFilename);
+
+				if ($isManifestFileFound)
+				{
+					break;
+				}
+			}
+		}
+
+		return $isManifestFileFound;
+	}
 }
+
