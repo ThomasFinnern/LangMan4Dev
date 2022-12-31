@@ -81,7 +81,7 @@ class langFileNamesSet
      * @throws Exception
      * @since version
      */
-    public function detectLangBasePath($basePath = '', $useLangSysIni = false)
+    public function detectLangBasePath($basePath = '', $useLangSysIni = false, $langId = 'en-GB')
     { 
         $isPathFound = false;
         if ($basePath == '') {
@@ -90,9 +90,8 @@ class langFileNamesSet
             $this->langBasePath = $basePath;
         }
 
-        if ($basePath == '' or $basePath == '/' or $basePath == '\\') {
-            //--- path does not exist -------------------------------
-
+	    // path does not exist ? nothing given
+	    if ($basePath == '' or $basePath == '/' or $basePath == '\\') {
             $OutTxt = 'Warning: langFileNamesSet.detectBasePath: Base path invalid "' . $basePath . '"<br>';
 
             $app = Factory::getApplication();
@@ -101,8 +100,8 @@ class langFileNamesSet
             return false;
         }
 
+	    // given path does not exist
         if (!is_dir($basePath)) {
-            //--- path does not exist -------------------------------
 
             $OutTxt = 'Warning: langFileNamesSet.detectBasePath: Base path does not exist "' . $basePath . '"<br>';
 
@@ -112,11 +111,21 @@ class langFileNamesSet
             return false;
         }
 
-        $this->useLangSysIni = $useLangSysIni;
-        $isPathFound         = $this->searchDir4LangID($basePath);
+	    //--- search folders for language construct -----------------------------------------
 
-        // ToDo: may be done outside
+	    $end = '.ini';
+	    if ($this->useLangSysIni) {
+		    $end = '.sys.ini';
+	    }
+
+	    $this->isLangInFolders  = false;
+	    $this->useLangSysIni = $useLangSysIni;
+
+	    $isPathFound = $this->search4LangIdFolder($basePath, $langId, $end);
+
+        //
         if (!$isPathFound) {
+
             //--- path does not exist -------------------------------
 
             $OutTxt = 'Warning: langFileNamesSet.searchDir4LangID: Base path for lang names not found behind path  "' . $basePath . '"<br>';
@@ -135,38 +144,6 @@ class langFileNamesSet
             b) Lang id may be found on file name in sub folder of Lang ID folder.
                ==> has actual no influence so is ignored
     */
-
-    /**
-     * @param $searchPath
-     * @param $langId
-     *
-     * @return bool
-     *
-     * @since version
-     */
-	 // ToDo: rename
-    protected function searchDir4LangID($searchPath, $langId = 'en-GB')
-    {
-        $isPathFound = false;
-
-        $end = '.ini';
-        if ($this->useLangSysIni) {
-            $end = '.sys.ini';
-        }
-
-        $this->isLangInFolders  = false;
-
-		// Files with Pre lang id found ? then path is ak
-	    $isPathFound = $this->check4LangIdPreName($searchPath, $langId, $end, $isPathFound);
-
-	    if (!$isPathFound) {
-
-			// check4LangIdInFolderNames
-		    $isPathFound = $this->check4LangIdInFolderNames($searchPath, $langId, $end, $isPathFound);
-	    }
-
-        return $isPathFound;
-    }
 
     /**
      * @param $prjType
@@ -193,55 +170,45 @@ class langFileNamesSet
     }
 
 	/**
-	 * @param           $searchPath
-	 * @param           $langId
-	 * @param   string  $end
-	 * @param   bool    $isPathFound
+	 * @param   string $searchPath
+	 * @param   string $langId
+	 * @param   string $end        '.sys.ini' or '.ini'
 	 *
-	 * @return bool
+	 * @return bool                 the type of lang file name (pre 'en-GB...ini' or 'com_...ini' files)
 	 *
 	 * @since version
 	 */
-	public function check4LangIdPreName($searchPath, $langId, string $end, bool $isPathFound): bool
+	public function check4LangIdPreName(string $searchPath, string $langId, string $end): bool
 	{
-		$isPathFound = false;
+		$isLangIdPre2Name = false;
 
 		#--- All files (en-GB. ... .ini) in folder -------------------------------------
 
 		$this->isLangIdPre2Name = false;
 
+		#--- search path starts with lang ID ? -----------------------------
+
+		// all files
 		foreach (Folder::files($searchPath) as $fileName)
 		{
 			if (str_starts_with($fileName, $langId))
 			{
 				if (str_ends_with($fileName, $end))
 				{
-
-					$this->langBasePath = $searchPath;
-
 					//--- flags --------------------------------
 
 					$this->isLangIdPre2Name = true;
-					$isPathFound            = true;
+					$isLangIdPre2Name            = true;
 
 					break;
 				}
 			}
 		}
 
-		return $isPathFound;
+		return $isLangIdPre2Name;
 	}
 
-	/**
-	 * @param         $searchPath
-	 * @param         $langId
-	 * @param   bool  $isPathFound
-	 *
-	 * @return bool
-	 *
-	 * @since version
-	 */
-	public function check4LangIdInFolderNames($searchPath, $langId, string $end, bool $isPathFound): bool
+	public function check4LangIdFolderName($searchPath, $langId, string $end): bool
 	{
 		$isPathFound = false;
 
@@ -253,17 +220,64 @@ class langFileNamesSet
 			if ($folderName == $langId)
 			{
 
-				$isPathFound        = true;
-
 				$this->isLangInFolders = true;
-				$this->langBasePath = $searchPath;
+				$this->langBasePath    = $searchPath;
 
-				//--- flags --------------------------------
-
-				$subFolder = $searchPath . "/" . $folderName;
-				$this->check4LangIdPreName($subFolder, $langId, $end, $isPathFound);
+				$isPathFound = true;
 
 				break;
+			}
+		}
+
+		return $isPathFound;
+	}
+
+	/**
+	 * Determines langBasePath and type of lang file name (pre 'en-GB...ini' or 'com_...ini' files)
+	 *  1) pre file found in search folder -> path = search path
+	 *  2) path name matches lang ID -> path = search path
+	 *  3) continue in subfolders if path not found
+	 * On path found remember the type of lang file name (pre 'en-GB...ini' or 'com_...ini' files)
+	 *
+	 * @param   string $searchPath
+	 * @param   string $langId
+	 * @param   string $end        '.sys.ini' or '.ini'
+	 *
+	 * @return bool                is langBasePath found ?
+	 *
+	 * @since version
+	 */
+	public function search4LangIdFolder(string $searchPath, string $langId, string $end): bool
+	{
+		$isPathFound = false;
+
+		#--- Search in given folder for 'pre en-GB.com...' files -------------------------------------
+
+		// determine type of lang file "en-GB.com_...ini
+		$isLangIdPre2Name = $this->check4LangIdPreName($searchPath, $langId, $end);
+
+		// found
+		if ($isLangIdPre2Name) {
+
+			$this->isLangInFolders = false;
+			$this->langBasePath = $searchPath;
+
+			$isPathFound        = true;
+		}
+
+		if (!$isPathFound)
+		{
+			#--- Search Lang ID as sub folders -------------------------------------
+
+			// -> $this->langBasePath
+			$isPathFound = $this->check4LangIdFolderName($searchPath, $langId, $end);
+
+			if ($isPathFound) {
+
+				#--- Search in found folder for 'pre en-GB' files -----------------------------------
+
+				$subFolder = $this->langBasePath . "/" . $langId;
+				$isLangIdPre2Name = $this->check4LangIdPreName($subFolder, $langId, $end);
 			}
 
 		}
@@ -277,7 +291,7 @@ class langFileNamesSet
 				$subFolder = $searchPath . "/" . $folderName;
 
 				// search in sub folder
-				$isPathFound = $this->searchDir4LangID($subFolder);
+				$isPathFound = $this->search4LangIdFolder($subFolder, $langId, $end);
 
 				if ($isPathFound)
 				{
@@ -285,7 +299,6 @@ class langFileNamesSet
 				}
 			}
 		}
-
 
 		return $isPathFound;
 	}

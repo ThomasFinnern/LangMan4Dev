@@ -103,31 +103,31 @@ class langSubProject extends langFiles
 
         //--- collect existing lang file names ----------------------------------------------------------
 
-        // ToDo see function below
-        if ($this->isManifestRead) {
-            $this->collectExistingLangFileNames();
-        }
+//        // ToDo see function below
+//        if ($this->isManifestRead) {
+//            $this->collectExistingLangFileNames();
+//        }
 
     }
 
-    private function collectExistingLangFileNames()
-    {
-
-        // ToDo: move parts from RetrieveBaseManifestData to here
-	    // is component installed (or on develop folder)
-	    if ($manifestLang->isInstalled)
-	    {
-
-
-	    } else {
-
-
-
-	    }
-
-
-	}
-
+//    private function collectExistingLangFileNames()
+//    {
+//
+//        // ToDo: move parts from RetrieveBaseManifestData to here
+//	    // is component installed (or on develop folder)
+//	    if ($manifestLang->isInstalled)
+//	    {
+//
+//
+//	    } else {
+//
+//
+//
+//	    }
+//
+//
+//	}
+//
 
 
     // ToDo: make two functions as second part finds standard lang files
@@ -196,11 +196,16 @@ class langSubProject extends langFiles
                             //--- lang files in component folder ------------------------------------------
 
                             $startPath = $this->langBasePathProject($this->prjXmlFilePath,  $this->prjType);
+
                             // project only used when project path exist
                             if (is_dir(dirname($startPath))) {
 
+	                            $XbasePath = $this->langBasePath;
+
                                 // subproject valid ? project only used when lang path exist
                                 $this->isLangPathDefined = $this->detectLangBasePath($startPath, $this->useLangSysIni);
+
+								$YbasePath = $this->langBasePath;
 
                                 $this->collectPrjFolderLangFiles();
                             }
