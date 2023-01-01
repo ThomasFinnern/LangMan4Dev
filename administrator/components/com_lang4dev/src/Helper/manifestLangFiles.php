@@ -34,10 +34,12 @@ class manifestLangFiles extends manifestData
 
     // is old paths definition is used ==> language files in joomla base paths instead of inside component
     public $isLangAtStdJoomla = false; // not inside component folder
-    public $stdLangFilePaths = [];
-    public $adminLangFilePaths = [];
+	public $stdLangFilePaths = [];
+	public $stdLangFiles = [];
+	public $adminLangFilePaths = [];
+	public $adminLangFiles = [];
 
-    public $adminPathOnDevelopment = "";
+	public $adminPathOnDevelopment = "";
     public $sitePathOnDevelopment = "";
 
     private $isLangOriginRead = false;
@@ -79,47 +81,7 @@ class manifestLangFiles extends manifestData
 
         return $isValidXml;
     }
-    /**
-     * example from joomla
-     *
-     *
-     * public function test()
-     * {
-     *
-     * // Copy language files from global folder
-     * if ($languages = $manifest->languages)
-     * {
-     * $folder        = (string) $languages->attributes()->folder;
-     * $languageFiles = $languages->language;
-     *
-     * $langTag = $languageFiles->attributes()->tag;
-     *
-     * foreach ($languageFiles as $languageFile)
-     *
-     * Folder::create($toPath . '/' . $folder . '/' . $languageFiles->attributes()->tag);
-     *
-     * foreach ($languageFiles as $languageFile)
-     * {
-     * $src = Path::clean($client->path . '/language/' . $languageFile);
-     * $dst = Path::clean($toPath . '/' . $folder . '/' . $languageFile);
-     *
-     * if (File::exists($src))
-     * {
-     * File::copy($src, $dst);
-     * }
-     * }
-     * }
-     * }
-     * /**/
 
-    /**
-     * @param $isOnServer bool
-     *                    OnServer true:  return path on server (base path when not local)
-     *                    OnServer false: return path on installation
-     *
-     *
-     * @since version
-     */
     public function langFileOrigins() // $isLangFilesOnServer=true
     {
         // defined by folder language in xml
@@ -149,10 +111,13 @@ class manifestLangFiles extends manifestData
                     $stdPath = (string) $stdLanguages['folder'];
 
                     foreach ($stdLanguages->language as $language) {
+
                         $langId             = (string)$language['tag'];
                         $subFolder[$langId] = $stdPath . '/' . (string)$language; // $language[0]
 
                         $this->stdLangFilePaths[] = $subFolder;
+	                    $this->stdLangFiles[] = basename((string)$language);
+
                     }
                 }
 
@@ -181,6 +146,7 @@ class manifestLangFiles extends manifestData
                         $subFolder[$langId] = $stdPath . '/' . (string)$language; // $language[0]
 
                         $this->adminLangFilePaths[] = $subFolder;
+						$this->adminLangFiles[] = basename((string)$language);
                     }
                 }
             }
@@ -232,15 +198,32 @@ class manifestLangFiles extends manifestData
         $lines[] = 'lang files '
             . ($this->isLangAtStdJoomla ? ' joomla standard folders' : ' inside component');
 
-        if (count($this->stdLangFilePaths) > 0) {
+        if (count($this->stdLangFiles) > 0) {
             $lines[] = '[site lang files]';
+            foreach ($this->stdLangFiles as $idx => $langFile) {
+                $lines[] = ' * [' . $idx . '] ' . json_encode($langFile);
+            }
+        }
+
+        if (count($this->adminLangFiles) > 0) {
+            $lines[] = '[admin lang files]';
+            foreach ($this->adminLangFiles as $idx => $langFile) {
+                $lines[] = ' * [' . $idx . '] ' . json_encode($langFile);
+            }
+        }
+
+        $lines[] = 'lang file paths  '
+            . ($this->isLangAtStdJoomla ? ' joomla standard folders' : ' inside component');
+
+        if (count($this->stdLangFilePaths) > 0) {
+            $lines[] = '[site lang file paths]';
             foreach ($this->stdLangFilePaths as $idx => $langFilePath) {
                 $lines[] = ' * [' . $idx . '] ' . json_encode($langFilePath);
             }
         }
 
         if (count($this->adminLangFilePaths) > 0) {
-            $lines[] = '[admin lang files]';
+            $lines[] = '[admin lang file paths]';
             foreach ($this->adminLangFilePaths as $idx => $langFilePath) {
                 $lines[] = ' * [' . $idx . '] ' . json_encode($langFilePath);
             }

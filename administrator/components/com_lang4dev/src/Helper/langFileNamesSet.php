@@ -195,6 +195,53 @@ class langFileNamesSet
         return $xmlLangNames;
     }
 
+    /**
+     * @param $prjType
+     * @param $manifestLang
+     *
+     * @return mixed
+     *
+     * @since version
+     */
+    public function manifestLangFiles($prjType, $manifestLang): array
+    {
+	    $xmlLangNames = [];
+
+        /*--- lang file origin defined in manifest file -----------------------*/
+
+        // on backend use administrator files
+        if ($prjType == projectType::PRJ_TYPE_COMP_BACK
+            || $prjType == projectType::PRJ_TYPE_COMP_BACK_SYS) {
+
+            $LangFileNames = $manifestLang->adminLangFiles;
+
+			// Select matching the type
+	        if (count($LangFileNames) > 0) {
+		        foreach ($LangFileNames as $idx => $LangFileName) {
+			        $isSysIni = str_ends_with($LangFileName, '.sys.ini');
+
+			        // backend system ?
+			        if ($prjType == projectType::PRJ_TYPE_COMP_BACK_SYS && $isSysIni)
+			        {
+				        $xmlLangNames [] = $LangFileName;
+			        }
+
+			        // backend standard ?
+			        if ($prjType == projectType::PRJ_TYPE_COMP_BACK && !$isSysIni)
+			        {
+				        $xmlLangNames [] = $LangFileName;
+			        }
+				}
+			}
+
+        } else {
+            // On site, module and plugin
+            $xmlLangNames = $manifestLang->stdLangFiles;
+        }
+
+        return $xmlLangNames;
+    }
+
 	/**
 	 * @param   string $searchPath
 	 * @param   string $langId
@@ -410,7 +457,7 @@ class langFileNamesSet
         $isLangPathDefined = false;
         $this->langIds = [];
 
-        $xmlLangNames = $this->manifestLangFilePaths($prjType, $manifestLang);
+        $xmlLangNames = $this->manifestLangFiles($prjType, $manifestLang);
 
 	    //--- transfer to lang files list ------------------------------
 
