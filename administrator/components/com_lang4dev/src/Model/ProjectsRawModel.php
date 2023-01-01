@@ -106,7 +106,7 @@ class ProjectsRawModel extends AdminModel
 
         $this->addPrjDbData($project, $prjDbId);
 
-        //--- all sub ids ----------------------------------------------
+        //--- add all sub ids ----------------------------------------------
 
         $dbSubProjects = $this->subPrjsDbData($prjDbId);
 

@@ -146,11 +146,11 @@ class manifestLangFiles extends manifestData
 
                     //--- collect files from installation ------------------------------
 
-                    $stdPath = $stdLanguages['folder'];
+                    $stdPath = (string) $stdLanguages['folder'];
 
                     foreach ($stdLanguages->language as $language) {
-                        $tag             = (string)$language['tag'];
-                        $subFolder[$tag] = (string)$language; // $language[0]
+                        $langId             = (string)$language['tag'];
+                        $subFolder[$langId] = $stdPath . '/' . (string)$language; // $language[0]
 
                         $this->stdLangFilePaths[] = $subFolder;
                     }
@@ -174,25 +174,15 @@ class manifestLangFiles extends manifestData
 
                     //--- collect files from installation ------------------------------
 
-                    $stdPath = $stdLanguages['folder'];
+                    $stdPath = (string) $stdLanguages['folder'];
 
                     foreach ($stdLanguages->language as $language) {
-                        $tag             = (string)$language['tag'];
-                        $subFolder[$tag] = (string)$language; // $language[0]
+                        $langId             = (string)$language['tag'];
+                        $subFolder[$langId] = $stdPath . '/' . (string)$language; // $language[0]
 
                         $this->adminLangFilePaths[] = $subFolder;
                     }
                 }
-                /**
-                 * // lang files will be inside component path
-                 * if ($this->isLangPathInXml) {
-                 *
-                 * // test for folder language in standard and administrator
-                 *
-                 *
-                 *
-                 * }
-                 * /**/
             }
         } catch (RuntimeException $e) {
             $OutTxt = '';

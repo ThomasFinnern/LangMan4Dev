@@ -153,14 +153,40 @@ class langFileNamesSet
      *
      * @since version
      */
-    public function manifestLangFilePaths($prjType, $manifestLang): mixed
+    public function manifestLangFilePaths($prjType, $manifestLang): array
     {
+	    $xmlLangNames = [];
+
         /*--- lang file origin defined in manifest file -----------------------*/
 
         // on backend use administrator files
         if ($prjType == projectType::PRJ_TYPE_COMP_BACK
             || $prjType == projectType::PRJ_TYPE_COMP_BACK_SYS) {
-            $xmlLangNames = $manifestLang->adminLangFilePaths;
+
+            $LangFileNames = $manifestLang->adminLangFilePaths;
+
+			// Select matching the type
+	        if (count($LangFileNames) > 0) {
+		        foreach ($LangFileNames as $idx => $langFilePathInfo) {
+			        foreach ($langFilePathInfo as $langId => $langFilePath)
+			        {
+				        $isSysIni = str_ends_with($langFilePath, '.sys.ini');
+
+				        // backend system ?
+				        if ($prjType == projectType::PRJ_TYPE_COMP_BACK_SYS && $isSysIni)
+				        {
+					        $xmlLangNames [] = $langFilePathInfo;
+				        }
+
+				        // backend standard ?
+				        if ($prjType == projectType::PRJ_TYPE_COMP_BACK && !$isSysIni)
+				        {
+					        $xmlLangNames [] = $langFilePathInfo;
+				        }
+			        }
+				}
+			}
+
         } else {
             // On site, module and plugin
             $xmlLangNames = $manifestLang->stdLangFilePaths;
@@ -303,19 +329,6 @@ class langFileNamesSet
 		return $isPathFound;
 	}
 
-	/**
-     * // ToDo: detectBasePath does not need to know about useLangSysIni, do it here ? or tell by construct
-     * public function collectLangFiles () {
-     *
-     * $isFound = false;
-     *
-     * // try ?
-     * $isFound = $this->collectFolderLangFiles ();
-     *
-     * return $isFound;
-     * }
-     * /**/
-
     protected function collectPrjFolderLangFiles()
     {
         $isFound = false;
@@ -334,12 +347,13 @@ class langFileNamesSet
 	    if ($this->isLangInFolders) {
 
 	        if (is_dir($this->langBasePath)) {
-		        // all folders
-		        foreach (Folder::folders($this->langBasePath) as $folderName) {
-			        $langId           = $folderName;
+		        // all folders are language IDs
+		        foreach (Folder::folders($this->langBasePath) as $langId) {
+
+			        // append new lang ID
 			        $this->langIds [] = $langId;
 
-			        $subFolder = $this->langBasePath . '/' . $folderName;
+			        $subFolder = $this->langBasePath . '/' . $langId;
 
 			        // all matching file names
 			        $fileNames = Folder::files($subFolder, $regex);
@@ -347,6 +361,7 @@ class langFileNamesSet
 
 				        $langFile = $subFolder . DIRECTORY_SEPARATOR . $fileName;
 
+				        // append found lang file
 				        $this->langFileNamesSet [$langId][] = $langFile;
 
 				        $isFound = true;
@@ -364,7 +379,12 @@ class langFileNamesSet
 	        foreach ($langFiles as $langFile) {
 		        [$langId, $baseName] = explode('.', $langFile, 2);
 
-		        $this->langIds []                   = $langId;
+		        // append new lang ID
+		        if (!in_array($langId, $this->langIds)) {
+			        $this->langIds [] = $langId;
+		        }
+
+				// append found lang file
 		        $this->langFileNamesSet [$langId][] = $this->langBasePath . '/' . $langFile;
 
 		        $isFound = true;
@@ -385,43 +405,29 @@ class langFileNamesSet
      *
      * @since version
      */
-    public function collectManifestLangFiles_OnJoomla($manifestLang, $prjType)
+    public function collectManifestLangFiles_OnJoomla($manifestLang, $prjType, $langBasePath)
     {
         $isLangPathDefined = false;
         $this->langIds = [];
 
         $xmlLangNames = $this->manifestLangFilePaths($prjType, $manifestLang);
 
-        $langBasePath = $this->langBasePathJoomla($prjType);
+	    //--- transfer to lang files list ------------------------------
 
-        // Within joomla use standard paths
-        $this->langBasePath = $this->langBasePathJoomla($prjType);
+	    if (count($xmlLangNames) > 0) {
+			// all items
+		    foreach ($xmlLangNames as $idx => $langFilePathInfo) {
+				// into lang Id  / path
+			    foreach ($langFilePathInfo as $langId => $langFilePath) {
 
-        if (count($xmlLangNames) > 0) {
-            foreach ($xmlLangNames as $idx => $langFilePathInfo) {
-                foreach ($langFilePathInfo as $langId => $langFilePath) {
-                    $isSysIni = str_ends_with($langFilePath, '.sys.ini');
+				    // append found lang file
+				    $this->langFileNamesSet [$langId][] = $langBasePath . '/' . $langFilePath;
 
-                    // backend system and *.sys.ini found
-                    if ($this->useLangSysIni && $isSysIni) {
-                        $this->langFileNamesSet [$langId][] = $langBasePath . '/' . $langFilePath;
-
-                        // append new lang ID
-                        if (!in_array($langId, $this->langIds)) {
-                            $this->langIds [] = $langId;
-                        }
-                    }
-
-                    // backend or site and no *.sys.ini file
-                    if (!$this->useLangSysIni && !$isSysIni) {
-                        $this->langFileNamesSet [$langId][] = $langBasePath . '/' . $langFilePath;
-
-                        // append new lang ID
-                        if (!in_array($langId, $this->langIds)) {
-                            $this->langIds [] = $langId;
-                        }
-                    }
-                }
+				    // append new lang ID
+				    if (!in_array($langId, $this->langIds)) {
+					    $this->langIds [] = $langId;
+				    }
+			    }
             }
 
             $isLangPathDefined = count ($this->langIds) > 0;
@@ -439,32 +445,35 @@ class langFileNamesSet
      *
      * @since version
      */
-    public function collectManifestLangFiles_OnDevelop($manifestLang, $prjType)
+    public function collectManifestLangFiles_OnDevelop($manifestLang, $prjType, $langBasePath)
     {
+	    $isLangPathDefined = false;
         $isCheck4Ini = false;
 
         $xmlLangNames = $this->manifestLangFilePaths($prjType, $manifestLang);
 
-        $langBasePath = $this->langBasePathJoomla($prjType);
+        //--- transfer to lang files list ------------------------------
 
-        //--- on local development folder and joomla standard paths------------------------------
-
-//			$this->langBasePath =  $this->langBasePathJoomla ($prjType);
-
-        /**/
         if (count($xmlLangNames) > 0) {
+	        // all items
             foreach ($xmlLangNames as $idx => $langFilePathInfo) {
+	            // into lang Id  / path
                 foreach ($langFilePathInfo as $langId => $langFilePath) {
-                    $isSysIni = str_ends_with($langFilePath, '.sys.ini');
 
-                    // On backend PRJ_TYPE_COMP_BACK_SYS only sys.ini files used
-                    if (!$isCheck4Ini || $isSysIni) {
-                        $this->langFileNames [$langId] = $langBasePath . '/' . $langFilePath;
-                    }
+	                // append found lang file
+					$this->langFileNamesSet [$langId][] = $langBasePath . '/' . $langFilePath;
+
+	                // append new lang ID
+	                if (!in_array($langId, $this->langIds)) {
+		                $this->langIds [] = $langId;
+	                }
                 }
             }
+
+	        $isLangPathDefined = true;
         }
-        /**/
+
+		return $isLangPathDefined;
     }
 
     /**
@@ -512,7 +521,8 @@ class langFileNamesSet
                                         $this->langIds [] = $folderLangId;
                                     }
 
-                                    $this->langFileNamesSet [$folderLangId][] = $matchLangFilePathName;
+	                                // append found lang file
+	                                $this->langFileNamesSet [$folderLangId][] = $matchLangFilePathName;
                                 }
                             }
                         }
@@ -529,22 +539,6 @@ class langFileNamesSet
         }
     }
 
-
-    /**
-     * Extract the lang folder from XML definition by type
-     *
-     * @param $manifestLang
-     * @param $prjType
-     *
-     *
-     * @since version
-     */
-    public function YYYcollectManifestLangFolder_OnDevelop($manifestLang, $basePath = '', $prjType)
-    {
-
-
-
-    }
 
 
     // search for matching filename
@@ -579,7 +573,7 @@ class langFileNamesSet
      *
      * @since version
      */
-    public function langBasePathJoomla($prjType)
+    public function langBasePathJoomlaStd($prjType)
     {
         // most used is admin backend
         $basePath = JPATH_ADMINISTRATOR . '/language';
@@ -621,7 +615,7 @@ class langFileNamesSet
      *
      * @since version
      */
-    public function langBasePathProject(string $prjXmlFilePath='', int $prjType=projectType::PRJ_TYPE_NONE)
+    public function langBasePathInsideProject(string $prjXmlFilePath='', int $prjType=projectType::PRJ_TYPE_NONE)
     {
         // most used is xml path
         $basePath = $prjXmlFilePath . '/language';
