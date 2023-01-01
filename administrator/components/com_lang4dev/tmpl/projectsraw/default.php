@@ -46,8 +46,11 @@ function renderProjectSelection($form)
 
 	<?php
 
+    //--- project ------------------------------------------------------
+
     //echo '<br>';
     echo '<h2>' . Text::_('COM_LANG4DEV_PROJECT_RAW') . '</h2>';
+
 	//echo '<pre><code>';
     echo '<div class="bg-white">';
 	echo '<pre>';
@@ -58,8 +61,60 @@ function renderProjectSelection($form)
 	//echo '</code>';
 	echo '</div>';
 	//echo '<br>';
-
     ?>
+
+    <?php
+
+    //--- found lang files list ------------------------------------------------------
+
+    echo '<h2>' . Text::_('COM_LANG4DEV_LANG_FILES_LIST') . '</h2>';
+
+    //echo '<pre><code>';
+    echo '<div class="bg-white">';
+    echo '<pre>';
+    //echo '<code>';
+    //echo json_encode($this->project, JSON_PRETTY_PRINT);
+    foreach ($this->langFileSetsPrjs as $prjId => $langFileSets) {
+	    echo '[' . $prjId . ']' . '<br>';
+
+	    foreach ($langFileSets as $langId => $langFiles) {
+		    echo '&nbsp;&nbsp;&nbsp;[' . $langId . ']' . '<br>';
+
+		    foreach ($langFiles as $langFile) {
+			    echo '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*&nbsp;' . $langFile . '<br>';
+		    }
+	    }
+    }
+
+    //echo '</code></pre>';
+    echo '</pre>';
+    //echo '</code>';
+    echo '</div>';
+    //echo '<br>';
+    ?>
+
+<!--    //--- manifest file content -------------------------------------------------------->
+
+    <?php
+
+    $manifestText = implode("<br>", $this->manifestLang->__toText());
+
+    echo '<h2>' . Text::_('COM_LANG4DEV_MANIFEST_FILE') . '</h2>';
+
+    //echo '<pre><code>';
+    echo '<div class="bg-white">';
+    echo '<pre>';
+    //echo '<code>';
+    echo $manifestText;
+    //echo '</code></pre>';
+    echo '</pre>';
+    //echo '</code>';
+    echo '</div>';
+    //echo '<br>';
+    ?>
+
+
+
 
     <input type="hidden" name="task" value=""/>
     <?php

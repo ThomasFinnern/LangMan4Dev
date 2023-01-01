@@ -110,18 +110,6 @@ class HtmlView extends BaseHtmlView
         $this->project = $model->getProject($prjId, $subPrjActive);
         $project       = $this->project;
 
-        /* test projects *
-        $project =
-        $this->project = selectProject('lang4dev');
-        // $this->project = selectProject('joomgallery');
-        // $this->project = selectProject('rsgallery2');
-        // $this->project = selectProject('joomla4x');
-        /**/
-
-        // script- / install file, language files as list
-        // not any more: $project->findPrjFiles();
-        // $project->detectLangFiles();
-
         //--- collect content ---------------------------------------------------
 
         // read translations
@@ -130,57 +118,19 @@ class HtmlView extends BaseHtmlView
 
         $project->alignTranslationsByMain($this->mainLangId);
 
-        //--- show found file list -----------------------------------------
+        //--- found lang files list -----------------------------------------
 
-        if ($this->isDebugBackend) {
-            //--- all projects filenames by lang ID  -----------------------------------------
+	    $this->langFileSetsPrjs = $project->LangFileNamesCollection();
 
-            $langFileSetsPrjs = $project->LangFileNamesCollection();
+	    //--- manifest file content ----------------------------------------
 
-            echo '<h4>Lang file list</h4>';
+	    if ( ! empty ($project->subProjects[0]))
+	    {
+		    $prjXmlPathFilename = $project->subProjects[0]->prjXmlPathFilename; // . '/lang4dev.xml';
 
-            foreach ($langFileSetsPrjs as $prjId => $langFileSets) {
-                echo '[' . $prjId . ']' . '<br>';
+		    $this->manifestLang = new manifestLangFiles ($prjXmlPathFilename);
+	    }
 
-                foreach ($langFileSets as $langId => $langFiles) {
-                    echo '&nbsp;&nbsp;&nbsp;[' . $langId . ']' . '<br>';
-
-                    foreach ($langFiles as $langFile) {
-                        echo '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*&nbsp;' . $langFile . '<br>';
-                    }
-                }
-            }
-
-            echo '<hr>';
-        }
-
-        //--- test manifest file ----------------------------------------
-
-        if ($this->isDebugBackend) {
-	        if ( ! empty ($project->subProjects[0]))
-	        {
-		        $prjXmlPathFilename = $project->subProjects[0]->prjXmlPathFilename; // . '/lang4dev.xml';
-
-
-		        // $manifestData = new manifestData ($prjXmlPathFilename);
-		        $manifestLang = new manifestLangFiles ($prjXmlPathFilename);
-		        //$manifestText = implode("\n", $manifestData->__toText());
-		        $manifestText = implode("<br>", $manifestLang->__toText());
-
-		        //--- show manifest content -----------------------------------------
-
-		        echo '<h4>manifest content parts</h4>';
-		        echo $manifestText . '<br>';
-		        echo '<hr>';
-	        }
-        }
-
-        //---  --------------------------------------------------------------
-        /**
-         * $Layout = Factory::getApplication()->input->get('layout');
-         * Lang4devHelper::addSubmenu('config');
-         * $this->sidebar = \JHtmlSidebar::render();
-         **/
 
         $Layout = Factory::getApplication()->input->get('layout');
         //echo '$Layout: ' . $Layout . '<br>';
