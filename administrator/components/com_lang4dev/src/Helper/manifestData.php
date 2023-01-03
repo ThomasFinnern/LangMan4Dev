@@ -103,7 +103,9 @@ class manifestData
 
                 //--- developer folder or installed in joomla  -----------------------------------------------------------
 
-                if (str_starts_with($prjXmlPathFilename, JPATH_ROOT)) {
+//	            if (str_starts_with($prjXmlPathFilename, JPATH_ROOT)) {
+	            // On windows JPATH_ROOT may begin with "D:\" but user path with "d:\"
+	            if (str_starts_with(strtolower($prjXmlPathFilename), strtolower(JPATH_ROOT))) {
                     $this->isInstalled = true;
                 } else {
                     $this->isInstalled = false;

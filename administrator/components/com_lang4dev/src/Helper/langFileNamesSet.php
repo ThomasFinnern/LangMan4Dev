@@ -146,6 +146,7 @@ class langFileNamesSet
     */
 
     /**
+     * Lists with LangId + Path and Filename
      * @param $prjType
      * @param $manifestLang
      *
@@ -196,6 +197,8 @@ class langFileNamesSet
     }
 
     /**
+     *
+     * Lists with LangId + Filename
      * @param $prjType
      * @param $manifestLang
      *
@@ -213,30 +216,60 @@ class langFileNamesSet
         if ($prjType == projectType::PRJ_TYPE_COMP_BACK
             || $prjType == projectType::PRJ_TYPE_COMP_BACK_SYS) {
 
-            $LangFileNames = $manifestLang->adminLangFiles;
+            $LangFileNames = $manifestLang->adminLangFilePaths;
 
-			// Select matching the type
-	        if (count($LangFileNames) > 0) {
-		        foreach ($LangFileNames as $idx => $LangFileName) {
-			        $isSysIni = str_ends_with($LangFileName, '.sys.ini');
-
-			        // backend system ?
-			        if ($prjType == projectType::PRJ_TYPE_COMP_BACK_SYS && $isSysIni)
+			// divide langId and lang file name
+	        if (count($LangFileNames) > 0)
+	        {
+		        foreach ($LangFileNames as $idx => $langFilePathInfo)
+		        {
+			        foreach ($langFilePathInfo as $langId => $langFilePath)
 			        {
-				        $xmlLangNames [] = $LangFileName;
-			        }
+				        //--- create langId:lang file name assoc array ---------------------
 
-			        // backend standard ?
-			        if ($prjType == projectType::PRJ_TYPE_COMP_BACK && !$isSysIni)
-			        {
-				        $xmlLangNames [] = $LangFileName;
+				        $LangFileName               = basename($langFilePath);
+				        $langFilePathInfo [$langId] = $LangFileName;
+
+				        $isSysIni = str_ends_with($LangFileName, '.sys.ini');
+
+				        //--- assign depending on type ---------------------
+
+				        if ($prjType == projectType::PRJ_TYPE_COMP_BACK_SYS && $isSysIni)
+				        {
+					        $xmlLangNames [] = $langFilePathInfo;
+				        }
+
+				        // backend standard ?
+				        if ($prjType == projectType::PRJ_TYPE_COMP_BACK && !$isSysIni)
+				        {
+					        $xmlLangNames [] = $langFilePathInfo;
+				        }
 			        }
-				}
-			}
+		        }
+	        }
 
         } else {
             // On site, module and plugin
-            $xmlLangNames = $manifestLang->stdLangFiles;
+
+	        $LangFileNames = $manifestLang->stdLangFilePaths;
+
+	        // divide langId and lang file name
+	        if (count($LangFileNames) > 0)
+	        {
+		        foreach ($LangFileNames as $idx => $langFilePathInfo)
+		        {
+			        foreach ($langFilePathInfo as $langId => $langFilePath)
+			        {
+
+				        //--- create langId:lang file name assoc array ---------------------
+
+				        $LangFileName               = basename($langFilePath);
+				        $langFilePathInfo [$langId] = $LangFileName;
+
+				        $xmlLangNames[] = $langFilePathInfo;
+			        }
+		        }
+	        }
         }
 
         return $xmlLangNames;
@@ -468,7 +501,7 @@ class langFileNamesSet
 			    foreach ($langFilePathInfo as $langId => $langFilePath) {
 
 				    // append found lang file
-				    $this->langFileNamesSet [$langId][] = $langBasePath . '/' . $langFilePath;
+				    $this->langFileNamesSet [$langId][] = $langBasePath . '/' . $langId . '/' . $langFilePath;
 
 				    // append new lang ID
 				    if (!in_array($langId, $this->langIds)) {
