@@ -149,15 +149,15 @@ function renderLangFileEditText(
                     $readonly = $isEditAndSaveMainTranslationFile ? '' : "readonly";
                     ?>
 
-					<textarea id="<?php
-                    echo $langId . '_' . $editIdx . '_main'; ?>"
+					<textarea id="<?php echo $langId . '_' . $editIdx . '_main'; ?>"
 					          name="langsEdited[]" rows="12" class="bg-primary  text-white textarea_main"
 					          style="overflow-x: scroll; min-width: 100%; overflow-wrap: normal; "
-
-			                  <?php
-                              echo $readonly; ?>
-			        ><?php
-                        echo $langText; ?></textarea>
+			                  <?php echo $readonly; ?>
+			        >
+                        <?php
+                        echo $langText;
+                        ?>
+                    </textarea>
 
                     <?php
                     if ($isEditAndSaveMainTranslationFile): ?>
@@ -165,21 +165,25 @@ function renderLangFileEditText(
 						       value="<?php
                                echo $langFile->getLangPathFileName(); ?>" hidden/>
                     <?php
-                    endif; ?>
+                    endif;
+                    ?>
 
                     <?php
                 } else {
                     //--- target edit text -------------------------------------------
                     ?>
-					<textarea id="<?php
-                    echo $langId . '_' . $editIdx . '_target'; ?>"
+					<textarea id="<?php echo $langId . '_' . $editIdx . '_target'; ?>"
 					          name="langsText[]" rows="12" class="bg-white text-dark textarea_target"
 					          style="overflow-x: scroll; min-width: 100%; "
-					><?php
-                        echo $langText; ?></textarea>
+					>
+                        <?php
+                        echo $langText;
+                        ?>
+                    </textarea>
 					<input type="text" name="langPathFileNames[]"
-					       value="<?php
-                           echo $langFile->getLangPathFileName(); ?>" hidden/>
+					       value="<?php echo $langFile->getLangPathFileName();?>"
+                           hidden
+                    />
 
                     <?php
                 }
@@ -202,6 +206,59 @@ function renderMainfileList($mainLangFiles = [])
     }
 }
 
+/*-----------------------------------------------------------------
+Debug lines
+-----------------------------------------------------------------*/
+
+//--- show found file list -----------------------------------------
+function renderDebug($project) {
+
+    //--- all projects filenames by lang ID  -----------------------------------------
+
+    $langFileSetsPrjs = $project->LangFileNamesCollection();
+
+?>
+    <hr>
+    <br>
+    <!--div class="row g-2"-->
+    <div class="row">
+        <h3>Lang file list</h3><br>
+
+        <div class="d-flex align-items-center">
+            <div class="p-2 flex-grow-1">
+
+                <?php
+                foreach ($langFileSetsPrjs as $prjId => $langFileSets) {
+                ?>
+                    [<?php echo $prjId; ?>]<br>
+
+                    <?php
+                    foreach ($langFileSets as $langId => $langFiles) {
+                    ?>
+                        &nbsp;&nbsp;&nbsp;[<?php echo $langId; ?>]<br>
+
+                        <?php
+                        foreach ($langFiles as $langFile) {
+                        ?>
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*&nbsp;<?php echo $langFile; ?><br>
+
+        				<?php
+                        }
+                    }
+                }
+				?>
+
+            </div>
+        </div>
+    </div>
+    <br>
+
+	<?php
+	return;
+}
+/*-----------------------------------------------------------------
+HTML code
+-----------------------------------------------------------------*/
 ?>
 <form action="<?php
 echo Route::_('index.php?option=com_lang4dev&view=translate'); ?>" method="post" name="adminForm"
@@ -303,10 +360,16 @@ echo Route::_('index.php?option=com_lang4dev&view=translate'); ?>" method="post"
 
     ?>
 
+	<?php
 
-	<hr>
+	if ($this->isDebugBackend)
+	{
+		renderDebug($this->project);
+	}
 
-	<input type="hidden" name="task" value=""/>
+	?>
+
+    <input type="hidden" name="task" value=""/>
     <?php
     echo HTMLHelper::_('form.token'); ?>
 </form>

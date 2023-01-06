@@ -69,6 +69,8 @@ function renderProjectSelection($form)
 
 	if ( ! empty ($this->langFileSetsPrjs))
 	{
+		echo 'hr';
+
 		echo '<h2>' . Text::_('COM_LANG4DEV_LANG_FILES_LIST') . '</h2>';
 
 		//echo '<pre><code>';
@@ -104,6 +106,8 @@ function renderProjectSelection($form)
     <?php
     if ( ! empty ($this->manifestLang))
     {
+        echo 'hr';
+
 	    $manifestText = implode("<br>", $this->manifestLang->__toText());
 
 	    echo '<h2>' . Text::_('COM_LANG4DEV_MANIFEST_FILE') . '</h2>';

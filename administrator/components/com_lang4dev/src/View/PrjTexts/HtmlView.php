@@ -143,69 +143,8 @@ class HtmlView extends BaseHtmlView
         // ['missing', same, notUsed, doubles']
         $this->transIdsClassified = $project->getTransIdsClassified($this->mainLangId);
 
-        /*-----------------------------------------------------------------
-        Debug lines
-        -----------------------------------------------------------------*/
-
         // ToDo: write to log and prepare for email to be send
 
-        //--- show project with sub projects ... ---------------------------------
-
-        if ($this->isDebugBackend) {
-            echo '<br><h4>Project (sub) data</h4><br>';
-
-            $projectText = implode("<br>", $this->project->__toText());
-
-            echo $projectText . '<br>';
-            echo '<hr>';
-        }
-
-//		//--- show found file list -----------------------------------------
-//
-//		if ($this->isDebugBackend)
-//		{
-//			//--- all projects filenames by lang ID  -----------------------------------------
-//
-//			$langFileSetsPrjs = $project->LangFileNamesCollection();
-//
-//			echo '<h4>Lang file list</h4>';
-//
-//			foreach ($langFileSetsPrjs as $prjId => $langFileSets)
-//			{
-//				echo '[' . $prjId . ']' . '<br>';
-//
-//				foreach ($langFileSets as $langId => $langFiles)
-//				{
-//					echo '&nbsp;&nbsp;&nbsp;[' . $langId . ']' . '<br>';
-//
-//					foreach ($langFiles as $langFile)
-//					{
-//						echo '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*&nbsp;' . $langFile . '<br>';
-//					}
-//				}
-//			}
-//
-//			echo '<hr>';
-//		}
-
-        //--- manifest file ----------------------------------------
-
-//		if ($this->isDebugBackend)
-//		{
-//			$prjXmlPathFilename = $project->subProjects[0]->prjXmlPathFilename; // . '/lang4dev.xml';
-//
-//			// $manifestData = new manifestData ($prjXmlPathFilename);
-//			$manifestLang = new manifestLangFiles ($prjXmlPathFilename);
-//			//$manifestText = implode("\n", $manifestData->__toText());
-//			$manifestText = implode("<br>", $manifestLang->__toText());
-//
-//			//--- show manifest content -----------------------------------------
-//
-//			echo '<h4>manifest content parts</h4>';
-//			echo $manifestText . '<br>';
-//			echo '<hr>';
-//
-//		}
 
         /**
          * $Layout = Factory::getApplication()->input->get('layout');

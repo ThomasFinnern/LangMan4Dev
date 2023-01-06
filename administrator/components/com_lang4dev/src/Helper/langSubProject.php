@@ -848,18 +848,25 @@ class langSubProject extends langFiles
                     $this->prjXmlFilePath     = $searchPath;
                     $this->prjXmlPathFilename = $prjXmlPathFilename;
                     $isFileFound              = true;
-                } else {
-                    #--- All sub folders in folder -------------------------------------
+                } else
+                {
+	                #--- All sub folders in folder -------------------------------------
 
-                    foreach (Folder::folders($searchPath) as $folderName) {
-                        $subFolder = $searchPath . '/' . $folderName;
+	                $subFolders = Folder::folders($searchPath);
+	                if (!empty ($subFolders))
+	                {
+		                foreach ($subFolders as $folderName)
+		                {
+			                $subFolder = $searchPath . '/' . $folderName;
 
-                        $isPathFound = $this->searchXmlProjectFile($projectFileName, $subFolder);
+			                $isPathFound = $this->searchXmlProjectFile($projectFileName, $subFolder);
 
-                        if ($isPathFound) {
-                            break;
-                        }
-                    }
+			                if ($isPathFound)
+			                {
+				                break;
+			                }
+		                }
+	                }
                 }
             } catch (RuntimeException $e) {
                 $OutTxt = '';
