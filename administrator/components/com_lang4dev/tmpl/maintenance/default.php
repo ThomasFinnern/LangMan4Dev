@@ -293,7 +293,7 @@ function zoneInfo ($info='Unknown zone info')
 					// DisplayZone($repair_Zone, $repair_ZoneButtons);
 					// DisplayZone($danger_Zone, $danger_ZoneButtons);
 
-					if ($this->isDevelop) {
+					if ($this->isDebugBackend) {
 						DisplayZone($developer_Zone, $developer_ZoneButtons);
 					}
 					/**/

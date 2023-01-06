@@ -114,7 +114,7 @@ class searchTransIdLocations
             if (strlen($this->langIdPrefix) < 5) {
                 $hasErr = true;
 
-                $OutTxt = 'findAllTranslationIds: langIdPrefix is not set or too smalll: "' . $this->langIdPrefix . '"';
+                $OutTxt = 'findAllTranslationIds: langIdPrefix is not set or too small: "' . $this->langIdPrefix . '"';
 
                 $app = Factory::getApplication();
                 $app->enqueueMessage($OutTxt, 'error');

@@ -117,7 +117,8 @@ class manifestData
 
                 //--- default main (site) path -------------------------------
 
-                $this->prjDefaultPath = '>>Site_not_defined';
+                // $this->prjDefaultPath = ' >> initial::(Site_not_defined)';
+                $this->prjDefaultPath = '';
                 $this->isDefaultPathDefined = false;
 
                 if (isset($xml->files)) {

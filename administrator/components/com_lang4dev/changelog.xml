@@ -1,4 +1,13 @@
 <changelogs>
+	<!--
+		security: Any security issues that have been fixed
+		fix: Any bugs that have been fixed
+		language: This is for language changes
+		addition: Any new features added
+		change: Any changes
+		remove: Any features removed
+		note: Any extra information to inform the user
+	-->
 	<changelog>
 		<element>com_lang4dev</element>
 		<type>component</type>
@@ -38,6 +47,16 @@
 			<item>Fixes additional comma in function call for PHP 7.4</item>
 		</fix>
 	</changelog>
-	
-	
+	<changelog>
+		<element>com_lang4dev</element>
+		<type>component</type>
+		<version>0.21.1.0</version>
+		<date>2022-12-18</date>
+		<fix>
+			<item>Files defined in manifest file were not found</item>
+		</fix>
+        <addition>
+            <item>Maintenance: Added Project JSONify for RAW view of project data</item>
+        </addition>
+	</changelog>
 </changelogs>

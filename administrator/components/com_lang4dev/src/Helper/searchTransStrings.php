@@ -100,7 +100,7 @@ class searchTransStrings
             }
         } catch (RuntimeException $e) {
             $OutTxt = '';
-            $OutTxt .= 'Error executing findAllTranslationIds: "' . '<br>';
+            $OutTxt .= 'Error executing findAllTranslationStrings: "' . '<br>';
             $OutTxt .= 'Error: "' . $e->getMessage() . '"' . '<br>';
 
             $app = Factory::getApplication();

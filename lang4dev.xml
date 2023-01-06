@@ -2,16 +2,16 @@
 <extension type="component"
            method="upgrade">
 	<name>COM_LANG4DEV</name>
-	<creationDate>15. Oct. 2022</creationDate>
+	<creationDate>06. Jan. 2023</creationDate>
 	<author>Thomas Finnern</author>
 	<authorEmail>lang4dev@tomfinnern.de</authorEmail>
 	<authorUrl>https://github.com/ThomasFinnern</authorUrl>
 	<copyright>(c) 2022-2022 Lang4dev Team</copyright>
 	<license>GNU General Public License version 2 or later;</license>
-	<version>0.20.0.0</version>
+	<version>0.21.1.0</version>
 	<description>COM_LANG4DEV_XML_DESCRIPTION</description>
 	<namespace path="src">Finnern\Component\Lang4dev</namespace>
-	
+
 	<!-- Script to run on installation -->
 	<scriptfile>install_langman4dev.php</scriptfile>
 
@@ -26,15 +26,15 @@
 		</sql>
 	</uninstall>
 	<!--update-->  <!-- Runs on update -->
-		<!--schemas>
-			<schemapath type="mysql">sql/updates/mysql</schemapath>
-		</schemas>
-	</update-->
+	<!--schemas>
+		<schemapath type="mysql">sql/updates/mysql</schemapath>
+	</schemas>
+</update-->
 
 	<!-- Back-end files -->
 	<administration>
 		<menu view="lang4dev">COM_LANG4DEV</menu>
-		
+
 		<submenu>
 			<menu view="COM_LANG4DEV_MENU_CONTROL_PANEL"
 			      img="class:home"
@@ -91,21 +91,21 @@
 			<folder>tmpl</folder>
 		</files>
 	</administration>
-	
+
 	<media folder="media/com_lang4dev"
 	       destination="com_lang4dev">
 		<folder>css</folder>
 		<folder>images</folder>
 		<folder>js</folder>
-    </media>
-	
+	</media>
+
 	<changelogurl>https://raw.githubusercontent.com/ThomasFinnern/J_LangMan4ExtDev/main/administrator/components/com_lang4dev/changelog.xml</changelogurl>
-	
+
 	<updateservers>
 		<server type="extension"
 		        name="Lang4Dev Updates">https://raw.githubusercontent.com/ThomasFinnern/J_LangMan4ExtDevProject/main/UpdateServer/Lang4dev_component_update.xml</server>
 	</updateservers>
-	
+
 	<dlid prefix="dlid="
 	      suffix=""/>
 </extension>

@@ -65,7 +65,7 @@ CREATE TABLE IF NOT EXISTS `#__lang4dev_subprojects`
 
 	`prefix`              varchar(255)                                           NOT NULL DEFAULT '',
 	`notes`               text                                                   NOT NULL,
-	`isLangAtStdJoomla`   int NOT NULL DEFAULT 0
+	`isLangAtStdJoomla`   int                                                    NOT NULL DEFAULT 0,
 
 	`prjXmlPathFilename`  varchar(255)                                           NOT NULL DEFAULT '',
 	`installPathFilename` varchar(255)                                           NOT NULL DEFAULT '',
