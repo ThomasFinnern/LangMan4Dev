@@ -113,18 +113,15 @@ function renderLangFileEditText(
     ?>
 	<div class="card bg-light border">
 		<h3 class="card-header bg-white">
-            <?php
-            echo $langId; ?> &nbsp;
+            <?php echo $langId; ?> &nbsp;
 			<div class="fs-4 fw-normal">
-                <?php
-                echo $subPrjPath; ?>
+                <?php echo $subPrjPath; ?>
 			</div>
 		</h3>
 
 		<div class="card-body">
 
 			<div class="card-text">
-
                 <?php
                 // ToDo: enable edit of main language by config
                 if (!$isMain || $isEditAndSaveMainTranslationFile) {
@@ -153,17 +150,14 @@ function renderLangFileEditText(
 					          name="langsEdited[]" rows="12" class="bg-primary  text-white textarea_main"
 					          style="overflow-x: scroll; min-width: 100%; overflow-wrap: normal; "
 			                  <?php echo $readonly; ?>
-			        >
-                        <?php
-                        echo $langText;
-                        ?>
-                    </textarea>
+			        ><?php echo $langText; ?></textarea>
 
                     <?php
                     if ($isEditAndSaveMainTranslationFile): ?>
 						<input type="text" name="langPathFileNames[]"
-						       value="<?php
-                               echo $langFile->getLangPathFileName(); ?>" hidden/>
+						       value="<?php echo $langFile->getLangPathFileName(); ?>"
+                               hidden
+                        />
                     <?php
                     endif;
                     ?>
@@ -175,11 +169,8 @@ function renderLangFileEditText(
 					<textarea id="<?php echo $langId . '_' . $editIdx . '_target'; ?>"
 					          name="langsText[]" rows="12" class="bg-white text-dark textarea_target"
 					          style="overflow-x: scroll; min-width: 100%; "
-					>
-                        <?php
-                        echo $langText;
-                        ?>
-                    </textarea>
+					><?php echo $langText;?></textarea>
+
 					<input type="text" name="langPathFileNames[]"
 					       value="<?php echo $langFile->getLangPathFileName();?>"
                            hidden
