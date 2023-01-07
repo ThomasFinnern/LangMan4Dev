@@ -193,25 +193,16 @@ class basePrjPathFinder
                 $subPrjPath = $rootPath;
             }
 
-            // replace backslash
-            $jroot_slash      = str_replace('\\', '/', JPATH_ROOT);
-            $rootPath_slash   = str_replace('\\', '/', $rootPath);
-            $subPrjPath_slash = str_replace('\\', '/', $subPrjPath);
+// yyyy toDo: .... use function
+//
 
-            // Is a path within joomla installation found ?
-            if (str_starts_with(strtolower($rootPath_slash), strtolower($jroot_slash))) {
-                $isInstalled = true;
-            }
+	        $isInstalled = $this->isPathOnJxServer($rootPath);
 
-            // reduce path to project path within joomla directory
-            if (str_starts_with(strtolower($subPrjPath_slash), strtolower($jroot_slash))) {
-                // remove joomla root path
-                $j_pathLength = strlen($jroot_slash);
-                $subPrjPath   = substr($subPrjPath_slash, $j_pathLength + 1);
-            }
-//			else {
-//                // $basePrjPathFinder   = $subPrjPath_slash; // ToDo: shall we use converted ?
-//            }
+			if ($isInstalled)
+			{
+				// reduce path to project path within joomla directory
+				$subPrjPath = $this->behindPathOnJxServer ($subPrjPath);
+			}
         }
 
         // path already defined and outside joomla
@@ -271,6 +262,47 @@ class basePrjPathFinder
 		}
 
 		return $isManifestFileFound;
+	}
+
+	public function isPathOnJxServer($prjPathFilename)
+	{
+		$isPathOnJxServer = false;
+
+		$lowerJxPath = strtolower (JPATH_ROOT);
+		$lowerPrjPath = strtolower ($prjPathFilename);
+
+		$slashJxPath = str_replace('\\', '/', $lowerJxPath);;
+		$slashPrjPath = str_replace('\\', '/', $lowerPrjPath);;
+
+		// project path starts with root path
+		if (str_starts_with($slashPrjPath, $slashJxPath)) {
+			$isPathOnJxServer = true;
+		}
+
+		return $isPathOnJxServer;
+	}
+
+	// reduce path to project path within joomla directory
+	public function behindPathOnJxServer($prjPath)
+	{
+		$behindPath = '';
+		$behindPath = $prjPath;
+
+		$lowerJxPath = strtolower (JPATH_ROOT);
+		$lowerPrjPath = strtolower ($prjPath);
+
+		$slashJxPath = str_replace('\\', '/', $lowerJxPath);;
+		$slashPrjPath = str_replace('\\', '/', $lowerPrjPath);;
+
+		// project path starts with root path
+		if (str_starts_with($slashPrjPath, $slashJxPath)) {
+
+			// remove joomla root path
+			$jxPathLength = strlen($slashJxPath);
+			$behindPath = substr($slashPrjPath, $jxPathLength + 1);
+		}
+
+		return $behindPath;
 	}
 }
 

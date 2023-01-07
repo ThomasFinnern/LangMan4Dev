@@ -12,7 +12,7 @@ namespace Finnern\Component\Lang4dev\Administrator\Helper;
 use Exception;
 use Joomla\CMS\Factory;
 use Joomla\CMS\Filesystem\File;
-use Joomla\CMS\Filesystem\Folder;
+//use Joomla\CMS\Filesystem\Folder;
 use Joomla\CMS\Language\Text;
 use RuntimeException;
 
@@ -103,13 +103,7 @@ class manifestData
 
                 //--- developer folder or installed in joomla  -----------------------------------------------------------
 
-//	            if (str_starts_with($prjXmlPathFilename, JPATH_ROOT)) {
-	            // On windows JPATH_ROOT may begin with "D:\" but user path with "d:\"
-	            if (str_starts_with(strtolower($prjXmlPathFilename), strtolower(JPATH_ROOT))) {
-                    $this->isInstalled = true;
-                } else {
-                    $this->isInstalled = false;
-                }
+	            $this->isInstalled = $this->isPathOnJxServer($prjXmlPathFilename);
 
                 //--- extract values -----------------------------------------------------------
 
@@ -264,6 +258,24 @@ class manifestData
     }
 
 
+	public function isPathOnJxServer($prjPathFilename)
+	{
+		$isPathOnJxServer = false;
+
+		$lowerJxPath = strtolower (JPATH_ROOT);
+		$lowerPrjPath = strtolower ($prjPathFilename);
+
+		$slashJxPath = str_replace('\\', '/', $lowerJxPath);;
+		$slashPrjPath = str_replace('\\', '/', $lowerPrjPath);;
+
+		// project path starts with root path
+		if (str_starts_with($slashPrjPath, $slashJxPath)) {
+			$isPathOnJxServer = true;
+		}
+
+		return $isPathOnJxServer;
+	}
+
 
 
 
@@ -326,44 +338,6 @@ class manifestData
 //		}
 //	}
 
-    /**
-     * public function subProjectsByManifest ($oSubPrjPath){
-     *
-     * $subProjects = [];
-     *
-     * // ToDo: create small manifest class and extract all necessary infos
-     *
-     *
-     * //---
-     * $manifestPath = $oSubPrjPath->getRootManifestPath ();
-     * if (file_exists ($manifestPath))
-     * {
-     *
-     * // content of file
-     * $context = stream_context_create(array('http' => array('header' => 'Accept: application/xml')));
-     * $xml     = file_get_contents($manifestPath, false, $context);
-     *
-     * // Data is valid
-     * if ($xml)
-     * {
-     * //--- read xml to json ---------------------------------------------------
-     *
-     * $manifestByXml = simplexml_load_string($xml);
-     *
-     * if (!empty ($manifestByXml))
-     * {
-     * //Encode the SimpleXMLElement object into a JSON string.
-     * $jsonString = json_encode($manifestByXml);
-     * //Convert it back into an associative array
-     * $jsonArray = json_decode($jsonString, true);
-     *
-     * }
-     * }
-     * }
-     *
-     * return $subProjects;
-     * }
-     * /**/
 
     public function __toTextItem($name = '')
     {
