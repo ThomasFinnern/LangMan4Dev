@@ -2,7 +2,7 @@
 /**
  * @package       Lang4dev
  * @subpackage    com_lang4dev
- * @copyright (C) 2022-2022 Lang4dev Team
+ * @copyright (c) 2022-2023 Lang4dev Team
  * @license       http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @author        finnern
  */
