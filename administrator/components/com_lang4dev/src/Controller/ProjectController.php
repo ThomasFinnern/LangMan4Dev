@@ -176,7 +176,7 @@ class projectController extends FormController
             }
 
             if (!$isSaved) {
-                $OutTxt = "error on detectDetails for project: \n"
+                $OutTxt = "!$isSaved: error on detectDetails for project: \n"
                     . 'Could not save into DB (project): "' . $prjRootPath . '"';
                 $app    = Factory::getApplication();
                 $app->enqueueMessage($OutTxt, 'error');
@@ -207,7 +207,7 @@ class projectController extends FormController
             }
 
             if (!$isSaved) {
-                $OutTxt = "error on detectDetails for project: \n"
+                $OutTxt = "!$isSaved: error on detectDetails for project: \n"
                     . 'One or more subprojects could not be saved into DB (sub project): "' . $prjRootPath . '"';
                 $app    = Factory::getApplication();
                 $app->enqueueMessage($OutTxt, 'error');
@@ -226,13 +226,13 @@ class projectController extends FormController
             } else {
                 if ($id < 1) {
                     // error DB save
-                    $OutTxt = "error on detectDetails for project: \n"
+                    $OutTxt = "$id < 1: error on detectDetails for project: \n"
                         . 'Could not save into DB: "' . $prjRootPath . '"';
                     $app    = Factory::getApplication();
                     $app->enqueueMessage($OutTxt, 'warning');
                 } else {
                     // error path
-                    $OutTxt = "error on detectDetails for project: \n"
+                    $OutTxt = "count($subProjects)==0: error on detectDetails for project: \n"
                         . 'Could not create subprojects from root path: "' . $prjRootPath . '"';
                     $app    = Factory::getApplication();
                     $app->enqueueMessage($OutTxt, 'warning');

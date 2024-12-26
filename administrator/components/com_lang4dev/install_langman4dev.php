@@ -4,7 +4,7 @@
  * @package       Joomla.Administrator
  * @subpackage    com_lang4dev
  *
- * @copyright (c) 2022-2023 Lang4dev Team
+ * @copyright (C) 2022-2022 Lang4dev Team
  * @license       GNU General Public License version 2 or later; see LICENSE.txt
  */
 defined('_JEXEC') or die;

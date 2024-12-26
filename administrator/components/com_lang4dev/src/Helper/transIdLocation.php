@@ -38,6 +38,8 @@ class transIdLocation
     /** @var int */
     public $colIdx = -1;
 
+    public $string;
+
     // ToDo: constructor property promation PHP 8.x https://stitcher.io/blog/constructor-promotion-in-php-8
     /**
      * @since __BUMP_VERSION__
