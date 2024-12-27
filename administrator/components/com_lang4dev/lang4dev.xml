@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8" ?>
-<extension type="component"
-           method="upgrade">
+<extension type="component" method="upgrade">
 	<name>COM_LANG4DEV</name>
 	<creationDate>26. Dec. 2024</creationDate>
 	<author>Thomas Finnern</author>
