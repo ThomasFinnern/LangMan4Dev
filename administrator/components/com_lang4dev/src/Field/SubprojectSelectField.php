@@ -2,7 +2,7 @@
 /*
  * @package     Lang4dev
  * @subpackage  com_lang4dev
- * @copyright   (c) 2022-2023 RSGallery2 Team
+ * @copyright  (c)  2022-2024 RSGallery2 Team
  * @license     http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @author      lang4dev team
  * RSGallery is Free Software

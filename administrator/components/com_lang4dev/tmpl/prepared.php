@@ -3,7 +3,7 @@
 
 /**
  * @package       Lang4dev
- * @copyright (C) 2022-2021 Lang4dev Team
+ * @copyright  (c)  2022-2024 Lang4dev Team
  * @license       http://www.gnu.org/copyleft/gpl.html GNU/GPL
  */
 
