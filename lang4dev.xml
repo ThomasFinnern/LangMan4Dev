@@ -7,7 +7,7 @@
     <authorUrl>https://github.com/ThomasFinnern</authorUrl>
     <copyright>(c) 2022-2024 Lang4dev Team</copyright>
     <license>GNU General Public License version 2 or later;</license>
-    <version>0.21.2.0</version>
+    <version>0.22.0</version>
     <description>COM_LANG4DEV_XML_DESCRIPTION</description>
     <element>Lang4Dev</element>
     <namespace path="src">Finnern\Component\Lang4dev</namespace>
