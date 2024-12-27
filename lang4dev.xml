@@ -1,16 +1,16 @@
 <?xml version="1.0" encoding="utf-8" ?>
-<extension type="component"
-           method="upgrade">
-	<name>COM_LANG4DEV</name>
-	<creationDate>26. Dec. 2024</creationDate>
-	<author>Thomas Finnern</author>
-	<authorEmail>lang4dev@tomfinnern.de</authorEmail>
-	<authorUrl>https://github.com/ThomasFinnern</authorUrl>
-	<copyright>(c) 2022-2023 Lang4dev Team</copyright>
-	<license>GNU General Public License version 2 or later;</license>
-	<version>0.21.1.1</version>
-	<description>COM_LANG4DEV_XML_DESCRIPTION</description>
-	<namespace path="src">Finnern\Component\Lang4dev</namespace>
+<extension type="component" method="upgrade">
+    <name>COM_LANG4DEV</name>
+    <creationDate>2024.12.27</creationDate>
+    <author>Thomas Finnern</author>
+    <authorEmail>lang4dev@tomfinnern.de</authorEmail>
+    <authorUrl>https://github.com/ThomasFinnern</authorUrl>
+    <copyright>(c) 2022-2024 Lang4dev Team</copyright>
+    <license>GNU General Public License version 2 or later;</license>
+    <version>0.21.2.0</version>
+    <description>COM_LANG4DEV_XML_DESCRIPTION</description>
+    <element>Lang4Dev</element>
+    <namespace path="src">Finnern\Component\Lang4dev</namespace>
 
 	<!-- Script to run on installation -->
 	<scriptfile>install_langman4dev.php</scriptfile>
