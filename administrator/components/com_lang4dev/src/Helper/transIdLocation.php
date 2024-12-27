@@ -4,7 +4,7 @@
  *
  * @version
  * @package       Lang4dev
- * @copyright (c) 2022-2023 Lang4dev Team
+ * @copyright  (c)  2022-2024 Lang4dev Team
  * @license
  */
 
@@ -37,6 +37,8 @@ class transIdLocation
     public $lineNr = -1;
     /** @var int */
     public $colIdx = -1;
+
+    public $string;
 
     // ToDo: constructor property promation PHP 8.x https://stitcher.io/blog/constructor-promotion-in-php-8
     /**

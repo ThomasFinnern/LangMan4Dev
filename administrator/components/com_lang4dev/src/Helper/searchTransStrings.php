@@ -4,7 +4,7 @@
  *
  * @version
  * @package       Lang4dev
- * @copyright (c) 2022-2023 Lang4dev Team
+ * @copyright  (c)  2022-2024 Lang4dev Team
  * @license
  */
 
@@ -41,6 +41,13 @@ class searchTransStrings
     public $installPathFilename = "";
 //
 //	protected $name = 'Lang4dev';
+    public $searchPaths;
+    private $langIdPrefix;
+
+    public $useLangSysIni;
+    public $prjXmlPathFilename;
+
+
 
     /**
      * @since __BUMP_VERSION__
@@ -133,7 +140,7 @@ class searchTransStrings
                     continue;
                 }
 
-                //--- scan content of valid  files -----------------------------------
+                //--- scan content of valid files -----------------------------------
 
                 if ($ext == 'php') {
                     $this->searchTransStrings_in_PHP_file($fileName, $searchPath);
