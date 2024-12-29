@@ -201,6 +201,8 @@ class HtmlView extends BaseHtmlView
                 . '* Check J4x for exception handling try ...  catch ??? <br>'
                 . '* Other background (white ?)<br>'
                 . '* styling To SCSS file<br>'
+				. '* links to doc -> how to use<br>'
+				. '* icon smaller <br>'
 //				. '* <br>'
 //				. '* <br>'
 //				. '* <br>'

@@ -145,6 +145,7 @@ class HtmlView extends BaseHtmlView
         if (!empty ($this->isDevelop)) {
             echo '<span style="color:red">'
                 . '<b>Tasks:</b> <br>'
+                . '* !!! alias from project title no Project name<br>'
                 . '* description to each input parameter "_DESC"<br>'
                 . '* <br>'
                 . '* <br>'

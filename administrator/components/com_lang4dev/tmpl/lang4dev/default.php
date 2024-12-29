@@ -79,17 +79,6 @@ $cmdButtons[] = new cmdButton(
     'viewTranslate'
 );
 
-/** ToDo: all in one joomla (german) translation
- * // translations
- * $cmdButtons[] = new cmdButton(
- * Route::_('index.php?option=com_lang4dev&view=translations'),
- * Text::_('COM_LANG4DEV_TRANSLATIONS'),
- * Text::_('COM_LANG4DEV_TRANSLATIONS_DESC') . '                        ',
- * array('icon-flag', 'icon-book'),
- * 'viewTranslations'
- * );
- * /**/
-
 // translations
 $cmdButtons[] = new cmdButton(
     Route::_('index.php?option=com_lang4dev&view=maintenance'),
@@ -99,6 +88,112 @@ $cmdButtons[] = new cmdButton(
     'viewTranslations'
 );
 
+/** ToDo: all in one joomla (german) translation */
+// translations
+$cmdButtons[] = new cmdButton(
+	Route::_('index.php?option=com_lang4dev&view=translations'),
+	Text::_('COM_LANG4DEV_TRANSLATIONS'),
+	Text::_('COM_LANG4DEV_TRANSLATIONS_DESC') . '                        ',
+	array('icon-flag', 'icon-book'),
+	'viewTranslations'
+);
+
+?>
+
+<form action="<?php echo Route::_('index.php?option=com_lang4dev'); ?>"
+	      method="post" name="adminForm" id="adminForm" class="form-validate">
+
+
+	<div class="main-horizontal-header">
+		<?php
+        //--- header: logo description ------------------
+	    DisplayLogo();
+	    DisplayDescr_123($this->extensionVersion);
+        ?>
+	</div>
+
+	<div class="main-horizontal-bar">
+		<div class="main-horizontal-row">
+
+			<div class="horizontal-buttons">
+                <?php
+                //--- Control buttons ------------------
+                DisplayControlButtons($cmdButtons);
+                ?>
+			</div>
+		</div>
+	</div>
+
+	<div class="project_selection_container">
+
+	    <?php renderProjectSelection($this->form); ?>
+		<?php renderLangIdTexts($this->form); ?>
+	</div>
+
+	<input type="hidden" name="task" value=""/>
+    <?php
+    echo HTMLHelper::_('form.token'); ?>
+
+</form>
+
+<?php
+
+//--- Logo -----------------------------
+
+/**
+ * Just displays the logo as svg
+ *
+ * @since __BUMP_VERSION__
+ */
+function DisplayLogo()
+{
+    echo '    <div class="lang4dev_logo img-fluid">';
+//	             echo HTMLHelper::_('image', 'com_lang4dev/RSG2_logo.big.png', Text::_('COM_LANG4DEV_MAIN_LOGO_ALT_TEXT'), null, true);
+    echo HTMLHelper::_(
+        'image',
+        'com_lang4dev/Lang4Dev_Logo.svg',
+        Text::_('COM_LANG4DEV_MAIN_LOGO_ALT_TEXT'),
+        null,
+        true
+    );
+    echo '     </div>';
+//	echo '<p class="test">';
+//	echo '</p>
+
+//    echo '<div class="clearfix"></div>';
+}
+
+//---  ------------------
+
+function DisplayDescr_123($extensionVersion)
+{
+	?>
+	<div class="header_title">
+		<div class="header_title_header">
+			<h2><?php echo Text::_('COM_LANG4DEV_LANG4DEV'); ?></h2>
+			<strong><?php echo Text::_('COM_LANG4DEV_LANG4DEV_DESC'); ?></strong>
+		</div>
+		<div class="header_steps_text">
+		    <div><span class="badge badge-pill bg-success">1</span> <?php echo Text::_('Define project'); ?></div>
+		    <div><span class="badge badge-pill bg-success">2</span> <?php echo Text::_('Select project ->below'); ?></div>
+		    <div><span class="badge badge-pill bg-success">3</span> <?php echo Text::_('Collect translation IDs'); ?></div>
+		    <div><span class="badge badge-pill bg-success">4</span> <?php echo Text::_('Translate project'); ?></div>
+		</div>
+		<div class="version_text">Lang4Dev&nbsp;<?php
+            echo 'V' . $extensionVersion; ?>
+		</div>
+
+	</div>
+	<?php
+}
+
+function DisplayVersion($extensionVersion)
+{
+	?>
+
+    <?php
+}
+
 function DisplayButton($button)
 {
     global $imageClass;
@@ -107,7 +202,7 @@ function DisplayButton($button)
 
     // <button type="button" class="btn btn-primary">Primary</button>
     ?>
-	<div class="rsg2-icon-button-container" style="border: #0a53be;">
+	<div class="button-container">
 		<button type="button" class="btn ">
 
 			<a href="<?php
@@ -143,18 +238,13 @@ function DisplayControlButtons($cmdButtons)
 function renderProjectSelection($form)
 {
     ?>
-	<br>
-	<div class="d-flex flex-row py-0 my-0 justify-content-between">
-		<div class="mx-2 py-0 flex-fill ">
-            <?php
-            echo $form->renderField('selectProject'); ?>
+	<div class='project_selection'>
+		<div class='project_selection_setting'>
+            <?php echo $form->renderField('selectProject'); ?>
 		</div>
-
-		<div class="mx-2 py-0 px-2 flex-fill ">
-            <?php
-            echo $form->renderField('selectSubproject'); ?>
+		<div class='project_selection_setting'>
+            <?php echo $form->renderField('selectSubproject'); ?>
 		</div>
-
 	</div>
     <?php
 
@@ -165,98 +255,16 @@ function renderLangIdTexts($form)
 {
     // mx-2 py-0, mx-2 py-0 px-2
     ?>
-	<br>
-	<div class="d-flex flex-row py-0 my-0 justify-content-between">
-		<div class="mx-2 py-0 flex-fill ">
-            <?php
-            echo $form->renderField('selectSourceLangId'); ?>
+	<div class='project_selection'>
+		<div class='project_selection_setting'>
+            <?php echo $form->renderField('selectSourceLangId'); ?>
 		</div>
-
-		<div class="mx-2 py-0 flex-fill ">
-            <?php
-            echo $form->renderField('selectTargetLangId'); ?>
+		<div class='project_selection_setting'>
+            <?php echo $form->renderField('selectTargetLangId'); ?>
 		</div>
-
 	</div>
     <?php
 
     return;
 }
-
-?>
-
-	<form action="<?php
-    echo Route::_('index.php?option=com_lang4dev'); ?>"
-	      method="post" name="adminForm" id="adminForm" class="form-validate">
-
-		<div class="main-horizontal-bar" style="display: flex; flex-direction: row; justify-content: flex-start;">
-            <?php
-            //--- Logo -----------------------------
-            DisplayLogo();
-            ?>
-
-			<div class="main-vertical-stack"
-			     style="display: flex; flex-direction: column; justify-content: space-between">
-				<div class="vertical-header">
-					<h2><?php
-                        echo Text::_('COM_LANG4DEV_LANG4DEV'); ?></h2>
-					<strong><?php
-                        echo Text::_('COM_LANG4DEV_LANG4DEV_DESC'); ?></strong>
-				</div>
-				<div class="horizontal-buttons"
-				     style="display: flex; flex-direction: row; align-content: space-between; ">
-                    <?php
-                    //--- Control buttons ------------------
-                    DisplayControlButtons($cmdButtons);
-                    ?>
-				</div>
-				<div class="vertical-empty-part3" style="min-height: 20px;">
-				</div>
-			</div>
-		</div>
-
-		<br>
-		<h2><?php
-            echo '&nbsp;&nbsp;' ?>Lang4Dev<?php
-            echo '&nbsp;V' . $this->extensionVersion; ?></h2>
-
-        <?php
-        renderProjectSelection($this->form); ?>
-        <?php
-        renderLangIdTexts($this->form); ?>
-
-		<input type="hidden" name="task" value=""/>
-        <?php
-        echo HTMLHelper::_('form.token'); ?>
-
-	</form>
-
-<?php
-
-//--- Logo -----------------------------
-
-/**
- * Just displays the logo as svg
- *
- * @since __BUMP_VERSION__
- */
-function DisplayLogo()
-{
-    echo '    <div class="lang4dev_logo">';
-//	             echo HTMLHelper::_('image', 'com_lang4dev/RSG2_logo.big.png', Text::_('COM_LANG4DEV_MAIN_LOGO_ALT_TEXT'), null, true);
-    echo HTMLHelper::_(
-        'image',
-        'com_lang4dev/Lang4Dev_Logo.svg',
-        Text::_('COM_LANG4DEV_MAIN_LOGO_ALT_TEXT'),
-        null,
-        true
-    );
-    echo '     </div>';
-//	echo '<p class="test">';
-//	echo '</p>
-
-    echo '<div class="clearfix"></div>';
-}
-
-//--- Control buttons ------------------
 

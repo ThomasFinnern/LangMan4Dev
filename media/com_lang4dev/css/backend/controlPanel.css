@@ -1,20 +1,45 @@
 /* @import "__lang4dev"; /**/
-/**
-div.quickicon-icon {
-
-	font-size: xx-large;
-	text-align: center;
-	width: 5em;
-	width: auto;
-	border: 2px solid red;
-	border-color: red;
-	border-width: thick;
-	border-radius: 5px;
-	padding: 4px;
-	margin: 4px;
-
+.main-horizontal-header {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
 }
-/**/
+.main-horizontal-header .lang4dev_logo {
+  flex-shrink: 3;
+}
+.main-horizontal-header .lang4dev_logo img {
+  max-width: 60%;
+}
+.main-horizontal-header .header_title {
+  padding: 1px 10px 10px 1px;
+}
+.main-horizontal-header .header_title .header_steps_text {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 10px 10px 10px 1px;
+}
+.main-horizontal-bar {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+}
+.main-horizontal-bar .main-horizontal-row {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.horizontal-buttons {
+  display: flex;
+  flex-direction: row;
+  align-content: space-between;
+  flex-wrap: wrap;
+}
+.horizontal-buttons .maint-text {
+  max-width: 120px;
+}
+
 .lang4dev-icon {
   background-color: white;
   border: 5px solid lightgrey;
@@ -24,11 +49,27 @@ div.quickicon-icon {
 }
 
 .lang4dev-icon:hover {
+  background: lightgray;
   border: 5px solid green;
 }
 
-.vertical-header {
-  padding: 40px 10px 10px 17px;
+.project_selection_container {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+.project_selection_container .project_selection {
+  border: 2px solid lightgrey;
+  border-radius: 4px;
+  padding: 10px 10px 0px 10px;
+  margin: 5px 0px 5px 20px;
+  max-width: 600px;
+}
+.project_selection_container .project_selection .project_selection_setting {
+  justify-content: flex-start;
+}
+.project_selection_container .project_selection .project_selection_setting .control-label {
+  max-width: 150px;
 }
 
 /*# sourceMappingURL=controlPanel.css.map */
