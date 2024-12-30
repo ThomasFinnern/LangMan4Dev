@@ -1,0 +1,54 @@
+{
+  "$schema": "https://developer.joomla.org/schemas/json-schema/web_assets.json",
+  "name": "com_lang4dev",
+  "version": "0.1.0",
+  "description": "Assets used by com_lang4dev copyright 2023-2023",
+  "license": "GNU General Public License version 2 or later",
+  "assets": [
+    {
+      "name": "com_lang4dev.backend.controlPanel",
+      "description": "Backend styling.",
+      "type": "style",
+      "uri": "com_lang4dev/backend/controlPanel.css"
+    },
+
+    {
+      "name": "com_lang4dev.lib.bs_set2dark",
+      "description": "JavaScript: On dark mode exchange class '...-light' with '...-dark'",
+      "type": "script",
+      "uri": "com_lang4dev/lib/bs_set2dark.js",
+      "attributes": {
+        "defer": true
+      },
+      "dependencies": [
+        "core"
+      ]
+    },
+	
+    {
+      "name": "com_lang4dev.backend.controlPanel",
+      "type": "preset",
+      "dependencies": [
+        "com_lang4dev.backend.controlPanel#style",
+        "com_lang4dev.lib.bs_set2dark#script"
+      ]
+    },
+
+    {
+      "name": "com_lang4dev.backend.prjTexts",
+      "description": "Backend styling.",
+      "type": "style",
+      "uri": "com_lang4dev/backend/prjTexts.css"
+    },
+
+    {
+      "name": "com_lang4dev.backend.prjTexts",
+      "type": "preset",
+      "dependencies": [
+        "com_lang4dev.backend.prjTexts#style",
+        "com_lang4dev.lib.bs_set2dark#script"
+      ]
+    }
+
+  ]
+}

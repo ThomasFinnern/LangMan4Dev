@@ -12,16 +12,15 @@ defined('_JEXEC') or die;
 use Joomla\CMS\HTML\HTMLHelper;
 use Joomla\CMS\Language\Text;
 use Joomla\CMS\Router\Route;
-use Joomla\CMS\Language\Multilanguage;
-use Joomla\CMS\Language\Associations;
-use Joomla\CMS\Layout\LayoutHelper;
-use Joomla\CMS\Session\Session;
-
-//HTMLHelper::_('stylesheet', 'com_lang4dev/backend/maintenance.css', array('version' => 'auto', 'relative' => true));
-//HTMLHelper::_('script', 'com_lang4dev/backend/maintenance.js', ['version' => 'auto', 'relative' => true]);
+//use Joomla\CMS\Language\Multilanguage;
+//use Joomla\CMS\Language\Associations;
+//use Joomla\CMS\Layout\LayoutHelper;
+//use Joomla\CMS\Session\Session;
 
 //Text::script('COM_LANG4DEV_PLEASE_CHOOSE_A_GALLERY_FIRST', true);
-HTMLHelper::_('stylesheet', 'com_lang4dev/backend/controlPanel.css', array('version' => 'auto', 'relative' => true));
+
+//HTMLHelper::_('stylesheet', 'com_lang4dev/backend/controlPanel.css', array('version' => 'auto', 'relative' => true));
+$this->document->getWebAssetManager()->useStyle('com_lang4dev.backend.controlPanel');
 
 // command buttons
 class cmdButton

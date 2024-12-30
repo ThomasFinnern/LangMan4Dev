@@ -744,7 +744,7 @@ class langSubProject extends langFiles
      *
      * @since version
      */
-    public function getPrjIdAndTypeText()
+    public function getPrjIdAndTypeText() : string
     {
         return $this->prjId . ': ' . $this->getPrjTypeText();
     }

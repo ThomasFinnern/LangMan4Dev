@@ -13,6 +13,7 @@ defined('_JEXEC') or die;
 
 require_once(__DIR__ . '/../../Helper/selectProject.php');
 
+use Finnern\Component\Lang4dev\Administrator\Helper\langPathFileName;
 use Finnern\Component\Lang4dev\Administrator\Model\PrjTextsModel;
 use Joomla\CMS\Component\ComponentHelper;
 use Joomla\CMS\Filesystem\File;
@@ -60,6 +61,7 @@ class HtmlView extends BaseHtmlView
 
     protected $mainLangId;
     protected $transIdsClassified;
+    protected $subProjectDatas;
 
     /**
      * Method to display the view.
@@ -145,6 +147,23 @@ class HtmlView extends BaseHtmlView
 
         // ToDo: write to log and prepare for email to be send
 
+        //--- Collect display data from subProjects ----------------------------------
+
+        $this->subProjectDatas = [];
+
+        if (count($project->subProjects) > 0) {
+            foreach ($project->subProjects as $subProject) {
+
+                $subProjectData = new \stdClass();
+                $subProjectData->prjIdAndTypeText = $subProject->getPrjIdAndTypeText();
+                $subProjectData->transStringsLocations = $subProject->getTransStringsLocations();
+                $subProjectData->langFileNames = $subProject->getLangFileNames($this->mainLangId);
+                // create dummy lang name for path extract
+                $subProjectData->componentLangPath = $this->getComponentLangPath($subProject);
+
+                $this->subProjectDatas[] = $subProjectData;
+            }
+        }
 
         /**
          * $Layout = Factory::getApplication()->input->get('layout');
@@ -218,6 +237,33 @@ class HtmlView extends BaseHtmlView
         if (Factory::getApplication()->getIdentity()->authorise('core.admin', 'com_lang4dev')) {
             $toolbar->preferences('com_lang4dev');
         }
+    }
+
+    /**
+     * @param   \Finnern\Component\Lang4dev\Administrator\Helper\langSubProject  $subProject
+     *
+     * @return string
+     *
+     * @since version
+     */
+    public function getComponentLangPath(\Finnern\Component\Lang4dev\Administrator\Helper\langSubProject $subProject): string
+    {
+        $dummyLangFilePathName = $subProject->langBasePath . '/' . $this->mainLangId . '/' . 'dumyyName.ini';
+        $oLangPathFileName     = new langPathFileName ($dummyLangFilePathName);
+
+        $postId = ""; //  = " (C) ";
+        // lang files outside component
+        if ($oLangPathFileName->isLangAtStdJoomla()) {
+            $postId = " (J) ";  // lang files inside joomla base lang path
+        }
+
+        $componentLangPath = dirname($oLangPathFileName->getlangSubPrjPathFileName()) . $postId;
+
+        if ($this->isDebugBackend) {
+            $componentLangPath = $subProject->langBasePath . '/' . $this->mainLangId . $postId;
+        }
+
+        return $componentLangPath;
     }
 
 }

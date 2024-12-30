@@ -10,10 +10,123 @@
 
 defined('_JEXEC') or die;
 
-use Finnern\Component\Lang4dev\Administrator\Helper\langPathFileName;
 use Joomla\CMS\HTML\HTMLHelper;
 use Joomla\CMS\Language\Text;
 use Joomla\CMS\Router\Route;
+
+$this->document->getWebAssetManager()->useStyle('com_lang4dev.backend.prjTexts');
+
+
+
+$comment = '';
+if ($this->isDoCommentIds) {
+    $comment = ';';
+}
+
+/*-----------------------------------------------------------------
+HTML code
+-----------------------------------------------------------------*/
+?>
+
+
+<form action="<?php
+echo Route::_('index.php?option=com_lang4dev&view=prjtexts'); ?>"
+      method="post" name="adminForm" id="adminForm">
+
+	<div class="project_selection_container">
+
+	    <?php renderProjectSelection($this->form); ?>
+
+	</div>
+
+    <?php
+
+    // ToDo: tell main lang and info
+
+    $idx = 1;
+
+    $subProjectDatas = $this->subProjectDatas;
+
+    if (count($subProjectDatas) > 0) {
+        foreach ($subProjectDatas as $subProjectData) {
+
+            ?>
+            <div class="card ">
+                <h2 class="card-header " style="background-color: #ced4da;">
+                    <?php
+
+                    renderHeaderPrjIdType($subProjectData->prjIdAndTypeText, $subProjectData->langFileNames, $subProjectData->componentLangPath);
+
+                    ?>
+
+                </h2>
+                <div class="card-body">
+                    <!-- h5 class="card-title"></h5-->
+                    <p class="card-text">
+                        <?php
+
+                        renderDeveloperAdHocTexts($subProjectData->transStringsLocations, $comment);
+
+                        // fields ['missing, same, notUsed, doubles']
+                        $transIdsClassified = $this->transIdsClassified[$subProjectData->prjIdAndTypeText];
+
+                        // ToDo: interface parameters
+                        $missing = $transIdsClassified['missing'];
+                        $same    = $transIdsClassified['same'];
+                        $notUsed = $transIdsClassified['notUsed'];
+                        $doubles = $transIdsClassified['doubles'];
+
+                        // renderMissingPreparedTransIds ($missing, $comment);
+
+                        // ToDo: Use constants ?
+                        renderSubProjectStatistic($missing, $same, $notUsed, $doubles, $comment);
+
+                        ?>
+                    </p>
+                </div>
+            </div>
+            <?php
+        }
+    } else {
+        // ToDo: use bootstrap card
+        echo '<br>';
+        echo '<h2>' . Text::_('COM_LANG4DEV_NO_SUB_PROJECTS_DEFINED_FOR_PROJECT') . '</h2>';
+        echo ' ' . Text::_('COM_LANG4DEV_NO_SUB_PROJECTS_DEFINED_FOR_PROJECT_DESC') . ' ';
+    }
+    ?>
+
+	<?php
+
+	if ($this->isDebugBackend)
+	{
+		renderDebug($this->project);
+	}
+
+	?>
+
+    <input type="hidden" name="task" value=""/>
+    <?php
+    echo HTMLHelper::_('form.token');
+    ?>
+
+</form>
+
+<?php
+function renderProjectSelection($form)
+{
+    ?>
+	<div class='project_selection'>
+		<div class='project_selection_setting'>
+            <?php echo $form->renderField('selectProject'); ?>
+		</div>
+		<div class='project_selection_setting'>
+            <?php echo $form->renderField('selectSubproject'); ?>
+		</div>
+	</div>
+    <?php
+
+    return;
+}
 
 function renderHeaderPrjIdType(
     $prjIdAndType = '',
@@ -50,27 +163,6 @@ function renderHeaderPrjIdType(
     return;
 }
 
-
-function renderProjectSelection($form)
-{
-    ?>
-	<br>
-	<div class="d-flex flex-row py-0 my-0 justify-content-between">
-		<div class="mx-2 py-0 flex-fill ">
-            <?php
-            echo $form->renderField('selectProject'); ?>
-		</div>
-
-		<div class="mx-2 py-0 px-2 flex-fill ">
-            <?php
-            echo $form->renderField('selectSubproject'); ?>
-		</div>
-
-	</div>
-    <?php
-
-    return;
-}
 
 function renderMissingPreparedTransIds ($missing, $comment = '')
 {
@@ -355,119 +447,3 @@ function renderDebug($project) {
     <?php
     return;
 }
-
-$comment = '';
-if ($this->isDoCommentIds) {
-    $comment = ';';
-}
-
-/*-----------------------------------------------------------------
-HTML code
------------------------------------------------------------------*/
-?>
-
-
-<form action="<?php
-echo Route::_('index.php?option=com_lang4dev&view=prjtexts'); ?>"
-      method="post" name="adminForm" id="adminForm">
-
-    <?php
-
-    // ToDo: tell main lang and info
-
-    renderProjectSelection($this->form);
-
-    $idx = 1;
-
-    $subProjects = $this->project->subProjects;
-
-    if (count($subProjects) > 0) {
-        foreach ($subProjects as $subProject) {
-            $prjIdAndType = $subProject->getPrjIdAndTypeText();
-
-            //$transStringsLocations = $subProject->filteredTransStringsLocations();
-            $transStringsLocations = $subProject->getTransStringsLocations();
-
-            $fileNames = $subProject->getLangFileNames($this->mainLangId);
-
-            //--- create dummy lang name for path extract --------------------
-
-            $dummyLangFilePathName = $subProject->langBasePath . '/' . $this->mainLangId . '/' . 'dumyyName.ini';
-            $oLangPathFileName     = new langPathFileName ($dummyLangFilePathName);
-
-            $postId = ""; //  = " (C) ";
-            // lang files outside component
-            if ($oLangPathFileName->isLangAtStdJoomla()) {
-                $postId = " (J) ";  // lang files inside joomla base lang path
-            }
-
-            $componentLangPath = dirname($oLangPathFileName->getlangSubPrjPathFileName()) . $postId;
-
-            if ($this->isDebugBackend) {
-                $componentLangPath = $subProject->langBasePath . '/' . $this->mainLangId . $postId;
-            }
-            // style="width: 18rem; bg-light .bg-transparent bg-secondary text-white
-
-            ?>
-            <div class="card ">
-                <h2 class="card-header " style="background-color: #ced4da;">
-                    <?php
-
-                    // echo $prjIdAndType;
-                    renderHeaderPrjIdType($prjIdAndType, $fileNames, $componentLangPath);
-
-                    ?>
-
-                </h2>
-                <div class="card-body">
-                    <!-- h5 class="card-title"></h5-->
-                    <p class="card-text">
-                        <?php
-
-                        // ['missing', same, notUsed, doubles']
-                        $transIdsClassified = $this->transIdsClassified[$prjIdAndType];
-
-                        // ToDo: interface parameters
-                        $missing = $transIdsClassified['missing'];
-                        $same    = $transIdsClassified['same'];
-                        $notUsed = $transIdsClassified['notUsed'];
-                        $doubles = $transIdsClassified['doubles'];
-
-                        // renderMissingPreparedTransIds ($missing, $comment);
-
-                        renderDeveloperAdHocTexts($transStringsLocations, $comment);
-
-                        // ToDo: Use constants ?
-                        renderSubProjectStatistic($missing, $same, $notUsed, $doubles, $comment);
-
-                        ?>
-                    </p>
-                </div>
-            </div>
-            <?php
-        }
-    } else {
-        // ToDo: use bootstrap card
-        echo '<br>';
-        echo '<h2>' . Text::_('COM_LANG4DEV_NO_SUB_PROJECTS_DEFINED_FOR_PROJECT') . '</h2>';
-        echo ' ' . Text::_('COM_LANG4DEV_NO_SUB_PROJECTS_DEFINED_FOR_PROJECT_DESC') . ' ';
-    }
-    ?>
-
-	<?php
-
-	if ($this->isDebugBackend)
-	{
-		renderDebug($this->project);
-	}
-
-	?>
-
-    <input type="hidden" name="task" value=""/>
-    <?php
-    echo HTMLHelper::_('form.token');
-    ?>
-
-</form>
-
-
