@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <extension type="component" method="upgrade">
     <name>COM_LANG4DEV</name>
-    <creationDate>2024.12.27</creationDate>
+    <creationDate>2025.01.01</creationDate>
     <author>Thomas Finnern</author>
     <authorEmail>lang4dev@tomfinnern.de</authorEmail>
     <authorUrl>https://github.com/ThomasFinnern</authorUrl>
-    <copyright>(c) 2022-2024 Lang4dev Team</copyright>
+    <copyright>(c) 2022-2025 Lang4dev Team</copyright>
     <license>GNU General Public License version 2 or later;</license>
-    <version>0.22.0</version>
+    <version>0.23.0</version>
     <description>COM_LANG4DEV_XML_DESCRIPTION</description>
     <element>Lang4Dev</element>
     <namespace path="src">Finnern\Component\Lang4dev</namespace>
@@ -53,10 +53,10 @@
 			      img="class:language"
 			      link="option=com_lang4dev&amp;view=translate">COM_LANG4DEV_MENU_TRANSLATE
 			</menu>
-			<menu view="COM_LANG4DEV_MENU_TRANSLATIONS"
+			<!--menu view="COM_LANG4DEV_MENU_TRANSLATIONS"
 			      img="class:language"
 			      link="option=com_lang4dev&amp;view=translations">COM_LANG4DEV_MENU_TRANSLATIONS
-			</menu>
+			</menu-->
 			<menu view="COM_LANG4DEV_MENU_MAINTENANCE"
 			      img="class:equalizer"
 			      link="option=com_lang4dev&amp;view=maintenance">COM_LANG4DEV_MENU_MAINTENANCE
@@ -65,23 +65,14 @@
 			      img="class:config"
 			      link="option=com_config&amp;view=component&amp;component=com_lang4dev">COM_LANG4DEV_MENU_CONFIG
 			</menu>
-			<!--menu view="COM_LANG4DEV_MENU_TEST_01"
+			<!--menu view="COM_LANG4DEV_MENU_MAINTENANCE"
 			      img="class:equalizer"
-			      link="option=com_lang4dev&amp;view=maintenance">COM_LANG4DEV_MENU_TEST_01
+			      link="option=com_lang4dev&amp;view=maintenance">COM_LANG4DEV_MENU_MAINTENANCE
 			</menu-->
-			<menu view="COM_LANG4DEV_MENU_TEST_01"
+			<!--menu view="COM_LANG4DEV_MENU_MAINTENANCE_1A" test comment 1
 			      img="class:equalizer"
-			      link="option=com_lang4dev&amp;view=maintenance">COM_LANG4DEV_MENU_TEST_01
-			</menu>
-			<!--menu view="COM_LANG4DEV_MENU_TEST_02"
-			      img="class:equalizer"
-			      link="option=com_lang4dev&amp;view=maintenance">COM_LANG4DEV_MENU_TEST_02
+			      link="option=com_lang4dev&amp;view=maintenance">COM_LANG4DEV_MENU_MAINTENANCE_1B
 			</menu-->
-			<menu view="COM_LANG4DEV_MENU_TEST_02"
-			      img="class:equalizer"
-			      link="option=com_lang4dev&amp;view=maintenance">COM_LANG4DEV_MENU_TEST_02
-			</menu>
-			<!--menu view="COM_LANG4DEV_MENU_MAINTENANCE2" test comment 2 -->
 			<!--menu view="COM_LANG4DEV_MENU_MAINTENANCE2" test comment 2 -->
 
 		</submenu>
