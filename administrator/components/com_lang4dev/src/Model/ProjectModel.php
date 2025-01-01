@@ -12,6 +12,7 @@ namespace Finnern\Component\Lang4dev\Administrator\Model;
 defined('_JEXEC') or die;
 
 use Exception;
+use Finnern\Component\Lang4dev\Administrator\Helper\eProjectType;
 use Finnern\Component\Lang4dev\Administrator\Helper\langSubProject;
 use Finnern\Component\Lang4dev\Administrator\Helper\manifestLangFiles;
 use Finnern\Component\Lang4dev\Administrator\Helper\projectType;
@@ -966,7 +967,43 @@ class ProjectModel extends AdminModel
 
             //--- collect new sub project ------------------
 
-            $subProjects[] = $langSubProject;
+            $isExisting = true;
+
+            switch ($prjType) {
+                case eProjectType::PRJ_TYPE_NONE:
+                    $isExisting = false;
+                    break;
+
+                case eProjectType::PRJ_TYPE_COMP_BACK_SYS:
+                case eProjectType::PRJ_TYPE_COMP_BACK:
+//                    if ( ! is_dir ($langSubProject->prjRootPath))
+                    if ( ! is_dir ($langSubProject->prjAdminPath))
+                    {
+                        $isExisting = false;
+                    }
+                    break;
+
+                case eProjectType::PRJ_TYPE_COMP_SITE:
+//                    if ( ! is_dir ($langSubProject->prjRootPath))
+                    if ( ! is_dir ($langSubProject->prjDefaultPath))
+                    {
+                        $isExisting = false;
+                    }
+                    break;
+
+                case eProjectType::PRJ_TYPE_MODEL:
+                case eProjectType::PRJ_TYPE_PLUGIN:
+                    if ( ! is_dir ($langSubProject->prjRootPath))
+                    {
+                        $isExisting = false;
+                    }
+                    break;
+
+            }
+
+            if ($isExisting) {
+                $subProjects[] = $langSubProject;
+            }
         }
 
         return $subProjects;

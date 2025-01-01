@@ -10,7 +10,6 @@ namespace Finnern\Component\Lang4dev\Administrator\Helper;
 
 use Exception;
 use Joomla\CMS\Factory;
-use Joomla\CMS\Filesystem\File;
 use Joomla\CMS\Filesystem\Folder;
 use Joomla\CMS\Language\Text;
 use RuntimeException;
@@ -23,7 +22,7 @@ class langSubProject extends langFiles
     /** @var int */
     public $prjId = '';
     /** @var int */
-    public $prjType = 0;
+    public eProjectType $prjType;
 
     // ToDo: Separate std path (plugin/module -> ), admin path, site path
 
@@ -76,8 +75,8 @@ class langSubProject extends langFiles
      * @param $prjXmlPathFilename
      */
     public function __construct(
-        $prjId = '',
-        $prjType = projectType::PRJ_TYPE_NONE,
+        string $prjId = '',
+        eProjectType $prjType = eProjectType::PRJ_TYPE_NONE,
         $prjRootPath = '',
         $prjXmlPathFilename = ''
     ) {
@@ -91,7 +90,7 @@ class langSubProject extends langFiles
 
         // Admin path
 
-        if ($this->prjType == projectType::PRJ_TYPE_COMP_BACK_SYS) {
+        if ($this->prjType == eProjectType::PRJ_TYPE_COMP_BACK_SYS) {
             $this->useLangSysIni = true;
         }
 
@@ -206,7 +205,7 @@ class langSubProject extends langFiles
 
                             //--- Lang path by manifest definition ---------------------------------------
                             $startPath = $this->prjRootPath . "/" . $manifestLang->defaultLangPath;
-                            if ($this->prjType == projectType::PRJ_TYPE_COMP_BACK || $this->prjType == projectType::PRJ_TYPE_COMP_BACK_SYS) {
+                            if ($this->prjType == eProjectType::PRJ_TYPE_COMP_BACK || $this->prjType == eProjectType::PRJ_TYPE_COMP_BACK_SYS) {
                                 $startPath = $this->prjRootPath . "/" . $manifestLang->adminLangPath;
                             }
 
@@ -354,8 +353,8 @@ class langSubProject extends langFiles
     {
         $projectFileName = $this->prjId;
 
-//		if (   $this->prjType == projectType::PRJ_TYPE_COMP_BACK_SYS
-//			|| $this->prjType == projectType::PRJ_TYPE_COMP_BACK)
+//		if (   $this->prjType == eProjectType::PRJ_TYPE_COMP_BACK_SYS
+//			|| $this->prjType == eProjectType::PRJ_TYPE_COMP_BACK)
 //		{
 //			// $projectFileName = 'com_' . $this->prjId;
 //			$projectFileName = substr($this->prjId, 4);
@@ -518,7 +517,7 @@ class langSubProject extends langFiles
             //--- scan all not project files ------------------------------------
 
             // standard
-            if ($this->prjType != projectType::PRJ_TYPE_COMP_BACK_SYS && $this->prjType != projectType::PRJ_TYPE_COMP_BACK) {
+            if ($this->prjType != eProjectType::PRJ_TYPE_COMP_BACK_SYS && $this->prjType != eProjectType::PRJ_TYPE_COMP_BACK) {
 
                 //--- site, module or plugin --------------------------------------
 
@@ -573,7 +572,7 @@ class langSubProject extends langFiles
             //--- scan all not project files ------------------------------------
 
             // standard
-            if ($this->prjType != projectType::PRJ_TYPE_COMP_BACK_SYS && $this->prjType != projectType::PRJ_TYPE_COMP_BACK) {
+            if ($this->prjType != eProjectType::PRJ_TYPE_COMP_BACK_SYS && $this->prjType != eProjectType::PRJ_TYPE_COMP_BACK) {
 
                 //--- site, module or plugin --------------------------------------
 
@@ -931,7 +930,7 @@ class langSubProject extends langFiles
 
         //--- pre check type -----------------
 
-        if ($this->prjType == projectType::PRJ_TYPE_COMP_BACK_SYS) {
+        if ($this->prjType == eProjectType::PRJ_TYPE_COMP_BACK_SYS) {
             $this->useLangSysIni = true;
         }
 
@@ -966,7 +965,7 @@ class langSubProject extends langFiles
 
         $lines [] = $this->getPrjIdAndTypeText();
         $lines [] = '$prjId = "' . $this->prjId . '"';
-        $lines [] = '$prjType = "' . $this->prjType . '"';
+        $lines [] = '$prjType = "' . projectType::getPrjTypeText($this->prjType) . '"';
 
         $lines [] = '$prjRootPath = "' . $this->prjRootPath . '"';
         $lines [] = '$prjXmlFilePath = "' . $this->prjXmlFilePath . '"';

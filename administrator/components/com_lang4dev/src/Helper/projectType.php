@@ -11,57 +11,58 @@
 
 namespace Finnern\Component\Lang4dev\Administrator\Helper;
 
-use Joomla\CMS\Factory;
-use Joomla\CMS\Filesystem\Folder;
-
-use Finnern\Component\Lang4dev\Administrator\Helper\langFiles;
-
 use function defined;
 
 // no direct access
 defined('_JEXEC') or die;
 
+enum eProjectType // : int
+{
+    case PRJ_TYPE_NONE;
+    case  PRJ_TYPE_COMP_BACK; // PRJ_TYPE_COMPONENT
+    case  PRJ_TYPE_COMP_BACK_SYS;
+    case  PRJ_TYPE_COMP_SITE;
+    case  PRJ_TYPE_MODEL;
+    case  PRJ_TYPE_PLUGIN;
+}
+
 /**
  * Collect contents of all translation files for one base folder (existing)
- * Write the changes set inlcuding
- * The files uses is limitet as *.ini are not useful
+ * Write the changes set including
+ * The files uses is limited as *.ini are not useful
  *
- * @package Lang4dev
+ * @package     Finnern\Component\Lang4dev\Administrator\Helper
+ * *
+ * * @since       version
  */
+
 class projectType
 {
-    /*   */
-    const PRJ_TYPE_NONE = 0;
-    const PRJ_TYPE_COMPONENT = 1;
-    const PRJ_TYPE_COMP_BACK = 1;
-    const PRJ_TYPE_COMP_BACK_SYS = 2;
-    const PRJ_TYPE_COMP_SITE = 3;
-    const PRJ_TYPE_MODEL = 4;
-    const PRJ_TYPE_PLUGIN = 5;
+    // ToDo: create enum
 
     // const PRJ_TYPE_TEMPLATE = 1;
 
     /**
      * @param $prjId
      *
-     * @return int
+     * @return eProjectType
      *
      * @since version
      */
-    public static function prjTypeByProjectId($prjId)
+    public static function prjTypeByProjectId($prjId) : eProjectType
     {
-        $prjType = self::PRJ_TYPE_NONE;
+        $prjType = eProjectType::PRJ_TYPE_NONE;
 
         switch (strtolower(substr($prjId, 0, 3))) {
             case "com":
                 // Attention: lang projects have three here
-                $prjType = self::PRJ_TYPE_COMPONENT;
+                $prjType = eProjectType::PRJ_TYPE_COMP_BACK; // PRJ_TYPE_COMPONENT;
                 break;
             case "mod":
-                $prjType = self::PRJ_TYPE_NONE;
+                $prjType = eProjectType::PRJ_TYPE_MODEL;
                 break;
             case "plg":
-                $prjType = self::PRJ_TYPE_NONE;
+                $prjType = eProjectType::PRJ_TYPE_PLUGIN;
                 break;
             default:
                 // dummy
@@ -74,26 +75,27 @@ class projectType
     /**
      * @param $prjId
      *
-     * @return array
+     * @return array eProjectType
      *
      * @since version
      */
-    public static function prjTypesByProjectId($prjId)
+    public static function prjTypesByProjectId($prjId) : array
     {
         $prjTypes = [];
 
+        // ToDo: Package
         switch (strtolower(substr($prjId, 0, 3))) {
             case "com":
                 // Attention: lang projects have three here
-                $prjTypes[] = self::PRJ_TYPE_COMP_BACK;
-                $prjTypes[] = self::PRJ_TYPE_COMP_BACK_SYS;
-                $prjTypes[] = self::PRJ_TYPE_COMP_SITE;
+                $prjTypes[] = eProjectType::PRJ_TYPE_COMP_BACK;
+                $prjTypes[] = eProjectType::PRJ_TYPE_COMP_BACK_SYS;
+                $prjTypes[] = eProjectType::PRJ_TYPE_COMP_SITE;
                 break;
             case "mod":
-                $prjTypes[] = self::PRJ_TYPE_NONE;
+                $prjTypes[] = eProjectType::PRJ_TYPE_MODEL;
                 break;
             case "plg":
-                $prjTypes[] = self::PRJ_TYPE_NONE;
+                $prjTypes[] = eProjectType::PRJ_TYPE_PLUGIN;
                 break;
             default:
                 // dummy
@@ -103,7 +105,7 @@ class projectType
         return $prjTypes;
     }
 
-    // *.Sys.ini files are not used for backend normal(seperate type backend sys)  and site
+    // *.Sys.ini files are not used for backend normal(separate type backend sys)  and site
 
     /**
      * @param $prjType
@@ -112,15 +114,15 @@ class projectType
      *
      * @since version
      */
-    public static function subPrjHasSysFiles($prjType)
+    public static function subPrjHasSysFiles($prjType) : bool
     {
         $hasSysFiles = true;
 
-        if ($prjType == projectType::PRJ_TYPE_COMP_BACK) {
+        if ($prjType == eProjectType::PRJ_TYPE_COMP_BACK) {
             $hasSysFiles = false;
         }
 
-        if ($prjType == projectType::PRJ_TYPE_COMP_SITE) {
+        if ($prjType == eProjectType::PRJ_TYPE_COMP_SITE) {
             $hasSysFiles = false;
         }
 
@@ -130,25 +132,25 @@ class projectType
     /**
      * @param $prjType
      *
-     * @return bool[]
+     * @return array [bool, bool]
      *
      * @since version
      */
-    public static function enabledByType($prjType)
+    public static function enabledByType($prjType) : array
     {
         $isSearchXml     = false;
         $isSearchInstall = false;
 
-        if ($prjType == projectType::PRJ_TYPE_COMP_BACK_SYS
-            || $prjType == projectType::PRJ_TYPE_MODEL
-            || $prjType == projectType::PRJ_TYPE_PLUGIN
+        if ($prjType == eProjectType::PRJ_TYPE_COMP_BACK_SYS
+            || $prjType == eProjectType::PRJ_TYPE_MODEL
+            || $prjType == eProjectType::PRJ_TYPE_PLUGIN
         ) {
             $isSearchXml = true;
         }
 
-        if ($prjType == projectType::PRJ_TYPE_COMP_BACK_SYS
-            || $prjType == projectType::PRJ_TYPE_MODEL
-            || $prjType == projectType::PRJ_TYPE_PLUGIN
+        if ($prjType == eProjectType::PRJ_TYPE_COMP_BACK_SYS
+            || $prjType == eProjectType::PRJ_TYPE_MODEL
+            || $prjType == eProjectType::PRJ_TYPE_PLUGIN
         ) {
             $isSearchInstall = true;
         }
@@ -163,37 +165,104 @@ class projectType
      *
      * @since version
      */
-    public static function getPrjTypeText($prjType)
+    public static function getPrjTypeText($prjType) : string
     {
         $typename = '? type';
 
         switch ($prjType) {
-            case self::PRJ_TYPE_NONE:
+            case eProjectType::PRJ_TYPE_NONE:
                 $typename = 'type-none';
                 break;
 
-            case self::PRJ_TYPE_COMP_BACK_SYS:
+            case eProjectType::PRJ_TYPE_COMP_BACK_SYS:
                 $typename = 'type-backend-sys';
                 break;
 
-            case self::PRJ_TYPE_COMP_BACK:
+            case eProjectType::PRJ_TYPE_COMP_BACK:
                 $typename = 'type-backend';
                 break;
 
-            case self::PRJ_TYPE_COMP_SITE:
+            case eProjectType::PRJ_TYPE_COMP_SITE:
                 $typename = 'type-site';
                 break;
 
-            case self::PRJ_TYPE_MODEL:
+            case eProjectType::PRJ_TYPE_MODEL:
                 $typename = 'type-model';
                 break;
 
-            case self::PRJ_TYPE_PLUGIN:
+            case eProjectType::PRJ_TYPE_PLUGIN:
                 $typename = 'type-plugin';
                 break;
         }
 
         return $typename;
     }
+
+    public static function int2prjType2(int $prjTypeInt) : eProjectType
+    {
+        $prjType = eProjectType::PRJ_TYPE_NONE;
+
+        switch ($prjTypeInt) {
+            case 0:
+            $prjType = eProjectType::PRJ_TYPE_NONE;
+                break;
+
+            case 1:
+            $prjType = eProjectType::PRJ_TYPE_COMP_BACK_SYS;
+                break;
+
+            case 2:
+            $prjType = eProjectType::PRJ_TYPE_COMP_BACK;
+                break;
+
+            case 3:
+            $prjType = eProjectType::PRJ_TYPE_COMP_SITE;
+                break;
+
+            case 4:
+            $prjType = eProjectType::PRJ_TYPE_MODEL;
+                break;
+
+            case 5:
+            $prjType = eProjectType::PRJ_TYPE_PLUGIN;
+                break;
+        }
+
+        return $prjType;
+    }
+
+    public static function prjType2int(eProjectType $prjType) : string
+    {
+        $prjTypeInt = 0;
+
+        switch ($prjType) {
+            case eProjectType::PRJ_TYPE_NONE:
+                $prjTypeInt = 0;
+                break;
+
+            case eProjectType::PRJ_TYPE_COMP_BACK_SYS:
+                $prjTypeInt = 1;
+                break;
+
+            case eProjectType::PRJ_TYPE_COMP_BACK:
+                $prjTypeInt = 2;
+                break;
+
+            case eProjectType::PRJ_TYPE_COMP_SITE:
+                $prjTypeInt = 3;
+                break;
+
+            case eProjectType::PRJ_TYPE_MODEL:
+                $prjTypeInt = 4;
+                break;
+
+            case eProjectType::PRJ_TYPE_PLUGIN:
+                $prjTypeInt = 5;
+                break;
+        }
+
+        return $prjTypeInt;
+    }
+
 
 } // class

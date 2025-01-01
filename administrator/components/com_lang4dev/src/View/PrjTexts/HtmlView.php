@@ -127,9 +127,6 @@ class HtmlView extends BaseHtmlView
         // $this->project = selectProject('joomla4x');
         /**/
 
-        // script- / install file, language files as list
-        // not any more: $project->findPrjFiles();
-        // $project->detectLangFiles();
 
         //--- collect content ---------------------------------------------------
 

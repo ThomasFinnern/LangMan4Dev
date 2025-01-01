@@ -161,8 +161,8 @@ class langFileNamesSet
         /*--- lang file origin defined in manifest file -----------------------*/
 
         // on backend use administrator files
-        if ($prjType == projectType::PRJ_TYPE_COMP_BACK
-            || $prjType == projectType::PRJ_TYPE_COMP_BACK_SYS) {
+        if ($prjType == eProjectType::PRJ_TYPE_COMP_BACK
+            || $prjType == eProjectType::PRJ_TYPE_COMP_BACK_SYS) {
 
             $LangFileNames = $manifestLang->adminLangFilePaths;
 
@@ -174,13 +174,13 @@ class langFileNamesSet
 				        $isSysIni = str_ends_with($langFilePath, '.sys.ini');
 
 				        // backend system ?
-				        if ($prjType == projectType::PRJ_TYPE_COMP_BACK_SYS && $isSysIni)
+				        if ($prjType == eProjectType::PRJ_TYPE_COMP_BACK_SYS && $isSysIni)
 				        {
 					        $xmlLangNames [] = $langFilePathInfo;
 				        }
 
 				        // backend standard ?
-				        if ($prjType == projectType::PRJ_TYPE_COMP_BACK && !$isSysIni)
+				        if ($prjType == eProjectType::PRJ_TYPE_COMP_BACK && !$isSysIni)
 				        {
 					        $xmlLangNames [] = $langFilePathInfo;
 				        }
@@ -213,8 +213,8 @@ class langFileNamesSet
         /*--- lang file origin defined in manifest file -----------------------*/
 
         // on backend use administrator files
-        if ($prjType == projectType::PRJ_TYPE_COMP_BACK
-            || $prjType == projectType::PRJ_TYPE_COMP_BACK_SYS) {
+        if ($prjType == eProjectType::PRJ_TYPE_COMP_BACK
+            || $prjType == eProjectType::PRJ_TYPE_COMP_BACK_SYS) {
 
             $LangFileNames = $manifestLang->adminLangFilePaths;
 
@@ -234,13 +234,13 @@ class langFileNamesSet
 
 				        //--- assign depending on type ---------------------
 
-				        if ($prjType == projectType::PRJ_TYPE_COMP_BACK_SYS && $isSysIni)
+				        if ($prjType == eProjectType::PRJ_TYPE_COMP_BACK_SYS && $isSysIni)
 				        {
 					        $xmlLangNames [] = $langFilePathInfo;
 				        }
 
 				        // backend standard ?
-				        if ($prjType == projectType::PRJ_TYPE_COMP_BACK && !$isSysIni)
+				        if ($prjType == eProjectType::PRJ_TYPE_COMP_BACK && !$isSysIni)
 				        {
 					        $xmlLangNames [] = $langFilePathInfo;
 				        }
@@ -659,28 +659,28 @@ class langFileNamesSet
         $basePath = JPATH_ADMINISTRATOR . '/language';
 
         switch ($prjType) {
-            case projectType::PRJ_TYPE_NONE:
+            case eProjectType::PRJ_TYPE_NONE:
                 break;
 
-            case projectType::PRJ_TYPE_COMP_BACK_SYS:
+            case eProjectType::PRJ_TYPE_COMP_BACK_SYS:
                 // admin
                 break;
 
-            case projectType::PRJ_TYPE_COMP_BACK:
+            case eProjectType::PRJ_TYPE_COMP_BACK:
                 // admin
                 break;
 
-            case projectType::PRJ_TYPE_COMP_SITE:
+            case eProjectType::PRJ_TYPE_COMP_SITE:
                 // site
                 $basePath = JPATH_ROOT . '/language';
                 break;
 
-            case projectType::PRJ_TYPE_MODEL:
+            case eProjectType::PRJ_TYPE_MODEL:
                 // site
                 $basePath = JPATH_ROOT . '/language';
                 break;
 
-            case projectType::PRJ_TYPE_PLUGIN:
+            case eProjectType::PRJ_TYPE_PLUGIN:
                 // admin
                 break;
         }
@@ -695,35 +695,35 @@ class langFileNamesSet
      *
      * @since version
      */
-    public function langBasePathInsideProject(string $prjXmlFilePath='', int $prjType=projectType::PRJ_TYPE_NONE)
+    public function langBasePathInsideProject(string $prjXmlFilePath='', eProjectType $prjType=eProjectType::PRJ_TYPE_NONE)
     {
         // most used is xml path
         $basePath = $prjXmlFilePath . '/language';
 
-        if ($prjType == projectType::PRJ_TYPE_COMP_SITE) {
+        if ($prjType == eProjectType::PRJ_TYPE_COMP_SITE) {
             //$basePath = str_replace($basePath, '/administrator', '');
             $basePath = str_replace('/administrator', '', $basePath);
         }
 
 //        switch ($prjType) {
-//            case projectType::PRJ_TYPE_COMP_SITE:
+//            case eProjectType::PRJ_TYPE_COMP_SITE:
 //                // site
 //                $basePath = str_replace ($basePath, '/administrator', '');
 //                break;
 //
-//            case projectType::PRJ_TYPE_NONE:
+//            case eProjectType::PRJ_TYPE_NONE:
 //                break;
 //
-//            case projectType::PRJ_TYPE_COMP_BACK_SYS:
+//            case eProjectType::PRJ_TYPE_COMP_BACK_SYS:
 //                break;
 //
-//            case projectType::PRJ_TYPE_COMP_BACK:
+//            case eProjectType::PRJ_TYPE_COMP_BACK:
 //                break;
 //
-//            case projectType::PRJ_TYPE_MODEL:
+//            case eProjectType::PRJ_TYPE_MODEL:
 //                break;
 //
-//            case projectType::PRJ_TYPE_PLUGIN:
+//            case eProjectType::PRJ_TYPE_PLUGIN:
 //                break;
 //        }
 

@@ -12,6 +12,7 @@ namespace Finnern\Component\Lang4dev\Administrator\Model;
 defined('_JEXEC') or die;
 
 use Exception;
+use Finnern\Component\Lang4dev\Administrator\Helper\eProjectType;
 use Finnern\Component\Lang4dev\Administrator\Helper\langProject;
 use Finnern\Component\Lang4dev\Administrator\Helper\projectType;
 use Finnern\Component\Lang4dev\Administrator\Helper\sessionProjectId;
@@ -112,7 +113,7 @@ class PrjTextsModel extends AdminModel
 
             $subPrj = $project->addSubProject(
                 $dbSub->prjId,
-                $dbSub->subPrjType,
+                projectType::int2prjType2( $dbSub->subPrjType),
                 $dbSub->root_path,
                 $dbSub->prjXmlPathFilename
             );

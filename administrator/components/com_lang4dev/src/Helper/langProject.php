@@ -52,8 +52,8 @@ class langProject
      * @since version
      */
     public function addSubProject(
-        $prjId = '',
-        $prjType = '', // ToDo: enum from sub ?
+        string $prjId = '',
+        eProjectType $prjType = eProjectType::PRJ_TYPE_NONE,
         $prjRootPath = '',
         $prjXmlFilePath = ''
     ) {
@@ -278,9 +278,8 @@ class langProject
 
         try {
             foreach ($this->subProjects as $subProject) {
-                $prjId                     = $subProject->prjId . ':' . projectType::getPrjTypeText(
-                        $subProject->prjType
-                    );
+                $prjId                     = $subProject->prjId . ':'
+                    . projectType::getPrjTypeText($subProject->prjType);
                 $langFileSetsPrjs [$prjId] = $subProject->langFileNamesSet;
             }
         } catch (RuntimeException $e) {

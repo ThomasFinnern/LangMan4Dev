@@ -997,7 +997,7 @@ class SubprojectModel extends AdminModel
         $data = [];
 
         /**/
-        // $data ['title'] = $subProject->prjId . '_' . projectType::getPrjTypeText($subProject->prjId);
+        // $data ['title'] = $subProject->prjId . '_' . eProjectType::getPrjTypeText($subProject->prjId);
         // $data ['alias'] = $subProject->;
 
         $data ['id']                = $existingId;
@@ -1051,7 +1051,7 @@ class SubprojectModel extends AdminModel
         $data        = [];
         $data ['id'] = 0;
 
-        $data ['title'] = '(' . $parentId . ') ' . $subProject->prjId . '_' . projectType::getPrjTypeText(
+        $data ['title'] = '(' . $parentId . ') ' . $subProject->prjId . '_' . eProjectType::getPrjTypeText(
                 $subProject->prjType
             );
         $data ['alias'] = strtolower($data ['title']);
