@@ -410,8 +410,14 @@ class ProjectModel extends AdminModel
             // Pre-select some filters (Status, Language, Access) in edit form if those have been selected in Category Manager
             if (!$data->id) {
                 // Check for which extension the Category Manager is used and get selected fields
-                $extension = substr($app->getUserState('com_lang4dev.galleries.filter.extension'), 4);
-                $filters   = (array)$app->getUserState('com_lang4dev.galleries.' . $extension . '.filter');
+                $userState = $app->getUserState('com_lang4dev.galleries.filter.extension');
+                if (strlen($userState) > 4) {
+                    $extension = substr($userState, 4);
+                    $filters   = (array)$app->getUserState('com_lang4dev.galleries.' . $extension . '.filter');
+                } else {
+
+                    $filters = new \stdClass();
+                }
 
                 $data->set(
                     'published',

@@ -65,21 +65,21 @@
 			      img="class:config"
 			      link="option=com_config&amp;view=component&amp;component=com_lang4dev">COM_LANG4DEV_MENU_CONFIG
 			</menu>
-			<!--menu view="COM_LANG4DEV_MENU_???1"
+			<!--menu view="COM_LANG4DEV_MENU_TEST_01"
 			      img="class:equalizer"
-			      link="option=com_lang4dev&amp;view=maintenance">COM_LANG4DEV_MENU_???1
+			      link="option=com_lang4dev&amp;view=maintenance">COM_LANG4DEV_MENU_TEST_01
 			</menu-->
-			<menu view="COM_LANG4DEV_MENU_???1"
+			<menu view="COM_LANG4DEV_MENU_TEST_01"
 			      img="class:equalizer"
-			      link="option=com_lang4dev&amp;view=maintenance">COM_LANG4DEV_MENU_???1
+			      link="option=com_lang4dev&amp;view=maintenance">COM_LANG4DEV_MENU_TEST_01
 			</menu>
-			<!--menu view="COM_LANG4DEV_MENU_???2"
+			<!--menu view="COM_LANG4DEV_MENU_TEST_02"
 			      img="class:equalizer"
-			      link="option=com_lang4dev&amp;view=maintenance">COM_LANG4DEV_MENU_???2
+			      link="option=com_lang4dev&amp;view=maintenance">COM_LANG4DEV_MENU_TEST_02
 			</menu-->
-			<menu view="COM_LANG4DEV_MENU_???2"
+			<menu view="COM_LANG4DEV_MENU_TEST_02"
 			      img="class:equalizer"
-			      link="option=com_lang4dev&amp;view=maintenance">COM_LANG4DEV_MENU_???2
+			      link="option=com_lang4dev&amp;view=maintenance">COM_LANG4DEV_MENU_TEST_02
 			</menu>
 			<!--menu view="COM_LANG4DEV_MENU_MAINTENANCE2" test comment 2 -->
 			<!--menu view="COM_LANG4DEV_MENU_MAINTENANCE2" test comment 2 -->

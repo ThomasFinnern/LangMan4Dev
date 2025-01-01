@@ -53,31 +53,51 @@ function renderProjectSelection($form)
     <HR>
 
 	<?php
-
     //--- project ------------------------------------------------------
+	$prjInfo = json_encode($this->project, JSON_PRETTY_PRINT);
+	$subPrjInfo = json_encode(json_encode($this->project->subProjects), JSON_PRETTY_PRINT);
+	if ($prjInfo == false) {
+        $prjInfo = '{' . "\n";
 
-    //echo '<br>';
-    echo '<h2>' . Text::_('COM_LANG4DEV_PROJECT_RAW') . '</h2>';
+            $prjInfo .= '   "prjName": "' . $this->project->prjName . '"' . "\n";
+            $prjInfo .= '   "prjRootPath": "' . $this->project->prjRootPath . '"' . "\n";
+            $prjInfo .= '   "langIdPrefix": "' . $this->project->langIdPrefix . '"' . "\n";
+            //$prjInfo .= '   "subProjects": ' . json_encode($this->project->subProjects) . '"' . "\n";
+            $prjInfo .= '   "subProjects": [';
 
-	//echo '<pre><code>';
-    echo '<div class="bg-white">';
-	echo '<pre>';
-    //echo '<code>';
-	echo json_encode($this->project, JSON_PRETTY_PRINT);
-	//echo '</code></pre>';
-	echo '</pre>';
-	//echo '</code>';
-	echo '</div>';
-	//echo '<br>';
+			// imitate parts of json_encode subProjects
+			if (count($this->project->subProjects)) {
+                foreach ($this->project->subProjects as $subProject) {
+                    $prjInfo .= $subProject->prjType->name . ", ";
+                }
+                $prjInfo = substr($prjInfo, 0, -2);
+                $prjInfo .= ']' . "\n";
+            } else {
+
+                $prjInfo .= '   "subProjects": []' . "\n";
+			}
+
+            $prjInfo .= '   "dbId": ' . $this->project->dbId . "\n";
+
+        $prjInfo .= '}';
+
+	}
     ?>
 
-	<?php
+    <h2><?php echo Text::_('COM_LANG4DEV_PROJECT_RAW'); ?></h2>
 
+    <div class="bg-white">
+		<pre>
+<?php echo $prjInfo; ?>
+		</pre>
+	</div>
+
+	<?php
 	//--- found lang files list ------------------------------------------------------
 
 	if ( ! empty ($this->langFileSetsPrjs))
 	{
-		echo 'hr';
+		echo '<hr>';
 
 		echo '<h2>' . Text::_('COM_LANG4DEV_LANG_FILES_LIST') . '</h2>';
 
@@ -114,7 +134,7 @@ function renderProjectSelection($form)
     <?php
     if ( ! empty ($this->manifestLang))
     {
-        echo 'hr';
+        echo '<hr>';
 
 	    $manifestText = implode("<br>", $this->manifestLang->__toText());
 

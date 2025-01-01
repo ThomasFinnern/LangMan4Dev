@@ -196,7 +196,7 @@ class HtmlView extends BaseHtmlView
                 . '<b>Tasks:</b> <br>'
                 . '* use mainLangId from (config / session) used in files view ? <br>'
                 . '* Use OutText / ? outtxt for AD HOC texts<br>'
-//				. '* <br>'
+				. '* Project (sub) data: === langProject: show on debug backend or No subprojects defined   <br>'
 //				. '* <br>'
 //				. '* <br>'
 //				. '* <br>'
