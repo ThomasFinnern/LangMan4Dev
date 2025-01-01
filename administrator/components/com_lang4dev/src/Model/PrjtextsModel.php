@@ -196,21 +196,22 @@ class PrjTextsModel extends AdminModel
             // Get the options.
             $prjDb = $db->setQuery($query)->loadObject();
 
-            // $project->prjName = $prjDb->name;
-            $project->prjName     = $prjDb->title;
-            $project->prjRootPath = $prjDb->root_path;
+            if ( ! empty ($prjDb->name)) {
+                // $project->prjName = $prjDb->name;
+                $project->prjName     = $prjDb->title;
+                $project->prjRootPath = $prjDb->root_path;
 
-            /** doesn't have these ... *
-             * $project->prjXmlPathFilename = $prjDb->prjXmlPathFilename;
-             * $project->installPathFilename = $prjDb->installPathFilename;
-             * $project->prefix = $prjDb->prefix;
-             * $project->subPrjType = $prjDb->subPrjType;
-             * /**/
+                /** doesn't have these ... *
+                 * $project->prjXmlPathFilename = $prjDb->prjXmlPathFilename;
+                 * $project->installPathFilename = $prjDb->installPathFilename;
+                 * $project->prefix = $prjDb->prefix;
+                 * $project->subPrjType = $prjDb->subPrjType;
+                 * /**/
 
-            // = prjType ???
-            // Not in DB actually: $project->langIdPrefix = $prjDb->;
-            // $project->isSysFileFound = $prjDb->;
-
+                // = prjType ???
+                // Not in DB actually: $project->langIdPrefix = $prjDb->;
+                // $project->isSysFileFound = $prjDb->;
+            }
         } catch (RuntimeException $e) {
             $OutTxt = '';
             $OutTxt .= 'Error executing collectSubProjectIds: ' . '<br>';

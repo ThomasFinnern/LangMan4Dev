@@ -141,7 +141,7 @@ class HtmlView extends BaseHtmlView
         if (!empty ($this->isDevelop)) {
             echo '<span style="color:red">'
                 . '<b>Tasks:</b> <br>'
-                . '* <br>'
+                . '* Button edit on select ... <br>'
                 . '* <br>'
 //				. '* <br>'
 //				. '* <br>'

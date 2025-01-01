@@ -97,19 +97,11 @@ class HtmlView extends BaseHtmlView
         switch ($Layout) {
             /**
              * case 'RawView':
-             * ToolBarHelper::title(Text::_('COM_Lang4dev_MAINTENANCE')
-             * . ': ' . Text::_('COM_Lang4dev_CONFIGURATION_RAW_VIEW'), 'screwdriver');
-             * ToolBarHelper::cancel('config.cancel_rawView', 'JTOOLBAR_CLOSE');
-             *
              *
              * break;
              *
              * case 'RawEdit':
-             * ToolBarHelper::title(Text::_('COM_Lang4dev_MAINTENANCE')
-             * . ': ' . Text::_('COM_Lang4dev_CONFIGURATION_RAW_EDIT'), 'screwdriver');
-             * ToolBarHelper::apply('config.apply_rawEdit');
-             * ToolBarHelper::save('config.save_rawEdit');
-             * ToolBarHelper::cancel('config.cancel_rawEdit', 'JTOOLBAR_CLOSE');
+             *
              * break;
              * /**/
             default:

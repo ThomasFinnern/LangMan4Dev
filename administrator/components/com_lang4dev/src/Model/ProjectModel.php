@@ -411,12 +411,12 @@ class ProjectModel extends AdminModel
             if (!$data->id) {
                 // Check for which extension the Category Manager is used and get selected fields
                 $userState = $app->getUserState('com_lang4dev.galleries.filter.extension');
-                if (strlen($userState) > 4) {
+                if (!empty($userState) && ($userState > 4)) {
                     $extension = substr($userState, 4);
                     $filters   = (array)$app->getUserState('com_lang4dev.galleries.' . $extension . '.filter');
                 } else {
 
-                    $filters = new \stdClass();
+//                    $filters = new \stdClass();
                 }
 
                 $data->set(

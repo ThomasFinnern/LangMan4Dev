@@ -139,7 +139,7 @@ class HtmlView extends BaseHtmlView
         if (!empty ($this->isDevelop)) {
             echo '<span style="color:red">'
                 . '<b>Tasks:</b> <br>'
-                . '* <br>'
+                . '* Add count subprojects as column<br>'
                 . '* <br>'
 //				. '* <br>'
 //				. '* <br>'
