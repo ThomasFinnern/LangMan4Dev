@@ -46,5 +46,51 @@
 
   }
 
+  .prj_data_container {
+
+    .card {
+      .card-header {
+
+        background-color: #ced4da;
+
+      }
+    }
+
+    //.prj_data_ {
+    //
+    //}
+
+  }
+
+  .prj_data_empty_container {
+
+    .card {
+      .card-header {
+
+        background-color: #ced4da;
+
+      }
+    }
+
+  }
+
+  .prj_id_type_header {
+
+    display: flex;
+
+    .prj_id_type_header_id_type {
+
+      justify-content: center;
+      flex-grow: 1;
+      padding: 2px;
+
+
+    }
+    .prj_id_type_header_filename ..... yyyy
+
+
+  }
+
+
 
 }

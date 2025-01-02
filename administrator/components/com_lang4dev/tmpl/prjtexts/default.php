@@ -37,11 +37,12 @@ echo Route::_('index.php?option=com_lang4dev&view=prjtexts'); ?>"
 
 	    <?php renderProjectSelection($this->form); ?>
 
+        // ToDo: tell main lang and info
+
 	</div>
 
+    <div class='prj_data_empty_container'>
     <?php
-
-    // ToDo: tell main lang and info
 
     $idx = 1;
 
@@ -52,14 +53,14 @@ echo Route::_('index.php?option=com_lang4dev&view=prjtexts'); ?>"
 
             ?>
             <div class="card ">
-                <h2 class="card-header " style="background-color: #ced4da;">
+                <h2 class="card-header ">
                     <?php
 
                     renderHeaderPrjIdType($subProjectData->prjIdAndTypeText, $subProjectData->langFileNames, $subProjectData->componentLangPath);
 
                     ?>
-
                 </h2>
+
                 <div class="card-body">
                     <!-- h5 class="card-title"></h5-->
                     <p class="card-text">
@@ -70,32 +71,37 @@ echo Route::_('index.php?option=com_lang4dev&view=prjtexts'); ?>"
                         // fields ['missing, same, notUsed, doubles']
                         $transIdsClassified = $this->transIdsClassified[$subProjectData->prjIdAndTypeText];
 
-                        // ToDo: interface parameters
-                        $missing = $transIdsClassified['missing'];
-                        $same    = $transIdsClassified['same'];
-                        $notUsed = $transIdsClassified['notUsed'];
-                        $doubles = $transIdsClassified['doubles'];
-
-                        // renderMissingPreparedTransIds ($missing, $comment);
+                        // ??? renderMissingPreparedTransIds ($missing, $comment);
 
                         // ToDo: Use constants ?
-                        renderSubProjectStatistic($missing, $same, $notUsed, $doubles, $comment);
+                        renderSubProjectStatistic($transIdsClassified['missing'],
+                            $transIdsClassified['same'],
+                            $transIdsClassified['notUsed'],
+                            $transIdsClassified['doubles']);
 
                         ?>
                     </p>
                 </div>
             </div>
-            <?php
+
+        </div>
+    <?php
         }
     } else {
-        // ToDo: use bootstrap card
-        echo '<br>';
-        echo '<h2>' . Text::_('COM_LANG4DEV_NO_SUB_PROJECTS_DEFINED_FOR_PROJECT') . '</h2>';
-        echo ' ' . Text::_('COM_LANG4DEV_NO_SUB_PROJECTS_DEFINED_FOR_PROJECT_DESC') . ' ';
-    }
     ?>
+        <div class='prj_data_empty_container'>
+            <div class="card ">
+                <h2 class="card-header ">
+                    <?php Text::_('COM_LANG4DEV_NO_SUB_PROJECTS_DEFINED_FOR_PROJECT'); ?>
+                </h2>
 
+                <div class="card-body">
+                    <?php Text::_('COM_LANG4DEV_NO_SUB_PROJECTS_DEFINED_FOR_PROJECT_DESC'); ?>
+                </div>
+            </div>
+        </div>
 	<?php
+    }
 
 	if ($this->isDebugBackend)
 	{
@@ -136,7 +142,8 @@ function renderHeaderPrjIdType(
     ?>
 	<!--div class="row g-2"-->
 	<div class="row">
-		<div class="d-flex align-items-center">
+	<div class="prj_id_type_header">
+    	<div class="prj_id_type_header_id_type">
 			<div class="p-2 flex-grow-1">
 
                 <?php
@@ -144,6 +151,7 @@ function renderHeaderPrjIdType(
 
 			</div>
 
+		<div class="prj_id_type_header_filename "> yyyyy
 			<div class="p-2 fs-4">
                 <?php
                 foreach ($fileNames as $fileName) {
@@ -156,7 +164,9 @@ function renderHeaderPrjIdType(
                 echo $path; ?>
 			</div>
 		</div>
+		</div>
 
+	</div>
 	</div>
     <?php
 
