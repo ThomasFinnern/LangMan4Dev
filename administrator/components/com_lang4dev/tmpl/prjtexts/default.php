@@ -150,8 +150,8 @@ function renderHeaderPrjIdType(
                 echo $prjIdAndType; ?>
 
 			</div>
-
-		<div class="prj_id_type_header_filename "> yyyyy
+<!--yyyyy-->
+		<div class="prj_id_type_header_filename ">
 			<div class="p-2 fs-4">
                 <?php
                 foreach ($fileNames as $fileName) {

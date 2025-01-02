@@ -13,6 +13,8 @@ defined('_JEXEC') or die;
 use Joomla\CMS\HTML\HTMLHelper;
 use Joomla\CMS\Router\Route;
 
+$this->document->getWebAssetManager()->useStyle('com_lang4dev.backend.translations');
+
 ?>
 <form action="<?php
 echo Route::_('index.php?option=com_lang4dev&view=translations'); ?>" method="post" name="adminForm"

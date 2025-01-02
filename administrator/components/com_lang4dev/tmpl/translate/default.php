@@ -17,6 +17,8 @@ use Joomla\CMS\Router\Route;
 
 use Finnern\Component\Lang4dev\Administrator\Helper\langFile;
 
+$this->document->getWebAssetManager()->useStyle('com_lang4dev.backend.translate');
+
 function renderProjectSelection($form)
 {
     ?>
