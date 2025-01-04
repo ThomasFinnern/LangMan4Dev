@@ -26,8 +26,9 @@
 
 	<field name="prjId"
 	       type="text"
-	       label="COM_LANG4DEV_SUBPROJECT_ID"
-	       description="COM_LANG4DEV_SUBPROJECT_ID_DESC"
+	       label="COM_LANG4DEV_COMPONENT_NAME"
+	       description="COM_LANG4DEV_COMPONENT_NAME_DESC"
+	       readonly="true"
 	/>
 
 	<field name="subPrjType"
@@ -51,7 +52,7 @@
 
 	<field name="prefix"
 	       type="text"
-	       label="COM_LANG4DEV_SUBPROJECT_PREFIX"
+	       label="COM_LANG4DEV_SUBPROJECT_LANG_PREFIX"
 	       description="COM_LANG4DEV_SUBPROJECT_PREFIX_DESC"
 	/>
 

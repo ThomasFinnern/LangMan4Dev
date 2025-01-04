@@ -48,6 +48,51 @@
         "com_lang4dev.backend.prjTexts#style",
         "com_lang4dev.lib.bs_set2dark#script"
       ]
+    },
+    {
+      "name": "com_lang4dev.backend.translate",
+      "description": "Backend styling.",
+      "type": "style",
+      "uri": "com_lang4dev/backend/translate.css"
+    },
+
+    {
+      "name": "com_lang4dev.backend.translate",
+      "type": "preset",
+      "dependencies": [
+        "com_lang4dev.backend.translate#style",
+        "com_lang4dev.lib.bs_set2dark#script"
+      ]
+    },
+    {
+      "name": "com_lang4dev.backend.maintenance",
+      "description": "Backend styling.",
+      "type": "style",
+      "uri": "com_lang4dev/backend/maintenance.css"
+    },
+
+    {
+      "name": "com_lang4dev.backend.maintenance",
+      "type": "preset",
+      "dependencies": [
+        "com_lang4dev.backend.maintenance#style",
+        "com_lang4dev.lib.bs_set2dark#script"
+      ]
+    },
+    {
+      "name": "com_lang4dev.backend.translation",
+      "description": "Backend styling.",
+      "type": "style",
+      "uri": "com_lang4dev/backend/translation.css"
+    },
+
+    {
+      "name": "com_lang4dev.backend.translation",
+      "type": "preset",
+      "dependencies": [
+        "com_lang4dev.backend.translation#style",
+        "com_lang4dev.lib.bs_set2dark#script"
+      ]
     }
 
   ]

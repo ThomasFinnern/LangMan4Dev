@@ -86,7 +86,17 @@
 
 
     }
-    .prj_id_type_header_filename ..... yyyy
+
+    .prj_id_type_header_files_info {
+      .prj_id_type_header_filename {
+        padding: 2px;
+      }
+
+      .prj_id_type_header_path {
+        padding: 2px;
+      }
+
+    }
 
 
   }

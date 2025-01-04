@@ -19,6 +19,8 @@ use Joomla\CMS\Router\Route;
 use Joomla\CMS\Session\Session;
 use Joomla\String\Inflector;
 
+use Finnern\Component\Lang4dev\Administrator\Helper\projectType;
+
 HTMLHelper::_('behavior.multiselect');
 //HTMLHelper::_('bootstrap.framework');
 
@@ -78,23 +80,22 @@ echo Route::_('index.php?option=com_lang4dev&view=subprojects'); ?>"
         <?php
         if (empty($this->items)) : ?>
 
-		<div class="card border-danger mb-3"
-		">
-		<div class="card-header"><?php
-            echo Text::_('NOTICE'); ?></div>
-		<div class="card-body">
-			<!--div class="alert alert-info"-->
-			<span class="fa fa-info-circle" aria-hidden="true"></span><span
-					class="sr-only"><?php
-                echo Text::_('INFO'); ?></span>
-            <?php
-            echo Text::_('COM_LANG4DEV_CREATE_A_SUBPROJECT_FIRST'); // JGLOBAL_NO_MATCHING_RESULTS ?>
-			<!--/div-->
-		</div>
-	</div>
+			<div class="card border-danger mb-3">
+				<div class="card-header"><?php echo Text::_('NOTICE'); ?>
+				</div>
+				<div class="card-body">
+					<!--div class="alert alert-info"-->
+					<span class="fa fa-info-circle" aria-hidden="true"></span><span
+							class="sr-only"><?php
+		                echo Text::_('INFO'); ?></span>
+		            <?php
+		            echo Text::_('COM_LANG4DEV_CREATE_A_SUBPROJECT_FIRST'); // JGLOBAL_NO_MATCHING_RESULTS ?>
+					<!--/div-->
+				</div>
+			</div>
 
-    <?php
-    else : ?>
+	    <?php
+	    else : ?>
 
 		<table class="table table-sm" id="subprojetsList">
 			<caption id="captionTable" class="sr-only">
@@ -164,7 +165,7 @@ echo Route::_('index.php?option=com_lang4dev&view=subprojects'); ?>"
 
 				<th scope="col" >
                     <?php
-                    echo Text::_('COM_LANG4DEV_SUBPROJECT_PREFIX'); ?>
+                    echo Text::_('COM_LANG4DEV_COMPONENT_NAME'); ?>
 				</th>
 
 				<th scope="col" >
@@ -270,7 +271,7 @@ echo Route::_('index.php?option=com_lang4dev&view=subprojects'); ?>"
 
                     <td class="small d-none d-md-table-cell">
 		                <?php
-                        echo $item->subPrjType;
+                        echo projectType::getPrjTypeText(projectType::int2prjType($item->subPrjType));
                         ?>
                     </td>
 

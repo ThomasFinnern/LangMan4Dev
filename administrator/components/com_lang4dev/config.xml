@@ -312,6 +312,7 @@
 			<option value="0">JNO</option>
 			<option value="1">JYES</option>
 		</field>
+		<!--
 		<field
 				id="isDebugSite"
 				name="isDebugSite"
@@ -326,6 +327,7 @@
 			<option value="0">JNO</option>
 			<option value="1">JYES</option>
 		</field>
+		-->
 		<field
 				id="isDevelop"
 				name="isDevelop"

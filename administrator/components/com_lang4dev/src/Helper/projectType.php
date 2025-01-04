@@ -198,7 +198,7 @@ class projectType
         return $typename;
     }
 
-    public static function int2prjType2(int $prjTypeInt) : eProjectType
+    public static function int2prjType(int $prjTypeInt) : eProjectType
     {
         $prjType = eProjectType::PRJ_TYPE_NONE;
 

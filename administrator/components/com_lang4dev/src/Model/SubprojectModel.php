@@ -12,6 +12,7 @@ namespace Finnern\Component\Lang4dev\Administrator\Model;
 defined('_JEXEC') or die;
 
 use Exception;
+use Finnern\Component\Lang4dev\Administrator\Helper\eProjectType;
 use Finnern\Component\Lang4dev\Administrator\Helper\projectType;
 use JForm;
 use Joomla\CMS\Access\Rules;
@@ -997,12 +998,12 @@ class SubprojectModel extends AdminModel
         $data = [];
 
         /**/
-        // $data ['title'] = $subProject->prjId . '_' . eProjectType::getPrjTypeText($subProject->prjId);
+        // $data ['title'] = $subProject->prjId . '_' . rojectType::getPrjTypeText($subProject->prjId);
         // $data ['alias'] = $subProject->;
 
         $data ['id']                = $existingId;
         $data ['prjId']             = $subProject->prjId;
-        $data ['subPrjType']        = $subProject->prjType;
+        $data ['subPrjType']        = projectType::prjType2int($subProject->prjType);
         $data ['root_path']         = $subProject->prjRootPath;
         $data ['prefix']            = $subProject->langIdPrefix;
         $data ['notes']             = '%';
@@ -1051,13 +1052,13 @@ class SubprojectModel extends AdminModel
         $data        = [];
         $data ['id'] = 0;
 
-        $data ['title'] = '(' . $parentId . ') ' . $subProject->prjId . '_' . eProjectType::getPrjTypeText(
+        $data ['title'] = '(' . $parentId . ') ' . $subProject->prjId . '_' . projectType::getPrjTypeText(
                 $subProject->prjType
             );
         $data ['alias'] = strtolower($data ['title']);
 
         $data ['prjId']             = $subProject->prjId;
-        $data ['subPrjType']        = $subProject->prjType;
+        $data ['subPrjType']        = projectType::prjType2int($subProject->prjType);
         $data ['root_path']         = $subProject->prjRootPath;
         $data ['prefix']            = $subProject->langIdPrefix;
         $data ['notes']             = '%';
@@ -1102,7 +1103,7 @@ class SubprojectModel extends AdminModel
     {
         $existingId = false; // indicates nothing found in DB
 
-        $prjType = $subProject->prjType;
+        $prjType = projectType::prjType2int($subProject->prjType);
         $prjId   = $subProject->prjId;
 
         $db    = Factory::getDbo();

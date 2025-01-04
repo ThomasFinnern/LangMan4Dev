@@ -279,7 +279,7 @@ class ProjectTable extends Table
 	public function generateAlias()
 	{
 		if (empty($this->alias)) {
-			$this->alias = $this->name;
+			$this->alias = $this->title;
 		}
 
 		$this->alias = ApplicationHelper::stringURLSafe($this->alias, $this->language);

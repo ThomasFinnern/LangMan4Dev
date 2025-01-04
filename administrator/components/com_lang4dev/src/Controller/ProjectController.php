@@ -130,6 +130,7 @@ class projectController extends FormController
             $data  = $input->post->get('jform', array(), 'array');
 
             $id          = (int)$data ['id'];
+            // ToDo: use component_name or project_id in db und view. attention alias
             $prjId       = trim($data ['name']);
             $prjRootPath = trim($data ['root_path']);
 

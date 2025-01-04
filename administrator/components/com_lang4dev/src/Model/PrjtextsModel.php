@@ -113,7 +113,7 @@ class PrjTextsModel extends AdminModel
 
             $subPrj = $project->addSubProject(
                 $dbSub->prjId,
-                projectType::int2prjType2( $dbSub->subPrjType),
+                projectType::int2prjType( $dbSub->subPrjType),
                 $dbSub->root_path,
                 $dbSub->prjXmlPathFilename
             );

@@ -150,20 +150,20 @@ function renderHeaderPrjIdType(
                 echo $prjIdAndType; ?>
 
 			</div>
-<!--yyyyy-->
-		<div class="prj_id_type_header_filename ">
-			<div class="p-2 fs-4">
-                <?php
-                foreach ($fileNames as $fileName) {
-                    echo '&nbsp;' . $fileName . '<br>';
-                }
-                ?>
+
+			<div class="prj_id_type_header_files_info ">
+				<div class="prj_id_type_header_filename fs-4">
+	                <?php
+	                foreach ($fileNames as $fileName) {
+	                    echo '&nbsp;' . $fileName . '<br>';
+	                }
+	                ?>
+				</div>
+				<div class="prj_id_type_header_path fs-4">
+	                <?php
+	                echo $path; ?>
+				</div>
 			</div>
-			<div class="p-2 fs-4">
-                <?php
-                echo $path; ?>
-			</div>
-		</div>
 		</div>
 
 	</div>

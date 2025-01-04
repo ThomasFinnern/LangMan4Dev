@@ -109,7 +109,7 @@ class subprojectController extends FormController
         // subproject
         /**/
         $prjId   = $data ['prjId'];
-        $prjType = (int)$data ['subPrjType'];
+        $prjType = projectType::int2prjType((int)$data ['subPrjType']);
 
         $rootPath           = trim($data ['root_path']);
         $data ['root_path'] = $rootPath;
