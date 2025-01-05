@@ -8,6 +8,51 @@ $rsg2-colors: (
 );
 
 
+.project_selection_container {
+
+  //border: 2px solid lightgrey;
+  //border-radius: 4px;
+
+  //padding: 10px;
+  //// padding: 10px 10px 10px 1px;
+  //margin-left: 20px;
+  //max-width: 600px;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+
+  .project_selection {
+
+    border: 2px solid lightgrey;
+    border-radius: 4px;
+
+    padding: 10px 10px 0px 10px;
+    // padding: 10px 10px 10px 1px;
+    // margin-left: 20px 0px 20px;
+    margin: 5px 0px 5px 20px;
+
+    max-width: 600px;
+
+    .project_selection_setting {
+
+      justify-content: flex-start;
+      //border: 2px solid lightblue;
+
+      .control-label {
+
+        // background-color: red;
+        max-width: 150px;
+
+      }
+
+    }
+
+  }
+
+
+}
+
 
 
 

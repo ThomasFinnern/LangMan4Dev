@@ -161,8 +161,8 @@ class langFileNamesSet
         /*--- lang file origin defined in manifest file -----------------------*/
 
         // on backend use administrator files
-        if ($prjType == eProjectType::PRJ_TYPE_COMP_BACK
-            || $prjType == eProjectType::PRJ_TYPE_COMP_BACK_SYS) {
+        if ($prjType == eSubProjectType::PRJ_TYPE_COMP_BACK
+            || $prjType == eSubProjectType::PRJ_TYPE_COMP_BACK_SYS) {
 
             $LangFileNames = $manifestLang->adminLangFilePaths;
 
@@ -174,13 +174,13 @@ class langFileNamesSet
 				        $isSysIni = str_ends_with($langFilePath, '.sys.ini');
 
 				        // backend system ?
-				        if ($prjType == eProjectType::PRJ_TYPE_COMP_BACK_SYS && $isSysIni)
+				        if ($prjType == eSubProjectType::PRJ_TYPE_COMP_BACK_SYS && $isSysIni)
 				        {
 					        $xmlLangNames [] = $langFilePathInfo;
 				        }
 
 				        // backend standard ?
-				        if ($prjType == eProjectType::PRJ_TYPE_COMP_BACK && !$isSysIni)
+				        if ($prjType == eSubProjectType::PRJ_TYPE_COMP_BACK && !$isSysIni)
 				        {
 					        $xmlLangNames [] = $langFilePathInfo;
 				        }
@@ -213,8 +213,8 @@ class langFileNamesSet
         /*--- lang file origin defined in manifest file -----------------------*/
 
         // on backend use administrator files
-        if ($prjType == eProjectType::PRJ_TYPE_COMP_BACK
-            || $prjType == eProjectType::PRJ_TYPE_COMP_BACK_SYS) {
+        if ($prjType == eSubProjectType::PRJ_TYPE_COMP_BACK
+            || $prjType == eSubProjectType::PRJ_TYPE_COMP_BACK_SYS) {
 
             $LangFileNames = $manifestLang->adminLangFilePaths;
 
@@ -234,13 +234,13 @@ class langFileNamesSet
 
 				        //--- assign depending on type ---------------------
 
-				        if ($prjType == eProjectType::PRJ_TYPE_COMP_BACK_SYS && $isSysIni)
+				        if ($prjType == eSubProjectType::PRJ_TYPE_COMP_BACK_SYS && $isSysIni)
 				        {
 					        $xmlLangNames [] = $langFilePathInfo;
 				        }
 
 				        // backend standard ?
-				        if ($prjType == eProjectType::PRJ_TYPE_COMP_BACK && !$isSysIni)
+				        if ($prjType == eSubProjectType::PRJ_TYPE_COMP_BACK && !$isSysIni)
 				        {
 					        $xmlLangNames [] = $langFilePathInfo;
 				        }
@@ -659,29 +659,29 @@ class langFileNamesSet
         $basePath = JPATH_ADMINISTRATOR . '/language';
 
         switch ($prjType) {
-            case eProjectType::PRJ_TYPE_NONE:
+            case eSubProjectType::PRJ_TYPE_NONE:
                 break;
 
-            case eProjectType::PRJ_TYPE_COMP_BACK_SYS:
+            case eSubProjectType::PRJ_TYPE_COMP_BACK_SYS:
                 // admin
                 break;
 
-            case eProjectType::PRJ_TYPE_COMP_BACK:
+            case eSubProjectType::PRJ_TYPE_COMP_BACK:
                 // admin
                 break;
 
-            case eProjectType::PRJ_TYPE_COMP_SITE:
+            case eSubProjectType::PRJ_TYPE_COMP_SITE:
                 // site
                 $basePath = JPATH_ROOT . '/language';
                 break;
 
-            case eProjectType::PRJ_TYPE_MODEL:
+            case eSubProjectType::PRJ_TYPE_MODEL:
                 // site
                 $basePath = JPATH_ROOT . '/language';
                 break;
 
-            case eProjectType::PRJ_TYPE_PLUGIN:
-                // admin
+            case eSubProjectType::PRJ_TYPE_PLUGIN:
+                $basePath = JPATH_ROOT . '/language';
                 break;
         }
 
@@ -695,12 +695,12 @@ class langFileNamesSet
      *
      * @since version
      */
-    public function langBasePathInsideProject(string $prjXmlFilePath='', eProjectType $prjType=eProjectType::PRJ_TYPE_NONE)
+    public function langBasePathInsideProject(string $prjXmlFilePath='', eSubProjectType $prjType=eSubProjectType::PRJ_TYPE_NONE)
     {
         // most used is xml path
         $basePath = $prjXmlFilePath . '/language';
 
-        if ($prjType == eProjectType::PRJ_TYPE_COMP_SITE) {
+        if ($prjType == eSubProjectType::PRJ_TYPE_COMP_SITE) {
             //$basePath = str_replace($basePath, '/administrator', '');
             $basePath = str_replace('/administrator', '', $basePath);
         }

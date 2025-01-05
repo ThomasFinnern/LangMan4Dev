@@ -12,7 +12,7 @@ namespace Finnern\Component\Lang4dev\Administrator\Model;
 defined('_JEXEC') or die;
 
 use Exception;
-use Finnern\Component\Lang4dev\Administrator\Helper\eProjectType;
+use Finnern\Component\Lang4dev\Administrator\Helper\eSubProjectType;
 use Finnern\Component\Lang4dev\Administrator\Helper\langSubProject;
 use Finnern\Component\Lang4dev\Administrator\Helper\manifestLangFiles;
 use Finnern\Component\Lang4dev\Administrator\Helper\projectType;
@@ -976,12 +976,12 @@ class ProjectModel extends AdminModel
             $isExisting = true;
 
             switch ($prjType) {
-                case eProjectType::PRJ_TYPE_NONE:
+                case eSubProjectType::PRJ_TYPE_NONE:
                     $isExisting = false;
                     break;
 
-                case eProjectType::PRJ_TYPE_COMP_BACK_SYS:
-                case eProjectType::PRJ_TYPE_COMP_BACK:
+                case eSubProjectType::PRJ_TYPE_COMP_BACK_SYS:
+                case eSubProjectType::PRJ_TYPE_COMP_BACK:
 //                    if ( ! is_dir ($langSubProject->prjRootPath))
                     if ( ! is_dir ($langSubProject->prjAdminPath))
                     {
@@ -989,7 +989,7 @@ class ProjectModel extends AdminModel
                     }
                     break;
 
-                case eProjectType::PRJ_TYPE_COMP_SITE:
+                case eSubProjectType::PRJ_TYPE_COMP_SITE:
 //                    if ( ! is_dir ($langSubProject->prjRootPath))
                     if ( ! is_dir ($langSubProject->prjDefaultPath))
                     {
@@ -997,8 +997,9 @@ class ProjectModel extends AdminModel
                     }
                     break;
 
-                case eProjectType::PRJ_TYPE_MODEL:
-                case eProjectType::PRJ_TYPE_PLUGIN:
+                case eSubProjectType::PRJ_TYPE_MODEL:
+                case eSubProjectType::PRJ_TYPE_PLUGIN:
+                case eSubProjectType::PRJ_TYPE_WEB_ROOT:
                     if ( ! is_dir ($langSubProject->prjRootPath))
                     {
                         $isExisting = false;

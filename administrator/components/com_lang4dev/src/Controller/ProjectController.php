@@ -168,7 +168,7 @@ class projectController extends FormController
                 $isSaved = $prjModel->save($data);
             }
 
-            // Was first write of this project
+            // On first write of this project
             if ($id < 1) {
                 $isSaved = $prjModel->save($data);
 
@@ -203,7 +203,7 @@ class projectController extends FormController
             foreach ($subProjects as $subProject) {
                 $subProject->RetrieveBaseManifestData();
 
-                //  includes save
+                //  !!! does save sub project additional !!!
                 $isSaved &= $subPrjModel->MergeSubProject($subProject, $id);
             }
 

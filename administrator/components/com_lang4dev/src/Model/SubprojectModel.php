@@ -12,7 +12,7 @@ namespace Finnern\Component\Lang4dev\Administrator\Model;
 defined('_JEXEC') or die;
 
 use Exception;
-use Finnern\Component\Lang4dev\Administrator\Helper\eProjectType;
+use Finnern\Component\Lang4dev\Administrator\Helper\eSubProjectType;
 use Finnern\Component\Lang4dev\Administrator\Helper\projectType;
 use JForm;
 use Joomla\CMS\Access\Rules;
@@ -1120,5 +1120,10 @@ class SubprojectModel extends AdminModel
 
         return (int)$existingId;
     }
+
+
+
+
+
 
 }

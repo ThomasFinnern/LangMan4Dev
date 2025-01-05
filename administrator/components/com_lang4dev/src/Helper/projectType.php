@@ -16,7 +16,7 @@ use function defined;
 // no direct access
 defined('_JEXEC') or die;
 
-enum eProjectType // : int
+enum eSubProjectType // : int
 {
     case PRJ_TYPE_NONE;
     case  PRJ_TYPE_COMP_BACK; // PRJ_TYPE_COMPONENT
@@ -24,6 +24,9 @@ enum eProjectType // : int
     case  PRJ_TYPE_COMP_SITE;
     case  PRJ_TYPE_MODEL;
     case  PRJ_TYPE_PLUGIN;
+    case  PRJ_TYPE_WEB_ADMIN;
+    case  PRJ_TYPE_WEB_SITE;
+    case  PRJ_TYPE_TEMPLATE;
 }
 
 /**
@@ -42,35 +45,42 @@ class projectType
 
     // const PRJ_TYPE_TEMPLATE = 1;
 
-    /**
-     * @param $prjId
-     *
-     * @return eProjectType
-     *
-     * @since version
-     */
-    public static function prjTypeByProjectId($prjId) : eProjectType
-    {
-        $prjType = eProjectType::PRJ_TYPE_NONE;
-
-        switch (strtolower(substr($prjId, 0, 3))) {
-            case "com":
-                // Attention: lang projects have three here
-                $prjType = eProjectType::PRJ_TYPE_COMP_BACK; // PRJ_TYPE_COMPONENT;
-                break;
-            case "mod":
-                $prjType = eProjectType::PRJ_TYPE_MODEL;
-                break;
-            case "plg":
-                $prjType = eProjectType::PRJ_TYPE_PLUGIN;
-                break;
-            default:
-                // dummy
-                break;
-        }
-
-        return $prjType;
-    }
+//    /**
+//     * @param $prjId
+//     *
+//     * @return eProjectType
+//     *
+//     * @since version
+//     */
+//    public static function prjTypeByProjectId(string $prjId) : eProjectType
+//    {
+//        $prjType = eProjectType::PRJ_TYPE_NONE;
+//
+//        switch (strtolower(substr($prjId, 0, 3))) {
+//            case "com":
+//                // Attention: lang projects have three here
+//                $prjType = eProjectType::PRJ_TYPE_COMP_BACK; // PRJ_TYPE_COMPONENT;
+//                break;
+//            case "mod":
+//                $prjType = eProjectType::PRJ_TYPE_MODEL;
+//                break;
+//            case "plg":
+//                $prjType = eProjectType::PRJ_TYPE_PLUGIN;
+//                break;
+//            case "/":
+//            case "\\":
+//                $prjType = eProjectType::PRJ_TYPE_WEB_ROOT;
+//                break;
+//
+//            missing types
+//
+//            default:
+//                // dummy
+//                break;
+//        }
+//
+//        return $prjType;
+//    }
 
     /**
      * @param $prjId
@@ -87,15 +97,33 @@ class projectType
         switch (strtolower(substr($prjId, 0, 3))) {
             case "com":
                 // Attention: lang projects have three here
-                $prjTypes[] = eProjectType::PRJ_TYPE_COMP_BACK;
-                $prjTypes[] = eProjectType::PRJ_TYPE_COMP_BACK_SYS;
-                $prjTypes[] = eProjectType::PRJ_TYPE_COMP_SITE;
+                $prjTypes[] = eSubProjectType::PRJ_TYPE_COMP_BACK;
+                $prjTypes[] = eSubProjectType::PRJ_TYPE_COMP_BACK_SYS;
+                $prjTypes[] = eSubProjectType::PRJ_TYPE_COMP_SITE;
                 break;
             case "mod":
-                $prjTypes[] = eProjectType::PRJ_TYPE_MODEL;
+                $prjTypes[] = eSubProjectType::PRJ_TYPE_MODEL;
                 break;
             case "plg":
-                $prjTypes[] = eProjectType::PRJ_TYPE_PLUGIN;
+                $prjTypes[] = eSubProjectType::PRJ_TYPE_PLUGIN;
+                break;
+            // root web page'
+            case "/":
+            case "\\":
+                $prjTypes[] = eSubProjectType::PRJ_TYPE_WEB_ADMIN;
+                $prjTypes[] = eSubProjectType::PRJ_TYPE_WEB_SITE;
+                break;
+            // administrator
+            case "adm":
+                $prjTypes[] = eSubProjectType::PRJ_TYPE_WEB_ADMIN;
+                break;
+            // site
+            case "sit":
+                $prjTypes[] = eSubProjectType::PRJ_TYPE_WEB_SITE;
+                break;
+            // site
+            case "tem":
+                $prjTypes[] = eSubProjectType::PRJ_TYPE_TEMPLATE;
                 break;
             default:
                 // dummy
@@ -118,11 +146,11 @@ class projectType
     {
         $hasSysFiles = true;
 
-        if ($prjType == eProjectType::PRJ_TYPE_COMP_BACK) {
+        if ($prjType == eSubProjectType::PRJ_TYPE_COMP_BACK) {
             $hasSysFiles = false;
         }
 
-        if ($prjType == eProjectType::PRJ_TYPE_COMP_SITE) {
+        if ($prjType == eSubProjectType::PRJ_TYPE_COMP_SITE) {
             $hasSysFiles = false;
         }
 
@@ -141,16 +169,16 @@ class projectType
         $isSearchXml     = false;
         $isSearchInstall = false;
 
-        if ($prjType == eProjectType::PRJ_TYPE_COMP_BACK_SYS
-            || $prjType == eProjectType::PRJ_TYPE_MODEL
-            || $prjType == eProjectType::PRJ_TYPE_PLUGIN
+        if ($prjType == eSubProjectType::PRJ_TYPE_COMP_BACK_SYS
+            || $prjType == eSubProjectType::PRJ_TYPE_MODEL
+            || $prjType == eSubProjectType::PRJ_TYPE_PLUGIN
         ) {
             $isSearchXml = true;
         }
 
-        if ($prjType == eProjectType::PRJ_TYPE_COMP_BACK_SYS
-            || $prjType == eProjectType::PRJ_TYPE_MODEL
-            || $prjType == eProjectType::PRJ_TYPE_PLUGIN
+        if ($prjType == eSubProjectType::PRJ_TYPE_COMP_BACK_SYS
+            || $prjType == eSubProjectType::PRJ_TYPE_MODEL
+            || $prjType == eSubProjectType::PRJ_TYPE_PLUGIN
         ) {
             $isSearchInstall = true;
         }
@@ -170,94 +198,130 @@ class projectType
         $typename = '? type';
 
         switch ($prjType) {
-            case eProjectType::PRJ_TYPE_NONE:
+            case eSubProjectType::PRJ_TYPE_NONE:
                 $typename = 'type-none';
                 break;
 
-            case eProjectType::PRJ_TYPE_COMP_BACK_SYS:
+            case eSubProjectType::PRJ_TYPE_COMP_BACK_SYS:
                 $typename = 'type-backend-sys';
                 break;
 
-            case eProjectType::PRJ_TYPE_COMP_BACK:
+            case eSubProjectType::PRJ_TYPE_COMP_BACK:
                 $typename = 'type-backend';
                 break;
 
-            case eProjectType::PRJ_TYPE_COMP_SITE:
+            case eSubProjectType::PRJ_TYPE_COMP_SITE:
                 $typename = 'type-site';
                 break;
 
-            case eProjectType::PRJ_TYPE_MODEL:
+            case eSubProjectType::PRJ_TYPE_MODEL:
                 $typename = 'type-model';
                 break;
 
-            case eProjectType::PRJ_TYPE_PLUGIN:
+            case eSubProjectType::PRJ_TYPE_PLUGIN:
                 $typename = 'type-plugin';
+                break;
+
+            case eSubProjectType::PRJ_TYPE_WEB_ADMIN:
+                $typename = 'type-web-admin';
+                break;
+
+            case eSubProjectType::PRJ_TYPE_WEB_SITE:
+                $typename = 'type-web-site';
+                break;
+
+            case eSubProjectType::PRJ_TYPE_TEMPLATE:
+                $typename = 'type-templates';
                 break;
         }
 
         return $typename;
     }
 
-    public static function int2prjType(int $prjTypeInt) : eProjectType
+    public static function int2prjType(int $prjTypeInt) : eSubProjectType
     {
-        $prjType = eProjectType::PRJ_TYPE_NONE;
+        $prjType = eSubProjectType::PRJ_TYPE_NONE;
 
         switch ($prjTypeInt) {
             case 0:
-            $prjType = eProjectType::PRJ_TYPE_NONE;
+                $prjType = eSubProjectType::PRJ_TYPE_NONE;
                 break;
 
             case 1:
-            $prjType = eProjectType::PRJ_TYPE_COMP_BACK_SYS;
+                $prjType = eSubProjectType::PRJ_TYPE_COMP_BACK_SYS;
                 break;
 
             case 2:
-            $prjType = eProjectType::PRJ_TYPE_COMP_BACK;
+                $prjType = eSubProjectType::PRJ_TYPE_COMP_BACK;
                 break;
 
             case 3:
-            $prjType = eProjectType::PRJ_TYPE_COMP_SITE;
+                $prjType = eSubProjectType::PRJ_TYPE_COMP_SITE;
                 break;
 
             case 4:
-            $prjType = eProjectType::PRJ_TYPE_MODEL;
+                $prjType = eSubProjectType::PRJ_TYPE_MODEL;
                 break;
 
             case 5:
-            $prjType = eProjectType::PRJ_TYPE_PLUGIN;
+                $prjType = eSubProjectType::PRJ_TYPE_PLUGIN;
+                break;
+
+            case 6:
+                $prjType = eSubProjectType::PRJ_TYPE_WEB_ADMIN;
+                break;
+
+            case 7:
+                $prjType = eSubProjectType::PRJ_TYPE_WEB_SITE;
+                break;
+
+            case 8:
+                $prjType = eSubProjectType::PRJ_TYPE_TEMPLATE;
                 break;
         }
 
         return $prjType;
     }
 
-    public static function prjType2int(eProjectType $prjType) : string
+    public static function prjType2int(eSubProjectType $prjType) : string
     {
         $prjTypeInt = 0;
 
         switch ($prjType) {
-            case eProjectType::PRJ_TYPE_NONE:
+            case eSubProjectType::PRJ_TYPE_NONE:
                 $prjTypeInt = 0;
                 break;
 
-            case eProjectType::PRJ_TYPE_COMP_BACK_SYS:
+            case eSubProjectType::PRJ_TYPE_COMP_BACK_SYS:
                 $prjTypeInt = 1;
                 break;
 
-            case eProjectType::PRJ_TYPE_COMP_BACK:
+            case eSubProjectType::PRJ_TYPE_COMP_BACK:
                 $prjTypeInt = 2;
                 break;
 
-            case eProjectType::PRJ_TYPE_COMP_SITE:
+            case eSubProjectType::PRJ_TYPE_COMP_SITE:
                 $prjTypeInt = 3;
                 break;
 
-            case eProjectType::PRJ_TYPE_MODEL:
+            case eSubProjectType::PRJ_TYPE_MODEL:
                 $prjTypeInt = 4;
                 break;
 
-            case eProjectType::PRJ_TYPE_PLUGIN:
+            case eSubProjectType::PRJ_TYPE_PLUGIN:
                 $prjTypeInt = 5;
+                break;
+
+            case eSubProjectType::PRJ_TYPE_WEB_ADMIN:
+                $prjTypeInt = 6;
+                break;
+
+            case eSubProjectType::PRJ_TYPE_WEB_SITE:
+                $prjTypeInt = 7;
+                break;
+
+            case eSubProjectType::PRJ_TYPE_TEMPLATE:
+                $prjTypeInt = 8;
                 break;
         }
 

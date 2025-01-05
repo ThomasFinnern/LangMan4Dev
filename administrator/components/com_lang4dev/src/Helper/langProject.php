@@ -53,7 +53,7 @@ class langProject
      */
     public function addSubProject(
         string $prjId = '',
-        eProjectType $prjType = eProjectType::PRJ_TYPE_NONE,
+        eSubProjectType $prjType = eSubProjectType::PRJ_TYPE_NONE,
         $prjRootPath = '',
         $prjXmlFilePath = ''
     ) {

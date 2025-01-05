@@ -22,7 +22,7 @@ class langSubProject extends langFiles
     /** @var int */
     public $prjId = '';
     /** @var int */
-    public eProjectType $prjType;
+    public eSubProjectType $prjType;
 
     // ToDo: Separate std path (plugin/module -> ), admin path, site path
 
@@ -76,7 +76,7 @@ class langSubProject extends langFiles
      */
     public function __construct(
         string $prjId = '',
-        eProjectType $prjType = eProjectType::PRJ_TYPE_NONE,
+        eSubProjectType $prjType = eSubProjectType::PRJ_TYPE_NONE,
         $prjRootPath = '',
         $prjXmlPathFilename = ''
     ) {
@@ -90,7 +90,7 @@ class langSubProject extends langFiles
 
         // Admin path
 
-        if ($this->prjType == eProjectType::PRJ_TYPE_COMP_BACK_SYS) {
+        if ($this->prjType == eSubProjectType::PRJ_TYPE_COMP_BACK_SYS) {
             $this->useLangSysIni = true;
         }
 
@@ -205,7 +205,7 @@ class langSubProject extends langFiles
 
                             //--- Lang path by manifest definition ---------------------------------------
                             $startPath = $this->prjRootPath . "/" . $manifestLang->defaultLangPath;
-                            if ($this->prjType == eProjectType::PRJ_TYPE_COMP_BACK || $this->prjType == eProjectType::PRJ_TYPE_COMP_BACK_SYS) {
+                            if ($this->prjType == eSubProjectType::PRJ_TYPE_COMP_BACK || $this->prjType == eSubProjectType::PRJ_TYPE_COMP_BACK_SYS) {
                                 $startPath = $this->prjRootPath . "/" . $manifestLang->adminLangPath;
                             }
 
@@ -517,7 +517,7 @@ class langSubProject extends langFiles
             //--- scan all not project files ------------------------------------
 
             // standard
-            if ($this->prjType != eProjectType::PRJ_TYPE_COMP_BACK_SYS && $this->prjType != eProjectType::PRJ_TYPE_COMP_BACK) {
+            if ($this->prjType != eSubProjectType::PRJ_TYPE_COMP_BACK_SYS && $this->prjType != eSubProjectType::PRJ_TYPE_COMP_BACK) {
 
                 //--- site, module or plugin --------------------------------------
 
@@ -572,7 +572,7 @@ class langSubProject extends langFiles
             //--- scan all not project files ------------------------------------
 
             // standard
-            if ($this->prjType != eProjectType::PRJ_TYPE_COMP_BACK_SYS && $this->prjType != eProjectType::PRJ_TYPE_COMP_BACK) {
+            if ($this->prjType != eSubProjectType::PRJ_TYPE_COMP_BACK_SYS && $this->prjType != eSubProjectType::PRJ_TYPE_COMP_BACK) {
 
                 //--- site, module or plugin --------------------------------------
 
@@ -930,7 +930,7 @@ class langSubProject extends langFiles
 
         //--- pre check type -----------------
 
-        if ($this->prjType == eProjectType::PRJ_TYPE_COMP_BACK_SYS) {
+        if ($this->prjType == eSubProjectType::PRJ_TYPE_COMP_BACK_SYS) {
             $this->useLangSysIni = true;
         }
 

@@ -19,21 +19,146 @@ use Finnern\Component\Lang4dev\Administrator\Helper\langFile;
 
 $this->document->getWebAssetManager()->useStyle('com_lang4dev.backend.translate');
 
+?>
+
+	?>
+	<form action="<?php
+    echo Route::_('index.php?option=com_lang4dev&view=translate'); ?>" method="post" name="adminForm"
+	      id="item-form" class="form-validate">
+
+<!--        --><?php
+//        renderProjectSelection($this->form); ?>
+<!---->
+<!--        --><?php
+//        renderLangIdTexts($this->form); ?>
+<!---->
+
+
+		<div class="project_selection_container">
+
+            <?php renderProjectSelection($this->form); ?>
+            <?php renderLangIdTexts($this->form); ?>
+		</div>
+
+
+
+
+		<?php
+        renderCheckAll($this->form); ?>
+
+        <?php
+
+        $subProjects = $this->project->subProjects;
+
+        foreach ($subProjects as $subProject) {
+            $title = $subProject->prjId . ': ' . $subProject->getPrjTypeText();
+            // style="width: 18rem; bg-light .bg-transparent bg-secondary text-white
+
+            ?>
+			<div class="card ">
+				<h2 class="card-header " style="background-color: #ced4da;">
+                    <?php
+                    echo $title; ?>
+				</h2>
+
+				<div class="card-body">
+                    <?php
+
+                    $editIdx = 0;
+
+                    //--- all main files ----------------------------------
+
+                    $mainLangFiles = $subProject->getLangFilesData($this->mainLangId);
+
+                    foreach ($mainLangFiles as $mainLangFile) {
+                        $subPrjPath = $mainLangFile->getlangSubPrjPathFileName();
+
+                        //--- render main file first -------------------------------------------------------
+
+                        renderLangFileEditText(
+                            $this->mainLangId,
+                            $mainLangFile,
+                            $subPrjPath,
+                            true,
+                            $this->isEditAndSaveMainTranslationFile,
+                            $editIdx
+                        );
+                        $editIdx++;
+
+                        //--- all matching translation lang files ----------------------------------
+
+                        $mainLangFileName = $mainLangFile->getlangBaseFileName();
+
+                        foreach ($subProject->getLangIds() as $langId) {
+                            // main is already rendered
+                            if ($langId != $this->mainLangId) {
+                                // matches translation or show all
+                                if ($langId == $this->transLangId || $this->isShowTranslationOfAllIds) {
+                                    $transLangFiles = $subProject->getLangFilesData($langId);
+
+                                    //--- find matching name with actual lang ID -------------------
+
+                                    foreach ($transLangFiles as $transLangFile) {
+                                        $transLangFileName = $transLangFile->getlangBaseFileName();
+
+                                        if ($transLangFileName == $mainLangFileName) {
+                                            $subPrjPath = $transLangFile->getlangSubPrjPathFileName();
+
+                                            //--- render translation files -------------------------------------------------------
+
+                                            renderLangFileEditText(
+                                                $langId,
+                                                $transLangFile,
+                                                $subPrjPath,
+                                                false,
+                                                $this->isEditAndSaveMainTranslationFile,
+                                                $editIdx
+                                            );
+                                            $editIdx++;
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+
+                    renderMainfileList($mainLangFiles);
+
+                    ?>
+				</div>
+
+			</div>
+            <?php
+        }
+
+        ?>
+
+        <?php
+
+        if ($this->isDebugBackend)
+        {
+            renderDebug($this->project);
+        }
+
+        ?>
+
+		<input type="hidden" name="task" value=""/>
+        <?php
+        echo HTMLHelper::_('form.token'); ?>
+	</form>
+
+<?php
+
 function renderProjectSelection($form)
 {
     ?>
-	<br>
-	<div class="d-flex flex-row py-0 my-0 justify-content-between">
-		<div class="mx-2 py-0 flex-fill ">
-            <?php
-            echo $form->renderField('selectProject'); ?>
+	<div class='project_selection'>
+		<div class='project_selection_setting'>
+            <?php echo $form->renderField('selectProject'); ?>
 		</div>
-
-		<div class="mx-2 py-0 px-2 flex-fill ">
-            <?php
-            echo $form->renderField('selectSubproject'); ?>
+		<div class='project_selection_setting'>
+            <?php echo $form->renderField('selectSubproject'); ?>
 		</div>
-
 	</div>
     <?php
 
@@ -44,18 +169,13 @@ function renderLangIdTexts($form)
 {
     // mx-2 py-0, mx-2 py-0 px-2
     ?>
-	<br>
-	<div class="d-flex flex-row py-0 my-0 justify-content-between">
-		<div class="mx-2 py-0 flex-fill ">
-            <?php
-            echo $form->renderField('selectSourceLangId'); ?>
+	<div class='project_selection'>
+		<div class='project_selection_setting'>
+            <?php echo $form->renderField('selectSourceLangId'); ?>
 		</div>
-
-		<div class="mx-2 py-0 flex-fill ">
-            <?php
-            echo $form->renderField('selectTargetLangId'); ?>
+		<div class='project_selection_setting'>
+            <?php echo $form->renderField('selectTargetLangId'); ?>
 		</div>
-
 	</div>
     <?php
 
@@ -64,6 +184,7 @@ function renderLangIdTexts($form)
 
 function renderCheckAll($form)
 {
+	// ToDo own scss here
     ?>
 	<div class="d-flex flex-row">
 		<div class="mx-2 p-2">
@@ -260,119 +381,4 @@ function renderDebug($project) {
 /*-----------------------------------------------------------------
 HTML code
 -----------------------------------------------------------------*/
-?>
-<form action="<?php
-echo Route::_('index.php?option=com_lang4dev&view=translate'); ?>" method="post" name="adminForm"
-      id="item-form" class="form-validate">
-
-    <?php
-    renderProjectSelection($this->form); ?>
-
-    <?php
-    renderLangIdTexts($this->form); ?>
-
-    <?php
-    renderCheckAll($this->form); ?>
-
-    <?php
-
-    $subProjects = $this->project->subProjects;
-
-    foreach ($subProjects as $subProject) {
-        $title = $subProject->prjId . ': ' . $subProject->getPrjTypeText();
-        // style="width: 18rem; bg-light .bg-transparent bg-secondary text-white
-
-        ?>
-		<div class="card ">
-			<h2 class="card-header " style="background-color: #ced4da;">
-                <?php
-                echo $title; ?>
-			</h2>
-
-			<div class="card-body">
-                <?php
-
-                $editIdx = 0;
-
-                //--- all main files ----------------------------------
-
-                $mainLangFiles = $subProject->getLangFilesData($this->mainLangId);
-
-                foreach ($mainLangFiles as $mainLangFile) {
-                    $subPrjPath = $mainLangFile->getlangSubPrjPathFileName();
-
-                    //--- render main file first -------------------------------------------------------
-
-                    renderLangFileEditText(
-                        $this->mainLangId,
-                        $mainLangFile,
-                        $subPrjPath,
-                        true,
-                        $this->isEditAndSaveMainTranslationFile,
-                        $editIdx
-                    );
-                    $editIdx++;
-
-                    //--- all matching translation lang files ----------------------------------
-
-                    $mainLangFileName = $mainLangFile->getlangBaseFileName();
-
-                    foreach ($subProject->getLangIds() as $langId) {
-                        // main is already rendered
-                        if ($langId != $this->mainLangId) {
-                            // matches translation or show all
-                            if ($langId == $this->transLangId || $this->isShowTranslationOfAllIds) {
-                                $transLangFiles = $subProject->getLangFilesData($langId);
-
-                                //--- find matching name with actual lang ID -------------------
-
-                                foreach ($transLangFiles as $transLangFile) {
-                                    $transLangFileName = $transLangFile->getlangBaseFileName();
-
-                                    if ($transLangFileName == $mainLangFileName) {
-                                        $subPrjPath = $transLangFile->getlangSubPrjPathFileName();
-
-                                        //--- render translation files -------------------------------------------------------
-
-                                        renderLangFileEditText(
-                                            $langId,
-                                            $transLangFile,
-                                            $subPrjPath,
-                                            false,
-                                            $this->isEditAndSaveMainTranslationFile,
-                                            $editIdx
-                                        );
-                                        $editIdx++;
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-
-                renderMainfileList($mainLangFiles);
-
-                ?>
-			</div>
-
-		</div>
-        <?php
-    }
-
-    ?>
-
-	<?php
-
-	if ($this->isDebugBackend)
-	{
-		renderDebug($this->project);
-	}
-
-	?>
-
-    <input type="hidden" name="task" value=""/>
-    <?php
-    echo HTMLHelper::_('form.token'); ?>
-</form>
-
 
