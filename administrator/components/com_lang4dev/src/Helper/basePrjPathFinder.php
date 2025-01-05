@@ -125,7 +125,10 @@ class basePrjPathFinder
         if ($rootPath != '') {
 
 			// standard
-            if (Folder::exists($rootPath)) {
+            if (Folder::exists($rootPath)
+                && $rootPath != '/'
+                && $rootPath != '\\'
+            ) {
 
 				$isRootFound = true;
 

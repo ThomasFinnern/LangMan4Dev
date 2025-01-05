@@ -19,25 +19,28 @@
 .project_selection_container .project_selection .project_selection_setting .control-label {
   max-width: 150px;
 }
-.project_selection_container .prj_data_container .card .card-header {
+
+.prj_data_container .card .card-header {
   background-color: #ced4da;
 }
-.project_selection_container .prj_data_empty_container .card .card-header {
+
+.prj_data_empty_container .card .card-header {
   background-color: #ced4da;
 }
-.project_selection_container .prj_id_type_header {
+
+.prj_id_type_header {
   display: flex;
+  flex-direction: row;
+  align-items: center;
 }
-.project_selection_container .prj_id_type_header .prj_id_type_header_id_type {
-  justify-content: center;
-  flex-grow: 1;
+.prj_id_type_header .prj_id_type_header_id_type {
   padding: 2px;
 }
-.project_selection_container .prj_id_type_header .prj_id_type_header_files_info .prj_id_type_header_filename {
-  padding: 2px;
+.prj_id_type_header .prj_id_type_header_filenames {
+  padding: 6px;
 }
-.project_selection_container .prj_id_type_header .prj_id_type_header_files_info .prj_id_type_header_path {
-  padding: 2px;
+.prj_id_type_header .prj_id_type_header_path {
+  padding: 4px;
 }
 
 /*# sourceMappingURL=prjTexts.css.map */

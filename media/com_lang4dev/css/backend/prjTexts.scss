@@ -45,60 +45,72 @@
     }
 
   }
+}
 
-  .prj_data_container {
+.prj_data_container {
 
-    .card {
-      .card-header {
+  //border: 2px solid darkgreen;
 
-        background-color: #ced4da;
+  //background-color: red;
 
-      }
+  .card {
+    .card-header {
+
+      background-color: #ced4da;
+
     }
-
-    //.prj_data_ {
-    //
-    //}
-
   }
 
-  .prj_data_empty_container {
+  //.prj_data_ {
+  //
+  //}
 
-    .card {
-      .card-header {
+}
 
-        background-color: #ced4da;
+.prj_data_empty_container {
 
-      }
-    }
+  .card {
+    .card-header {
 
-  }
-
-  .prj_id_type_header {
-
-    display: flex;
-
-    .prj_id_type_header_id_type {
-
-      justify-content: center;
-      flex-grow: 1;
-      padding: 2px;
-
+      background-color: #ced4da;
 
     }
-
-    .prj_id_type_header_files_info {
-      .prj_id_type_header_filename {
-        padding: 2px;
-      }
-
-      .prj_id_type_header_path {
-        padding: 2px;
-      }
-
-    }
-
-
   }
 
 }
+
+.prj_id_type_header {
+
+  //border: 3px solid darkblue;
+
+  display: flex;
+  flex-direction: row;
+//  justify-content: center;
+  align-items: center;
+
+
+          //background-color: darkblue;
+    // justify-content: flex-start;
+
+    .prj_id_type_header_id_type {
+
+      //border: 3px solid darkgreen;
+
+      //flex-grow: 1;
+      padding: 2px;
+    }
+
+    .prj_id_type_header_filenames {
+      //border: 3px solid red;
+
+      padding: 6px;
+    }
+
+    .prj_id_type_header_path {
+      //border: 3px solid darkorange;
+
+      padding: 4px;
+    }
+
+}
+

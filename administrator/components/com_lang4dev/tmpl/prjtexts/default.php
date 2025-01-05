@@ -16,12 +16,12 @@ use Joomla\CMS\Router\Route;
 
 $this->document->getWebAssetManager()->useStyle('com_lang4dev.backend.prjTexts');
 
-
-
 $comment = '';
 if ($this->isDoCommentIds) {
     $comment = ';';
 }
+
+$subProjectDataList = $this->subProjectDatas;
 
 /*-----------------------------------------------------------------
 HTML code
@@ -41,74 +41,68 @@ echo Route::_('index.php?option=com_lang4dev&view=prjtexts'); ?>"
 
 	</div>
 
-    <div class='prj_data_empty_container'>
-    <?php
+    <div class="prj_data_container">
 
-    $idx = 1;
+		<?php if (count($subProjectDataList) > 0): ?>
+			<?php
+	        foreach ($subProjectDataList as $subProjectData) {
+	            ?>
+	            <div class="card ">
+	                <h2 class="card-header ">
+	                    <?php
 
-    $subProjectDatas = $this->subProjectDatas;
+	                    renderHeaderPrjIdType($subProjectData->prjIdAndTypeText, $subProjectData->langFileNames, $subProjectData->componentLangPath);
 
-    if (count($subProjectDatas) > 0) {
-        foreach ($subProjectDatas as $subProjectData) {
+	                    ?>
+	                </h2>
 
-            ?>
-            <div class="card ">
-                <h2 class="card-header ">
-                    <?php
+	                <div class="card-body">
+	                    <!-- h5 class="card-title"></h5-->
+	                    <p class="card-text">
+	                        <?php
 
-                    renderHeaderPrjIdType($subProjectData->prjIdAndTypeText, $subProjectData->langFileNames, $subProjectData->componentLangPath);
+	                        renderDeveloperAdHocTexts($subProjectData->transStringsLocations, $comment);
 
-                    ?>
-                </h2>
+	                        // fields ['missing, same, notUsed, doubles']
+	                        $transIdsClassified = $this->transIdsClassified[$subProjectData->prjIdAndTypeText];
 
-                <div class="card-body">
-                    <!-- h5 class="card-title"></h5-->
-                    <p class="card-text">
-                        <?php
+	                        // ??? renderMissingPreparedTransIds ($missing, $comment);
 
-                        renderDeveloperAdHocTexts($subProjectData->transStringsLocations, $comment);
+	                        // ToDo: Use constants ?
+	                        renderSubProjectStatistic($transIdsClassified['missing'],
+	                            $transIdsClassified['same'],
+	                            $transIdsClassified['notUsed'],
+	                            $transIdsClassified['doubles']);
 
-                        // fields ['missing, same, notUsed, doubles']
-                        $transIdsClassified = $this->transIdsClassified[$subProjectData->prjIdAndTypeText];
+	                        ?>
+	                    </p>
+	                </div>
+	            </div>
+		    <?php
+		        }
+		    ?>
+		<?php else: ?>
+	        <div class="prj_data_empty_container">
+	            <div class="card ">
+	                <h2 class="card-header ">
+	                    <?php Text::_('COM_LANG4DEV_NO_SUB_PROJECTS_DEFINED_FOR_PROJECT'); ?>
+	                </h2>
 
-                        // ??? renderMissingPreparedTransIds ($missing, $comment);
+	                <div class="card-body">
+	                    <?php Text::_('COM_LANG4DEV_NO_SUB_PROJECTS_DEFINED_FOR_PROJECT_DESC'); ?>
+	                </div>
+	            </div>
+	        </div>
+		<?php endif; ?>
 
-                        // ToDo: Use constants ?
-                        renderSubProjectStatistic($transIdsClassified['missing'],
-                            $transIdsClassified['same'],
-                            $transIdsClassified['notUsed'],
-                            $transIdsClassified['doubles']);
+		<?php
+		if ($this->isDebugBackend)
+		{
+			renderDebug($this->project);
+		}
+		?>
 
-                        ?>
-                    </p>
-                </div>
-            </div>
-
-        </div>
-    <?php
-        }
-    } else {
-    ?>
-        <div class='prj_data_empty_container'>
-            <div class="card ">
-                <h2 class="card-header ">
-                    <?php Text::_('COM_LANG4DEV_NO_SUB_PROJECTS_DEFINED_FOR_PROJECT'); ?>
-                </h2>
-
-                <div class="card-body">
-                    <?php Text::_('COM_LANG4DEV_NO_SUB_PROJECTS_DEFINED_FOR_PROJECT_DESC'); ?>
-                </div>
-            </div>
-        </div>
-	<?php
-    }
-
-	if ($this->isDebugBackend)
-	{
-		renderDebug($this->project);
-	}
-
-	?>
+	</div>
 
     <input type="hidden" name="task" value=""/>
     <?php
@@ -121,11 +115,11 @@ echo Route::_('index.php?option=com_lang4dev&view=prjtexts'); ?>"
 function renderProjectSelection($form)
 {
     ?>
-	<div class='project_selection'>
-		<div class='project_selection_setting'>
+	<div class="project_selection">
+		<div class="project_selection_setting">
             <?php echo $form->renderField('selectProject'); ?>
 		</div>
-		<div class='project_selection_setting'>
+		<div class="project_selection_setting">
             <?php echo $form->renderField('selectSubproject'); ?>
 		</div>
 	</div>
@@ -142,31 +136,31 @@ function renderHeaderPrjIdType(
     ?>
 	<!--div class="row g-2"-->
 	<div class="row">
-	<div class="prj_id_type_header">
-    	<div class="prj_id_type_header_id_type">
-			<div class="p-2 flex-grow-1">
+		<div class="prj_id_type_header">
 
-                <?php
-                echo $prjIdAndType; ?>
+	        <div class="prj_id_type_header_id_type">
+				<div class="p-2 flex-grow-1">
 
-			</div>
-
-			<div class="prj_id_type_header_files_info ">
-				<div class="prj_id_type_header_filename fs-4">
 	                <?php
-	                foreach ($fileNames as $fileName) {
-	                    echo '&nbsp;' . $fileName . '<br>';
-	                }
-	                ?>
-				</div>
-				<div class="prj_id_type_header_path fs-4">
-	                <?php
-	                echo $path; ?>
+	                echo $prjIdAndType; ?>
+
 				</div>
 			</div>
+
+			<div class="prj_id_type_header_filenames fs-4">
+	            <?php
+	            foreach ($fileNames as $fileName) {
+	                echo '&nbsp;' . $fileName . '<br>';
+	            }
+	            ?>
+			</div>
+
+			<div class="prj_id_type_header_path fs-4">
+	            <?php
+	            echo $path; ?>
+			</div>
+
 		</div>
-
-	</div>
 	</div>
     <?php
 
@@ -241,45 +235,54 @@ function renderDeveloperAdHocTexts($transStringsLocations, $comment = '')
     $locationsCount = count($transStringsLocations);
     if ($locationsCount > 0) {
         ?>
-        <div class="card bg-light border">
-            <h3 class="card-header bg-white">
+        <div class="Ad_hoc_header">
+	        <div class="Ad_hoc_title">
+		        <div class="card bg-light border">
+		            <h3 class="card-header bg-white">
+		                <?php
+		                echo Text::_('COM_LANG4DEV_DEVELOPER_AD_HOC_TEXTS'); ?>
+		                <!--span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger border border-light"-->
+		                <span class="badge rounded-pill  bg-danger border border-light"
+		                      style="position: relative; top: -12px; left: +5px; ">
+		                    <?php
+		                    echo $locationsCount;
+		                    ?>
+		                    <span class="visually-hidden">Count missing</span>
+		                </span>
+		            </h3>
+		        </div>
+	        </div>
+
+	        <div class="ad_hoc_description">
+	            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<?php
+	                echo Text::_('COM_LANG4DEV_DEVELOPER_AD_HOC_TEXTS_DESC'); ?>
+	        </div>
+        </div>
+        <div class="card-body">
+            <!-- h5 class="card-title"></h5-->
+            <p class="card-text">
                 <?php
-                echo Text::_('COM_LANG4DEV_DEVELOPER_AD_HOC_TEXTS'); ?>
-                <!--span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger border border-light"-->
-                <span class="badge rounded-pill  bg-danger border border-light"
-                      style="position: relative; top: -12px; left: +5px; ">
-                    <?php
-                    echo $locationsCount;
-                    ?>
-                    <span class="visually-hidden">Count missing</span>
-                </span>
-            </h3>
-            <div class="card-body">
-                <!-- h5 class="card-title"></h5-->
-                <p class="card-text">
-                    <?php
-                    foreach ($transStringsLocations as $transIds) {
-                        foreach ($transIds as $transId) {
-                            /**
-                             * echo '# ' . $transId->file
-                             * . ' [L'. $transId->lineNr . 'C' . $transId->colIdx . '] in '
-                             * . ' (' . $transId->path . ')<br>';
-                             * echo $comment . $transId->name . '="' . $transId->string . '"<br>';
-                             * /**/
+                foreach ($transStringsLocations as $transIds) {
+                    foreach ($transIds as $transId) {
+                        /**
+                         * echo '# ' . $transId->file
+                         * . ' [L'. $transId->lineNr . 'C' . $transId->colIdx . '] in '
+                         * . ' (' . $transId->path . ')<br>';
+                         * echo $comment . $transId->name . '="' . $transId->string . '"<br>';
+                         * /**/
 
-                            /**/
+                        /**/
 
-                            echo $comment . $transId->name . '="' . $transId->string . '"'
-                                . ' ;' . $transId->file
-                                . ' [L' . $transId->lineNr . 'C' . $transId->colIdx . '] 
-                            . <br>';
-                            /**/
-                        }
+                        echo $comment . $transId->name . '="' . $transId->string . '"'
+                            . ' ;' . $transId->file
+                            . ' [L' . $transId->lineNr . 'C' . $transId->colIdx . '] 
+                        . <br>';
+                        /**/
                     }
+                }
 
-                    ?>
-                </p>
-            </div>
+                ?>
+            </p>
         </div>
         <br>
         <br>
