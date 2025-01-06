@@ -9,6 +9,8 @@
 
 defined('_JEXEC') or die;
 
+use Finnern\Component\Lang4dev\Administrator\Helper\langSubProject;
+use Finnern\Component\Lang4dev\Administrator\Helper\projectType;
 use Joomla\CMS\Factory;
 use Joomla\CMS\HTML\HTMLHelper;
 use Joomla\CMS\Language\Associations;
@@ -22,7 +24,7 @@ HTMLHelper::_('behavior.keepalive');
 $app   = Factory::getApplication();
 $input = $app->input;
 
-//$assoc = Associations::isEnabled();
+//$assoc = Associations::isEnabled();8
 // Are associations implemented for this extension?
 $extensionassoc = array_key_exists('item_associations', $this->form->getFieldsets());
 
@@ -37,6 +39,11 @@ $tmpl    = $isModal || $input->get('tmpl', '', 'cmd') === 'component' ? '&tmpl=c
 
 // toDo assoc ....
 $assoc = false;
+
+$this->document->getWebAssetManager()->useStyle('com_lang4dev.backend.project');
+
+
+
 
 ?>
 
@@ -75,6 +82,8 @@ echo Route::_('index.php?option=com_lang4dev&view=project&layout=edit&id=' . (in
 
                             //echo'<br>-------------- end: ><br>';
 
+                            renderSubProjects ($this->item->subProjects);
+
                             ?>
 						</fieldset>
 					</div>
@@ -91,7 +100,7 @@ echo Route::_('index.php?option=com_lang4dev&view=project&layout=edit&id=' . (in
         echo LayoutHelper::render('joomla.edit.params', $this); ?>
 
         <?php
-        echo HTMLHelper::_('uitab.addTab', 'myTab', 'publishing', Text::_('COM_LANG4DEV_ROJECT_INFO')); ?>
+        echo HTMLHelper::_('uitab.addTab', 'myTab', 'publishing', Text::_('COM_LANG4DEV_PROJECT_INFO')); ?>
 		<div class="row">
 			<div class="col-12 col-lg-6">
 				<fieldset id="fieldset-publishingdata" class="options-form">
@@ -156,3 +165,57 @@ echo Route::_('index.php?option=com_lang4dev&view=project&layout=edit&id=' . (in
         echo HTMLHelper::_('form.token'); ?>
 	</div>
 </form>
+
+<?php
+
+
+function renderSubProjects($subProjects): void
+{
+    ?>
+	<!--div class="row g-2"-->
+	<div class="row">
+		<div class="sub_projects_container">
+
+            <?php
+            foreach ($subProjects as $subProject) {
+                renderSubProject($subProject);
+            }
+            ?>
+
+		</div>
+	</div>
+    <?php
+
+    return;
+}
+
+
+function renderSubProject($subProject): void
+{
+    ?>
+	<!--div class="row g-2"-->
+	<div class="row">
+		<div class="sub_project_container">
+
+			<div class="sub_project_title">
+				<h4>
+                    <?php
+                    echo projectType::getPrjTypeText(projectType::int2prjType( $subProject->subPrjType));
+                    ?>
+				</h4>
+			</div>
+
+			<div class="sub_project_data">
+                <?php
+                echo $subProject->root_path;
+				?>
+			</div>
+
+		</div>
+	</div>
+    <?php
+
+    return;
+}
+
+?>

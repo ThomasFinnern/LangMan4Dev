@@ -13,6 +13,7 @@ defined('_JEXEC') or die;
 
 use Exception;
 use Finnern\Component\Lang4dev\Administrator\Helper\eSubProjectType;
+use Finnern\Component\Lang4dev\Administrator\Helper\langSubProject;
 use Finnern\Component\Lang4dev\Administrator\Helper\projectType;
 use JForm;
 use Joomla\CMS\Access\Rules;
@@ -955,7 +956,7 @@ class SubprojectModel extends AdminModel
      *
      * @since version
      */
-    public function mergeSubProject($subProject, $parentId)
+    public function saveSubProject($subProject, $parentId)
     {
         $isSaved = false;
 
@@ -970,10 +971,10 @@ class SubprojectModel extends AdminModel
 
         if ($existingId > 0) {
             // change existing
-            $isSaved = $this->mergeSubProject_DB($existingId, $subProject);
+            $isSaved = $this->mergeAndSave2_DB($existingId, $subProject);
         } else {
             // create new
-            $isSaved = $this->createSubProject_DB($subProject, $parentId);
+            $isSaved = $this->createAndSave2_DB($subProject, $parentId);
         }
 
         return $isSaved;
@@ -988,7 +989,7 @@ class SubprojectModel extends AdminModel
      * @throws Exception
      * @since version
      */
-    private function mergeSubProject_DB($existingId, $subProject)
+    private function mergeAndSave2_DB($existingId, $subProject)
     {
         $isSaved = false;
 
@@ -1005,7 +1006,7 @@ class SubprojectModel extends AdminModel
         $data ['prjId']             = $subProject->prjId;
         $data ['subPrjType']        = projectType::prjType2int($subProject->prjType);
         $data ['root_path']         = $subProject->prjRootPath;
-        $data ['prefix']            = $subProject->langIdPrefix;
+        $data ['langIdPrefix']            = $subProject->langIdPrefix;
         $data ['notes']             = '%';
         $data ['isLangAtStdJoomla'] = $subProject->isLangAtStdJoomla ? 1 : 0;
         // ToDo: activate or check as actual is empty $data ['prjXmlPathFilename'] = $subProject->prjXmlPathFilename;
@@ -1027,7 +1028,7 @@ class SubprojectModel extends AdminModel
 
                 $OutTxt .=  '"' . json_encode($errFound) . '"\n';
             }
-            $OutTxt .=  'Could not save into DB : "' . $data ['title'] . '"';
+            $OutTxt .=  'Could not save merged subproject into DB : "' . $data ['title'] . '"';
 
             $app    = Factory::getApplication();
             $app->enqueueMessage($OutTxt, 'error');
@@ -1045,7 +1046,7 @@ class SubprojectModel extends AdminModel
      * @throws Exception
      * @since version
      */
-    private function createSubProject_DB($subProject, $parentId)
+    private function createAndSave2_DB($subProject, $parentId)
     {
         // $table      = $this->getTable();
 
@@ -1060,7 +1061,7 @@ class SubprojectModel extends AdminModel
         $data ['prjId']             = $subProject->prjId;
         $data ['subPrjType']        = projectType::prjType2int($subProject->prjType);
         $data ['root_path']         = $subProject->prjRootPath;
-        $data ['prefix']            = $subProject->langIdPrefix;
+        $data ['langIdPrefix']            = $subProject->langIdPrefix;
         $data ['notes']             = '%';
         $data ['isLangAtStdJoomla'] = $subProject->isLangAtStdJoomla ? 1 : 0;
         // ToDo: activate or check as actual is empty $data ['prjXmlPathFilename'] = $subProject->prjXmlPathFilename;
@@ -1082,7 +1083,7 @@ class SubprojectModel extends AdminModel
 
                 $OutTxt .=  '"' . json_encode($errFound) . '"\n';
             }
-            $OutTxt .=  'Could not save into DB : "' . $data ['title'] . '"';
+            $OutTxt .=  'Could not save new subproject into DB : "' . $data ['title'] . '"';
 
             $app    = Factory::getApplication();
             $app->enqueueMessage($OutTxt, 'error');
@@ -1119,6 +1120,85 @@ class SubprojectModel extends AdminModel
         // wrong ? $existingId = $db->loadObject();
 
         return (int)$existingId;
+    }
+
+    /**
+     * @param $basePrjPath
+     *
+     * @return langSubProject []
+     *
+     * @since version
+     */
+    public function subProjectsByPrjId($basePrjPath) : array // : langSubProject []
+    {
+        $subProjects = [];
+
+        // List of integers (com has an array of three)
+        $prjTypes = projectType::prjTypesByProjectId($basePrjPath->prjId);
+
+        foreach ($prjTypes as $prjType) {
+            //--- new sub project -------------------------------------------------
+
+            $langSubProject = new langSubProject (
+                $basePrjPath->prjId,
+                $prjType,
+                $basePrjPath->getRootPath(),
+                $basePrjPath->getManifestPathFilename()
+            );
+
+            //--- collect new sub project ------------------
+
+            $isExisting = true;
+
+            switch ($prjType) {
+                case eSubProjectType::PRJ_TYPE_NONE:
+                    $isExisting = false;
+                    break;
+
+                case eSubProjectType::PRJ_TYPE_COMP_BACK_SYS:
+                case eSubProjectType::PRJ_TYPE_COMP_BACK:
+//                    if ( ! is_dir ($langSubProject->prjRootPath))
+                    if ( ! is_dir ($langSubProject->prjAdminPath))
+                    {
+                        $isExisting = false;
+                    }
+                    break;
+
+                case eSubProjectType::PRJ_TYPE_COMP_SITE:
+//                    if ( ! is_dir ($langSubProject->prjRootPath))
+                    if ( ! is_dir ($langSubProject->prjDefaultPath))
+                    {
+                        $isExisting = false;
+                    } else {
+                        // Attention actually lang4dev folder in ...\component folder is created accidently
+                        // ToDo: remove later as '/language' may not exist
+                        if ( ! is_dir ($langSubProject->prjDefaultPath . '/language'))
+                        {
+                            $isExisting = false;
+                        }
+                    }
+                    break;
+
+                case eSubProjectType::PRJ_TYPE_MODEL:
+                case eSubProjectType::PRJ_TYPE_PLUGIN:
+                case eSubProjectType::PRJ_TYPE_WEB_ADMIN:
+                case eSubProjectType::PRJ_TYPE_WEB_SITE:
+                case eSubProjectType::PRJ_TYPE_TEMPLATE:
+                case $this->PRJTYPEWEBROOT:
+                    if ( ! is_dir ($langSubProject->prjRootPath))
+                    {
+                        $isExisting = false;
+                    }
+                    break;
+
+            }
+
+            if ($isExisting) {
+                $subProjects[] = $langSubProject;
+            }
+        }
+
+        return $subProjects;
     }
 
 

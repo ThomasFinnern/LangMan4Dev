@@ -11,6 +11,14 @@
       "type": "style",
       "uri": "com_lang4dev/backend/controlPanel.css"
     },
+    {
+      "name": "com_lang4dev.backend.controlPanel",
+      "type": "preset",
+      "dependencies": [
+        "com_lang4dev.backend.controlPanel#style",
+        "com_lang4dev.lib.bs_set2dark#script"
+      ]
+    },
 
     {
       "name": "com_lang4dev.lib.bs_set2dark",
@@ -26,15 +34,6 @@
     },
 	
     {
-      "name": "com_lang4dev.backend.controlPanel",
-      "type": "preset",
-      "dependencies": [
-        "com_lang4dev.backend.controlPanel#style",
-        "com_lang4dev.lib.bs_set2dark#script"
-      ]
-    },
-
-    {
       "name": "com_lang4dev.backend.prjTexts",
       "description": "Backend styling.",
       "type": "style",
@@ -49,13 +48,13 @@
         "com_lang4dev.lib.bs_set2dark#script"
       ]
     },
+	
     {
       "name": "com_lang4dev.backend.translate",
       "description": "Backend styling.",
       "type": "style",
       "uri": "com_lang4dev/backend/translate.css"
     },
-
     {
       "name": "com_lang4dev.backend.translate",
       "type": "preset",
@@ -64,13 +63,13 @@
         "com_lang4dev.lib.bs_set2dark#script"
       ]
     },
+	
     {
       "name": "com_lang4dev.backend.maintenance",
       "description": "Backend styling.",
       "type": "style",
       "uri": "com_lang4dev/backend/maintenance.css"
     },
-
     {
       "name": "com_lang4dev.backend.maintenance",
       "type": "preset",
@@ -79,18 +78,33 @@
         "com_lang4dev.lib.bs_set2dark#script"
       ]
     },
+	
     {
       "name": "com_lang4dev.backend.translations",
       "description": "Backend styling.",
       "type": "style",
       "uri": "com_lang4dev/backend/translations.css"
     },
-
     {
       "name": "com_lang4dev.backend.translations",
       "type": "preset",
       "dependencies": [
         "com_lang4dev.backend.translations#style",
+        "com_lang4dev.lib.bs_set2dark#script"
+      ]
+    },
+	
+    {
+      "name": "com_lang4dev.backend.project",
+      "description": "Backend styling.",
+      "type": "style",
+      "uri": "com_lang4dev/backend/project.css"
+    },
+    {
+      "name": "com_lang4dev.backend.project",
+      "type": "preset",
+      "dependencies": [
+        "com_lang4dev.backend.project#style",
         "com_lang4dev.lib.bs_set2dark#script"
       ]
     }

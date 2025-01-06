@@ -12,6 +12,7 @@ namespace Finnern\Component\Lang4dev\Administrator\Model;
 defined('_JEXEC') or die;
 
 use Exception;
+use Finnern\Component\Lang4dev\Administrator\Helper\basePrjPathFinder;
 use Finnern\Component\Lang4dev\Administrator\Helper\eSubProjectType;
 use Finnern\Component\Lang4dev\Administrator\Helper\langSubProject;
 use Finnern\Component\Lang4dev\Administrator\Helper\manifestLangFiles;
@@ -32,6 +33,7 @@ use Joomla\CMS\MVC\Factory\MVCFactoryInterface;
 use Joomla\CMS\MVC\Model\AdminModel;
 use Joomla\CMS\MVC\View\GenericDataException;
 use Joomla\CMS\Plugin\PluginHelper;
+use Joomla\CMS\Session\Session;
 use Joomla\CMS\Table\Table;
 use Joomla\CMS\UCM\UCMType;
 use Joomla\CMS\Workflow\Workflow;
@@ -150,7 +152,7 @@ class ProjectModel extends AdminModel
     /**
      * Method to get a table object, load it if necessary.
      *
-     * @param   string  $type    The table name. Optional.
+     * @param   string  $name    The table name. Optional.
      * @param   string  $prefix  The class prefix. Optional.
      * @param   array   $config  Configuration array for model. Optional.
      *
@@ -158,9 +160,9 @@ class ProjectModel extends AdminModel
      *
      * @since __BUMP_VERSION__
      */
-    public function getTable($type = 'Project', $prefix = 'Lang4devTable', $config = array())
+    public function getTable($name = 'Project', $prefix = 'Lang4devTable', $options = array())
     {
-        return parent::getTable($type, $prefix, $config);
+        return parent::getTable($name, $prefix, $options);
     }
 
     /**
@@ -210,6 +212,10 @@ class ProjectModel extends AdminModel
     public function getItem($pk = null)
     {
         $item = parent::getItem($pk);
+
+        $subProjectsData = $this->subPrjsDbData ($item->id);
+        $item->subProjects = $subProjectsData;
+        // $item->subProjectsData = $subProjectsData;
 
         // Load associated foo items
         $assoc = Associations::isEnabled();
@@ -574,7 +580,7 @@ class ProjectModel extends AdminModel
      * Transform some data before it is displayed ? Saved ?
      * extension development 129 bottom
      *
-     * @param   JTable  $table
+     * @param   Table  $table
      *
      * @since __BUMP_VERSION__
      */
@@ -681,108 +687,68 @@ class ProjectModel extends AdminModel
             $isNew = false;
         }
 
-//		// Set the new parent id if parent id not matched OR while New/Save as Copy .
-//		if ($table->parent_id != $data['parent_id'] || $data['id'] == 0)
-//		{
-//			$table->setLocation($data['parent_id'], 'last-child');
-//		}
-//
-//		// ToDo: use name instead of title ?
-//		// Alter the title for save as copy
-//		if ($input->get('task') == 'save2copy')
-//		{
-//			$origTable = clone $this->getTable();
-//			$origTable->load($input->getInt('id'));
-//
-//			if ($data['title'] == $origTable->title)
-//			{
-//				list($title, $alias) = $this->generateNewTitle($data['parent_id'], $data['alias'], $data['title']);
-//				$data['title'] = $title;
-//				$data['alias'] = $alias;
-//			}
-//			else
-//			{
-//				if ($data['alias'] == $origTable->alias)
-//				{
-//					$data['alias'] = '';
-//				}
-//			}
-//
-//			$data['published'] = 0;
-//		}
+        //--- save2copy ---------------------------------------
 
-//        // Automatic handling of alias for empty fields
-//        if (in_array($input->get('task'), array('apply', 'save', 'save2new')) && (!isset($data['id']) || (int) $data['id'] == 0))
-//        {
-//            if ($data['alias'] == null)
-//            {
-//                if (Factory::getApplication()->get('unicodeslugs') == 1)
-//                {
-//                    $data['alias'] = \JFilterOutput::stringURLUnicodeSlug($data['title']);
-//                }
-//                else
-//                {
-//                    $data['alias'] = \JFilterOutput::stringURLSafe($data['title']);
-//                }
-//
-//                $table = Table::getInstance('Content', 'JTable');
-//
-//                if ($table->load(array('alias' => $data['alias'], 'catid' => $data['catid'])))
-//                {
-//                    $msg = Text::_('COM_CONTENT_SAVE_WARNING');
-//                }
-//
-//                list($title, $alias) = $this->generateNewTitle($data['catid'], $data['alias'], $data['title']);
-//                $data['alias'] = $alias;
-//
-//                if (isset($msg))
-//                {
-//                    Factory::getApplication()->enqueueMessage($msg, 'warning');
-//                }
-//            }
-//        }
+		// Set the new parent id if parent id not matched OR while New/Save as Copy .
+		if ($table->parent_id != $data['parent_id'] || $data['id'] == 0)
+		{
+			$table->setLocation($data['parent_id'], 'last-child');
+		}
 
-//        // Bind the data.
-//		if (!$table->bind($data))
-//		{
-//			$this->setError($table->getError());
-//
-//			return false;
-//		}
-//
-//		// Bind the rules.
-//		if (isset($data['rules']))
-//		{
-//			$rules = new Rules($data['rules']);
-//			$table->setRules($rules);
-//		}
-//
-//		// Check the data.
-//		if (!$table->check())
-//		{
-//			$this->setError($table->getError());
-//
-//			return false;
-//		}
+		// ToDo: use name instead of title ?
+		// Alter the title for save as copy
+		if ($input->get('task') == 'save2copy')
+		{
+			$origTable = clone $this->getTable();
+			$origTable->load($input->getInt('id'));
 
-        // Trigger the before save event.
-//		$result = Factory::getApplication()->triggerEvent($this->event_before_save, array($context, &$table, $isNew, $data));
-//
-//		if (in_array(false, $result, true))
-//		{
-//			$this->setError($table->getError());
-//
-//			return false;
-//		}
+			if ($data['title'] == $origTable->title)
+			{
+				list($title, $alias) = $this->generateNewTitle($data['parent_id'], $data['alias'], $data['title']);
+				$data['title'] = $title;
+				$data['alias'] = $alias;
+			}
+			else
+			{
+				if ($data['alias'] == $origTable->alias)
+				{
+					$data['alias'] = '';
+				}
+			}
 
-        // Store the data.
-//		if (!$table->store())
-//		{
-//
-//			$this->setError($table->getError());
-//
-//			return false;
-//		}
+			$data['published'] = 0;
+		}
+
+        // Automatic handling of alias for empty fields
+        if (in_array($input->get('task'), array('apply', 'save', 'save2new')) && (!isset($data['id']) || (int) $data['id'] == 0))
+        {
+            if ($data['alias'] == null)
+            {
+                if (Factory::getApplication()->get('unicodeslugs') == 1)
+                {
+                    $data['alias'] = \JFilterOutput::stringURLUnicodeSlug($data['title']);
+                }
+                else
+                {
+                    $data['alias'] = \JFilterOutput::stringURLSafe($data['title']);
+                }
+
+                $table = Table::getInstance('Content', 'JTable');
+
+                if ($table->load(array('alias' => $data['alias'], 'catid' => $data['catid'])))
+                {
+                    $msg = Text::_('COM_CONTENT_SAVE_WARNING');
+                }
+
+                list($title, $alias) = $this->generateNewTitle($data['catid'], $data['alias'], $data['title']);
+                $data['alias'] = $alias;
+
+                if (isset($msg))
+                {
+                    Factory::getApplication()->enqueueMessage($msg, 'warning');
+                }
+            }
+        }
 
         if (parent::save($data)) {
             /**
@@ -913,6 +879,86 @@ class ProjectModel extends AdminModel
     }
 
     /**
+     * SubprojectModel $subPrjModel
+     *
+     * @throws Exception
+     * @since version
+     */
+    public function detectDetails(SubprojectModel $subPrjModel) : array
+    {
+        $input = Factory::getApplication()->input;
+        $data  = $input->post->get('jform', array(), 'array');
+
+        $id          = (int)$data ['id'];
+        // ToDo: use component_name or project_id in db und view. attention alias
+        $prjId       = trim($data ['name']);
+        $prjRootPath = trim($data ['root_path']);
+
+        //--- path to project xml file ---------------------------------
+
+        // detect path by project name or root path is given
+        $basePrjPath = new basePrjPathFinder($prjId, $prjRootPath);
+
+        //--- update changed user path (too short, including root ...) ----------
+
+        $isChanged = false;
+
+        if ($basePrjPath->isRootValid) {
+            $subPrjPath = $basePrjPath->getSubPrjPath();
+            if ($prjRootPath != $subPrjPath) {
+                $prjRootPath = $subPrjPath;
+
+                // write back into input
+                $isChanged = true;
+
+                //$input->set('jform['root_path']', $prjRootPath);
+                $data ['root_path'] = $prjRootPath;
+            }
+        }
+
+        // write back into input
+        if ($isChanged) {
+            $this->input->post->set('jform', $data);
+        }
+
+        // On first write of this project fetch saved project id
+        if ($id < 1) {
+            $id = $this->justSavedId();
+        }
+
+        //---------------------------------------------------------
+        // extract subprojects
+        //---------------------------------------------------------
+
+        // Create subProjects by component-types and restrict to existing paths
+        // Attention actually lang4dev folder in ...\component folder is created accidently
+        $subProjects = $subPrjModel->subProjectsByPrjId($basePrjPath);
+
+        //--- save subproject changes ---------------------------------
+
+        foreach ($subProjects as $subProject) {
+            $subProject->RetrieveBaseManifestData();
+
+            $isSaved &= $subPrjModel->saveSubProject($subProject, $id);
+        }
+
+        if (!$isSaved) {
+            $OutTxt = "!$isSaved: error on detectDetails for project: \n"
+                . 'One or more subprojects could not be saved into DB (sub project): "' . $prjRootPath . '"';
+            $app    = Factory::getApplication();
+            $app->enqueueMessage($OutTxt, 'error');
+
+            // toDo: fetch errors
+            //$errors = $this->get('Errors');
+
+            return [];
+        }
+
+        return $subProjects;
+    }
+
+
+    /**
      *
      * @return integer highest ID of created projects
      *
@@ -948,75 +994,6 @@ class ProjectModel extends AdminModel
     }
 
     /**
-     * @param $basePrjPath
-     *
-     * @return langSubProject []
-     *
-     * @since version
-     */
-    public function subProjectsByPrjId($basePrjPath) : array // : langSubProject []
-    {
-        $subProjects = [];
-
-        // List of integers (com has an array of three)
-        $prjTypes = projectType::prjTypesByProjectId($basePrjPath->prjId);
-
-        foreach ($prjTypes as $prjType) {
-            //--- new sub project -------------------------------------------------
-
-            $langSubProject = new langSubProject (
-                $basePrjPath->prjId,
-                $prjType,
-                $basePrjPath->getRootPath(),
-                $basePrjPath->getManifestPathFilename()
-            );
-
-            //--- collect new sub project ------------------
-
-            $isExisting = true;
-
-            switch ($prjType) {
-                case eSubProjectType::PRJ_TYPE_NONE:
-                    $isExisting = false;
-                    break;
-
-                case eSubProjectType::PRJ_TYPE_COMP_BACK_SYS:
-                case eSubProjectType::PRJ_TYPE_COMP_BACK:
-//                    if ( ! is_dir ($langSubProject->prjRootPath))
-                    if ( ! is_dir ($langSubProject->prjAdminPath))
-                    {
-                        $isExisting = false;
-                    }
-                    break;
-
-                case eSubProjectType::PRJ_TYPE_COMP_SITE:
-//                    if ( ! is_dir ($langSubProject->prjRootPath))
-                    if ( ! is_dir ($langSubProject->prjDefaultPath))
-                    {
-                        $isExisting = false;
-                    }
-                    break;
-
-                case eSubProjectType::PRJ_TYPE_MODEL:
-                case eSubProjectType::PRJ_TYPE_PLUGIN:
-                case eSubProjectType::PRJ_TYPE_WEB_ROOT:
-                    if ( ! is_dir ($langSubProject->prjRootPath))
-                    {
-                        $isExisting = false;
-                    }
-                    break;
-
-            }
-
-            if ($isExisting) {
-                $subProjects[] = $langSubProject;
-            }
-        }
-
-        return $subProjects;
-    }
-
-    /**
      * Delete #__content_frontpage items if the deleted articles was featured
      *
      * @param   object  $pks  The primary key related to the contents that was deleted.
@@ -1044,5 +1021,50 @@ class ProjectModel extends AdminModel
 
         return $return;
     }
+
+    /**
+     * @param $parent_id
+     *
+     * @return array|mixed
+     *
+     * @throws Exception
+     * @since version
+     */
+    private function subPrjsDbData($parent_id)
+    {
+        $dbSubProjects = [];
+
+        try {
+            //--- collect data from manifest -----------------
+            $db = Factory::getDbo();
+
+            $query = $db->getQuery(true)
+                ->select($db->quoteName('id'))
+                ->select($db->quoteName('prjId'))
+                ->select($db->quoteName('subPrjType'))
+                ->select($db->quoteName('prefix'))
+                ->select($db->quoteName('isLangAtStdJoomla'))
+                ->select($db->quoteName('root_path'))
+                ->select($db->quoteName('prjXmlPathFilename'))
+                ->select($db->quoteName('installPathFilename'))
+                ->where($db->quoteName('parent_id') . ' = ' . (int)$parent_id)
+                ->from($db->quoteName('#__lang4dev_subprojects'))
+                ->order($db->quoteName('subPrjType') . ' ASC');
+
+            // Get the options.
+            $dbSubProjects = $db->setQuery($query)->loadObjectList();
+        } catch (RuntimeException $e) {
+            $OutTxt = '';
+            $OutTxt .= 'Error executing collectSubProjectIds: ' . '<br>';
+            $OutTxt .= 'Error: "' . $e->getMessage() . '"' . '<br>';
+
+            $app = Factory::getApplication();
+            $app->enqueueMessage($OutTxt, 'error');
+        }
+
+        return $dbSubProjects;
+    }
+
+
 
 } // class

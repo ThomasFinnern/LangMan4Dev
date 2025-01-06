@@ -63,7 +63,7 @@ CREATE TABLE IF NOT EXISTS `#__lang4dev_subprojects`
 	`subPrjType`          int                                                    NOT NULL DEFAULT 0,
 	`root_path`           varchar(255)                                           NOT NULL DEFAULT '',
 
-	`prefix`              varchar(255)                                           NOT NULL DEFAULT '',
+	`langIdPrefix`        varchar(255)                                           NOT NULL DEFAULT '',
 	`notes`               text                                                   NOT NULL,
 	`isLangAtStdJoomla`   int                                                    NOT NULL DEFAULT 0,
 

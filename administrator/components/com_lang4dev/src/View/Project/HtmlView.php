@@ -82,6 +82,8 @@ class HtmlView extends BaseHtmlView
     protected $isDebugBackend;
     protected $isDevelop;
 
+    // protected $subProjects;
+
     /**
      * Method to display the view.
      *
@@ -106,6 +108,8 @@ class HtmlView extends BaseHtmlView
         $this->item  = $this->get('Item');
         $this->state = $this->get('State');
 
+        $subProjects = $this->item->subProjects;
+
         //$section = $this->state->get('gallery.section') ? $this->state->get('gallery.section') . '.' : '';
         //$this->canDo = ContentHelper::getActions($this->state->get('gallery.component'), $section . 'gallery', $this->item->id);
         $this->canDo = ContentHelper::getActions('com_lang4dev', 'project', $this->item->id);
@@ -118,7 +122,7 @@ class HtmlView extends BaseHtmlView
 
         // different toolbar on different layouts
         $Layout = Factory::getApplication()->input->get('layout');
-        $this->addToolbar($Layout);
+        $this->addToolbar($Layout, $this->item->id);
 
         Factory::getApplication()->input->set('hidemainmenu', true);
 
@@ -132,7 +136,7 @@ class HtmlView extends BaseHtmlView
      *
      * @since __BUMP_VERSION__
      */
-    protected function addToolbar($Layout)
+    protected function addToolbar($Layout, $itemId)
     {
         //$canDo = \Joomla\Component\Content\Administrator\Helper\ContentHelper::getActions('com_content', 'category', $this->state->get('filter.category_id'));
         $canDo = true;
@@ -164,6 +168,8 @@ class HtmlView extends BaseHtmlView
 
                 ToolBarHelper::apply('project.apply');
                 ToolBarHelper::save('project.save');
+                ToolBarHelper::save2new('project.save2new');
+                ToolBarHelper::save2copy('project.save2copy');
 
                 $toolbar->delete('projects.delete')
                     ->text('JTOOLBAR_DELETE')
@@ -179,13 +185,16 @@ class HtmlView extends BaseHtmlView
                     ToolBarHelper::cancel('project.cancel', 'JTOOLBAR_CLOSE');
                 }
 
-                ToolbarHelper::custom(
-                    'project.detectDetails',
-                    'icon-refresh',
-                    '',
-                    'COM_LANG4DEV_DETECT_DETAILS',
-                    false
-                );
+                // item is saved already
+                if ($itemId>0) {
+                    ToolbarHelper::custom(
+                        'project.detectDetails',
+                        'icon-refresh',
+                        '',
+                        'COM_LANG4DEV_DETECT_DETAILS',
+                        false
+                    );
+                }
 
                 // Options button.
                 if (Factory::getApplication()->getIdentity()->authorise('core.admin', 'com_lang4dev')) {

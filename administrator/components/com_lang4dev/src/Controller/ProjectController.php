@@ -30,7 +30,6 @@ use Joomla\Utilities\ArrayHelper;
 use Finnern\Component\Lang4dev\Administrator\Helper\langProject;
 use Finnern\Component\Lang4dev\Administrator\Helper\projectType;
 use Finnern\Component\Lang4dev\Administrator\Helper\basePrjPathFinder;
-use Lang4dev\Component\Lang4dev\Administrator\Model\GalleryModel;
 
 use function defined;
 
@@ -104,6 +103,46 @@ class projectController extends FormController
         return true;
     }
 
+
+    /**
+     * Override parent save method to store form data with right key as expected by edit category page
+     *
+     * @param   string  $key     The name of the primary key of the URL variable.
+     * @param   string  $urlVar  The name of the URL variable if different from the primary key (sometimes required to avoid router collisions).
+     *
+     * @return  boolean  True if successful, false otherwise.
+     *
+     * @since   3.10.3
+     */
+    public function save($key = null, $urlVar = null)
+    {
+        //--- save this ----------------------------------
+
+        $result = parent::save($key, $urlVar);
+
+        //--- detect sub projects -----------------------
+
+        /** @var ProjectModel $model */
+        $prjModel = $this->getModel();
+
+        /** @var SubprojectModel $subPrjModel */
+        $subPrjModel = $this->getModel('Subproject');
+
+        // detect subprojects and write to DB
+        $subProjects = $prjModel->detectDetails($subPrjModel);
+
+        //--- no subProjects found ? -----------------------
+
+        if (count($subProjects) == 0) {
+                $OutTxt = "Error on detect subprojects for project. \n"
+                    . 'Could not create subprojects "' . 'count(\$subProjects)==0';
+                $app    = Factory::getApplication();
+                $app->enqueueMessage($OutTxt, 'warning');
+        }
+
+        return $result;
+    }
+
     /**
      *
      *
@@ -126,123 +165,29 @@ class projectController extends FormController
             $app    = Factory::getApplication();
             $app->enqueueMessage($OutTxt, 'error');
         } else {
-            $input = Factory::getApplication()->input;
-            $data  = $input->post->get('jform', array(), 'array');
-
-            $id          = (int)$data ['id'];
-            // ToDo: use component_name or project_id in db und view. attention alias
-            $prjId       = trim($data ['name']);
-            $prjRootPath = trim($data ['root_path']);
+            //--- detect sub projects ----------------------------------
 
             /** @var ProjectModel $model */
             $prjModel = $this->getModel();
 
-            //--- path to project xml file ---------------------------------
-
-            // detect path by project name or root path is given
-            $basePrjPath = new basePrjPathFinder($prjId, $prjRootPath);
-
-            //--- update changed user path (too short, including root ...) ----------
-
-            $isChanged = false;
-
-            if ($basePrjPath->isRootValid) {
-                $subPrjPath = $basePrjPath->getSubPrjPath();
-                if ($prjRootPath != $subPrjPath) {
-                    $prjRootPath = $subPrjPath;
-
-                    // write back into input
-                    $isChanged = true;
-
-                    //$input->set('jform['root_path']', $prjRootPath);
-                    $data ['root_path'] = $prjRootPath;
-                }
-            }
-
-            $isSaved = true; // fall back
-
-            // write back into input
-            if ($isChanged) {
-                $this->input->post->set('jform', $data);
-
-                $isSaved = $prjModel->save($data);
-            }
-
-            // On first write of this project
-            if ($id < 1) {
-                $isSaved = $prjModel->save($data);
-
-                //$id = $prjModel->highestProjectId_DB ();
-                $id = $prjModel->justSavedId();
-            }
-
-            if (!$isSaved) {
-                $OutTxt = "!$isSaved: error on detectDetails for project: \n"
-                    . 'Could not save into DB (project): "' . $prjRootPath . '"';
-                $app    = Factory::getApplication();
-                $app->enqueueMessage($OutTxt, 'error');
-
-                // toDo: fetch errors
-                // $errors = $this->get('Errors');
-
-                return;
-            }
-
-            //---------------------------------------------------------
-            // extract subprojects
-	        //---------------------------------------------------------
-
-            $subProjects = $prjModel->subProjectsByPrjId($basePrjPath);
-            // ToDo: add $subProjects = $prjModel->subProjectsByManifest ($basePrjPath);
-
-            //--- save subproject changes ---------------------------------
-
-            /** @var SubprojectModel $model */
+            /** @var SubprojectModel $subPrjModel */
             $subPrjModel = $this->getModel('Subproject');
 
-            foreach ($subProjects as $subProject) {
-                $subProject->RetrieveBaseManifestData();
+            // detect sub projects and write to DB
+            $subProjects = $prjModel->detectDetails($subPrjModel);
 
-                //  !!! does save sub project additional !!!
-                $isSaved &= $subPrjModel->MergeSubProject($subProject, $id);
-            }
+            //--- no subProjects found ? -----------------------
 
-            if (!$isSaved) {
-                $OutTxt = "!$isSaved: error on detectDetails for project: \n"
-                    . 'One or more subprojects could not be saved into DB (sub project): "' . $prjRootPath . '"';
+            if (count($subProjects) == 0) {
+                $OutTxt = "Error on detect subprojects for project. \n"
+                    . 'Could not create subprojects "' . 'count(\$subProjects)==0';
                 $app    = Factory::getApplication();
-                $app->enqueueMessage($OutTxt, 'error');
-
-                // toDo: fetch errors
-                //$errors = $this->get('Errors');
-
-                return;
+                $app->enqueueMessage($OutTxt, 'warning');
             }
 
-            // success: found subprojects and was saved before
-            if (count($subProjects) > 0 && $id > 0) {
-                $OutTxt = "detectDetails for project has finished successful:";
-                $app    = Factory::getApplication();
-                $app->enqueueMessage($OutTxt, 'info');
-            } else {
-                if ($id < 1) {
-                    // error DB save
-                    $OutTxt = "$id < 1: error on detectDetails for project: \n"
-                        . 'Could not save into DB: "' . $prjRootPath . '"';
-                    $app    = Factory::getApplication();
-                    $app->enqueueMessage($OutTxt, 'warning');
-                } else {
-                    // error path
-                    $OutTxt = "count($subProjects)==0: error on detectDetails for project: \n"
-                        . 'Could not create subprojects from root path: "' . $prjRootPath . '"';
-                    $app    = Factory::getApplication();
-                    $app->enqueueMessage($OutTxt, 'warning');
-                }
-            }
+            $link = 'index.php?option=com_lang4dev&view=project&layout=edit&id=' . $id;
+            $this->setRedirect($link);
         }
-
-        $link = 'index.php?option=com_lang4dev&view=project&layout=edit&id=' . $id;
-        $this->setRedirect($link);
     }
 
     /**
