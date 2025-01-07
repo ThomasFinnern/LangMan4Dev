@@ -94,6 +94,7 @@
 
 	<media folder="media/com_lang4dev"
 	       destination="com_lang4dev">
+		<filename>joomla.asset.json</filename>
 		<folder>css</folder>
 		<folder>images</folder>
 		<folder>js</folder>

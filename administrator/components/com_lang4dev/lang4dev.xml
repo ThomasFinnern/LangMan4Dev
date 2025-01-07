@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <extension type="component" method="upgrade">
     <name>COM_LANG4DEV</name>
-    <creationDate>2025.01.01</creationDate>
+    <creationDate>2025.01.06</creationDate>
     <author>Thomas Finnern</author>
     <authorEmail>lang4dev@tomfinnern.de</authorEmail>
     <authorUrl>https://github.com/ThomasFinnern</authorUrl>
     <copyright>(c) 2022-2025 Lang4dev Team</copyright>
     <license>GNU General Public License version 2 or later;</license>
-    <version>0.23.0</version>
+    <version>0.24.0</version>
     <description>COM_LANG4DEV_XML_DESCRIPTION</description>
     <element>Lang4Dev</element>
     <namespace path="src">Finnern\Component\Lang4dev</namespace>
@@ -94,6 +94,7 @@
 
 	<media folder="media/com_lang4dev"
 	       destination="com_lang4dev">
+		<filename>joomla.asset.json</filename>
 		<folder>css</folder>
 		<folder>images</folder>
 		<folder>js</folder>
