@@ -123,8 +123,11 @@ class HtmlView extends BaseHtmlView
 //            throw new GenericDataException(implode("\n", $errors), 500);
 //        }
 
+
+        /** ToDo: put in again *
         $this->form->setValue('selectSourceLangId', null, $mainLangId);
         $this->form->setValue('selectTargetLangId', null, $transLangId);
+        /**/
 
         //--- project --------------------------------------------------------------------
 

@@ -132,8 +132,17 @@ class sessionTransLangIds
         $mainLangId  = $this->mainLangId;
         $transLangId = $this->transLangId;
 
+
+        $OutTxt = "";
+        $OutTxt .= "\$mainLangId: " . json_encode($this->mainLangId) . "\n";
+        $OutTxt .= "\$$transLangId: " . json_encode($this->mainLangId) . "\n";
+
+        $app = Factory::getApplication();
+        $app->enqueueMessage($OutTxt, 'notice');
+
         // Is not set
         if ($mainLangId == '??-??') {
+
             //--- try session if set ---------------------------------
 
             $session    = Factory::getSession();
