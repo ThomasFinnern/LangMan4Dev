@@ -51,7 +51,7 @@ class Com_Lang4devInstallerScript extends InstallerScript
      */
     public function install($parent): bool
     {
-        echo Text::_('COM_LANG4DEV_INSTALLERSCRIPT_INSTALL');
+        // echo Text::_('COM_LANG4DEV_INSTALLERSCRIPT_INSTALL');
 
         return true;
     }
@@ -67,7 +67,7 @@ class Com_Lang4devInstallerScript extends InstallerScript
      */
     public function uninstall($parent): bool
     {
-        echo Text::_('COM_LANG4DEV_INSTALLERSCRIPT_UNINSTALL');
+        // echo Text::_('COM_LANG4DEV_INSTALLERSCRIPT_UNINSTALL');
 
         return true;
     }
@@ -84,7 +84,7 @@ class Com_Lang4devInstallerScript extends InstallerScript
      */
     public function update($parent): bool
     {
-        echo Text::_('COM_LANG4DEV_INSTALLERSCRIPT_UPDATE');
+        // echo Text::_('COM_LANG4DEV_INSTALLERSCRIPT_UPDATE');
 
         $this->addDashboardMenu('lang4dev', 'lang4dev');
 
@@ -129,7 +129,7 @@ class Com_Lang4devInstallerScript extends InstallerScript
             }
         }
 
-        echo Text::_('COM_LANG4DEV_INSTALLERSCRIPT_PREFLIGHT');
+        // echo Text::_('COM_LANG4DEV_INSTALLERSCRIPT_PREFLIGHT');
 
         return true;
     }
@@ -147,7 +147,7 @@ class Com_Lang4devInstallerScript extends InstallerScript
      */
     public function postflight($type, $parent)
     {
-        echo Text::_('COM_LANG4DEV_INSTALLERSCRIPT_POSTFLIGHT');
+        // echo Text::_('COM_LANG4DEV_INSTALLERSCRIPT_POSTFLIGHT');
 
         return true;
     }
