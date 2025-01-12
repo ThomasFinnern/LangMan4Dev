@@ -171,6 +171,7 @@ class langSubProject extends langFiles
                             if (is_dir(dirname($startPath))) {
 
 	                            // subproject valid ? project only used when lang path exist
+                                // ToDo: Check manifest for valid subprojects by pth before ... Delete site sub type if not existing
 	                            $this->isLangPathDefined = $this->detectLangBasePath($startPath, $this->useLangSysIni);
 
 	                            if ($this->isLangPathDefined)
@@ -911,15 +912,15 @@ class langSubProject extends langFiles
         //--- project XML and script file -------------------------------------------------
 
         // files config.xml and  to expect for subproject
-        [$isConfigXml, $isInstallPhp] = projectType::enabledByType($this->prjType);
+        [$isSearchXml, $isSearchInstall] = projectType::enabledByType($this->prjType);
 
-        if ($isInstallPhp) {
+        if ($isSearchInstall) {
             $this->installPathFilename = $this->prjXmlFilePath . '/' . $manifestLang->getSriptFile();
             // ToDo: function checkInstallFile ();
 
         }
 
-        if ($isConfigXml) {
+        if ($isSearchXml) {
             // ToDo: getConfigFile instead of direct below
             // $this->configPathFilename = $this->prjXmlFilePath . '/' . $manifestLang->getConfigFile();
             $this->configPathFilename = $this->prjXmlFilePath . '/' . 'config.xml';

@@ -223,14 +223,14 @@ function DisplayButton($button)
     <?php
 }
 
-function DisplayControlButtons($cmdButtons)
+function DisplayControlButtons($cmdButtons) : void
 {
     foreach ($cmdButtons as $Button) {
         DisplayButton($Button);
     }
 }
 
-function renderProjectSelection($form)
+function renderProjectSelection($form) : void
 {
     ?>
 	<div class='project_selection'>

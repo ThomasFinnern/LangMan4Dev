@@ -14,6 +14,7 @@ defined('_JEXEC') or die;
 use Exception;
 use Finnern\Component\Lang4dev\Administrator\Helper\eSubProjectType;
 use Finnern\Component\Lang4dev\Administrator\Helper\langSubProject;
+use Finnern\Component\Lang4dev\Administrator\Helper\manifestLangFiles;
 use Finnern\Component\Lang4dev\Administrator\Helper\projectType;
 use JForm;
 use Joomla\CMS\Access\Rules;
@@ -956,7 +957,7 @@ class SubprojectModel extends AdminModel
      *
      * @since version
      */
-    public function saveSubProject($subProject, $parentId)
+    public function saveSubProject($subProject, $parentId) : bool
     {
         $isSaved = false;
 
@@ -1046,7 +1047,7 @@ class SubprojectModel extends AdminModel
      * @throws Exception
      * @since version
      */
-    private function createAndSave2_DB($subProject, $parentId)
+    private function createAndSave2_DB($subProject, $parentId) :bool
     {
         // $table      = $this->getTable();
 
@@ -1061,7 +1062,7 @@ class SubprojectModel extends AdminModel
         $data ['prjId']             = $subProject->prjId;
         $data ['subPrjType']        = projectType::prjType2int($subProject->prjType);
         $data ['root_path']         = $subProject->prjRootPath;
-        $data ['langIdPrefix']            = $subProject->langIdPrefix;
+        $data ['langIdPrefix']      = $subProject->langIdPrefix;
         $data ['notes']             = '%';
         $data ['isLangAtStdJoomla'] = $subProject->isLangAtStdJoomla ? 1 : 0;
         // ToDo: activate or check as actual is empty $data ['prjXmlPathFilename'] = $subProject->prjXmlPathFilename;
@@ -1136,6 +1137,13 @@ class SubprojectModel extends AdminModel
         // List of integers (com has an array of three)
         $prjTypes = projectType::prjTypesByProjectId($basePrjPath->prjId);
 
+
+//        // Manifest tells if files have to be searched inside component or old on joomla standard paths
+//        $basePrjPath->getManifestPathFilename()
+//        $manifestLang = new manifestLangFiles ($this->prjXmlPathFilename);
+//
+//
+
         foreach ($prjTypes as $prjType) {
             //--- new sub project -------------------------------------------------
 
@@ -1143,7 +1151,7 @@ class SubprojectModel extends AdminModel
                 $basePrjPath->prjId,
                 $prjType,
                 $basePrjPath->getRootPath(),
-                $basePrjPath->getManifestPathFilename()
+
             );
 
             //--- collect new sub project ------------------

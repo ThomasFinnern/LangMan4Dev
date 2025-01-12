@@ -150,7 +150,7 @@ class HtmlView extends BaseHtmlView
             echo '<span style="color:red">'
                 . '<b>Tasks:</b> <br>'
                 . '* description to each input parameter "_DESC"<br>'
-                . '* <br>'
+                . '* fill out Project Info<br>'
                 . '* <br>'
 //				. '* <br>'
 //				. '* <br>'

@@ -937,19 +937,21 @@ class ProjectModel extends AdminModel
 
         //--- save subproject changes ---------------------------------
 
+        $isSaved = true;
         foreach ($subProjects as $subProject) {
-            $subProject->RetrieveBaseManifestData();
+            // 2025.01.12 $subProject->RetrieveBaseManifestData();
 
-            $isSaved &= $subPrjModel->saveSubProject($subProject, $id);
+            $isSubPrjSaved = $subPrjModel->saveSubProject($subProject, $id);
+            $isSaved &= $isSubPrjSaved;
         }
 
         if (!$isSaved) {
-            $OutTxt = "!$isSaved: error on detectDetails for project: \n"
+            $OutTxt = "!\$isSaved: error on detectDetails for project: \n"
                 . 'One or more subprojects could not be saved into DB (sub project): "' . $prjRootPath . '"';
             $app    = Factory::getApplication();
             $app->enqueueMessage($OutTxt, 'error');
 
-            // toDo: fetch errors
+            // ToDo: fetch errors
             //$errors = $this->get('Errors');
 
             return [];
