@@ -56,7 +56,7 @@ class ProjectsRawModel extends AdminModel
      * @var    string
      * @since __BUMP_VERSION__
      */
-    protected $text_prefix = 'COM_LANG4DEV';
+    protected $langIdPrefix = 'COM_LANG4DEV';
 
     /**
      * The type alias for this content type. Used for content version history.
@@ -134,7 +134,7 @@ class ProjectsRawModel extends AdminModel
             );
 
             $subPrj->installPathFilename = $dbSub->installPathFilename;
-            $subPrj->langIdPrefix        = $dbSub->prefix;
+            $subPrj->langIdPrefix        = $dbSub->langIdPrefix;
 	        // Not needed ? 2022.12.25 $subPrj->isLangAtStdJoomla   = $dbSub->isLangAtStdJoomla;
         }
 
@@ -161,7 +161,7 @@ class ProjectsRawModel extends AdminModel
                 ->select($db->quoteName('id'))
                 ->select($db->quoteName('prjId'))
                 ->select($db->quoteName('subPrjType'))
-                ->select($db->quoteName('prefix'))
+                ->select($db->quoteName('langIdPrefix'))
                 ->select($db->quoteName('isLangAtStdJoomla'))
                 ->select($db->quoteName('root_path'))
                 ->select($db->quoteName('prjXmlPathFilename'))
@@ -218,7 +218,7 @@ class ProjectsRawModel extends AdminModel
             /** doesn't have these ... *
              * $project->prjXmlPathFilename = $prjDb->prjXmlPathFilename;
              * $project->installPathFilename = $prjDb->installPathFilename;
-             * $project->prefix = $prjDb->prefix;
+             * $project->langIdPrefix = $prjDb->langIdPrefix;
              * $project->subPrjType = $prjDb->subPrjType;
              * /**/
 

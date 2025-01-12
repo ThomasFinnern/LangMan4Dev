@@ -56,7 +56,7 @@ class SubprojectModel extends AdminModel
      * @var    string
      * @since __BUMP_VERSION__
      */
-    protected $text_prefix = 'COM_LANG4DEV';
+    protected $langIdPrefix = 'COM_LANG4DEV';
 
     /**
      * The type alias for this content type. Used for content version history.

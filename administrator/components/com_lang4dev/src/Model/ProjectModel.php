@@ -60,7 +60,7 @@ class ProjectModel extends AdminModel
      * @var    string
      * @since __BUMP_VERSION__
      */
-    protected $text_prefix = 'COM_LANG4DEV';
+    protected $langIdPrefix = 'COM_LANG4DEV';
 
     /**
      * The type alias for this content type. Used for content version history.
@@ -689,11 +689,11 @@ class ProjectModel extends AdminModel
 
         //--- save2copy ---------------------------------------
 
-		// Set the new parent id if parent id not matched OR while New/Save as Copy .
-		if ($table->parent_id != $data['parent_id'] || $data['id'] == 0)
-		{
-			$table->setLocation($data['parent_id'], 'last-child');
-		}
+//		// Set the new parent id if parent id not matched OR while New/Save as Copy .
+//		if ($table->parent_id != $data['parent_id'] || $data['id'] == 0)
+//		{
+//			$table->setLocation($data['parent_id'], 'last-child');
+//		}
 
 		// ToDo: use name instead of title ?
 		// Alter the title for save as copy
@@ -720,7 +720,8 @@ class ProjectModel extends AdminModel
 		}
 
         // Automatic handling of alias for empty fields
-        if (in_array($input->get('task'), array('apply', 'save', 'save2new')) && (!isset($data['id']) || (int) $data['id'] == 0))
+        if (in_array($input->get('task'), array('apply', 'save', 'save2new'))
+            && (!isset($data['id']) || (int) $data['id'] == 0))
         {
             if ($data['alias'] == null)
             {
@@ -740,8 +741,8 @@ class ProjectModel extends AdminModel
                     $msg = Text::_('COM_CONTENT_SAVE_WARNING');
                 }
 
-                list($title, $alias) = $this->generateNewTitle($data['catid'], $data['alias'], $data['title']);
-                $data['alias'] = $alias;
+                // list($title, $alias) = $this->generateNewTitle($data['catid'], $data['alias'], $data['title']);
+                //$data['alias'] = $alias;
 
                 if (isset($msg))
                 {
@@ -1042,7 +1043,7 @@ class ProjectModel extends AdminModel
                 ->select($db->quoteName('id'))
                 ->select($db->quoteName('prjId'))
                 ->select($db->quoteName('subPrjType'))
-                ->select($db->quoteName('prefix'))
+                ->select($db->quoteName('langIdPrefix'))
                 ->select($db->quoteName('isLangAtStdJoomla'))
                 ->select($db->quoteName('root_path'))
                 ->select($db->quoteName('prjXmlPathFilename'))

@@ -50,8 +50,8 @@ class langSubProject extends langFiles
     // public $parentId = 0;
     // public $twinId = '';
 
-    // !!! ToDo: text_prefix !!!
-    // public $text_prefix;
+    // !!! ToDo: langIdPrefix !!!
+    // public $langIdPrefix;
 
     // public $useLangSysIni = false;
     /** @var bool */

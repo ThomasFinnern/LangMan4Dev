@@ -127,7 +127,7 @@ class subprojectController extends FormController
         if ($isFilesFound) {
             $data['prjXmlPathFilename']  = $subPrj->prjXmlPathFilename;
             $data['installPathFilename'] = $subPrj->installPathFilename;
-            $data['prefix']              = $subPrj->langIdPrefix;
+            $data['langIdPrefix']              = $subPrj->langIdPrefix;
         }
 
         //--- write to post data for save --------------------------------------

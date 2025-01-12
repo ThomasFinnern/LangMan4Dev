@@ -97,7 +97,7 @@ echo Route::_('index.php?option=com_lang4dev&view=subprojects'); ?>"
 	    <?php
 	    else : ?>
 
-		<table class="table table-sm" id="subprojetsList">
+		<table class="table table-sm" id="subprojectsList">
 			<caption id="captionTable" class="sr-only">
                 <?php
                 echo Text::_('COM_LANG4DEV_TABLE_CAPTION'); ?>, <?php
@@ -327,7 +327,7 @@ echo Route::_('index.php?option=com_lang4dev&view=subprojects'); ?>"
 
 					<td class="small d-none d-md-table-cell">
                         <?php
-                        echo $item->prefix; ?>
+                        echo $item->langIdPrefix; ?>
 					</td>
 
 					<td class="small d-none d-md-table-cell">

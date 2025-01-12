@@ -90,7 +90,7 @@ echo Route::_('index.php?option=com_lang4dev&view=subproject&layout=edit&id=' . 
 							<!--h5 class="card-title"><?php
                             echo Text::_('JDETAILS'); ?></h5-->
                             <?php
-                            echo $this->form->renderField('prefix');
+                            echo $this->form->renderField('langIdPrefix');
 
                             echo $this->form->renderField('prjXmlPathFilename');
 

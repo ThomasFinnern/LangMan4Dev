@@ -200,7 +200,7 @@ class SubprojectsModel extends ListModel
                 . 'a.subPrjType, '
                 . 'a.root_path, '
 
-                . 'a.prefix, '
+                . 'a.langIdPrefix, '
                 . 'a.notes, '
                 . 'a.isLangAtStdJoomla, '
 
