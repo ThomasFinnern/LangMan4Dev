@@ -1137,72 +1137,77 @@ class SubprojectModel extends AdminModel
         // List of integers (com has an array of three)
         $prjTypes = projectType::prjTypesByProjectId($basePrjPath->prjId);
 
+        // Manifest tells if files have to be searched inside component or old on joomla standard paths
+        $prjXmlPathFilename = $basePrjPath->getManifestPathFilename();
+        $oManifestFile = new manifestLangFiles ($prjXmlPathFilename);
 
-//        // Manifest tells if files have to be searched inside component or old on joomla standard paths
-//        $basePrjPath->getManifestPathFilename()
-//        $manifestLang = new manifestLangFiles ($this->prjXmlPathFilename);
-//
-//
 
         foreach ($prjTypes as $prjType) {
-            //--- new sub project -------------------------------------------------
 
-            $langSubProject = new langSubProject (
-                $basePrjPath->prjId,
-                $prjType,
-                $basePrjPath->getRootPath(),
-
-            );
-
-            //--- collect new sub project ------------------
-
-            $isExisting = true;
-
-            switch ($prjType) {
-                case eSubProjectType::PRJ_TYPE_NONE:
-                    $isExisting = false;
-                    break;
-
-                case eSubProjectType::PRJ_TYPE_COMP_BACK_SYS:
-                case eSubProjectType::PRJ_TYPE_COMP_BACK:
-//                    if ( ! is_dir ($langSubProject->prjRootPath))
-                    if ( ! is_dir ($langSubProject->prjAdminPath))
-                    {
-                        $isExisting = false;
-                    }
-                    break;
-
-                case eSubProjectType::PRJ_TYPE_COMP_SITE:
-//                    if ( ! is_dir ($langSubProject->prjRootPath))
-                    if ( ! is_dir ($langSubProject->prjDefaultPath))
-                    {
-                        $isExisting = false;
-                    } else {
-                        // Attention actually lang4dev folder in ...\component folder is created accidently
-                        // ToDo: remove later as '/language' may not exist
-                        if ( ! is_dir ($langSubProject->prjDefaultPath . '/language'))
-                        {
-                            $isExisting = false;
-                        }
-                    }
-                    break;
-
-                case eSubProjectType::PRJ_TYPE_MODEL:
-                case eSubProjectType::PRJ_TYPE_PLUGIN:
-                case eSubProjectType::PRJ_TYPE_WEB_ADMIN:
-                case eSubProjectType::PRJ_TYPE_WEB_SITE:
-                case eSubProjectType::PRJ_TYPE_TEMPLATE:
-                case $this->PRJTYPEWEBROOT:
-                    if ( ! is_dir ($langSubProject->prjRootPath))
-                    {
-                        $isExisting = false;
-                    }
-                    break;
-
+            // create subproject when manifest file is not found or prj type is found inside manifest
+            $isLang4SubProject = false;
+            if (!$oManifestFile->isValidXml) {
+                $isLang4SubProject = true;
+            } else {
+                $isLang4SubProject = projectType::isLangInManifest($prjType, $oManifestFile);
             }
 
-            if ($isExisting) {
-                $subProjects[] = $langSubProject;
+            // language path for project type is defined
+            if ($isLang4SubProject) {
+                //--- new sub project -------------------------------------------------
+
+                $langSubProject = new langSubProject (
+                    $basePrjPath->prjId,
+                    $prjType,
+                    $basePrjPath->getRootPath(),
+                    $oManifestFile
+                );
+
+                //--- collect new sub project ------------------
+
+                $isExisting = true;
+
+                switch ($prjType) {
+                    case eSubProjectType::PRJ_TYPE_NONE:
+                        $isExisting = false;
+                        break;
+
+                    case eSubProjectType::PRJ_TYPE_COMP_BACK_SYS:
+                    case eSubProjectType::PRJ_TYPE_COMP_BACK:
+//                    if ( ! is_dir ($langSubProject->prjRootPath))
+                        if (!is_dir($langSubProject->prjAdminPath)) {
+                            $isExisting = false;
+                        }
+                        break;
+
+                    case eSubProjectType::PRJ_TYPE_COMP_SITE:
+//                    if ( ! is_dir ($langSubProject->prjRootPath))
+                        if (!is_dir($langSubProject->prjDefaultPath)) {
+                            $isExisting = false;
+                        } else {
+                            // Attention actually lang4dev folder in ...\component folder is created accidently
+                            // ToDo: remove later as '/language' may not exist
+                            if (!is_dir($langSubProject->prjDefaultPath . '/language')) {
+                                $isExisting = false;
+                            }
+                        }
+                        break;
+
+                    case eSubProjectType::PRJ_TYPE_MODEL:
+                    case eSubProjectType::PRJ_TYPE_PLUGIN:
+                    case eSubProjectType::PRJ_TYPE_WEB_ADMIN:
+                    case eSubProjectType::PRJ_TYPE_WEB_SITE:
+                    case eSubProjectType::PRJ_TYPE_TEMPLATE:
+                    case $this->PRJTYPEWEBROOT:
+                        if (!is_dir($langSubProject->prjRootPath)) {
+                            $isExisting = false;
+                        }
+                        break;
+                }
+
+                if ($isExisting) {
+                    $subProjects[] = $langSubProject;
+                }
             }
         }
 

@@ -11,10 +11,10 @@
 
 namespace Finnern\Component\Lang4dev\Administrator\Helper;
 
-use function defined;
-
 // no direct access
 defined('_JEXEC') or die;
+
+use Finnern\Component\Lang4dev\Administrator\Helper\manifestLangFiles;
 
 enum eSubProjectType // : int
 {
@@ -326,6 +326,38 @@ class projectType
         }
 
         return $prjTypeInt;
+    }
+
+
+    public static function isLangInManifest($prjType, manifestLangFiles $manifestFile) : bool {
+        $isLangFound = false;
+
+        switch ($prjType) {
+            // case eSubProjectType::PRJ_TYPE_NONE:
+
+            case eSubProjectType::PRJ_TYPE_COMP_BACK_SYS:
+            case eSubProjectType::PRJ_TYPE_COMP_BACK:
+                if ($manifestFile->prjAdminPath != '') {
+                    $isLangFound = true;
+                }
+                break;
+
+            case eSubProjectType::PRJ_TYPE_COMP_SITE:
+                if ($manifestFile->prjDefaultPath != '') {
+                    $isLangFound = true;
+                }
+                break;
+
+            case eSubProjectType::PRJ_TYPE_MODEL:
+            case eSubProjectType::PRJ_TYPE_PLUGIN:
+            case eSubProjectType::PRJ_TYPE_WEB_ADMIN:
+            case eSubProjectType::PRJ_TYPE_WEB_SITE:
+            case eSubProjectType::PRJ_TYPE_TEMPLATE:
+                $isLangFound = true;
+                break;
+        }
+
+        return $isLangFound;
     }
 
 

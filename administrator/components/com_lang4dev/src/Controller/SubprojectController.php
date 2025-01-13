@@ -11,6 +11,7 @@ namespace Finnern\Component\Lang4dev\Administrator\Controller;
 
 defined('_JEXEC') or die;
 
+use Finnern\Component\Lang4dev\Administrator\Helper\basePrjPathFinder;
 use JInput;
 use Joomla\CMS\Factory;
 use Joomla\CMS\Language\Text;
@@ -111,8 +112,8 @@ class subprojectController extends FormController
         $prjId   = $data ['prjId'];
         $prjType = projectType::int2prjType((int)$data ['subPrjType']);
 
-        $rootPath           = trim($data ['root_path']);
-        $data ['root_path'] = $rootPath;
+        $prjRootPath       = trim($data ['root_path']);
+        $data ['root_path'] = $prjRootPath;
         /**/
 
         //--- retrieve data from paths --------------------------------------------
@@ -120,8 +121,18 @@ class subprojectController extends FormController
         $subPrj              = new langSubProject ();
         $subPrj->prjId       = $prjId;
         $subPrj->prjType     = $prjType;
-        $subPrj->prjRootPath = $rootPath;
+        $subPrj->prjRootPath = $prjRootPath;
 
+        //--- path to project xml file ---------------------------------
+
+        // detect path by project name or root path is given
+        $basePrjPath = new basePrjPathFinder($prjId, $prjRootPath);
+
+        //--- ??? as other update changed user path (too short, including root ...) ----------
+
+
+
+        //
         $isFilesFound = $subPrj->RetrieveBaseManifestData();
 
         if ($isFilesFound) {

@@ -29,8 +29,6 @@ class langSubProject extends langFiles
     /** @var string */
     public $prjRootPath = '';
     /** @var string */
-    public $prjXmlFilePath = '';
-    /** @var string */
     public $langIdPrefix = '';
 
     // is also admin
@@ -39,8 +37,10 @@ class langSubProject extends langFiles
     /** @var string */
     public $prjAdminPath = '';
 
-    /** @var string */
-    public $prjXmlPathFilename = '';
+//    public $prjXmlFilePath = '';
+//    public $prjXmlPathFilename = '';
+    /** @var manifestLangFiles */
+    public manifestLangFiles $oManifestFile;
     /** @var string */
     public $installPathFilename = '';
     /** @var string */
@@ -78,15 +78,15 @@ class langSubProject extends langFiles
         string $prjId = '',
         eSubProjectType $prjType = eSubProjectType::PRJ_TYPE_NONE,
         $prjRootPath = '',
-        $prjXmlPathFilename = ''
+        $oManifestFile
     ) {
         parent::__construct();
 
-        $this->prjType            = $prjType;
-        $this->prjId              = $prjId;
-        $this->prjRootPath        = $prjRootPath;
-        $this->prjXmlPathFilename = $prjXmlPathFilename;
-        $this->prjXmlFilePath     = dirname($prjXmlPathFilename);
+        $this->prjType       = $prjType;
+        $this->prjId         = $prjId;
+        $this->prjRootPath   = $prjRootPath;
+        $this->oManifestFile = $oManifestFile;
+        // $this->prjXmlFilePath     = dirname($prjXmlPathFilename);
 
         // Admin path
 
