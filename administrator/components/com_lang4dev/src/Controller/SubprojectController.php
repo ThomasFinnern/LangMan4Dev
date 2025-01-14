@@ -12,6 +12,7 @@ namespace Finnern\Component\Lang4dev\Administrator\Controller;
 defined('_JEXEC') or die;
 
 use Finnern\Component\Lang4dev\Administrator\Helper\basePrjPathFinder;
+use Finnern\Component\Lang4dev\Administrator\Helper\manifestLangFiles;
 use JInput;
 use Joomla\CMS\Factory;
 use Joomla\CMS\Language\Text;
@@ -94,7 +95,7 @@ class subprojectController extends FormController
      *
      * @since version
      */
-    public function detectDetails()
+    public function detectSubPrjDetails()
     {
         $result = false;
 
@@ -111,10 +112,13 @@ class subprojectController extends FormController
         /**/
         $prjId   = $data ['prjId'];
         $prjType = projectType::int2prjType((int)$data ['subPrjType']);
-
+        $parent_id = $data ['parent_id'];
         $prjRootPath       = trim($data ['root_path']);
         $data ['root_path'] = $prjRootPath;
         /**/
+
+        $prjXmlPathFilename = trim($data ['prjXmlPathFilename']);
+        $oManifestFile = new manifestLangFiles ($prjXmlPathFilename);
 
         //--- retrieve data from paths --------------------------------------------
 
@@ -123,25 +127,18 @@ class subprojectController extends FormController
         $subPrj->prjType     = $prjType;
         $subPrj->prjRootPath = $prjRootPath;
 
-        //--- path to project xml file ---------------------------------
+        //--- new sub project -------------------------------------------------
 
-        // detect path by project name or root path is given
-        $basePrjPath = new basePrjPathFinder($prjId, $prjRootPath);
-
-        //--- ??? as other update changed user path (too short, including root ...) ----------
-
-
-
-        //
-        $isFilesFound = $subPrj->RetrieveBaseManifestData();
-
-        if ($isFilesFound) {
-            $data['prjXmlPathFilename']  = $subPrj->prjXmlPathFilename;
-            $data['installPathFilename'] = $subPrj->installPathFilename;
-            $data['langIdPrefix']              = $subPrj->langIdPrefix;
-        }
+        $langSubProject = new langSubProject (
+            $prjId,
+            $prjType,
+            $prjRootPath,
+            $oManifestFile
+        );
 
         //--- write to post data for save --------------------------------------
+
+        $isSubPrjSaved = $this->saveSubProject($langSubProject, $parent_id);
 
         // Add new data to input before process by parent save()
         $this->input->post->set('jform', $data);

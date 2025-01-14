@@ -188,7 +188,7 @@ class HtmlView extends BaseHtmlView
                 // item is saved already
                 if ($itemId>0) {
                     ToolbarHelper::custom(
-                        'project.detectDetails',
+                        'project.detectSubProjects',
                         'icon-refresh',
                         '',
                         'COM_LANG4DEV_DETECT_DETAILS',

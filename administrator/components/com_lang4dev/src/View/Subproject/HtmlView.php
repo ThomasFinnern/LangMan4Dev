@@ -171,7 +171,7 @@ class HtmlView extends BaseHtmlView
                     ->message('JGLOBAL_CONFIRM_DELETE')
                     ->listCheck(true);
                 ToolbarHelper::custom(
-                    'subproject.detectDetails',
+                    'subproject.detectSubPrjDetails',
                     'refresh',
                     'home',
                     'COM_LANG4DEV_SUB_DETECT_DETAILS',

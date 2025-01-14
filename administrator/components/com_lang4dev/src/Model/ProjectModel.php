@@ -17,7 +17,6 @@ use Finnern\Component\Lang4dev\Administrator\Helper\eSubProjectType;
 use Finnern\Component\Lang4dev\Administrator\Helper\langSubProject;
 use Finnern\Component\Lang4dev\Administrator\Helper\manifestLangFiles;
 use Finnern\Component\Lang4dev\Administrator\Helper\projectType;
-use JForm;
 use Joomla\CMS\Access\Rules;
 use Joomla\CMS\Association\AssociationServiceInterface;
 use Joomla\CMS\Categories\CategoryServiceInterface;
@@ -885,7 +884,7 @@ class ProjectModel extends AdminModel
      * @throws Exception
      * @since version
      */
-    public function detectDetails(SubprojectModel $subPrjModel) : array
+    public function detectSubProjects(SubprojectModel $subPrjModel) : array
     {
         $input = Factory::getApplication()->input;
         $data  = $input->post->get('jform', array(), 'array');
@@ -933,20 +932,20 @@ class ProjectModel extends AdminModel
 
         // Create subProjects by component-types and restrict to existing paths
         // Attention actually lang4dev folder in ...\component folder is created accidently
-        $subProjects = $subPrjModel->subProjectsByPrjId($basePrjPath);
+        $langSubProjects = $subPrjModel->subProjectsByPrjId($basePrjPath);
 
         //--- save subproject changes ---------------------------------
 
         $isSaved = true;
-        foreach ($subProjects as $subProject) {
-            // 2025.01.12 $subProject->RetrieveBaseManifestData();
+        foreach ($langSubProjects as $langSubProject) {
+            // 2025.01.12 $langSubProject->RetrieveBaseManifestData();
 
-            $isSubPrjSaved = $subPrjModel->saveSubProject($subProject, $id);
+            $isSubPrjSaved = $subPrjModel->saveSubProject($langSubProject, $id);
             $isSaved &= $isSubPrjSaved;
         }
 
         if (!$isSaved) {
-            $OutTxt = "!\$isSaved: error on detectDetails for project: \n"
+            $OutTxt = "!\$isSaved: error on detectSubProjects for project: \n"
                 . 'One or more subprojects could not be saved into DB (sub project): "' . $prjRootPath . '"';
             $app    = Factory::getApplication();
             $app->enqueueMessage($OutTxt, 'error');
@@ -957,7 +956,7 @@ class ProjectModel extends AdminModel
             return [];
         }
 
-        return $subProjects;
+        return $langSubProjects;
     }
 
 

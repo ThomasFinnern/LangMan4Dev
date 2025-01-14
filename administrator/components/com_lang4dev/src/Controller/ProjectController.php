@@ -129,7 +129,7 @@ class projectController extends FormController
         $subPrjModel = $this->getModel('Subproject');
 
         // detect subprojects and write to DB
-        $subProjects = $prjModel->detectDetails($subPrjModel);
+        $subProjects = $prjModel->detectSubProjects($subPrjModel);
 
         //--- no subProjects found ? -----------------------
 
@@ -149,7 +149,7 @@ class projectController extends FormController
      * @throws Exception
      * @since version
      */
-    public function detectDetails()
+    public function detectSubProjects()
     {
         Session::checkToken() or die(Text::_('JINVALID_TOKEN'));
 
@@ -173,8 +173,8 @@ class projectController extends FormController
             /** @var SubprojectModel $subPrjModel */
             $subPrjModel = $this->getModel('Subproject');
 
-            // detect sub projects and write to DB
-            $subProjects = $prjModel->detectDetails($subPrjModel);
+            // detect subprojects and write to DB
+            $subProjects = $prjModel->detectSubProjects($subPrjModel);
 
             //--- no subProjects found ? -----------------------
 

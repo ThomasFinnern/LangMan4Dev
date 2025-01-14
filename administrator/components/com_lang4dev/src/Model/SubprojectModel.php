@@ -968,7 +968,7 @@ class SubprojectModel extends AdminModel
 
         // ToDo: check for existing lang Ids
 
-        $existingId = $this->checkSubPrjDoesExist($subProject, $parentId);
+        $existingId = $this->checkSubPrjDoesExist_inDB($subProject, $parentId);
 
         if ($existingId > 0) {
             // change existing
@@ -1101,7 +1101,7 @@ class SubprojectModel extends AdminModel
      *
      * @since version
      */
-    private function checkSubPrjDoesExist($subProject, $parentId)
+    private function checkSubPrjDoesExist_inDB($subProject, $parentId)
     {
         $existingId = false; // indicates nothing found in DB
 
@@ -1123,6 +1123,11 @@ class SubprojectModel extends AdminModel
         return (int)$existingId;
     }
 
+    
+    
+    
+    
+    
     /**
      * @param $basePrjPath
      *
@@ -1154,6 +1159,7 @@ class SubprojectModel extends AdminModel
 
             // language path for project type is defined
             if ($isLang4SubProject) {
+
                 //--- new sub project -------------------------------------------------
 
                 $langSubProject = new langSubProject (
