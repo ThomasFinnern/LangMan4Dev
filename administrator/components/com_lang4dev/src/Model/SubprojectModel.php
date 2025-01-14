@@ -1144,17 +1144,17 @@ class SubprojectModel extends AdminModel
 
         // Manifest tells if files have to be searched inside component or old on joomla standard paths
         $prjXmlPathFilename = $basePrjPath->getManifestPathFilename();
-        $oManifestFile = new manifestLangFiles ($prjXmlPathFilename);
+        $oManifestLangFiles = new manifestLangFiles ($prjXmlPathFilename);
 
 
         foreach ($prjTypes as $prjType) {
 
             // create subproject when manifest file is not found or prj type is found inside manifest
             $isLang4SubProject = false;
-            if (!$oManifestFile->isValidXml) {
+            if (!$oManifestLangFiles->isValidXml) {
                 $isLang4SubProject = true;
             } else {
-                $isLang4SubProject = projectType::isLangInManifest($prjType, $oManifestFile);
+                $isLang4SubProject = projectType::isLangInManifest($prjType, $oManifestLangFiles);
             }
 
             // language path for project type is defined
@@ -1166,7 +1166,7 @@ class SubprojectModel extends AdminModel
                     $basePrjPath->prjId,
                     $prjType,
                     $basePrjPath->getRootPath(),
-                    $oManifestFile
+                    $oManifestLangFiles
                 );
 
                 //--- collect new sub project ------------------
