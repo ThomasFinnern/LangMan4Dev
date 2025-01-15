@@ -14,6 +14,7 @@ defined('_JEXEC') or die;
 use Exception;
 use Finnern\Component\Lang4dev\Administrator\Helper\eSubProjectType;
 use Finnern\Component\Lang4dev\Administrator\Helper\langProject;
+use Finnern\Component\Lang4dev\Administrator\Helper\manifestLangFiles;
 use Finnern\Component\Lang4dev\Administrator\Helper\projectType;
 use Finnern\Component\Lang4dev\Administrator\Helper\sessionProjectId;
 use JForm;
@@ -110,11 +111,15 @@ class PrjTextsModel extends AdminModel
 
             //--- create subproject with DB data ------------------------
 
+            $prjXmlPathFilename = $dbSub->prjXmlPathFilename;
+            $oManifestLangFiles = new manifestLangFiles ($prjXmlPathFilename);
+
             $subPrj = $project->addSubProject(
                 $dbSub->prjId,
                 projectType::int2prjType( $dbSub->subPrjType),
                 $dbSub->root_path,
-                $dbSub->prjXmlPathFilename
+                // yyyyxx
+                $oManifestLangFiles
             );
 
             $subPrj->installPathFilename = $dbSub->installPathFilename;

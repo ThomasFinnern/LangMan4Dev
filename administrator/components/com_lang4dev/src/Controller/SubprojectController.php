@@ -122,6 +122,7 @@ class subprojectController extends FormController
 
         //--- retrieve data from paths --------------------------------------------
 
+        // yyyyxx
         $subPrj              = new langSubProject ();
         $subPrj->prjId       = $prjId;
         $subPrj->prjType     = $prjType;
@@ -133,6 +134,7 @@ class subprojectController extends FormController
             $prjId,
             $prjType,
             $prjRootPath,
+            // yyyyxx
             $oManifestFile
         );
 
@@ -143,7 +145,7 @@ class subprojectController extends FormController
         // Add new data to input before process by parent save()
         $this->input->post->set('jform', $data);
 
-        $result = parent::save($key = null, $urlVar = 'id') && $isFilesFound;
+        $result = parent::save($key = null, $urlVar = 'id') && $isSubPrjSaved;
 
         //--- return to edit --------------------------------
 

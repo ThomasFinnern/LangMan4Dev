@@ -1129,6 +1129,8 @@ class SubprojectModel extends AdminModel
     
     
     /**
+     *
+     *
      * @param $basePrjPath
      *
      * @return langSubProject []
@@ -1146,7 +1148,6 @@ class SubprojectModel extends AdminModel
         $prjXmlPathFilename = $basePrjPath->getManifestPathFilename();
         $oManifestLangFiles = new manifestLangFiles ($prjXmlPathFilename);
 
-
         foreach ($prjTypes as $prjType) {
 
             // create subproject when manifest file is not found or prj type is found inside manifest
@@ -1154,6 +1155,7 @@ class SubprojectModel extends AdminModel
             if (!$oManifestLangFiles->isValidXml) {
                 $isLang4SubProject = true;
             } else {
+                // is lang of project type in manifest ?
                 $isLang4SubProject = projectType::isLangInManifest($prjType, $oManifestLangFiles);
             }
 
