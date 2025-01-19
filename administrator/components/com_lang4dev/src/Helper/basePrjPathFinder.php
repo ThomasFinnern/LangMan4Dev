@@ -16,17 +16,16 @@ use Joomla\CMS\Filesystem\Folder;
 
 class basePrjPathFinder
 {
-    protected $rootPath = '';   // detected complete from path origin on
-	protected $prjXmlPathFilename = ''; // detected manifest file path
-	protected $subPrjPath = ''; // user known path, may be behind JPATH_ROOT on server
+    public string $prJRootPath = '';   // ($prjXmlFilePath) detected complete from path origin on
+    public string $prjXmlFilePath = ''; // same as root path (prJRootPath)
+    public string $prjXmlPathFilename = '';
+    public string $subPrjPath = ''; // user known path, may be behind JPATH_ROOT on server
 
-    public $prjId = ''; // project id 'com_...' helper for detecting the path
+    public string $prjId = ''; // project id 'com_...' helper for detecting the path
 
-
-    public $isRootValid = false;
-
-	public $isManifestFileFound = false;
-	public $isInstalled = false;
+    public bool $isRootValid = false;
+	public bool $isManifestFileFound = false;
+	public bool $isInstalled = false;
 
     /**
      * @since __BUMP_VERSION__
@@ -41,8 +40,9 @@ class basePrjPathFinder
             [
                 $this->isRootValid,
                 $this->isInstalled,
-                $this->rootPath,
-                $this->subPrjPath
+                $this->prJRootPath,
+                $this->subPrjPath,
+                $this->prjXmlFilePath
             ]
                 = $this->detectRootPath();
 
@@ -50,32 +50,10 @@ class basePrjPathFinder
 
 			if ($this->isRootValid) {
 				$prjXmlFilename = strtolower(substr($this->prjId, 4)) . '.xml';
-				$this->isManifestFileFound = $this->searchManifestFilePath($this->rootPath, $prjXmlFilename);
+				$this->isManifestFileFound = $this->searchManifestFilePath($this->prJRootPath, $prjXmlFilename);
 			}
 
         }
-    }
-
-    /**
-     *
-     * @return mixed|string
-     *
-     * @since version
-     */
-    public function getRootPath()
-    {
-        return $this->rootPath;
-    }
-
-    /**
-     *
-     * @return mixed|string
-     *
-     * @since version
-     */
-    public function getSubPrjPath()
-    {
-        return $this->subPrjPath;
     }
 
     /**
@@ -87,6 +65,17 @@ class basePrjPathFinder
     public function getManifestPathFilename()
     {
         return $this->prjXmlPathFilename;
+    }
+
+    /**
+     *
+     * @return mixed|string
+     *
+     * @since version
+     */
+    public function getSubPrjPath()
+    {
+        return $this->subPrjPath;
     }
 
     /**
@@ -122,6 +111,7 @@ class basePrjPathFinder
         //--- path already valid -------------------------
 
         $rootPath = $subPrjPath;
+
         if ($rootPath != '') {
 
 			// standard
@@ -227,7 +217,7 @@ class basePrjPathFinder
 //        }
 
 		$this->isInstalled = $isInstalled;
-        return [$isRootFound, $isInstalled, $rootPath, $subPrjPath];
+        return [$isRootFound, $isInstalled, $rootPath, $subPrjPath, $rootPath];
     }
 
 	private function searchManifestFilePath($rootPath, $prjXmlFilename)
@@ -239,15 +229,13 @@ class basePrjPathFinder
 
 		if (is_file($prjXmlPathFilename))
 		{
-
 			$isManifestFileFound      = true;
 			$this->prjXmlPathFilename = $prjXmlPathFilename;
-
 		}
 
 		#--- Search in each sub folder -------------------------------------
 
-		// example project file already/still only in rootPath/administrator/component/ subfolder
+		// example project file already/still only in prJRootPath/administrator/component/ subfolder
 
 		if (!$isManifestFileFound)
 		{

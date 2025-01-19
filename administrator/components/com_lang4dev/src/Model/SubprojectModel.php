@@ -12,6 +12,7 @@ namespace Finnern\Component\Lang4dev\Administrator\Model;
 defined('_JEXEC') or die;
 
 use Exception;
+use Finnern\Component\Lang4dev\Administrator\Helper\basePrjPathFinder;
 use Finnern\Component\Lang4dev\Administrator\Helper\eSubProjectType;
 use Finnern\Component\Lang4dev\Administrator\Helper\langSubProject;
 use Finnern\Component\Lang4dev\Administrator\Helper\manifestLangFiles;
@@ -1137,7 +1138,7 @@ class SubprojectModel extends AdminModel
      *
      * @since version
      */
-    public function subProjectsByPrjId($basePrjPath) : array // : langSubProject []
+    public function subProjectsByPrjId(basePrjPathFinder $basePrjPath) : array // : langSubProject []
     {
         $subProjects = [];
 
@@ -1167,7 +1168,7 @@ class SubprojectModel extends AdminModel
                 $langSubProject = new langSubProject (
                     $basePrjPath->prjId,
                     $prjType,
-                    $basePrjPath->getRootPath(),
+                    $basePrjPath,
                     $oManifestLangFiles
                 );
 

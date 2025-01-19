@@ -27,7 +27,6 @@ use Joomla\Utilities\ArrayHelper;
 
 use Finnern\Component\Lang4dev\Administrator\Helper\langProject;
 use Finnern\Component\Lang4dev\Administrator\Helper\projectType;
-//use Finnern\Component\Lang4dev\Administrator\Helper\basePrjPathFinder;
 
 use function defined;
 

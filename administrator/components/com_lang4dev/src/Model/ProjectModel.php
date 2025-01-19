@@ -39,7 +39,6 @@ use Joomla\CMS\Workflow\Workflow;
 use Joomla\Registry\Registry;
 use Joomla\String\StringHelper;
 use Joomla\Utilities\ArrayHelper;
-//use Finnern\Component\Lang4dev\Administrator\Helper\basePrjPathFinder;
 use JTableCategory;
 
 use function defined;

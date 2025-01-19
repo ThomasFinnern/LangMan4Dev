@@ -54,6 +54,7 @@ class manifestData
 
         // filename given
         if ($prjXmlPathFilename != '') {
+            $this->prjXmlFilePath = dirname($prjXmlPathFilename);
             $this->isValidXml = $this->readManifestData();
         }
 
