@@ -40,9 +40,12 @@ class manifestData
     // local development folder or installed component
     public $isInstalled = false;
     /** @var bool */
-    public $isValidXml;
+    public $isValidXml = false;
 
-    protected $manifest = false; // XML: false or SimpleXMLElement
+    public string $installFile = "";
+    public string $configFile = "";
+
+    protected $manifestXml = false; // XML: false or SimpleXMLElement
 
     /**
      * @since __BUMP_VERSION__
@@ -84,31 +87,35 @@ class manifestData
                 $prjXmlPathFilename = $this->prjXmlPathFilename;
             }
 
+            // developer folder or installed in joomla
+            $this->isInstalled = $this->isPathOnJxServer($prjXmlPathFilename);
+
+            //--- extract data  -----------------------------------------------------------
+
             // file exists
             if (File::exists($prjXmlPathFilename)) {
-                //// keep as alternative example, used in RSG" installer . Can't remeber why simplexml_load_file was not used
+
+                //--- extract xml -----------------------------------------------------------
+
+                //// keep as alternative example, used in RSG" installer . Can't remember why simplexml_load_file was not used
                 //$context = stream_context_create(array('http' => array('header' => 'Accept: application/xml')));
-                //$this->manifest = $xml = file_get_contents($prjXmlPathFilename, false, $context);
+                //$this->manifestXml = $xml = file_get_contents($prjXmlPathFilename, false, $context);
 
                 // Read the file to see if it's a valid component XML file
-                $this->manifest = simplexml_load_file($prjXmlPathFilename);
+                $xml = simplexml_load_file($prjXmlPathFilename);
+                $this->manifestXml = $xml;
 
                 // error reading ?
-                if (!empty($this->manifest)) {
+                if (!empty($xml)) {
                     $isValidXml = true;
                 } else {
-                    $OutTxt = Text::_('COM_LANG4DEV_FILE_IS_NOT_AN_XML_DOCUMENT' . ': ' . $prjXmlPathFilename);
+                    $OutTxt = Text::_('COM_LANG4DEV_FILE_IS_NOT_AN_XML_DOCUMENT' . ': '
+                        . $prjXmlPathFilename);
                     $app    = Factory::getApplication();
                     $app->enqueueMessage($OutTxt, 'error');
                 }
 
-                //--- developer folder or installed in joomla  -----------------------------------------------------------
-
-	            $this->isInstalled = $this->isPathOnJxServer($prjXmlPathFilename);
-
-                //--- extract values -----------------------------------------------------------
-
-                $xml = $this->manifest;
+                //=== extract values ==============================================
 
                 //--- default main (site) path -------------------------------
 
@@ -130,6 +137,7 @@ class manifestData
                 $this->isAdminPathDefined = false;
 
                 if (isset($xml->administration->files)) {
+
                     $files = $xml->administration->files;
                     if (isset ($files['folder'])) {
                         $this->prjAdminPath = $files['folder'][0];
@@ -152,6 +160,34 @@ class manifestData
                     // add languages folder
                     $this->adminLangPath = $this->prjAdminPath . '/language';
                 }
+
+                //--- install script file -----------------------------------
+
+                $this->installFile = "";
+                if (isset($xml->scriptfile)) {
+                    $installFile = $xml->scriptfile;
+                    $this->installFile = $installFile[0];
+                }
+
+                //--- config file -----------------------------------
+
+                $this->configFile = "";
+
+                if (isset($xml->administration->files)) {
+                    $files = $xml->administration->files;
+                    if (isset($files->filename)) {
+                        $filenames = $files->filename;
+                        foreach($filenames as $key => $xmlFilename)
+                        {
+                            $filename = $xmlFilename[0];
+                            if (strtolower($filename) == "config.xml") {
+                                $this->configFile = $filename;
+                                break;
+                            }
+                        }
+                    }
+                }
+
             } else {
                 $OutTxt = Text::_('COM_LANG4DEV_FILE_DOES_NOT_EXIST' . ': ' . $prjXmlPathFilename);
                 $app    = Factory::getApplication();
@@ -172,6 +208,8 @@ class manifestData
     // info cast to string / int .. when using it (otherwise array is returned)
 
     /**
+     * Take values direct from Xml of manifest
+     *
      * @param $name
      * @param $default
      *
@@ -179,12 +217,12 @@ class manifestData
      *
      * @since version
      */
-    public function get($name, $default)
+    public function getByXml($name, $default)
     {
-//		return isset($this->manifest->$name) ? $this->manifest->$name : $default;
-        $result = $this->manifest->$name;
+//		return isset($this->manifestXml->$name) ? $this->manifestXml->$name : $default;
+        $result = $this->manifestXml->$name;
 
-        // return isset($this->manifest->$name) ? $this->manifest->$name : $default;
+        // return isset($this->manifestXml->$name) ? $this->manifestXml->$name : $default;
         return $result;
     }
 
@@ -206,9 +244,9 @@ class manifestData
             $name = array($names);
         }
 
-        $base = $this->manifest;
+        $base = $this->manifestXml;
         foreach ($names as $name) {
-            $base = isset($this->manifest->$name) ? $this->manifest->$name : null;
+            $base = isset($this->manifestXml->$name) ? $this->manifestXml->$name : null;
 
             if ($base == null) {
                 break;
@@ -230,7 +268,7 @@ class manifestData
      */
     public function getSriptFile()
     {
-        return (string)$this->get('scriptfile', '');
+        return (string)$this->getByXml('scriptfile', '');
     }
 
     /**
@@ -241,7 +279,7 @@ class manifestData
      */
     public function getName()
     {
-        return (string)$this->get('name', '');
+        return (string)$this->getByXml('name', '');
     }
 
     // info cast to string / int .. when using it (otherwise array is returned)
@@ -255,7 +293,7 @@ class manifestData
      */
     public function getXml($name)
     {
-        return isset($this->manifest->$name) ? $this->manifest->$name : null;
+        return isset($this->manifestXml->$name) ? $this->manifestXml->$name : null;
     }
 
 
@@ -342,7 +380,7 @@ class manifestData
 
     public function __toTextItem($name = '')
     {
-        return $name . '="' . $this->get($name, '') . '"';
+        return $name . '="' . $this->getByXml($name, '') . '"';
     }
 
     /**

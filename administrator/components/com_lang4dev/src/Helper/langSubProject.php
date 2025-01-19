@@ -35,9 +35,9 @@ class langSubProject extends langFiles
     /** @var string */
     public $prjAdminPath = '';
 
-    /** @var string */
+    /** @var string from manifest file*/
     public $installPathFilename = '';
-    /** @var string */
+    /** @var string from manifest file*/
     public $configPathFilename = '';
 
     // external
@@ -760,7 +760,8 @@ class langSubProject extends langFiles
         [$isSearchXml, $isSearchInstall] = projectType::enabledByType($this->prjType);
 
         if ($isSearchInstall) {
-            $this->installPathFilename = $manifestLang->prjXmlFilePath . '/' . $manifestLang->getSriptFile();
+            // $this->installPathFilename = $manifestLang->prjXmlFilePath . '/' . $manifestLang->getSriptFile();
+            $this->installPathFilename = $manifestLang->prjXmlFilePath . '/' . $manifestLang->installFile;
             // ToDo: function checkInstallFile ();
 
         }
@@ -768,7 +769,8 @@ class langSubProject extends langFiles
         if ($isSearchXml) {
             // ToDo: getConfigFile instead of direct below
             // $this->configPathFilename = $this->prjXmlFilePath . '/' . $manifestLang->getConfigFile();
-            $this->configPathFilename = $manifestLang->prjXmlFilePath . '/' . 'config.xml';
+            //$this->configPathFilename = $manifestLang->prjXmlFilePath . '/' . 'config.xml';
+            $this->configPathFilename = $manifestLang->prjXmlFilePath . '/' . $manifestLang->configFile;
         }
 
         // lang id of project

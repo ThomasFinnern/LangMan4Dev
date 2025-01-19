@@ -39,8 +39,8 @@ class manifestLangFiles extends manifestData
 	public $adminLangFilePaths = [];
 	public $adminLangFiles = [];
 
-	public $adminPathOnDevelopment = "";
-    public $sitePathOnDevelopment = "";
+//	public $adminPathOnDevelopment = "";
+//    public $sitePathOnDevelopment = "";
 
     private $isLangOriginRead = false;
 
@@ -91,7 +91,7 @@ class manifestLangFiles extends manifestData
         $this->adminLangFilePaths = [];
 
         try {
-            $manifest = $this->manifest;
+            $manifest = $this->manifestXml;
 
             if (!empty ($manifest)) {
                 //--- old standard -----------------------------------------------
@@ -101,7 +101,7 @@ class manifestLangFiles extends manifestData
 
                 $this->isLangOriginRead = true;
 
-                $stdLanguages = $this->get('languages', []);
+                $stdLanguages = $this->getByXml('languages', []);
                 if (count($stdLanguages) > 0) {
                     // lang files path will be defined in XML and copied to joomla standard path not component
                     $this->isLangAtStdJoomla = true;
@@ -131,7 +131,7 @@ class manifestLangFiles extends manifestData
                 //	</languages>
                 //</administration>
 
-                $administration = $this->get('administration', []);
+                $administration = $this->getByXml('administration', []);
                 $stdLanguages   = $administration->languages;
                 if (count($stdLanguages) > 0) {
                     // lang files path will be defined in XML anf copied to joomla standard path
