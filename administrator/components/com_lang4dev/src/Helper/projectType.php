@@ -38,7 +38,6 @@ enum eSubProjectType // : int
  * *
  * * @since       version
  */
-
 class projectType
 {
     // ToDo: create enum
@@ -103,9 +102,11 @@ class projectType
                 break;
             case "mod":
                 $prjTypes[] = eSubProjectType::PRJ_TYPE_MODEL;
+                $prjTypes[] = eSubProjectType::PRJ_TYPE_COMP_BACK_SYS;
                 break;
             case "plg":
                 $prjTypes[] = eSubProjectType::PRJ_TYPE_PLUGIN;
+                $prjTypes[] = eSubProjectType::PRJ_TYPE_COMP_BACK_SYS;
                 break;
             // root web page'
             case "/":
