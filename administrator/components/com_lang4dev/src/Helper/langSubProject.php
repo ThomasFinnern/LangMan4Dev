@@ -14,6 +14,20 @@ use Joomla\CMS\Filesystem\Folder;
 use Joomla\CMS\Language\Text;
 use RuntimeException;
 
+/**
+ * Language subprojects for backend, backend sys files, site, module and plugins
+ * On creation all paths by type are build as strings and are added
+ * In general the manifest file is extracted. Its is prepared to handle
+ * components, modules and plugins (WIP)
+ * Open:
+ *   * Special handling for "Root" projects: (WIP)
+ *     They have no manifest file
+ *   * Templates
+ *   * Language overrides
+ *   * Component overrides
+ *
+ *
+ */
 class langSubProject extends langFiles
 {
     /** @var int */

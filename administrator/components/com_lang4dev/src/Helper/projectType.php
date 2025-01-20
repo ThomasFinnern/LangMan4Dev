@@ -40,48 +40,11 @@ enum eSubProjectType // : int
  */
 class projectType
 {
-    // ToDo: create enum
-
-    // const PRJ_TYPE_TEMPLATE = 1;
-
-//    /**
-//     * @param $prjId
-//     *
-//     * @return eProjectType
-//     *
-//     * @since version
-//     */
-//    public static function prjTypeByProjectId(string $prjId) : eProjectType
-//    {
-//        $prjType = eProjectType::PRJ_TYPE_NONE;
-//
-//        switch (strtolower(substr($prjId, 0, 3))) {
-//            case "com":
-//                // Attention: lang projects have three here
-//                $prjType = eProjectType::PRJ_TYPE_COMP_BACK; // PRJ_TYPE_COMPONENT;
-//                break;
-//            case "mod":
-//                $prjType = eProjectType::PRJ_TYPE_MODEL;
-//                break;
-//            case "plg":
-//                $prjType = eProjectType::PRJ_TYPE_PLUGIN;
-//                break;
-//            case "/":
-//            case "\\":
-//                $prjType = eProjectType::PRJ_TYPE_WEB_ROOT;
-//                break;
-//
-//            missing types
-//
-//            default:
-//                // dummy
-//                break;
-//        }
-//
-//        return $prjType;
-//    }
 
     /**
+     * Return a list of language subprojects matching the project by first 3 characters of
+     * project ID.
+     *  *.Sys.ini files are not used for backend normal(separate type backend sys)  and site
      * @param $prjId
      *
      * @return array eProjectType
@@ -134,7 +97,6 @@ class projectType
         return $prjTypes;
     }
 
-    // *.Sys.ini files are not used for backend normal(separate type backend sys)  and site
 
     /**
      * @param $prjType
