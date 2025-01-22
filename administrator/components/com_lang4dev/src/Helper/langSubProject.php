@@ -10,7 +10,6 @@ namespace Finnern\Component\Lang4dev\Administrator\Helper;
 
 use Exception;
 use Joomla\CMS\Factory;
-use Joomla\Filesystem\Folder;
 use Joomla\CMS\Language\Text;
 use RuntimeException;
 
@@ -53,6 +52,9 @@ class langSubProject extends langFiles
     public $installPathFilename = '';
     /** @var string from manifest file*/
     public $configPathFilename = '';
+    public $notes = '';
+
+
 
     // external
     // public $parentId = 0;
@@ -62,7 +64,7 @@ class langSubProject extends langFiles
     // public $langIdPrefix;
 
     // public $useLangSysIni = false;
-    /** @var bool */
+    /** @var bool  Standard joomla pathes for language */
     public $isLangAtStdJoomla = false;
     /** @var bool */
     public $isManifestRead = false;
@@ -202,6 +204,50 @@ class langSubProject extends langFiles
 //
 //        return $isManifestFileFound;
 //    }
+
+
+    public function checkData(string $sourceName)
+    {
+
+        $this->issueWarningDataItem ($sourceName, 'prjId',
+            $this->prjId == '');
+        $this->issueWarningDataItem ($sourceName, 'subPrjType',
+            projectType::prjType2int($this->prjType) == 0);
+        $this->issueWarningDataItem ($sourceName, 'root_path',
+            $this->oBasePrjPath->prjRootPath == '');
+        $this->issueWarningDataItem ($sourceName, 'langIdPrefix',
+            $this->langIdPrefix == '');
+
+//        $this->issueWarningDataItem ($sourceName, 'prjXmlPathFilename',
+//            $this->oBasePrjPath->prjXmlPathFilename == '');
+//        $this->issueWarningDataItem ($sourceName, 'installPathFilename',
+//            $this->>installPathFilename == '');
+
+
+    }
+
+    //
+
+    /**
+     * issue warning on empty content (checked outside)
+     * @param   string  $sourceName
+     * @param   string  $itemName
+     * @param   int     $isEmpty
+     *
+     *
+     * @since version
+     */
+    private function issueWarningDataItem(string $sourceName, string $itemName, int $isEmpty) : void
+    {
+        if ($isEmpty) {
+
+            $OutTxt = Text::_('langSubproject has empty variable on save : ' . $sourceName
+                . '::' . $itemName);
+            $app    = Factory::getApplication();
+            $app->enqueueMessage($OutTxt, 'warning');
+        }
+
+    }
 
     /**
      *
@@ -927,7 +973,7 @@ class langSubProject extends langFiles
                     }
                 } else {
                     //--- lang files in joomla standard folder -------------------------------------
-//--------------------------------
+
                     // old style manifest .... already installed parallel joomla lang path
 
                     $langBasePath = $this->langBasePathJoomlaStd($this->prjType);
@@ -1007,5 +1053,6 @@ class langSubProject extends langFiles
         }
 
     }
+
 } // class
 

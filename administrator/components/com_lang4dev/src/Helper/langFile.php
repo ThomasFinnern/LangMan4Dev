@@ -497,7 +497,7 @@ class langFile extends langPathFileName
             // backup ?
             if ($doBackup) {
                 //
-                if (File::exists($filePath)) {
+                if (is_file($filePath)) {
                     File::copy($filePath, File::stripExt($filePath) . '.bak');
                 }
             }

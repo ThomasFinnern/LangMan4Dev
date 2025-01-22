@@ -396,7 +396,7 @@ class TranslateController extends AdminController
             // ToDo: name/path has valid lang ID
 
             // ToDo: flag if it must exist
-            if (!File::exists($langPathFileName)) {
+            if (!is_file($langPathFileName)) {
                 $isNameVerified = false;
             }
         }

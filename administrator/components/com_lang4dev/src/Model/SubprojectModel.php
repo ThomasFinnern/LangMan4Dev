@@ -18,27 +18,13 @@ use Finnern\Component\Lang4dev\Administrator\Helper\langSubProject;
 use Finnern\Component\Lang4dev\Administrator\Helper\manifestLangFiles;
 use Finnern\Component\Lang4dev\Administrator\Helper\projectType;
 use JForm;
-use Joomla\CMS\Access\Rules;
-use Joomla\CMS\Association\AssociationServiceInterface;
-use Joomla\CMS\Categories\CategoryServiceInterface;
 use Joomla\CMS\Component\ComponentHelper;
-use Joomla\CMS\Date\Date;
 use Joomla\CMS\Factory;
-use Joomla\CMS\Filesystem\Path;
-use Joomla\CMS\Helper\TagsHelper;
 use Joomla\CMS\Language\Associations;
-use Joomla\CMS\Language\LanguageHelper;
-use Joomla\CMS\Language\Text;
 use Joomla\CMS\MVC\Factory\MVCFactoryInterface;
 use Joomla\CMS\MVC\Model\AdminModel;
-use Joomla\CMS\MVC\View\GenericDataException;
 use Joomla\CMS\Plugin\PluginHelper;
 use Joomla\CMS\Table\Table;
-use Joomla\CMS\UCM\UCMType;
-use Joomla\CMS\Workflow\Workflow;
-use Joomla\Registry\Registry;
-use Joomla\String\StringHelper;
-use Joomla\Utilities\ArrayHelper;
 use JTableCategory;
 
 use function defined;
@@ -377,22 +363,22 @@ class SubprojectModel extends AdminModel
         return $form;
     }
 
-    /**
-     * A protected method to get the where clause for the reorder
-     * This ensures that the row will be moved relative to a row with the same extension
-     *
-     * @param   JTableCategory  $table  Current table instance
-     *
-     * @return  array  An array of conditions to add to ordering queries.
-     *
-     * @since __BUMP_VERSION__
-     */
-    protected function getReorderConditions($table)
-    {
-        return [
-            $this->_db->quoteName('extension') . ' = ' . $this->_db->quote($table->extension),
-        ];
-    }
+//    /**
+//     * A protected method to get the where clause for the reorder
+//     * This ensures that the row will be moved relative to a row with the same extension
+//     *
+//     * @param   JTableCategory  $table  Current table instance
+//     *
+//     * @return  array  An array of conditions to add to ordering queries.
+//     *
+//     * @since __BUMP_VERSION__
+//     */
+//    protected function getReorderConditions($table)
+//    {
+//        return [
+//            $this->_db->quoteName('extension') . ' = ' . $this->_db->quote($table->extension),
+//        ];
+//    }
 
     /**
      * Method to get the data that should be injected in the form.
@@ -571,7 +557,7 @@ class SubprojectModel extends AdminModel
      * Transform some data before it is displayed ? Saved ?
      * extension development 129 bottom
      *
-     * @param   JTable  $table
+     * @param   Table  $table
      *
      * @since __BUMP_VERSION__
      */
@@ -983,7 +969,7 @@ class SubprojectModel extends AdminModel
     }
 
     /**
-     * @param $existingId
+     * @param $itemId
      * @param $subProject
      *
      * @return bool
@@ -991,33 +977,23 @@ class SubprojectModel extends AdminModel
      * @throws Exception
      * @since version
      */
-    private function mergeAndSave2_DB($existingId, $subProject)
+    private function mergeAndSave2_DB(int $itemId, langSubProject $subProject) : bool
     {
         $isSaved = false;
 
-        $table = $this->getTable();
-        //$table->load($existingId);
+        // $table = $this->getTable();
+
+        // Attempt to load the row.
+        //$data = $table->load($itemId);
+
+        // enqueue messages on missing data
+        $subProject->checkData ("mergeAndSave2_DB");
 
         $data = [];
+        $data ['id'] = $itemId;
 
-        /**/
-        // $data ['title'] = $subProject->prjId . '_' . rojectType::getPrjTypeText($subProject->prjId);
-        // $data ['alias'] = $subProject->;
-
-        $data ['id']                = $existingId;
-        $data ['prjId']             = $subProject->prjId;
-        $data ['subPrjType']        = projectType::prjType2int($subProject->prjType);
-        $data ['root_path']         = $subProject->prjRootPath;
-        $data ['langIdPrefix']            = $subProject->langIdPrefix;
-        $data ['notes']             = '%';
-        $data ['isLangAtStdJoomla'] = $subProject->isLangAtStdJoomla ? 1 : 0;
-        // ToDo: activate or check as actual is empty $data ['prjXmlPathFilename'] = $subProject->prjXmlPathFilename;
-        $data ['prjXmlPathFilename']  = $subProject->prjXmlPathFilename;
-        $data ['installPathFilename'] = $subProject->installPathFilename;
-        // already set $data ['parent_id'] = $subProject->;
-        //$data ['twin_id'] = $subProject->;
-        // ToDo: $data ['lang_path_type'] = $subProject->;
-        // ToDo: $data ['lang_ids'] = $subProject->;
+        // ToDo: Changed alias from user ... singularity ...
+        $this->assignSubProject2Data ($subProject, $data);
 
         $isSaved = $this->save($data);
 
@@ -1052,27 +1028,23 @@ class SubprojectModel extends AdminModel
     {
         // $table      = $this->getTable();
 
-        $data        = [];
-        $data ['id'] = 0;
+        $id = 0;
 
-        $data ['title'] = '(' . $parentId . ') ' . $subProject->prjId . '_' . projectType::getPrjTypeText(
-                $subProject->prjType
-            );
+        // enqueue messages on missing data
+        $subProject->checkData ("mergeAndSave2_DB");
+
+        $data        = [];
+
+        $data ['id'] = $id;
+        $data ['title'] = $subProject->prjId . '_'
+            . projectType::getPrjTypeText($subProject->prjType)
+            . '(' . $parentId . ') '
+        ;
+
+        // ToDo: Alias from user  ... singularity ...
         $data ['alias'] = strtolower($data ['title']);
 
-        $data ['prjId']             = $subProject->prjId;
-        $data ['subPrjType']        = projectType::prjType2int($subProject->prjType);
-        $data ['root_path']         = $subProject->prjRootPath;
-        $data ['langIdPrefix']      = $subProject->langIdPrefix;
-        $data ['notes']             = '%';
-        $data ['isLangAtStdJoomla'] = $subProject->isLangAtStdJoomla ? 1 : 0;
-        // ToDo: activate or check as actual is empty $data ['prjXmlPathFilename'] = $subProject->prjXmlPathFilename;
-        $data ['prjXmlPathFilename']  = $subProject->prjXmlPathFilename;
-        $data ['installPathFilename'] = $subProject->installPathFilename;
-        $data ['parent_id']           = $parentId;
-        //$data ['twin_id'] = $subProject->;
-        // ToDo: $data ['lang_path_type'] = $subProject->;
-        // ToDo: $data ['lang_ids'] = $subProject->;
+        $this->assignSubProject2Data ($subProject, $data);
 
         $isSaved = $this->save($data);
 
@@ -1222,9 +1194,35 @@ class SubprojectModel extends AdminModel
         return $subProjects;
     }
 
+    private function assignSubProject2Data(langSubProject $subProject, &$data) : void
+    {
+        // title ...
+        // if alias empty ...
 
+        /**/
+        // $data ['title'] = $subProject->prjId . '_' . projectType::getPrjTypeText($subProject->prjId);
+        // $data ['alias'] = $subProject->;
 
+        $data ['prjId']               = $subProject->prjId;
+        $data ['subPrjType']          = projectType::prjType2int($subProject->prjType);
+        $data ['root_path']           = $subProject->oBasePrjPath->prjRootPath;
+        $data ['langIdPrefix']        = $subProject->langIdPrefix;
+        $data ['notes']               = $subProject->notes;
+        $data ['isLangAtStdJoomla']   = $subProject->isLangAtStdJoomla ? 1 : 0;
+        $data ['prjXmlPathFilename']  = $subProject->oBasePrjPath->prjXmlPathFilename;
+        $data ['installPathFilename'] = $subProject->installPathFilename;
+        // already set $data ['parent_id'] = $subProject->;
+        //$data ['twin_id'] = $subProject->;
+        // ToDo: $data ['lang_path_type'] = $subProject->;
+        // ToDo: $data ['lang_ids'] = $subProject->;
 
+        // ? lang_path_type
+        // ? lang_ids
+        // ?
+        // ? checked_out
+        // ...
+
+    }
 
 
 }

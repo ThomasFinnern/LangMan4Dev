@@ -29,10 +29,10 @@ class basePrjPathFinder
     /**
      * @since __BUMP_VERSION__
      */
-    public function __construct($prjId, $subPrjPath)
+    public function __construct($prjId, $prjRootPath)
     {
         $this->prjId      = $prjId;
-        $this->subPrjPath = $subPrjPath;
+        $this->prjRootPath = $prjRootPath;
 
         // at least the project id is given
         if ($prjId != '') {
@@ -43,7 +43,7 @@ class basePrjPathFinder
                 $this->subPrjPath,
                 $this->prjXmlFilePath
             ]
-                = $this->detectRootPath();
+                = $this->detectProjectPaths();
 
 			//--- detect manifest file -------------------------------------------
 
@@ -84,13 +84,13 @@ class basePrjPathFinder
 
     /**
      * @param $prjId
-     * @param $subPrjPath
+     * @param $prjRootPath
      *
      * @return array
      *
      * @since version
      */
-    private function detectRootPath($prjId = '', $subPrjPath = '')
+    private function detectProjectPaths($prjId = '', $prjRootPath = '')
     {
         $isRootFound  = false;
         $isInstalled = false;
@@ -102,19 +102,20 @@ class basePrjPathFinder
         }
 
 	    // previous setting expected ?
-        if ($subPrjPath == '') {
-            $subPrjPath = $this->subPrjPath;
+        if ($prjRootPath == '') {
+            $prjRootPath = $this->prjRootPath;
         }
 
         //--- path accidentally a filename (XML?) -------------------------
 
-        if (File::exists($subPrjPath)) {
-            $subPrjPath = dirname($subPrjPath);
+        if (is_file($prjRootPath)) {
+            $prjRootPath = dirname($prjRootPath);
         }
 
         //--- path already valid -------------------------
 
-        $rootPath = $subPrjPath;
+        // fall back
+        $rootPath = $prjRootPath;
 
         if ($rootPath != '') {
 
@@ -130,11 +131,11 @@ class basePrjPathFinder
                 //--- fast lane for sources in joomla installation -------------------------
 
 	            // try root path of component on server (joomla installation)
-	            if (str_starts_with($subPrjPath, '/',) || str_starts_with($subPrjPath, '\\',))
+	            if (str_starts_with($prjRootPath, '/',) || str_starts_with($prjRootPath, '\\',))
 	            {
-		            $rootPath = JPATH_ROOT . $subPrjPath;
+		            $rootPath = JPATH_ROOT . $prjRootPath;
 	            } else {
-		            $rootPath = JPATH_ROOT . '/' . $subPrjPath;
+		            $rootPath = JPATH_ROOT . '/' . $prjRootPath;
 	            }
 
 				// normalize
@@ -153,7 +154,7 @@ class basePrjPathFinder
 	    // path not given but project ID can be found on joomla server folder
         if (!$isRootFound) {
             // detect sub path also
-            if ($subPrjPath == '') {
+            if ($prjRootPath == '') {
                 // com plg, mod
                 switch (strtolower(substr($prjId, 0, 3))) {
                     case "com":
@@ -186,8 +187,8 @@ class basePrjPathFinder
 
         if ($isRootFound) {
             // use found path
-            if ($subPrjPath == '') {
-                $subPrjPath = $rootPath;
+            if ($prjRootPath == '') {
+                $prjRootPath = $rootPath;
             }
 
 // yyyy toDo: .... use function
@@ -198,14 +199,14 @@ class basePrjPathFinder
 			if ($isInstalled)
 			{
 				// reduce path to project path within joomla directory
-				$subPrjPath = $this->behindPathOnJxServer ($subPrjPath);
+				$prjRootPath = $this->behindPathOnJxServer ($prjRootPath);
 			}
         }
 
         // path already defined and outside joomla
         if (!$isRootFound) {
             // path already defined
-            $rootPath = $subPrjPath;
+            $rootPath = $prjRootPath;
             // ToDo: should the project id checked as part of the path ?
             if (is_dir($rootPath)) {
                 $isRootFound = true;
@@ -221,7 +222,7 @@ class basePrjPathFinder
 //        }
 
 		$this->isInstalled = $isInstalled;
-        return [$isRootFound, $isInstalled, $rootPath, $subPrjPath, $rootPath];
+        return [$isRootFound, $isInstalled, $rootPath, $prjRootPath, $rootPath];
     }
 
     /** look for existing manifest file
@@ -251,14 +252,14 @@ class basePrjPathFinder
             $prjXmlLongPathFilename = $rootPath . '/' . strtolower($prjId) . '.xml';
 
             // short
-            if (!file_exists($prjXmlShortFilename)) {
+            if (file_exists($prjXmlShortFilename)) {
                 $isManifestFileFound = true;
                 $prjXmlPathFilename = $prjXmlShortFilename;
             } else {
                 // long
-                if (!file_exists($prjXmlShortFilename)) {
+                if (file_exists($prjXmlLongPathFilename)) {
                     $isManifestFileFound = true;
-                    $prjXmlPathFilename = $prjXmlShortFilename;
+                    $prjXmlPathFilename = $prjXmlLongPathFilename;
                 } else {
 
 //                    // 2025.01.22 is it needed ?

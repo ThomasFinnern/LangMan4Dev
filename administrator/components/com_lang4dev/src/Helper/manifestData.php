@@ -72,7 +72,7 @@ class manifestData
      * @throws Exception
      * @since version
      */
-    public function readManifestData($prjXmlPathFilename = '')
+    public function readManifestData($prjXmlPathFilename = '') : bool
     {
         $isValidXml = false;
 
@@ -93,7 +93,7 @@ class manifestData
             //--- extract data  -----------------------------------------------------------
 
             // file exists
-            if (File::exists($prjXmlPathFilename)) {
+            if (is_file($prjXmlPathFilename)) {
 
                 //--- extract xml -----------------------------------------------------------
 

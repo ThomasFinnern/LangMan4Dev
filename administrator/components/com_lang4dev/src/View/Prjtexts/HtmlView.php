@@ -16,25 +16,15 @@ require_once(__DIR__ . '/../../Helper/selectProject.php');
 use Finnern\Component\Lang4dev\Administrator\Helper\langPathFileName;
 use Finnern\Component\Lang4dev\Administrator\Model\PrjTextsModel;
 use Joomla\CMS\Component\ComponentHelper;
-use Joomla\Filesystem\File;
-use Joomla\CMS\Filesystem\Path;
 use Joomla\CMS\Form\Form;
-use Joomla\CMS\Helper\ContentHelper;
 use Joomla\CMS\Factory;
-use Joomla\CMS\HTML\HTMLHelper;
 use Joomla\CMS\Language\Text;
 use Joomla\CMS\MVC\View\HtmlView as BaseHtmlView;
-use Joomla\CMS\MVC\View\GenericDataException;
-use Joomla\CMS\Router\Route;
 use Joomla\CMS\Toolbar\Toolbar;
 use Joomla\CMS\Toolbar\ToolbarHelper;
 
-//use Finnern\Component\Lang4dev\Administrator\Helper\manifestData;
-use Finnern\Component\Lang4dev\Administrator\Helper\manifestLangFiles;
 use Finnern\Component\Lang4dev\Administrator\Helper\sessionProjectId;
 use Finnern\Component\Lang4dev\Administrator\Helper\sessionTransLangIds;
-use Finnern\Component\Lang4dev\Administrator\Helper\langFile;
-use Finnern\Component\Lang4dev\Administrator\Helper\projectType;
 
 use function defined;
 use function Finnern\Component\Lang4dev\Administrator\Helper\selectProject;

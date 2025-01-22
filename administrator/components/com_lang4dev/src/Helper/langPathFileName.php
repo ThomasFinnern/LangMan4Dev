@@ -443,7 +443,7 @@ class langPathFileName
             // sys exist at right place ?
 
             // File must exist
-            if ($isMustExist && !File::exists($langPathFileName)) {
+            if ($isMustExist && !is_file($langPathFileName)) {
                 $isNameVerified = false;
             }
         }
