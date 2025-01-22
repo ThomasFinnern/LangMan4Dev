@@ -14,14 +14,14 @@ namespace Finnern\Component\Lang4dev\Administrator\Helper;
 
 use Exception;
 use Joomla\CMS\Factory;
-use Joomla\CMS\Filesystem\File;
+use Joomla\Filesystem\File;
 
-//use Joomla\CMS\Filesystem\Folder;
+//use Joomla\Filesystem\Folder;
 
 use Finnern\Component\Lang4dev\Administrator\Helper\langTranslation;
 use Finnern\Component\Lang4dev\Administrator\Helper\langPathFileName;
 
-use Joomla\CMS\Filesystem\Folder;
+use Joomla\Filesystem\Folder;
 use RuntimeException;
 
 // use function defined;

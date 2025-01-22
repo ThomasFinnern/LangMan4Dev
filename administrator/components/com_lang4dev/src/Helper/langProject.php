@@ -9,12 +9,12 @@
 namespace Finnern\Component\Lang4dev\Administrator\Helper;
 
 use Exception;
-use Joomla\CMS\Factory;
-use Joomla\CMS\Filesystem\File;
-use Joomla\CMS\Filesystem\Folder;
-
 use Finnern\Component\Lang4dev\Administrator\Helper\langSubProject;
 use Finnern\Component\Lang4dev\Administrator\Helper\projectType;
+use Joomla\CMS\Factory;
+use Joomla\Filesystem\File;
+use Joomla\Filesystem\Folder;
+
 use RuntimeException;
 
 class langProject
@@ -54,16 +54,15 @@ class langProject
     public function addSubProject(
         string $prjId = '',
         eSubProjectType $prjType = eSubProjectType::PRJ_TYPE_NONE,
-        $prjRootPath = '',
-        // yyyyxx
-        $prjXmlFilePath = ''
-    ) {
+        basePrjPathFinder $oBasePrjPath = null,
+        manifestLangFiles $oManifestFiles = null
+    ) : langSubProject
+    {
         $subPrj = new langSubProject (
             $prjId,
             $prjType,
-            $prjRootPath,
-            // yyyyxx
-            $prjXmlFilePath
+            $oBasePrjPath,
+            $oManifestFiles
         );
 
         // project only used when project path exist
@@ -214,30 +213,30 @@ class langProject
         return $this;
     }
 
-    /**
-     *
-     * @return $this
-     *
-     * @throws Exception
-     * @since version
-     */
-    public function detectLangFiles()
-    {
-        try {
-            foreach ($this->subProjects as $subProject) {
-                $subProject->detectLangFiles();
-            }
-        } catch (RuntimeException $e) {
-            $OutTxt = '';
-            $OutTxt .= 'Error executing detectLangFiles: "' . '<br>';
-            $OutTxt .= 'Error: "' . $e->getMessage() . '"' . '<br>';
-
-            $app = Factory::getApplication();
-            $app->enqueueMessage($OutTxt, 'error');
-        }
-
-        return $this;
-    }
+//    /**
+//     *
+//     * @return $this
+//     *
+//     * @throws Exception
+//     * @since version
+//     */
+//    public function detectLangFiles()
+//    {
+//        try {
+//            foreach ($this->subProjects as $subProject) {
+//                $subProject->detectLangFiles();
+//            }
+//        } catch (RuntimeException $e) {
+//            $OutTxt = '';
+//            $OutTxt .= 'Error executing detectLangFiles: "' . '<br>';
+//            $OutTxt .= 'Error: "' . $e->getMessage() . '"' . '<br>';
+//
+//            $app = Factory::getApplication();
+//            $app->enqueueMessage($OutTxt, 'error');
+//        }
+//
+//        return $this;
+//    }
 
     /**
      * @param $mainLangId

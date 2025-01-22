@@ -22,23 +22,23 @@ function createPrj_RSG2()
 {
     $prjLang4dev = new langProject ();
 
-    $subPrj = $prjLang4dev->addSubProject(
-        'com_lang4dev',
-        eSubProjectType::PRJ_TYPE_COMP_BACK_SYS,
-        JPATH_ADMINISTRATOR . '/components/com_lang4dev',
-    );
-
-    $subPrj = $prjLang4dev->addSubProject(
-        'com_lang4dev',
-        eSubProjectType::PRJ_TYPE_COMP_BACK,
-        JPATH_ADMINISTRATOR . '/components/com_lang4dev'
-    );
-
-    $subPrj = $prjLang4dev->addSubProject(
-        'com_lang4dev',
-        eSubProjectType::PRJ_TYPE_COMP_SITE,
-        JPATH_SITE . '/components/com_lang4dev'
-    );
+//    $subPrj = $prjLang4dev->addSubProject(
+//        'com_lang4dev',
+//        eSubProjectType::PRJ_TYPE_COMP_BACK_SYS,
+//        JPATH_ADMINISTRATOR . '/components/com_lang4dev',
+//    );
+//
+//    $subPrj = $prjLang4dev->addSubProject(
+//        'com_lang4dev',
+//        eSubProjectType::PRJ_TYPE_COMP_BACK,
+//        JPATH_ADMINISTRATOR . '/components/com_lang4dev'
+//    );
+//
+//    $subPrj = $prjLang4dev->addSubProject(
+//        'com_lang4dev',
+//        eSubProjectType::PRJ_TYPE_COMP_SITE,
+//        JPATH_SITE . '/components/com_lang4dev'
+//    );
 
     return $prjLang4dev;
 }
@@ -53,47 +53,47 @@ function createPrj_JoomGallery()
 {
     $prjJoomGallery = new langProject ();
 
-    $subPrj = $prjJoomGallery->addSubProject(
-        'com_joomgallery',
-        eSubProjectType::PRJ_TYPE_COMP_BACK_SYS,
-        JPATH_ADMINISTRATOR . '/components/com_joomgallery',
-    );
-
-    $subPrj = $prjJoomGallery->addSubProject(
-        'com_joomgallery',
-        eSubProjectType::PRJ_TYPE_COMP_BACK,
-        JPATH_ADMINISTRATOR . '/components/com_joomgallery'
-    );
-
-    $subPrj = $prjJoomGallery->addSubProject(
-        'com_joomgallery',
-        eSubProjectType::PRJ_TYPE_COMP_SITE,
-        JPATH_SITE . '/components/com_lang4dev'
-    );
-
-    $subPrj = $prjJoomGallery->addSubProject(
-        'joomgallerycategories',
-        eSubProjectType::PRJ_TYPE_PLUGIN,
-        JPATH_PLUGINS . '/finder/joomgallerycategories'
-    );
-
-    $subPrj = $prjJoomGallery->addSubProject(
-        'joomgalleryimages',
-        eSubProjectType::PRJ_TYPE_PLUGIN,
-        JPATH_PLUGINS . '/finder/joomgalleryimages'
-    );
-
-    $subPrj = $prjJoomGallery->addSubProject(
-        'joomgallerycategories',
-        eSubProjectType::PRJ_TYPE_PLUGIN,
-        JPATH_PLUGINS . '/privacy/joomgalleryimages'
-    );
-
-    $subPrj = $prjJoomGallery->addSubProject(
-        'web-joomgallery',
-        eSubProjectType::PRJ_TYPE_PLUGIN,
-        JPATH_PLUGINS . '/webservices/joomgallery'
-    );
+//    $subPrj = $prjJoomGallery->addSubProject(
+//        'com_joomgallery',
+//        eSubProjectType::PRJ_TYPE_COMP_BACK_SYS,
+//        JPATH_ADMINISTRATOR . '/components/com_joomgallery',
+//    );
+//
+//    $subPrj = $prjJoomGallery->addSubProject(
+//        'com_joomgallery',
+//        eSubProjectType::PRJ_TYPE_COMP_BACK,
+//        JPATH_ADMINISTRATOR . '/components/com_joomgallery'
+//    );
+//
+//    $subPrj = $prjJoomGallery->addSubProject(
+//        'com_joomgallery',
+//        eSubProjectType::PRJ_TYPE_COMP_SITE,
+//        JPATH_SITE . '/components/com_lang4dev'
+//    );
+//
+//    $subPrj = $prjJoomGallery->addSubProject(
+//        'joomgallerycategories',
+//        eSubProjectType::PRJ_TYPE_PLUGIN,
+//        JPATH_PLUGINS . '/finder/joomgallerycategories'
+//    );
+//
+//    $subPrj = $prjJoomGallery->addSubProject(
+//        'joomgalleryimages',
+//        eSubProjectType::PRJ_TYPE_PLUGIN,
+//        JPATH_PLUGINS . '/finder/joomgalleryimages'
+//    );
+//
+//    $subPrj = $prjJoomGallery->addSubProject(
+//        'joomgallerycategories',
+//        eSubProjectType::PRJ_TYPE_PLUGIN,
+//        JPATH_PLUGINS . '/privacy/joomgalleryimages'
+//    );
+//
+//    $subPrj = $prjJoomGallery->addSubProject(
+//        'web-joomgallery',
+//        eSubProjectType::PRJ_TYPE_PLUGIN,
+//        JPATH_PLUGINS . '/webservices/joomgallery'
+//    );
 
     return $prjJoomGallery;
 }
@@ -110,17 +110,17 @@ function createPrj_Lang4Dev()
 
     $prjLang4dev = new langProject ();
 
-    $subPrj = $prjLang4dev->addSubProject(
-        'com_lang4dev',
-        eSubProjectType::PRJ_TYPE_COMP_BACK_SYS,
-        JPATH_ADMINISTRATOR . '/components/com_lang4dev'
-    );
-
-    $subPrj = $prjLang4dev->addSubProject(
-        'com_lang4dev',
-        eSubProjectType::PRJ_TYPE_COMP_BACK,
-        JPATH_ADMINISTRATOR . '/components/com_lang4dev'
-    );
+//    $subPrj = $prjLang4dev->addSubProject(
+//        'com_lang4dev',
+//        eSubProjectType::PRJ_TYPE_COMP_BACK_SYS,
+//        JPATH_ADMINISTRATOR . '/components/com_lang4dev'
+//    );
+//
+//    $subPrj = $prjLang4dev->addSubProject(
+//        'com_lang4dev',
+//        eSubProjectType::PRJ_TYPE_COMP_BACK,
+//        JPATH_ADMINISTRATOR . '/components/com_lang4dev'
+//    );
 
     return $prjLang4dev;
 }

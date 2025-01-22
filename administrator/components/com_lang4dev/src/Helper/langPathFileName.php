@@ -17,8 +17,8 @@ namespace Finnern\Component\Lang4dev\Administrator\Helper;
 
 use Exception;
 use Joomla\CMS\Factory;
-use Joomla\CMS\Filesystem\File;
-use Joomla\CMS\Filesystem\Folder;
+use Joomla\Filesystem\File;
+use Joomla\Filesystem\Folder;
 use RuntimeException;
 
 use function defined;
@@ -470,7 +470,7 @@ class langPathFileName
             }
 
             // does exist already ?
-            $isCreated = Folder::exists($langPathFileName);
+            $isCreated = is_dir($langPathFileName);
 
             // Needs creation
             if (!$isCreated) {
@@ -479,7 +479,7 @@ class langPathFileName
                 // $projectPath  = dirname($languagePath);
 
                 // language path must exist
-                if (Folder::exists($languagePath)) {
+                if (is_dir($languagePath)) {
                     $isCreated = Folder::create($langIDPath);
                 }
             }

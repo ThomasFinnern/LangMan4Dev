@@ -12,6 +12,7 @@ namespace Finnern\Component\Lang4dev\Administrator\Model;
 defined('_JEXEC') or die;
 
 use Exception;
+use Finnern\Component\Lang4dev\Administrator\Helper\basePrjPathFinder;
 use Finnern\Component\Lang4dev\Administrator\Helper\eSubProjectType;
 use Finnern\Component\Lang4dev\Administrator\Helper\langProject;
 use Finnern\Component\Lang4dev\Administrator\Helper\manifestLangFiles;
@@ -114,11 +115,12 @@ class PrjTextsModel extends AdminModel
             $prjXmlPathFilename = $dbSub->prjXmlPathFilename;
             $oManifestLangFiles = new manifestLangFiles ($prjXmlPathFilename);
 
+            $oBasePrjPath = new basePrjPathFinder ($prjDbId, dirname($prjXmlPathFilename));
+
             $subPrj = $project->addSubProject(
                 $dbSub->prjId,
                 projectType::int2prjType( $dbSub->subPrjType),
-                $dbSub->root_path,
-                // yyyyxx
+                $oBasePrjPath,
                 $oManifestLangFiles
             );
 

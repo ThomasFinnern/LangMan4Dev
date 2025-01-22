@@ -10,7 +10,7 @@ namespace Finnern\Component\Lang4dev\Administrator\Helper;
 
 use Exception;
 use Joomla\CMS\Factory;
-use Joomla\CMS\Filesystem\Folder;
+use Joomla\Filesystem\Folder;
 use Joomla\CMS\Language\Text;
 use RuntimeException;
 
@@ -390,7 +390,7 @@ class langSubProject extends langFiles
             }
 
             if (empty($searchPath)) {
-                $searchPath = $this->oBasePrjPath->prJRootPath;
+                $searchPath = $this->oBasePrjPath->prjRootPath;
             }
             $searchTransIdLocations->searchPaths = array($searchPath);
 
@@ -445,7 +445,7 @@ class langSubProject extends langFiles
             }
 
             if (empty($searchPath)) {
-                $searchPath = $this->oBasePrjPath->prJRootPath;
+                $searchPath = $this->oBasePrjPath->prjRootPath;
             }
 
             $searchTransIdLocations->searchPaths = array($searchPath);
@@ -810,8 +810,8 @@ class langSubProject extends langFiles
             $this->prjAdminPath   = $manifestLang->prjXmlFilePath;
         } else {
             // default/admin given by manifest file or auto paths
-            $this->prjDefaultPath = $this->oBasePrjPath->prJRootPath . '/' . $manifestLang->prjDefaultPath;
-            $this->prjAdminPath   = $this->oBasePrjPath->prJRootPath . '/' . $manifestLang->prjAdminPath;
+            $this->prjDefaultPath = $this->oBasePrjPath->prjRootPath . '/' . $manifestLang->prjDefaultPath;
+            $this->prjAdminPath   = $this->oBasePrjPath->prjRootPath . '/' . $manifestLang->prjAdminPath;
         }
     }
 
@@ -830,7 +830,7 @@ class langSubProject extends langFiles
         $lines [] = '$prjId = "' . $this->prjId . '"';
         $lines [] = '$prjType = "' . projectType::getPrjTypeText($this->prjType) . '"';
 
-        $lines [] = '$prjRootPath = "' . $this->oBasePrjPath->prJRootPath . '"';
+        $lines [] = '$prjRootPath = "' . $this->oBasePrjPath->prjRootPath . '"';
         $lines [] = '$prjXmlFilePath = "' . $this->oBasePrjPath->prjXmlFilePath . '"';
         $lines [] = '$langIdPrefix = "' . $this->langIdPrefix . '"';
 
@@ -951,9 +951,9 @@ class langSubProject extends langFiles
                     //--- lang files in new standard component folder ------------------------------------------
 
                     //--- Lang path by manifest definition ---------------------------------------
-                    $startPath = $this->oBasePrjPath->prJRootPath . "/" . $oManifestLangFiles->defaultLangPath;
+                    $startPath = $this->oBasePrjPath->prjRootPath . "/" . $oManifestLangFiles->defaultLangPath;
                     if ($this->prjType == eSubProjectType::PRJ_TYPE_COMP_BACK || $this->prjType == eSubProjectType::PRJ_TYPE_COMP_BACK_SYS) {
-                        $startPath = $this->oBasePrjPath->prJRootPath . "/" . $oManifestLangFiles->adminLangPath;
+                        $startPath = $this->oBasePrjPath->prjRootPath . "/" . $oManifestLangFiles->adminLangPath;
                     }
 
                     // project only used when project path exist
@@ -975,7 +975,7 @@ class langSubProject extends langFiles
 //--------------------------------
                     // old style manifest .... ' file explicit defined in manifest
 
-                    $this->langBasePath = $this->oBasePrjPath->prJRootPath; // root path expected
+                    $this->langBasePath = $this->oBasePrjPath->prjRootPath; // root path expected
 
                     // old style .... '<languages>' xml element exists
                     if (is_dir(dirname($this->langBasePath))) {

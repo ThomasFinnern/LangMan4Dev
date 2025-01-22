@@ -14,7 +14,7 @@ namespace Finnern\Component\Lang4dev\Administrator\Helper;
 use Exception;
 use Finnern\Component\Lang4dev\Administrator\Helper\projectType;
 use Joomla\CMS\Factory;
-use Joomla\CMS\Filesystem\Folder;
+use Joomla\Filesystem\Folder;
 
 use RuntimeException;
 
@@ -675,7 +675,7 @@ class langFileNamesSet
                 $basePath = JPATH_ROOT . '/language';
                 break;
 
-            case eSubProjectType::PRJ_TYPE_MODEL:
+            case eSubProjectType::PRJ_TYPE_MODULE:
                 // site
                 $basePath = JPATH_ROOT . '/language';
                 break;

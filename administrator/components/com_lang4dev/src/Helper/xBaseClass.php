@@ -12,7 +12,7 @@
 namespace Finnern\Component\Lang4dev\Administrator\Helper;
 
 use Joomla\CMS\Factory;
-use Joomla\CMS\Filesystem\Folder;
+use Joomla\Filesystem\Folder;
 
 use Finnern\Component\Lang4dev\Administrator\Helper\langFiles;
 

@@ -10,14 +10,13 @@
 namespace Finnern\Component\Lang4dev\Administrator\Helper;
 
 use Joomla\CMS\Factory;
-use Joomla\CMS\Filesystem\File;
-use Joomla\CMS\Filesystem\Folder;
-
+use Joomla\Filesystem\File;
+use Joomla\Filesystem\Folder;
 
 class basePrjPathFinder
 {
-    public string $prJRootPath = '';   // ($prjXmlFilePath) detected complete from path origin on
-    public string $prjXmlFilePath = ''; // same as root path (prJRootPath)
+    public string $prjRootPath = '';   // ($prjXmlFilePath) detected complete from path origin on
+    public string $prjXmlFilePath = ''; // same as root path (prjRootPath)
     public string $prjXmlPathFilename = '';
     public string $subPrjPath = ''; // user known path, may be behind JPATH_ROOT on server
 
@@ -40,7 +39,7 @@ class basePrjPathFinder
             [
                 $this->isRootValid,
                 $this->isInstalled,
-                $this->prJRootPath,
+                $this->prjRootPath,
                 $this->subPrjPath,
                 $this->prjXmlFilePath
             ]
@@ -49,8 +48,13 @@ class basePrjPathFinder
 			//--- detect manifest file -------------------------------------------
 
 			if ($this->isRootValid) {
-				$prjXmlFilename = strtolower(substr($this->prjId, 4)) . '.xml';
-				$this->isManifestFileFound = $this->searchManifestFilePath($this->prJRootPath, $prjXmlFilename);
+
+                [$isManifestFileFound, $prjXmlPathFilename]
+                    = $this->searchManifestFileInPath($this->prjRootPath, $this->prjId);
+
+                $this->prjXmlPathFilename = $prjXmlPathFilename;
+                $this->isManifestFileFound = $isManifestFileFound;
+
 			}
 
         }
@@ -115,7 +119,7 @@ class basePrjPathFinder
         if ($rootPath != '') {
 
 			// standard
-            if (Folder::exists($rootPath)
+            if (is_dir($rootPath)
                 && $rootPath != '/'
                 && $rootPath != '\\'
             ) {
@@ -137,7 +141,7 @@ class basePrjPathFinder
 	            $rootPath   = str_replace('\\', '/', $rootPath);
 
 	            // path already defined and within joomla
-                if (Folder::exists($rootPath)) {
+                if (is_dir($rootPath)) {
                     $isRootFound  = true;
                     $isInstalled = true;
                 }
@@ -172,7 +176,7 @@ class basePrjPathFinder
                 }
             }
 
-            if (Folder::exists($rootPath)) {
+            if (is_dir($rootPath)) {
                 $isRootFound = true;
 	            $isInstalled = true;
             }
@@ -203,7 +207,7 @@ class basePrjPathFinder
             // path already defined
             $rootPath = $subPrjPath;
             // ToDo: should the project id checked as part of the path ?
-            if (Folder::exists($rootPath)) {
+            if (is_dir($rootPath)) {
                 $isRootFound = true;
             }
         }
@@ -220,39 +224,72 @@ class basePrjPathFinder
         return [$isRootFound, $isInstalled, $rootPath, $subPrjPath, $rootPath];
     }
 
-	private function searchManifestFilePath($rootPath, $prjXmlFilename)
+    /** look for existing manifest file
+     * path may be in subfolder ../administrator/component/.../*.xml
+     * file may start with 'com_' or without
+     *
+     * @param string $rootPath
+     * @param string $prjId
+     *
+     * @return array
+     *
+     * @throws \Exception
+     * @since version
+     */
+	private function searchManifestFileInPath($rootPath, $prjId) : array
 	{
 		$isManifestFileFound = false;
+        $prjXmlPathFilename = "";
 
-		// root path is valid before
-		$prjXmlPathFilename = $rootPath . '/' . $prjXmlFilename;
+        try {
 
-		if (is_file($prjXmlPathFilename))
-		{
-			$isManifestFileFound      = true;
-			$this->prjXmlPathFilename = $prjXmlPathFilename;
-		}
+            //-- Test direct in given Path -----------------------------------
 
-		#--- Search in each sub folder -------------------------------------
+            // short version without com_, mod_..., plg_ ...
+            $prjXmlShortFilename = $rootPath . '/' . strtolower(substr($prjId, 4)) . '.xml';
+            // long version with com_, mod_..., plg_ ...
+            $prjXmlLongPathFilename = $rootPath . '/' . strtolower($prjId) . '.xml';
 
-		// example project file already/still only in prJRootPath/administrator/component/ subfolder
+            // short
+            if (!file_exists($prjXmlShortFilename)) {
+                $isManifestFileFound = true;
+                $prjXmlPathFilename = $prjXmlShortFilename;
+            } else {
+                // long
+                if (!file_exists($prjXmlShortFilename)) {
+                    $isManifestFileFound = true;
+                    $prjXmlPathFilename = $prjXmlShortFilename;
+                } else {
 
-		if (!$isManifestFileFound)
-		{
-			foreach (Folder::folders($rootPath) as $folderName)
-			{
-				$subFolder = $rootPath . "/" . $folderName;
+//                    // 2025.01.22 is it needed ?
+//                    //--- Search in each sub folder -------------------------------------
 
-				$isManifestFileFound = $this->searchManifestFilePath($subFolder, $prjXmlFilename);
+//                    //  example project file already/still in subfolder prjRootPath/administrator/component/project/
+//
+//                    foreach (Folder::folders($rootPath) as $folderName) {
+//                        $subFolder = $rootPath . "/" . $folderName;
+//
+//                        [$isManifestFileFound, $prjXmlPathFilename]
+//                             = $this->searchManifestFileInPath($subFolder, $prjId);
+//
+//                        if ($isManifestFileFound) {
+//                            break;
+//                        }
+//                    }
+                }
+            }
 
-				if ($isManifestFileFound)
-				{
-					break;
-				}
-			}
-		}
+        } catch (\RuntimeException $e) {
+            $OutTxt = '';
+            $OutTxt .= 'Error executing searchManifestFilePath: "' . '<br>';
+            $OutTxt .= 'Error: "' . $e->getMessage() . '"' . '<br>';
 
-		return $isManifestFileFound;
+            $app = Factory::getApplication();
+            $app->enqueueMessage($OutTxt, 'error');
+        }
+
+
+		return [$isManifestFileFound, $prjXmlPathFilename];
 	}
 
 	public function isPathOnJxServer($prjPathFilename)

@@ -22,7 +22,7 @@ enum eSubProjectType // : int
     case  PRJ_TYPE_COMP_BACK; // PRJ_TYPE_COMPONENT
     case  PRJ_TYPE_COMP_BACK_SYS;
     case  PRJ_TYPE_COMP_SITE;
-    case  PRJ_TYPE_MODEL;
+    case  PRJ_TYPE_MODULE;
     case  PRJ_TYPE_PLUGIN;
     case  PRJ_TYPE_WEB_ADMIN;
     case  PRJ_TYPE_WEB_SITE;
@@ -38,8 +38,49 @@ enum eSubProjectType // : int
  * *
  * * @since       version
  */
+
 class projectType
 {
+    // ToDo: create enum
+
+    // const PRJ_TYPE_TEMPLATE = 1;
+
+//    /**
+//     * @param $prjId
+//     *
+//     * @return eProjectType
+//     *
+//     * @since version
+//     */
+//    public static function prjTypeByProjectId(string $prjId) : eProjectType
+//    {
+//        $prjType = eProjectType::PRJ_TYPE_NONE;
+//
+//        switch (strtolower(substr($prjId, 0, 3))) {
+//            case "com":
+//                // Attention: lang projects have three here
+//                $prjType = eProjectType::PRJ_TYPE_COMP_BACK; // PRJ_TYPE_COMPONENT;
+//                break;
+//            case "mod":
+//                $prjType = eProjectType::PRJ_TYPE_MODEL;
+//                break;
+//            case "plg":
+//                $prjType = eProjectType::PRJ_TYPE_PLUGIN;
+//                break;
+//            case "/":
+//            case "\\":
+//                $prjType = eProjectType::PRJ_TYPE_WEB_ROOT;
+//                break;
+//
+//            missing types
+//
+//            default:
+//                // dummy
+//                break;
+//        }
+//
+//        return $prjType;
+//    }
 
     /**
      * Return a list of language subprojects matching the project by first 3 characters of
@@ -64,7 +105,7 @@ class projectType
                 $prjTypes[] = eSubProjectType::PRJ_TYPE_COMP_SITE;
                 break;
             case "mod":
-                $prjTypes[] = eSubProjectType::PRJ_TYPE_MODEL;
+                $prjTypes[] = eSubProjectType::PRJ_TYPE_MODULE;
                 $prjTypes[] = eSubProjectType::PRJ_TYPE_COMP_BACK_SYS;
                 break;
             case "plg":
@@ -97,6 +138,7 @@ class projectType
         return $prjTypes;
     }
 
+    // *.Sys.ini files are not used for backend normal(separate type backend sys)  and site
 
     /**
      * @param $prjType
@@ -133,14 +175,14 @@ class projectType
         $isSearchInstall = false;
 
         if ($prjType == eSubProjectType::PRJ_TYPE_COMP_BACK_SYS
-            || $prjType == eSubProjectType::PRJ_TYPE_MODEL
+            || $prjType == eSubProjectType::PRJ_TYPE_MODULE
             || $prjType == eSubProjectType::PRJ_TYPE_PLUGIN
         ) {
             $isSearchXml = true;
         }
 
         if ($prjType == eSubProjectType::PRJ_TYPE_COMP_BACK_SYS
-            || $prjType == eSubProjectType::PRJ_TYPE_MODEL
+            || $prjType == eSubProjectType::PRJ_TYPE_MODULE
             || $prjType == eSubProjectType::PRJ_TYPE_PLUGIN
         ) {
             $isSearchInstall = true;
@@ -177,7 +219,7 @@ class projectType
                 $typename = 'type-site';
                 break;
 
-            case eSubProjectType::PRJ_TYPE_MODEL:
+            case eSubProjectType::PRJ_TYPE_MODULE:
                 $typename = 'type-model';
                 break;
 
@@ -223,7 +265,7 @@ class projectType
                 break;
 
             case 4:
-                $prjType = eSubProjectType::PRJ_TYPE_MODEL;
+                $prjType = eSubProjectType::PRJ_TYPE_MODULE;
                 break;
 
             case 5:
@@ -267,7 +309,7 @@ class projectType
                 $prjTypeInt = 3;
                 break;
 
-            case eSubProjectType::PRJ_TYPE_MODEL:
+            case eSubProjectType::PRJ_TYPE_MODULE:
                 $prjTypeInt = 4;
                 break;
 
@@ -311,7 +353,7 @@ class projectType
                 }
                 break;
 
-            case eSubProjectType::PRJ_TYPE_MODEL:
+            case eSubProjectType::PRJ_TYPE_MODULE:
             case eSubProjectType::PRJ_TYPE_PLUGIN:
             case eSubProjectType::PRJ_TYPE_WEB_ADMIN:
             case eSubProjectType::PRJ_TYPE_WEB_SITE:

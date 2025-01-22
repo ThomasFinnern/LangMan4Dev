@@ -17,7 +17,7 @@ use Finnern\Component\Lang4dev\Administrator\Helper\sessionTransLangIds;
 use JInput;
 use Joomla\CMS\Application\CMSApplication;
 use Joomla\CMS\Factory;
-use Joomla\CMS\Filesystem\File;
+use Joomla\Filesystem\File;
 use Joomla\CMS\Language\Text;
 use Joomla\CMS\MVC\Controller\AdminController;
 use Joomla\CMS\MVC\Factory\MVCFactoryInterface;

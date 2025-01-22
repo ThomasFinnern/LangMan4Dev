@@ -1132,21 +1132,21 @@ class SubprojectModel extends AdminModel
     /**
      *
      *
-     * @param $basePrjPath
+     * @param $oBasePrjPath
      *
      * @return langSubProject []
      *
      * @since version
      */
-    public function subProjectsByPrjId(basePrjPathFinder $basePrjPath) : array // : langSubProject []
+    public function subProjectsByPrjId(basePrjPathFinder $oBasePrjPath) : array // : langSubProject []
     {
         $subProjects = [];
 
         // List of integers (com has an array of three)
-        $prjTypes = projectType::prjTypesByProjectId($basePrjPath->prjId);
+        $prjTypes = projectType::prjTypesByProjectId($oBasePrjPath->prjId);
 
         // Manifest tells if files have to be searched inside component or old on joomla standard paths
-        $prjXmlPathFilename = $basePrjPath->getManifestPathFilename();
+        $prjXmlPathFilename = $oBasePrjPath->getManifestPathFilename();
         $oManifestLangFiles = new manifestLangFiles ($prjXmlPathFilename);
 
         foreach ($prjTypes as $prjType) {
@@ -1166,9 +1166,9 @@ class SubprojectModel extends AdminModel
                 //--- new sub project -------------------------------------------------
 
                 $langSubProject = new langSubProject (
-                    $basePrjPath->prjId,
+                    $oBasePrjPath->prjId,
                     $prjType,
-                    $basePrjPath,
+                    $oBasePrjPath,
                     $oManifestLangFiles
                 );
 
@@ -1183,14 +1183,12 @@ class SubprojectModel extends AdminModel
 
                     case eSubProjectType::PRJ_TYPE_COMP_BACK_SYS:
                     case eSubProjectType::PRJ_TYPE_COMP_BACK:
-//                    if ( ! is_dir ($langSubProject->prjRootPath))
                         if (!is_dir($langSubProject->prjAdminPath)) {
                             $isExisting = false;
                         }
                         break;
 
                     case eSubProjectType::PRJ_TYPE_COMP_SITE:
-//                    if ( ! is_dir ($langSubProject->prjRootPath))
                         if (!is_dir($langSubProject->prjDefaultPath)) {
                             $isExisting = false;
                         } else {
@@ -1202,13 +1200,14 @@ class SubprojectModel extends AdminModel
                         }
                         break;
 
-                    case eSubProjectType::PRJ_TYPE_MODEL:
+                    case eSubProjectType::PRJ_TYPE_MODULE:
                     case eSubProjectType::PRJ_TYPE_PLUGIN:
                     case eSubProjectType::PRJ_TYPE_WEB_ADMIN:
                     case eSubProjectType::PRJ_TYPE_WEB_SITE:
                     case eSubProjectType::PRJ_TYPE_TEMPLATE:
                     case $this->PRJTYPEWEBROOT:
-                        if (!is_dir($langSubProject->prjRootPath)) {
+                        if (!is_dir($langSubProject->prjDefaultPath))
+                        {
                             $isExisting = false;
                         }
                         break;

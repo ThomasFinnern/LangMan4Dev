@@ -16,7 +16,7 @@ require_once(__DIR__ . '/../../Helper/selectProject.php');
 use Finnern\Component\Lang4dev\Administrator\Helper\langPathFileName;
 use Finnern\Component\Lang4dev\Administrator\Model\PrjTextsModel;
 use Joomla\CMS\Component\ComponentHelper;
-use Joomla\CMS\Filesystem\File;
+use Joomla\Filesystem\File;
 use Joomla\CMS\Filesystem\Path;
 use Joomla\CMS\Form\Form;
 use Joomla\CMS\Helper\ContentHelper;
