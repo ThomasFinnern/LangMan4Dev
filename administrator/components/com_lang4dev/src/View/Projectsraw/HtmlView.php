@@ -126,7 +126,7 @@ class HtmlView extends BaseHtmlView
 
 	    if ( ! empty ($project->subProjects[0]))
 	    {
-		    $prjXmlPathFilename = $project->subProjects[0]->prjXmlPathFilename; // . '/lang4dev.xml';
+		    $prjXmlPathFilename = $project->subProjects[0]->oBasePrjPath->prjXmlPathFilename; // . '/lang4dev.xml';
 
 		    $this->manifestLang = new manifestLangFiles ($prjXmlPathFilename);
 	    }

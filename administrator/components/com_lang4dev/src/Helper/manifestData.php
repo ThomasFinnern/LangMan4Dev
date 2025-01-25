@@ -220,7 +220,14 @@ class manifestData
     public function getByXml($name, $default)
     {
 //		return isset($this->manifestXml->$name) ? $this->manifestXml->$name : $default;
-        $result = $this->manifestXml->$name;
+//        $result = $this->manifestXml->$name;
+        $result = null;
+
+//        if (isset($this->manifestXml->{$name})) {
+        if (isset($this->manifestXml->$name)) {
+
+            $result = $this->manifestXml->$name;
+        }
 
         // return isset($this->manifestXml->$name) ? $this->manifestXml->$name : $default;
         return $result;
@@ -380,7 +387,13 @@ class manifestData
 
     public function __toTextItem($name = '')
     {
-        return $name . '="' . $this->getByXml($name, '') . '"';
+//        $value = $this->getByXml($name, '') ;
+//        if ($value == null) {
+//            $value = "%null%"
+//        }
+
+        $value = $this->getByXml($name, '')  ?? "%null%";
+        return $name . '="' . $value . '"';
     }
 
     /**

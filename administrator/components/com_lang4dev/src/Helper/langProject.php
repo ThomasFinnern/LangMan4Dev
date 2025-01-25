@@ -382,7 +382,7 @@ class langProject
 
         // A subproject is defined
         if (!empty ($this->subProjects[0])) {
-            $prjXmlPathFilename = $this->subProjects[0]->prjXmlPathFilename; // . '/lang4dev.xml';
+            $prjXmlPathFilename = $this->subProjects[0]->oBasePrjPath->prjXmlPathFilename; // . '/lang4dev.xml';
 
             // $manifestData = new manifestData ($prjXmlPathFilename);
             $manifestLang = new manifestLangFiles ($prjXmlPathFilename);
