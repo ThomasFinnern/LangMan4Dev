@@ -169,10 +169,10 @@ function DisplayDescr_123($extensionVersion)
 			<strong><?php echo Text::_('COM_LANG4DEV_LANG4DEV_DESC'); ?></strong>
 		</div>
 		<div class="header_steps_text">
-		    <div><span class="badge badge-pill bg-success">1</span> <?php echo Text::_('Define project'); ?></div>
-		    <div><span class="badge badge-pill bg-success">2</span> <?php echo Text::_('Select project ->below'); ?></div>
-		    <div><span class="badge badge-pill bg-success">3</span> <?php echo Text::_('Collect translation IDs'); ?></div>
-		    <div><span class="badge badge-pill bg-success">4</span> <?php echo Text::_('Translate project'); ?></div>
+		    <div><span class="badge badge-pill bg-success">1</span> <?php echo Text::_('COM_LANG4DEV_DEFINE_PROJECT'); ?></div>
+		    <div><span class="badge badge-pill bg-success">2</span> <?php echo Text::_('COM_LANG4DEV_SELECT_PROJECT_BELOW'); ?></div>
+		    <div><span class="badge badge-pill bg-success">3</span> <?php echo Text::_('COM_LANG4DEV_COLLECT_TRANSLATION_IDS'); ?></div>
+		    <div><span class="badge badge-pill bg-success">4</span> <?php echo Text::_('COM_LANG4DEV_TRANSLATE_PROJECT'); ?></div>
 		</div>
 		<div class="version_text">Lang4Dev&nbsp;<?php
             echo 'V' . $extensionVersion; ?>

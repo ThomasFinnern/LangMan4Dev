@@ -129,7 +129,7 @@ class ProjectsRawController extends AdminController
         $canCreateFile = true;
 
         if (!$canCreateFile) {
-            $OutTxt = Text::_('COM_LANG4DEV_TRANSLATE_SELECT_PROJECT_INVALID_RIGHTS');
+            $OutTxt = Text::_('COM_LANG4DEV_TRANSLATE_SELECT_LANG_IDS_PROJECT_INVALID_RIGHTS');
             $app    = Factory::getApplication();
             $app->enqueueMessage($OutTxt, 'error');
         } else {

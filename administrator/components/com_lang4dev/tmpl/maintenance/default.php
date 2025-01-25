@@ -56,13 +56,6 @@ class zoneButtons
 }
 
 
-//--- lang4dev zone -----------------------------
-
-//$lang4dev_Zone = new zoneContainer(Text::_('COM_LANG4DEV_RSGALLERY2_ZONE'), Text::_('COM_LANG4DEV_RSGALLERY2_ZONE_DESC'), 'rsg2', 'rsg2Zone');
-//
-//$lang4dev_ZoneButtons = [];
-//
-
 //--- Raw database zone -----------------------------
 
 $rawDatabase_Zone = new zoneContainer(Text::_('COM_LANG4DEV_RAW_DB_ZONE'), Text::_('COM_LANG4DEV_RAW_DB_ZONE_DESCRIPTION'), 'rawDb', 'rawDbZone');
@@ -99,8 +92,8 @@ $developer_ZoneButtons = [];
 /**/
 $developer_ZoneButtons[] =  new zoneButtons(
 	Route::_('index.php?option=com_lang4dev&view=projectsraw'),
-	Text::_('Projects jsonify'),
-	Text::_('View all projects as json encoded objects'),
+	Text::_('COM_LANG4DEV_PROJECTS_JSONIFY'),
+	Text::_('COM_LANG4DEV_VIEW_ALL_PROJECTS_AS_JSON_ENCODED_OBJECTS'),
 	array('icon-eye-open', 'icon-expand'),
 	'view___'
 );
@@ -109,8 +102,8 @@ $developer_ZoneButtons[] =  new zoneButtons(
 /**
 $developer_ZoneButtons[] =  new zoneButtons(
 	Route::_('index.php?option=com_lang4dev&view=develop&layout=InstallMessage'),
-	Text::_('Test Install/Update message'),
-	Text::_('Check the output result of the install finish and upgrade finish result view part'),
+	Text::_('COM_LANG4DEV_TEST_INSTALL_UPDATE_MESSAGE'),
+	Text::_('COM_LANG4DEV_TEST_INSTALL_UPDATE_MESSAGE_DESC'),
 	array('icon-eye-open', 'icon-expand'),
 	'view___'
 );
@@ -119,16 +112,6 @@ $developer_ZoneButtons[] =  new zoneButtons(
 //$developer4Test_Zone = new zoneContainer(Text::_('COM_LANG4DEV_DEVELOP_TEST_ZONE'), Text::_('COM_LANG4DEV_DEVELOP_TEST_ZONE_DESCRIPTION'), 'devTest', 'devTestZone');
 //
 //$developer4Test_ZoneButtons = [];
-
-/**
-$developer4Test_ZoneButtons[] = new zoneButtons(
-	Route::_('index.php?option=com_lang4dev&view=MaintenanceJ3x&layout=MoveJ3xImages'),
-	Text::_('COM_LANG4DEV_MOVE_J3X_IMAGES'),
-	Text::_('COM_LANG4DEV_MOVE_J3X_IMAGES_DESC'),
-	array('icon-new-tab', 'icon-copy', 'icon-image', 'icon-notification-2'),
-	'viewDbTransferJ3xImages'
-);
-/**/
 
 //--- display .... -----------------------------
 

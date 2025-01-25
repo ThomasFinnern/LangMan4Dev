@@ -1,4 +1,4 @@
-# J_LangMan4ExtDev
+# LangMan4Dev
 
 Joomla! language manager for extension developers  
 Started Feb 2022
@@ -6,6 +6,10 @@ Started Feb 2022
 **Supports translation ID handling for joomla extension developers**
 
 ![controlpanelRSgallery2](https://github.com/ThomasFinnern/J_LangMan4ExtDevProject/blob/main/Documentation/J!4x/controlPanel/ControlPanel.02.png?raw=true)
+
+It detects missing and surplus translation ids in source code and helps for first manual translations
+
+It does not support auto translations 
 
 ## Use cases
 

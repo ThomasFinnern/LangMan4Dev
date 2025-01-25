@@ -241,7 +241,7 @@ class langSubProject extends langFiles
     {
         if ($isEmpty) {
 
-            $OutTxt = Text::_('langSubproject has empty variable on save : ' . $sourceName
+            $OutTxt = Text::_('COM_LANG4DEV_LANG_SUBPROJECT_HAS_EMPTY_VARIABLE_ON_SAVE' . $sourceName
                 . '::' . $itemName);
             $app    = Factory::getApplication();
             $app->enqueueMessage($OutTxt, 'warning');
@@ -348,7 +348,7 @@ class langSubProject extends langFiles
                 }
             } else {
                 // ToDo: Is warning needed
-                $OutTxt = Text::_('No lang files for: ' . $langId . ' found');
+                $OutTxt = Text::_('COM_LANG4DEV_NO_LANG_FILES_FOR' . $langId . ' found');
                 $OutTxt .= 'Project: ' . $this->getPrjIdAndTypeText();
                 $app    = Factory::getApplication();
                 $app->enqueueMessage($OutTxt, 'warning');
@@ -358,7 +358,7 @@ class langSubProject extends langFiles
             }
         } else {
             // ToDo: Is warning needed
-            $OutTxt = Text::_('Empty langFileNamesSet[] for: ' . $langId . ' found');
+            $OutTxt = Text::_('COM_LANG4DEV_EMPTY_LANG_FILENAMES_SET_FOR' . $langId . ' found');
             $OutTxt .= 'Project: ' . $this->getPrjIdAndTypeText();
             $app    = Factory::getApplication();
             $app->enqueueMessage($OutTxt, 'warning');

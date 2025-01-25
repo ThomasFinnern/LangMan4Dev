@@ -241,14 +241,14 @@ class TranslateController extends AdminController
                 //--- invalid lang ID names ------------------------
 
                 if (!$isTargetVerified) {
-                    $OutTxt = Text::_('COM_LANG4DEV_TRANSLATE_WRONG_LANG_ID')
+                    $OutTxt = Text::_('COM_LANG4DEV_TRANSLATE_WRONG_TARGET_LANG_ID')
                         . ': "' . $targetLangId . '"';
                     $app    = Factory::getApplication();
                     $app->enqueueMessage($OutTxt, 'error');
                 }
 
                 if (!$isSourceVerified) {
-                    $OutTxt = Text::_('COM_LANG4DEV_TRANSLATE_WRONG_LANG_ID')
+                    $OutTxt = Text::_('COM_LANG4DEV_TRANSLATE_WRONG_SOURCE_LANG_ID')
                         . ': "' . $sourceLangId . '"';
                     $app    = Factory::getApplication();
                     $app->enqueueMessage($OutTxt, 'error');
@@ -359,7 +359,7 @@ class TranslateController extends AdminController
                         }
                     } else { // ! $isNameVerified
 
-                        $OutTxt = Text::_('COM_LANG4DEV_TRANSLATE_ERORR_INVALID_FILE_NAME')
+                        $OutTxt = Text::_('COM_LANG4DEV_TRANSLATE_ERROR_INVALID_FILE_NAME')
                             . ': "' . $oLangPathFileName->getLangPathFileName() . '"';
                         $app    = Factory::getApplication();
                         $app->enqueueMessage($OutTxt, 'error');
@@ -489,7 +489,7 @@ class TranslateController extends AdminController
         $canCreateFile = true;
 
         if (!$canCreateFile) {
-            $OutTxt = Text::_('COM_LANG4DEV_TRANSLATE_SELECT_PROJECT_INVALID_RIGHTS');
+            $OutTxt = Text::_('COM_LANG4DEV_TRANSLATE_SELECT_LANG_IDS_PROJECT_INVALID_RIGHTS');
             $app    = Factory::getApplication();
             $app->enqueueMessage($OutTxt, 'error');
         } else {
