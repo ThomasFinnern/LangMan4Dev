@@ -640,7 +640,7 @@ class langSubProject extends langFiles
      */
     public function getPrjTypeText()
     {
-        return projectType::getPrjTypeText($this->prjType);
+        return projectType::prjType2string($this->prjType);
     }
 
     /**
@@ -874,7 +874,7 @@ class langSubProject extends langFiles
 
         $lines [] = $this->getPrjIdAndTypeText();
         $lines [] = '$prjId = "' . $this->prjId . '"';
-        $lines [] = '$prjType = "' . projectType::getPrjTypeText($this->prjType) . '"';
+        $lines [] = '$prjType = "' . projectType::prjType2string($this->prjType) . '"';
 
         $lines [] = '$prjRootPath = "' . $this->oBasePrjPath->prjRootPath . '"';
         $lines [] = '$prjXmlFilePath = "' . $this->oBasePrjPath->prjXmlFilePath . '"';

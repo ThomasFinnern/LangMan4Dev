@@ -280,7 +280,7 @@ class langProject
         try {
             foreach ($this->subProjects as $subProject) {
                 $prjId                     = $subProject->prjId . ':'
-                    . projectType::getPrjTypeText($subProject->prjType);
+                    . projectType::prjType2string($subProject->prjType);
                 $langFileSetsPrjs [$prjId] = $subProject->langFileNamesSet;
             }
         } catch (RuntimeException $e) {

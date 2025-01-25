@@ -720,7 +720,7 @@ class langFileNamesSet
 //            case eProjectType::PRJ_TYPE_COMP_BACK:
 //                break;
 //
-//            case eProjectType::PRJ_TYPE_MODEL:
+//            case eProjectType::PRJ_TYPE_MODULE:
 //                break;
 //
 //            case eProjectType::PRJ_TYPE_PLUGIN:

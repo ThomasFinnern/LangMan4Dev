@@ -271,7 +271,7 @@ echo Route::_('index.php?option=com_lang4dev&view=subprojects'); ?>"
 
                     <td class="small d-none d-md-table-cell">
 		                <?php
-                        echo projectType::getPrjTypeText(projectType::int2prjType($item->subPrjType));
+                        echo projectType::prjType2string(projectType::int2prjType($item->subPrjType));
                         ?>
                     </td>
 

@@ -959,7 +959,7 @@ class SubprojectModel extends AdminModel
 
         if ($existingId > 0) {
             // change existing
-            $isSaved = $this->mergeAndSave2_DB($existingId, $subProject);
+            $isSaved = $this->mergeAndSave2_DB($existingId, $subProject, $parentId);
         } else {
             // create new
             $isSaved = $this->createAndSave2_DB($subProject, $parentId);
@@ -977,7 +977,7 @@ class SubprojectModel extends AdminModel
      * @throws Exception
      * @since version
      */
-    private function mergeAndSave2_DB(int $itemId, langSubProject $subProject) : bool
+    private function mergeAndSave2_DB(int $itemId, langSubProject $subProject, $parentId) : bool
     {
         $isSaved = false;
 
@@ -991,6 +991,7 @@ class SubprojectModel extends AdminModel
 
         $data = [];
         $data ['id'] = $itemId;
+        $data ['parent_id'] = $parentId;
 
         // ToDo: Changed alias from user ... singularity ...
         $this->assignSubProject2Data ($subProject, $data);
@@ -1036,8 +1037,9 @@ class SubprojectModel extends AdminModel
         $data        = [];
 
         $data ['id'] = $id;
+        $data ['parent_id'] = $parentId;
         $data ['title'] = $subProject->prjId . '_'
-            . projectType::getPrjTypeText($subProject->prjType)
+            . projectType::prjType2string($subProject->prjType)
             . '(' . $parentId . ') '
         ;
 
@@ -1074,12 +1076,12 @@ class SubprojectModel extends AdminModel
      *
      * @since version
      */
-    private function checkSubPrjDoesExist_inDB($subProject, $parentId)
+    private function checkSubPrjDoesExist_inDB($subProject, $parentId) : int
     {
         $existingId = false; // indicates nothing found in DB
 
-        $prjType = projectType::prjType2int($subProject->prjType);
         $prjId   = $subProject->prjId;
+        $prjType = projectType::prjType2int($subProject->prjType);
 
         $db    = Factory::getDbo();
         $query = $db->getQuery(true)
@@ -1093,7 +1095,7 @@ class SubprojectModel extends AdminModel
 
         // wrong ? $existingId = $db->loadObject();
 
-        return (int)$existingId;
+        return (int)$existingId > 0;
     }
 
     
@@ -1200,7 +1202,7 @@ class SubprojectModel extends AdminModel
         // if alias empty ...
 
         /**/
-        // $data ['title'] = $subProject->prjId . '_' . projectType::getPrjTypeText($subProject->prjId);
+        // $data ['title'] = $subProject->prjId . '_' . projectType::prjType2string($subProject->prjId);
         // $data ['alias'] = $subProject->;
 
         $data ['prjId']               = $subProject->prjId;
@@ -1211,10 +1213,42 @@ class SubprojectModel extends AdminModel
         $data ['isLangAtStdJoomla']   = $subProject->isLangAtStdJoomla ? 1 : 0;
         $data ['prjXmlPathFilename']  = $subProject->oBasePrjPath->prjXmlPathFilename;
         $data ['installPathFilename'] = $subProject->installPathFilename;
-        // already set $data ['parent_id'] = $subProject->;
-        //$data ['twin_id'] = $subProject->;
+
+
         // ToDo: $data ['lang_path_type'] = $subProject->;
+        $data ['lang_path_type']      = projectType::prjType2string($subProject->prjType);
         // ToDo: $data ['lang_ids'] = $subProject->;
+        $data ['lang_ids']            = implode (',', $subProject->langIds);
+        //ToDo: $data ['twin_id'] = $subProject->;
+
+
+
+        //--- expected extern: --------------------------------
+
+        //$data ['parent_id']           = $subProject->parentId;
+        if ( ! isset($data ['parent_id'])) {
+
+            $OutTxt =  'parent_id missing for subproject into DB';
+            $OutTxt .=  '\nprjId: ' . $subProject->prjId;
+            $OutTxt .=  '\nsubPrjType: ' . projectType::prjType2string($subProject->prjType);
+
+            $app    = Factory::getApplication();
+            $app->enqueueMessage($OutTxt, 'error');
+        } else {
+
+            if ( ! isset($data ['parent_id'])) {
+
+                $OutTxt =  'parent_id is "0" for subproject into DB';
+                $OutTxt .=  '\n' . 'prjId: ' . $subProject->prjId;
+                $OutTxt .=  '\n' . 'subPrjType: ' . projectType::prjType2string($subProject->prjType);
+
+                $app    = Factory::getApplication();
+                $app->enqueueMessage($OutTxt, 'error');
+            }
+
+        }
+
+
 
         // ? lang_path_type
         // ? lang_ids

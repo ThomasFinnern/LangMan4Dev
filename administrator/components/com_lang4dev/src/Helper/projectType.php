@@ -62,7 +62,7 @@ class projectType
 //                $prjType = eProjectType::PRJ_TYPE_COMP_BACK; // PRJ_TYPE_COMPONENT;
 //                break;
 //            case "mod":
-//                $prjType = eProjectType::PRJ_TYPE_MODEL;
+//                $prjType = eProjectType::PRJ_TYPE_MODULE;
 //                break;
 //            case "plg":
 //                $prjType = eProjectType::PRJ_TYPE_PLUGIN;
@@ -198,7 +198,7 @@ class projectType
      *
      * @since version
      */
-    public static function getPrjTypeText($prjType) : string
+    public static function prjType2string($prjType) : string
     {
         $typename = '? type';
 

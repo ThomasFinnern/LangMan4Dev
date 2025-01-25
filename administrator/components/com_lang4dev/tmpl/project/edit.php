@@ -175,13 +175,13 @@ function renderSubProjects($subProjects): void
 	<!--div class="row g-2"-->
 	<div class="row">
 		<div class="sub_projects_container">
-
+			<ul>
             <?php
             foreach ($subProjects as $subProject) {
                 renderSubProject($subProject);
             }
             ?>
-
+			</ul>
 		</div>
 	</div>
     <?php
@@ -193,16 +193,16 @@ function renderSubProjects($subProjects): void
 function renderSubProject($subProject): void
 {
     ?>
-	<!--div class="row g-2"-->
-	<div class="row">
+	<li>
 		<div class="sub_project_container">
 
 			<div class="sub_project_title">
-				<h4>
+				<divxh4>
                     <?php
-                    echo projectType::getPrjTypeText(projectType::int2prjType( $subProject->subPrjType));
+                    echo projectType::prjType2string(projectType::int2prjType( $subProject->subPrjType));
+					echo ':';
                     ?>
-				</h4>
+				</divxh4>
 			</div>
 
 			<div class="sub_project_data">
@@ -212,7 +212,7 @@ function renderSubProject($subProject): void
 			</div>
 
 		</div>
-	</div>
+	</li>
     <?php
 
     return;
