@@ -23,11 +23,20 @@ defined('_JEXEC') or die;
 
 // https://www.php.net/manual/de/simplexml.examples-basic.php
 
+/**
+ * Container for manifest xml data
+ *
+ *
+ * @package     Finnern\Component\Lang4dev\Administrator\Helper
+ *
+ * @since       version
+ */
 class manifestData
 {
     public $prjXmlFilePath = '';
     public $prjXmlPathFilename = '';
 
+    // path to lanuages
     public $defaultLangPath = "";
     public $adminLangPath = "";
 
