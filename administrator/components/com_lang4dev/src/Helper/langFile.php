@@ -1,13 +1,10 @@
 <?php
 /**
- * This class collects lines of a joomla language file for read/write/update
- * It keeps references to empty lines and comments and the order of lines
- *
- *
- * @version
- * @package       Lang4dev
+ * @package         LangMan4Dev
+ * @subpackage      com_lang4dev
+ * @author          Thomas Finnern <InsideTheMachine.de>
  * @copyright  (c)  2022-2025 Lang4dev Team
- * @license
+ * @license         GNU General Public License version 2 or later
  */
 
 namespace Finnern\Component\Lang4dev\Administrator\Helper;

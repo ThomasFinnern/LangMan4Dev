@@ -1,8 +1,8 @@
 <?php
 /**
- * @package         Lang4dev
- * @subpackage
- *
+ * @package         LangMan4Dev
+ * @subpackage      com_lang4dev
+ * @author          Thomas Finnern <InsideTheMachine.de>
  * @copyright  (c)  2022-2025 Lang4dev Team
  * @license         GPL2
  */

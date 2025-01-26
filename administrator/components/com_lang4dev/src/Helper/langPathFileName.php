@@ -1,16 +1,10 @@
 <?php
 /**
- * Handle path and file names regarding
- *  - lang id in front of name (not necessary any more
- *  - sys file indicator
- *  - extract ang id
- *
- * the path may be extrctrd into parts or the parts may create a valid path
- *
- * @version
- * @package       Lang4dev
+ * @package         LangMan4Dev
+ * @subpackage      com_lang4dev
+ * @author          Thomas Finnern <InsideTheMachine.de>
  * @copyright  (c)  2022-2025 Lang4dev Team
- * @license       GPL2
+ * @license         GPL2
  */
 
 namespace Finnern\Component\Lang4dev\Administrator\Helper;

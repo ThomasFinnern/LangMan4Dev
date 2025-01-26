@@ -1,10 +1,10 @@
 <?php
 /**
- * @package       Lang4dev
- * @subpackage    com_lang4dev
+ * @package         LangMan4Dev
+ * @subpackage      com_lang4dev
+ * @author          Thomas Finnern <InsideTheMachine.de>
  * @copyright  (c)  2022-2025 Lang4dev Team
- * @license       http://www.gnu.org/copyleft/gpl.html GNU/GPL
- * @author        finnern
+ * @license         http://www.gnu.org/copyleft/gpl.html GNU/GPL
  */
 
 namespace Finnern\Component\Lang4dev\Administrator\Model;

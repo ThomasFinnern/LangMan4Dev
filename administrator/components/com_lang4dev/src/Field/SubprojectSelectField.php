@@ -24,12 +24,11 @@ use RuntimeException;
 use function defined;
 
 /**
- * Collects available subproject ids with titles and creates
- * contents of a dropdown box for the selection
- * Includes "Select subproject" as first entry
- * Sorted by ordering (the newest first)
- *
- * @since __BUMP_VERSION__
+ * @package         LangMan4Dev
+ * @subpackage      com_lang4dev
+ * @author          Thomas Finnern <InsideTheMachine.de>
+ * @copyright  (c)  2019-2025 RSGallery2 Team
+ * @license         GNU General Public License version 2 or later
  */
 class SubprojectSelectField extends ListField
 {

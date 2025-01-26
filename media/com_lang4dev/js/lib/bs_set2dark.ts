@@ -1,13 +1,9 @@
 /**
- * @package    RSGallery2
- *
- * supports maintenance user confirm messages
- *
- * @subpackage com_rsgallery2
- * @copyright  (c) 2024-2024 RSGallery2 Team
- * @license    GNU General Public License version 2 or later
- * @author      finnern
- * @since       5.0.21
+ * @package         LangMan4Dev
+ * @subpackage      com_lang4dev
+ * @author          Thomas Finnern <InsideTheMachine.de>
+ * @copyright  (c)  2024-2025 RSGallery2 Team
+ * @license         GNU General Public License version 2 or later
  */
 
 //======================================================================================

@@ -1,10 +1,10 @@
 <?php
 /**
- * @package     Finnern\Component\Lang4dev\Administrator\Helper
- * @subpackage
- *
- * @copyright   A copyright
- * @license     A "Slug" license name e.g. GPL2
+ * @package         LangMan4Dev
+ * @subpackage      com_lang4dev
+ * @author          Thomas Finnern <InsideTheMachine.de>
+ * @copyright  (c)  2019-2025 RSGallery2 Team
+ * @license         GNU General Public License version 2 or later
  */
 
 namespace Finnern\Component\Lang4dev\Administrator\Helper;

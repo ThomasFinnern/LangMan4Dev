@@ -2,9 +2,11 @@
 // no direct access
 
 /**
- * @package       Lang4dev
+ * @package         LangMan4Dev
+ * @subpackage      com_lang4dev
+ * @author          Thomas Finnern <InsideTheMachine.de>
  * @copyright  (c)  2022-2025 Lang4dev Team
- * @license       http://www.gnu.org/copyleft/gpl.html GNU/GPL
+ * @license         http://www.gnu.org/copyleft/gpl.html GNU/GPL
  */
 
 defined('_JEXEC') or die;
