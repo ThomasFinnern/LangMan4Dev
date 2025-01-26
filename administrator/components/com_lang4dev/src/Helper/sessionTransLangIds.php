@@ -4,7 +4,7 @@
  * @subpackage
  *
  * @version
- * @copyright  (c)  2022-2024 Lang4dev Team
+ * @copyright  (c)  2022-2025 Lang4dev Team
  * @license       GPL2
  */
 
