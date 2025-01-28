@@ -25,6 +25,11 @@ defined('_JEXEC') or die;
 
 // https://www.php.net/manual/de/simplexml.examples-basic.php
 
+/**
+ * @package     Finnern\Component\Lang4dev\Administrator\Helper
+ *
+ * @since       version
+ */
 class manifestLangFiles extends manifestData
 {
 //	public $prjXmlFilePath = '';
@@ -33,9 +38,17 @@ class manifestLangFiles extends manifestData
 //	private $manifest = false; // XML: false or SimpleXMLElement
 
     // is old paths definition is used ==> language files in joomla base paths instead of inside component
+    /**
+     * @var bool
+     * @since version
+     */
     public $isLangAtStdJoomla = false; // not inside component folder
+
+    // [$langId][] = $stdPath . '/' . language name
 	public $stdLangFilePaths = [];
 	public $stdLangFiles = [];
+
+    // [$langId][] = $stdPath . '/' . language name
 	public $adminLangFilePaths = [];
 	public $adminLangFiles = [];
 
@@ -50,9 +63,8 @@ class manifestLangFiles extends manifestData
      */
     public function __construct($prjXmlPathFilename = '')
     {
+        // import manifest file
         parent::__construct($prjXmlPathFilename);
-
-
     }
 
     /**
@@ -103,69 +115,47 @@ class manifestLangFiles extends manifestData
                 // ToDo: use xpath for faster access and smaller code
 
                 //---------------------------------------------------------------
-                // old standard
+                // old type language files definition in XML
                 //---------------------------------------------------------------
 
                 //--- site/standard -----------------------------------------------
 
-                //<languages folder="site/com_joomgallery/languages">
-                //	<language tag="en-GB">en-GB/com_joomgallery.ini</language>
-                //</languages>
+                // <languages folder="site/com_joomgallery/languages">
+                // 	 <language tag="en-GB">en-GB/com_joomgallery.ini</language>
+                // </languages>
 
-                $stdLanguages = $this->getByXml('languages', []);
-                if (!empty($stdLanguages)) {
-                    if (count($stdLanguages) > 0) {
-                        // lang files path will be defined in XML and copied to joomla standard path not component
-                        $this->isLangAtStdJoomla = true;
+                // extract path and names from text in XML
+                $stdLanguagesXml = $this->getByXml('languages', []);
 
-                        //--- collect files from installation ------------------------------
-
-                        $stdPath = (string)$stdLanguages['folder'];
-
-                        foreach ($stdLanguages->language as $language) {
-                            $langId             = (string)$language['tag'];
-                            $subFolder[$langId] = $stdPath . '/' . (string)$language; // $language[0]
-
-                            $this->stdLangFilePaths[] = $subFolder;
-                            $this->stdLangFiles[]     = basename((string)$language);
-                        }
-                    }
+                if (!empty($stdLanguagesXml)) {
+                    // add items to
+                    [$this->stdLangFilePaths, $this->stdLangFiles] =
+                        $this->extractLangPathsByXML($stdLanguagesXml);
                 }
 
                 //--- backend -----------------------------------------------
 
-                //<administration>
-                //	<languages folder="administrator/com_joomgallery/languages">
-                //	    <language tag="en-GB">en-GB/com_joomgallery.ini</language>
-                //	    <language tag="en-GB">en-GB/com_joomgallery.sys.ini</language>
-                //	    <language tag="en-GB">en-GB/com_joomgallery.exif.ini</language>
-                //	    <language tag="en-GB">en-GB/com_joomgallery.iptc.ini</language>
-                //	</languages>
-                //</administration>
+                // <administration>
+                //	 <languages folder="administrator/com_joomgallery/languages">
+                //	   <language tag="en-GB">en-GB/com_joomgallery.ini</language>
+                //	   <language tag="en-GB">en-GB/com_joomgallery.sys.ini</language>
+                //	   <language tag="en-GB">en-GB/com_joomgallery.exif.ini</language>
+                //	   <language tag="en-GB">en-GB/com_joomgallery.iptc.ini</language>
+                //	 </languages>
+                // </administration>
 
+                // extract path and names from text in XML
                 $administration = $this->getByXml('administration', []);
-                $stdLanguages   = $administration->languages;
-                if (!empty($stdLanguages)) {
-                    if (count($stdLanguages) > 0) {
-                        // lang files path will be defined in XML anf copied to joomla standard path
-                        $this->isLangAtStdJoomla = true;
+                $stdLanguagesXml   = $administration->languages;
 
-                        //--- collect files from installation ------------------------------
-
-                        $stdPath = (string)$stdLanguages['folder'];
-
-                        foreach ($stdLanguages->language as $language) {
-                            $langId             = (string)$language['tag'];
-                            $subFolder[$langId] = $stdPath . '/' . (string)$language; // $language[0]
-
-                            $this->adminLangFilePaths[] = $subFolder;
-                            $this->adminLangFiles[]     = basename((string)$language);
-                        }
-                    }
+                if (!empty($stdLanguagesXml)) {
+                    // add items to
+                    [$this->adminLangFilePaths, $this->adminLangFiles] =
+                        $this->extractLangPathsByXML($stdLanguagesXml);
                 }
 
                 //---------------------------------------------------------------
-                // new standard
+                // new type language files definition by files in folder language
                 //---------------------------------------------------------------
 
                 //--- site/standard -----------------------------------------------
@@ -173,6 +163,9 @@ class manifestLangFiles extends manifestData
                 // 	<files folder="components/com_rsgallery2">
                 //		<!--folder>forms</folder-->
                 //		<folder>language</folder>
+
+
+                // Read path then find the files in folder
 
                 $langFolder = $manifestXml->xpath("/extension/files/folder[contains(text(),'language')]");
                 // lang folder given
@@ -189,11 +182,9 @@ class manifestLangFiles extends manifestData
 
                     //--- search for lang ID folders in project or files ------------------------------
 
-                    [$stdLangFilePaths, $stdLangFiles] = $this->Search4LangIdFolderOrFiles ($this->prjDefaultPath, $subPath);
-
-                    $this->stdLangFilePaths = $stdLangFilePaths;
-                    $this->stdLangFiles     = $stdLangFiles;
-
+                    // add items to
+                    [$this->stdLangFilePaths, $this->stdLangFiles] =
+                        $this->Search4LangPathInFolders ($this->prjDefaultPath, $subPath);
                 }
 
                 //--- backend -----------------------------------------------
@@ -217,10 +208,9 @@ class manifestLangFiles extends manifestData
 
                     //--- search for lang ID folders in project or files ------------------------------
 
-                    [$adminLangFilePaths, $adminLangFiles] = $this->Search4LangIdFolderOrFiles ($this->prjAdminPath, $subPath);
-
-                    $this->adminLangFilePaths = $adminLangFilePaths;
-                    $this->adminLangFiles     = $adminLangFiles;
+                    // add items to
+                    [$this->adminLangFilePaths, $this->adminLangFiles] =
+                        $this->Search4LangPathInFolders ($this->prjAdminPath, $subPath);
 
                 }
 
@@ -238,36 +228,12 @@ class manifestLangFiles extends manifestData
         return $this->isLangAtStdJoomla;
     }
 
-    /**
-     * Collect language IDs like en-GB from folder name (ToDo: or file names)
-     * The given sub path is needed if the component is not installed already
-     * Installed components try to use 'language' folder
-     *
-     * @param   string  $subPath
-     *
-     * @return array[]
-     *
-     * @since version
-     */
-    private function Search4LangIdFolderOrFiles(string $rootPath, string $subPath) : array
-    {
-        $stdLangFilePaths = [];
-        $stdLangFiles = [];
-
-
-
-
-
-
-
-
-
-        return [$stdLangFilePaths, $stdLangFiles];
-    }
-
-    // new: lang files within component
+    // new:
 
     /**
+     * Are language files not i n component language foldeer but
+     * in standard joomla language folders
+     * ? true for plugins, modules
      *
      * @return bool|mixed
      *
@@ -335,5 +301,92 @@ class manifestLangFiles extends manifestData
         return $lines;
     }
 
- } // class
+    /**
+     * Old type language files definition in XML
+     * Adds path to $this->stdLangFilePaths
+     * Adds language file anem to $this->stdLangFiles
+     *
+     * @param   mixed  $stdLanguages xml object from manifest
+     *
+     * @return void
+     *
+     * @since version
+     */
+    public function extractLangPathsByXML(mixed $stdLanguages): array
+    {
+        $langFilePaths = [];
+        $langFiles = [];
+
+        if (count($stdLanguages) > 0) {
+
+            //<languages folder="site/com_joomgallery/languages">
+            //	<language tag="en-GB">en-GB/com_joomgallery.ini</language>
+            //</languages>
+
+            // lang files path will be defined in XML and copied to joomla standard path not component
+            $this->isLangAtStdJoomla = true;
+
+            //--- collect files from xml definition ------------------------------
+
+            $stdPath = (string)$stdLanguages['folder'];
+
+            foreach ($stdLanguages->language as $language) {
+// old
+//                $langId             = (string)$language['tag'];
+//                $subFolder[$langId] = $stdPath . '/' . (string)$language; // $language[0]
+//                $this->stdLangFilePaths[] = $subFolder;
+//                $this->stdLangFiles[]     = basename((string)$language);
+
+                $langId = (string)$language['tag'];
+                $test   =  $stdPath . '/' . (string)$language;
+
+                $langFilePaths[$langId][] = $stdPath . '/' . (string)$language;
+                $langFiles[]              = basename((string)$language);
+            }
+        }
+
+        return [$langFilePaths, $langFiles];
+    }
+
+    /**
+     * New type language files definition by files in folder language
+     *
+     * Collect language IDs like en-GB from folder name (ToDo: or file names)
+     * The given sub path is needed if the component is not installed already
+     * Installed components try to use 'language' folder
+     *
+     * @param   string  $subPath
+     *
+     * @return array[]
+     *
+     * @since version
+     */
+    private function Search4LangPathInFolders(string $rootPath, string $subPath) : array
+    {
+        $langFilePaths = [];
+        $langFiles = [];
+
+        //--- collect folder in path from xml definition ------------------------------
+
+        foreach (Folder::folders($rootPath) as $folderName) {
+
+            // sanitize lang name like en-GB
+            if (strlen($folderName) == 5 && $folderName[2] == '-') {
+
+                $langId = $folderName;
+                $subFolder = $rootPath . "/" . $folderName;
+
+                foreach (Folder::files($subFolder, '\.ini$') as $fileName) {
+
+                    $langFilePaths[$langId][] = $subFolder . '/' . $fileName;
+                    $langFiles[]              = $fileName;
+
+                }
+            }
+        }
+
+        return [$langFilePaths, $langFiles];
+    }
+
+} // class
 
