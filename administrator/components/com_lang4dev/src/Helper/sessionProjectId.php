@@ -26,6 +26,10 @@ defined('_JEXEC') or die;
  */
 class sessionProjectId
 {
+    /**
+     * @var string
+     * @since version
+     */
     protected $prjId = '-1';
     protected $subPrjActive = '0';
 

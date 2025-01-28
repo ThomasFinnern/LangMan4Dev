@@ -24,6 +24,10 @@ defined('_JEXEC') or die;
  */
 class lang4devVersion
 {
+    /**
+     * @var mixed|string
+     * @since version
+     */
     protected $name = 'Lang4dev';
     // Main Release Level: x.y.z
     protected $version = '1.0.0';

@@ -1196,6 +1196,14 @@ class SubprojectModel extends AdminModel
         return $subProjects;
     }
 
+    /**
+     * @param   langSubProject  $subProject
+     * @param                   $data
+     *
+     *
+     * @throws Exception
+     * @since version
+     */
     private function assignSubProject2Data(langSubProject $subProject, &$data) : void
     {
         // title ...

@@ -30,6 +30,10 @@ defined('_JEXEC') or die;
  */
 class langTranslation
 {
+    /**
+     * @var mixed|string
+     * @since version
+     */
     public $transId = '';
     public $translationText = '';
     public $commentsBefore = [];

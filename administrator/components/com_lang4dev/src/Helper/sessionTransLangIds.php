@@ -33,6 +33,10 @@ defined('_JEXEC') or die;
  */
 class sessionTransLangIds
 {
+    /**
+     * @var string
+     * @since version
+     */
     protected $mainLangId = '??-??';
     protected $transLangId = '??-??';
 

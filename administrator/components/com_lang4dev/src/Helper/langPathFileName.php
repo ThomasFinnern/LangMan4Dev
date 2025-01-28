@@ -42,6 +42,10 @@ class langPathFileName
 {
     // ToDo: ? plg / mod in administrator language ... ??? fall back ....
 
+    /**
+     * @var string
+     * @since version
+     */
     protected $langPathFileName = '???.ini';
     protected $langId = 'en-GB'; // 'en-GB'  // lang ID
     public $isIdPreceded = false;

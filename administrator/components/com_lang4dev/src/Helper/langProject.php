@@ -18,6 +18,11 @@ use Joomla\Filesystem\Folder;
 
 use RuntimeException;
 
+/**
+ * @package     Finnern\Component\Lang4dev\Administrator\Helper
+ *
+ * @since       version
+ */
 class langProject
 {
     public $prjName = '';

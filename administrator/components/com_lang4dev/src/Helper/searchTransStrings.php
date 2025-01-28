@@ -33,6 +33,10 @@ class searchTransStrings
 //	public $fileTypes = 'php, xml';
 //	public $langIdPrefix = '';
 //	public $searchPaths = [];
+    /**
+     * @var \Finnern\Component\Lang4dev\Administrator\Helper\transIdLocations
+     * @since version
+     */
     public $transStringLocations;
 //
 //	public $useLangSysIni = false;

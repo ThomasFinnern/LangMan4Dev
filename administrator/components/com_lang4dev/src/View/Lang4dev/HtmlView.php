@@ -78,6 +78,10 @@ class HtmlView extends BaseHtmlView
      */
     public $activeFilters;
 
+    /**
+     * @var
+     * @since version
+     */
     protected $extensionVersion;
 
     protected $isDebugBackend;

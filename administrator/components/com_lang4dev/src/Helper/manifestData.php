@@ -25,7 +25,11 @@ defined('_JEXEC') or die;
 
 /**
  * Container for manifest xml data
+ * On creation the manifest XML data will b read if file path is given
+ * This sets also several path (language) variables determined by the
+ * manifest data
  *
+ * Additional getter function into the data are supported
  *
  * @package     Finnern\Component\Lang4dev\Administrator\Helper
  *
@@ -33,6 +37,10 @@ defined('_JEXEC') or die;
  */
 class manifestData
 {
+    /**
+     * @var string
+     * @since version
+     */
     public $prjXmlFilePath = '';
     public $prjXmlPathFilename = '';
 
@@ -252,7 +260,7 @@ class manifestData
      *
      * @since version
      */
-    public function getByPath($names, $default)
+    public function getByXPath($names, $default)
     {
         $result = $default;
 

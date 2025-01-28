@@ -51,6 +51,9 @@ class langFile extends langPathFileName
     }
     /**/
 
+    /**
+     *
+     */
     const LINE_TYPE__NONE = 0;
     const LINE_TYPE__TRANS_ID = 1;
     const LINE_TYPE__COMMENT = 2;

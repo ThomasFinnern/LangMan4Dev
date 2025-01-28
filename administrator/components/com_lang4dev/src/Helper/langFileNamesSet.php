@@ -312,7 +312,16 @@ class langFileNamesSet
 		return $isLangIdPre2Name;
 	}
 
-	public function check4LangIdFolderName($searchPath, $langId, string $end): bool
+    /**
+     * @param           $searchPath
+     * @param           $langId
+     * @param   string  $end
+     *
+     * @return bool
+     *
+     * @since version
+     */
+    public function check4LangIdFolderName($searchPath, $langId, string $end): bool
 	{
 		$isPathFound = false;
 

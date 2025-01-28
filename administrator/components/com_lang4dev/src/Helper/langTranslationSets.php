@@ -36,6 +36,10 @@ class langTranslationSet
      * @since version
      */
     public $name = '';
+    /**
+     * @var array
+     * @since version
+     */
     public $translationsets = [];
     public $path = '';
 

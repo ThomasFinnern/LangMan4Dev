@@ -33,6 +33,10 @@ use function defined;
  */
 class HtmlView extends BaseHtmlView
 {
+    /**
+     * @var
+     * @since version
+     */
     protected $isDebugBackend;
     protected $isDevelop;
 

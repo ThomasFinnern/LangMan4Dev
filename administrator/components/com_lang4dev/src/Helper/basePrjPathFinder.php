@@ -13,8 +13,17 @@ use Joomla\CMS\Factory;
 use Joomla\Filesystem\File;
 use Joomla\Filesystem\Folder;
 
+/**
+ * @package     Finnern\Component\Lang4dev\Administrator\Helper
+ *
+ * @since       version
+ */
 class basePrjPathFinder
 {
+    /**
+     * @var string|mixed
+     * @since version
+     */
     public string $prjRootPath = '';   // ($prjXmlFilePath) detected complete from path origin on
     public string $prjXmlFilePath = ''; // same as root path (prjRootPath)
     public string $prjXmlPathFilename = '';

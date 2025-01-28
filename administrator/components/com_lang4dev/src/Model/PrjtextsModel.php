@@ -35,6 +35,12 @@ use function defined;
  */
 
 // ToDo: create one base model ProjectBaseModel for PrjTextsModel and TranslateModel to derive from ==> DRY method
+
+/**
+ * @package     Finnern\Component\Lang4dev\Administrator\Model
+ *
+ * @since       version
+ */
 class PrjTextsModel extends AdminModel
 {
     /**

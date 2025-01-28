@@ -14,6 +14,11 @@ defined('_JEXEC') or die;
 
 use Finnern\Component\Lang4dev\Administrator\Helper\manifestLangFiles;
 
+/**
+ * @package     Finnern\Component\Lang4dev\Administrator\Helper
+ *
+ * @since       version
+ */
 enum eSubProjectType // : int
 {
     case PRJ_TYPE_NONE;

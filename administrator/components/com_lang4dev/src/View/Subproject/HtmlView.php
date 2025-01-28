@@ -79,6 +79,10 @@ class HtmlView extends BaseHtmlView
      */
     protected $checkTags = false;
 
+    /**
+     * @var
+     * @since version
+     */
     protected $isDebugBackend;
     protected $isDevelop;
 

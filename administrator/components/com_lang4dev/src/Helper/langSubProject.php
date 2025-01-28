@@ -53,6 +53,10 @@ class langSubProject extends langFiles
     public $installPathFilename = '';
     /** @var string from manifest file*/
     public $configPathFilename = '';
+    /**
+     * @var string
+     * @since version
+     */
     public $notes = '';
 
 

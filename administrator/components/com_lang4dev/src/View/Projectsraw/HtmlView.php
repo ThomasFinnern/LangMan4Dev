@@ -47,6 +47,10 @@ class HtmlView extends BaseHtmlView
      */
     protected $form;
 
+    /**
+     * @var
+     * @since version
+     */
     protected $project;
 
     protected $isDebugBackend;
