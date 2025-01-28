@@ -157,6 +157,13 @@ echo Route::_('index.php?option=com_lang4dev&view=project&layout=edit&id=' . (in
         echo HTMLHelper::_('uitab.endTabSet'); ?>
 
         <?php
+        if ($this->isDebugBackend)
+        {
+            // renderDebug($this->project??);
+        }
+        ?>
+
+		<?php
         echo $this->form->getInput('extension'); ?>
 		<input type="hidden" name="task" value="">
 		<input type="hidden" name="forcedLanguage" value="<?php
@@ -218,4 +225,37 @@ function renderSubProject($subProject): void
     return;
 }
 
+function renderDebug($project) {
+
+	//--- show project with sub projects ... ---------------------------------
+	/*-----------------------------------------------------------------
+	Debug lines
+	-----------------------------------------------------------------*/
+	?>
+	<hr>
+	<br>
+	<!--div class="row g-2"-->
+	<div class="row">
+		<h3>Project (sub) data</h3><br>
+		<div class="d-flex align-items-center">
+			<div class="p-2 flex-grow-1">
+
+                <?php
+//                $projectText = implode("<br>", $project->__toText());
+//                echo $projectText;
+                ?>
+
+			</div>
+
+		</div>
+
+	</div>
+	<br>
+
+<?php
+	return;
+}
+
 ?>
+
+

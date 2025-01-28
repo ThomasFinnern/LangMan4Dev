@@ -106,19 +106,19 @@ class HtmlView extends BaseHtmlView
 
         $this->form->setValue('selectSourceLangId', null, $mainLangId);
 
-        //--- define project ------------------------------------------------------------
+        //--- define projectTexts ------------------------------------------------------------
 
         /** @var PrjTextsModel $model */
-        $model         = $this->getModel();
-        $this->project = $model->getProject($prjId, $subPrjActive);
-        $project       = $this->project;
+        $model             = $this->getModel();
+        $this->langProject = $model->getProject($prjId, $subPrjActive);
+        $project           = $this->langProject;
 
         /* test projects *
         $project =
-        $this->project = selectProject('lang4dev');
-        // $this->project = selectProject('joomgallery');
-        // $this->project = selectProject('rsgallery2');
-        // $this->project = selectProject('joomla4x');
+        $this->projectTexts = selectProject('lang4dev');
+        // $this->projectTexts = selectProject('joomgallery');
+        // $this->projectTexts = selectProject('rsgallery2');
+        // $this->projectTexts = selectProject('joomla4x');
         /**/
 
 

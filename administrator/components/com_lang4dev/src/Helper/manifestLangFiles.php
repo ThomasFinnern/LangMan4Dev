@@ -45,10 +45,12 @@ class manifestLangFiles extends manifestData
     public $isLangAtStdJoomla = false; // not inside component folder
 
     // [$langId][] = $stdPath . '/' . language name
+    // relative to install or web root
 	public $stdLangFilePaths = [];
 	public $stdLangFiles = [];
 
     // [$langId][] = $stdPath . '/' . language name
+    // relative to install or web root
 	public $adminLangFilePaths = [];
 	public $adminLangFiles = [];
 
@@ -164,27 +166,42 @@ class manifestLangFiles extends manifestData
                 //		<!--folder>forms</folder-->
                 //		<folder>language</folder>
 
+                // Not already defined by XML
+                if (empty($this->stdLangFilePaths)) {
 
-                // Read path then find the files in folder
+                    // determine path (install script / is installed)
 
-                $langFolder = $manifestXml->xpath("/extension/files/folder[contains(text(),'language')]");
-                // lang folder given
-                if (!empty($langFolder)) {
+                    // like in install script
+                    if (! $this->isInstalled) {
 
-                    // attribute folder for not installed components
-                    $subPath = "";
-                    $subPathXml = $manifestXml->xpath("/extension/files/@folder");
-                    if (!empty($subPathXml)){
-                        if (!empty($subPathXml[0])){
-                            $subPath = (string) $subPathXml[0];
-                        }
+                        //--- language folder path ------------------------------------------------
+
+//                        $langFolder = (string) $manifestXml->xpath("/extension/files/folder[contains(text(),'language')]");
+//                        // lang folder given
+//                        if (!empty($langFolder)) {
+//                            // attribute folder for not installed components
+//                            $subPath    = "";
+//                            $subPathXml = $manifestXml->xpath("/extension/files/@folder");
+//                            if (!empty($subPathXml)) {
+//                                if (!empty($subPathXml[0])) {
+//                                    $subPath = (string)$subPathXml[0];
+//                                }
+//                            }
+
+                        // defaultLangPathRelative from XML
+                        $langPath = $this->prjXmlFilePath .'/' . $this->defaultLangPathRelative;
+
+                    } else {
+                        // expected inside component
+                        $langPath = $this->prjXmlFilePath .'/' . 'language';
                     }
 
-                    //--- search for lang ID folders in project or files ------------------------------
+                    //--- search for lang ID folders and files ------------------------------
 
                     // add items to
                     [$this->stdLangFilePaths, $this->stdLangFiles] =
-                        $this->Search4LangPathInFolders ($this->prjDefaultPath, $subPath);
+                        $this->Search4LangPathInFolders($langPath);
+
                 }
 
                 //--- backend -----------------------------------------------
@@ -193,27 +210,43 @@ class manifestLangFiles extends manifestData
                 // 		<files folder="administrator/components/com_rsgallery2/">
                 // 			<folder>language</folder>
 
-                $langFolder = $manifestXml->xpath("/extension/administration/files/folder[contains(text(),'language')]");
-                // lang folder given
-                if (!empty($langFolder)) {
+                // Not already defined by XML
+                if (empty($this->adminLangFilePaths)) {
 
-                    // attribute folder for not installed components
-                    $subPath = "";
-                    $subPathXml = $manifestXml->xpath("//administration/files/@folder");
-                    if (!empty($subPathXml)){
-                        if (!empty($subPathXml[0])){
-                            $subPath = (string) $subPathXml[0];
-                        }
+                    // determine path (install script / is installed)
+
+                    // like in install script
+                    if (! $this->isInstalled) {
+
+                        //--- language folder path ------------------------------------------------
+
+                        $langFolder =  (string) $manifestXml->xpath("/extension/administration/files/folder[contains(text(),'language')]");
+//                        // lang folder given
+//                        if (!empty($langFolder)) {
+//                            // attribute folder for not installed components
+//                            $subPath = "";
+//                            $subPathXml = $manifestXml->xpath("//administration/files/@folder");
+//                            if (!empty($subPathXml)) {
+//                                if (!empty($subPathXml[0])) {
+//                                    $subPath = (string)$subPathXml[0];
+//                                }
+//                            }
+
+                        // defaultLangPathRelative from XML
+                        $langPath = $this->prjXmlFilePath .'/' . $this->adminLangPathRelative;
+
+                    } else {
+                        // expected inside component
+                        $langPath = $this->prjXmlFilePath .'/' . 'language';
                     }
 
-                    //--- search for lang ID folders in project or files ------------------------------
+                    //--- search for lang ID folders and files ------------------------------
 
                     // add items to
                     [$this->adminLangFilePaths, $this->adminLangFiles] =
-                        $this->Search4LangPathInFolders ($this->prjAdminPath, $subPath);
+                        $this->Search4LangPathInFolders($langPath);
 
                 }
-
 
             }
         } catch (RuntimeException $e) {
@@ -315,34 +348,42 @@ class manifestLangFiles extends manifestData
     public function extractLangPathsByXML(mixed $stdLanguages): array
     {
         $langFilePaths = [];
-        $langFiles = [];
+        $langFiles     = [];
 
-        if (count($stdLanguages) > 0) {
+        try {
+            if (count($stdLanguages) > 0) {
+                //<languages folder="site/com_joomgallery/languages">
+                //	<language tag="en-GB">en-GB/com_joomgallery.ini</language>
+                //</languages>
 
-            //<languages folder="site/com_joomgallery/languages">
-            //	<language tag="en-GB">en-GB/com_joomgallery.ini</language>
-            //</languages>
+                // lang files path will be defined in XML and copied to joomla standard path not component
+                $this->isLangAtStdJoomla = true;
 
-            // lang files path will be defined in XML and copied to joomla standard path not component
-            $this->isLangAtStdJoomla = true;
+                //--- collect files from xml definition ------------------------------
 
-            //--- collect files from xml definition ------------------------------
+                $stdPath = (string)$stdLanguages['folder'];
 
-            $stdPath = (string)$stdLanguages['folder'];
-
-            foreach ($stdLanguages->language as $language) {
+                foreach ($stdLanguages->language as $language) {
 // old
 //                $langId             = (string)$language['tag'];
 //                $subFolder[$langId] = $stdPath . '/' . (string)$language; // $language[0]
 //                $this->stdLangFilePaths[] = $subFolder;
 //                $this->stdLangFiles[]     = basename((string)$language);
 
-                $langId = (string)$language['tag'];
-                $test   =  $stdPath . '/' . (string)$language;
+                    $langId = (string)$language['tag'];
+                    $test   = $stdPath . '/' . (string)$language;
 
-                $langFilePaths[$langId][] = $stdPath . '/' . (string)$language;
-                $langFiles[]              = basename((string)$language);
+                    $langFilePaths[$langId][] = $stdPath . '/' . (string)$language;
+                    $langFiles[]              = basename((string)$language);
+                }
             }
+        } catch (RuntimeException $e) {
+            $OutTxt = '';
+            $OutTxt .= 'Error executing Search4LangPathInFolders: ' . '"<br>';
+            $OutTxt .= 'Error: "' . $e->getMessage() . '"' . '<br>';
+
+            $app = Factory::getApplication();
+            $app->enqueueMessage($OutTxt, 'error');
         }
 
         return [$langFilePaths, $langFiles];
@@ -361,28 +402,33 @@ class manifestLangFiles extends manifestData
      *
      * @since version
      */
-    private function Search4LangPathInFolders(string $rootPath, string $subPath) : array
+    private function Search4LangPathInFolders(string $langPath) : array
     {
         $langFilePaths = [];
-        $langFiles = [];
+        $langFiles     = [];
 
-        //--- collect folder in path from xml definition ------------------------------
+        try {
+            //--- collect folder in path from xml definition ------------------------------
 
-        foreach (Folder::folders($rootPath) as $folderName) {
+            foreach (Folder::folders($langPath) as $folderName) {
+                // sanitize lang name like en-GB
+                if (strlen($folderName) == 5 && $folderName[2] == '-') {
+                    $langId    = $folderName;
+                    $subFolder = $langPath . "/" . $folderName;
 
-            // sanitize lang name like en-GB
-            if (strlen($folderName) == 5 && $folderName[2] == '-') {
-
-                $langId = $folderName;
-                $subFolder = $rootPath . "/" . $folderName;
-
-                foreach (Folder::files($subFolder, '\.ini$') as $fileName) {
-
-                    $langFilePaths[$langId][] = $subFolder . '/' . $fileName;
-                    $langFiles[]              = $fileName;
-
+                    foreach (Folder::files($subFolder, '\.ini$') as $fileName) {
+                        $langFilePaths[$langId][] = $subFolder . '/' . $fileName;
+                        $langFiles[]              = $fileName;
+                    }
                 }
             }
+        } catch (RuntimeException $e) {
+            $OutTxt = '';
+            $OutTxt .= 'Error executing Search4LangPathInFolders: ' . '"<br>';
+            $OutTxt .= 'Error: "' . $e->getMessage() . '"' . '<br>';
+
+            $app = Factory::getApplication();
+            $app->enqueueMessage($OutTxt, 'error');
         }
 
         return [$langFilePaths, $langFiles];

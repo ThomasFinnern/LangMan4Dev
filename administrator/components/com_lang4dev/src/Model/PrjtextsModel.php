@@ -84,6 +84,7 @@ class PrjTextsModel extends AdminModel
     }
 
     /**
+     *
      * @param $prjDbId
      * @param $subPrjActive
      *
@@ -91,13 +92,13 @@ class PrjTextsModel extends AdminModel
      *
      * @since version
      */
-    public function getProject($prjDbId, $subPrjActive)
+    public function getProject($prjDbId, $subPrjActive) : langProject
     {
-        $project = new langProject ();
+        $langProject = new langProject ();
 
-        //--- get parent project ----------------------------------
+        //--- get parent langProject ----------------------------------
 
-        $this->addPrjDbData($project, $prjDbId);
+        $this->addPrjDbData($langProject, $prjDbId);
 
         //--- all sub ids ----------------------------------------------
 
@@ -123,7 +124,7 @@ class PrjTextsModel extends AdminModel
 
             $oBasePrjPath = new basePrjPathFinder ($prjDbId, dirname($prjXmlPathFilename));
 
-            $subPrj = $project->addSubProject(
+            $subPrj = $langProject->addSubProject(
                 $dbSub->prjId,
                 projectType::int2prjType( $dbSub->subPrjType),
                 $oBasePrjPath,
@@ -135,7 +136,7 @@ class PrjTextsModel extends AdminModel
 	        // Not needed ? 2022.12.25 $subPrj->isLangAtStdJoomla   = $dbSub->isLangAtStdJoomla;
         }
 
-        return $project;
+        return $langProject;
     }
 
     /**

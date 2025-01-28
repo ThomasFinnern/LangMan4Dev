@@ -345,13 +345,13 @@ class projectType
 
             case eSubProjectType::PRJ_TYPE_COMP_BACK_SYS:
             case eSubProjectType::PRJ_TYPE_COMP_BACK:
-                if ($manifestFile->prjAdminPath != '') {
+                if ($manifestFile->prjAdminPathRelative != '') {
                     $isLangFound = true;
                 }
                 break;
 
             case eSubProjectType::PRJ_TYPE_COMP_SITE:
-                if ($manifestFile->prjDefaultPath != '') {
+                if ($manifestFile->prjDefaultPathRelative != '') {
                     $isLangFound = true;
                 }
                 break;

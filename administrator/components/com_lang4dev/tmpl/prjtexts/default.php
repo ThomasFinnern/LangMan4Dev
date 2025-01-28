@@ -98,7 +98,7 @@ echo Route::_('index.php?option=com_lang4dev&view=prjtexts'); ?>"
 		<?php
 		if ($this->isDebugBackend)
 		{
-			renderDebug($this->project);
+			renderDebug($this->projectTexts);
 		}
 		?>
 
@@ -429,24 +429,24 @@ function renderSubProjectStatistic($missing, $same, $notUsed, $doubles, $comment
     return;
 }
 
+
+function renderDebug($langPrroject) {
+
+    //--- show projectTexts with sub projects ... ---------------------------------
 /*-----------------------------------------------------------------
 Debug lines
 -----------------------------------------------------------------*/
-
-function renderDebug($project) {
-
-    //--- show project with sub projects ... ---------------------------------
     ?>
     <hr>
     <br>
     <!--div class="row g-2"-->
     <div class="row">
-        <h3>Project (sub) data</h3><br>
+        <h3>projectTexts (sub) data</h3><br>
         <div class="d-flex align-items-center">
             <div class="p-2 flex-grow-1">
 
                 <?php
-                $projectText = implode("<br>", $project->__toText());
+                $projectText = implode("<br>", $langPrroject->__toText());
                 echo $projectText;
                 ?>
 

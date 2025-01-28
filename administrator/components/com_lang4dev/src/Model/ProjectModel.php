@@ -146,7 +146,7 @@ class ProjectModel extends AdminModel
     }
 
     /**
-     * Auto-populate the model state.
+     * Autopopulate the model state.
      *
      * Note. Calling getState in this method will result in recursion.
      *
@@ -1046,6 +1046,31 @@ class ProjectModel extends AdminModel
         }
 
         return $dbSubProjects;
+    }
+
+    public function __toText()
+    {
+        $lines[] = '<h4>=== ProjectModel ===============================</h4>';
+
+        $lines [] = '$prjName = "' . $this->prjName . '"';
+
+//        $lines [] = '$prjName = "' . $this->prjName . '"';
+//        $lines [] = '$prjRootPath = "' . $this->prjRootPath . '"';
+//        $lines [] = '$langIdPrefix = "' . $this->langIdPrefix . '"';
+//        $lines [] = '$dbId = "' . $this->dbId . '"';
+//        $lines [] = '<br>';
+//
+//        // $lines[] = '------------------------------------------------';
+//
+//        foreach ($this->subProjects as $subProject) {
+//            $subProjectLines = $subProject->__toText();
+//            array_push($lines, ...$subProjectLines);
+//        }
+
+        $lines[] = '------------------------------------------------';
+
+
+        return $lines;
     }
 
 

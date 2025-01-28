@@ -44,13 +44,16 @@ class manifestData
     public $prjXmlFilePath = '';
     public $prjXmlPathFilename = '';
 
-    // path to lanuages
-    public $defaultLangPath = "";
-    public $adminLangPath = "";
+    // inside installation: path to languages
+    // ToDo: string for xml
+    public $defaultLangPathRelative = "";
+    // ToDo: string for xml
+    public $adminLangPathRelative = "";
 
     // is also admin
-    public $prjDefaultPath = '';
-    public $prjAdminPath = '';
+    // inside installation: path to languages
+    public $prjDefaultPathRelative = '';
+    public $prjAdminPathRelative = '';
     public $isDefaultPathDefined = '';
     public $isAdminPathDefined = '';
 
@@ -136,46 +139,46 @@ class manifestData
 
                 //--- default main (site) path -------------------------------
 
-                // $this->prjDefaultPath = ' >> initial::(Site_not_defined)';
-                $this->prjDefaultPath = '';
-                $this->isDefaultPathDefined = false;
+                // $this->prjDefaultPathRelative = ' >> initial::(Site_not_defined)';
+                $this->prjDefaultPathRelative = '';
+                $this->isDefaultPathDefined   = false;
 
                 if (isset($xml->files)) {
                     $files = $xml->files;
                     if (isset ($files['folder'])) {
-                        $this->prjDefaultPath = $files['folder'][0];
-                        $this->isDefaultPathDefined = true;
+                        $this->prjDefaultPathRelative = $files['folder'][0];
+                        $this->isDefaultPathDefined   = true;
                     }
                 }
 
                 //--- default admin path -------------------------------
 
-                $this->prjAdminPath = ">>Admin_not_defined";
-                $this->isAdminPathDefined = false;
+                $this->prjAdminPathRelative = ">>Admin_not_defined";
+                $this->isAdminPathDefined   = false;
 
                 if (isset($xml->administration->files)) {
 
                     $files = $xml->administration->files;
                     if (isset ($files['folder'])) {
-                        $this->prjAdminPath = $files['folder'][0];
-                        $this->isAdminPathDefined = true;
+                        $this->prjAdminPathRelative = $files['folder'][0];
+                        $this->isAdminPathDefined   = true;
                     }
                 }
 
-                //--- defaultLangPath -------------------------------
+                //--- defaultLangPathRelative -------------------------------
 
-                $this->defaultLangPath = '';
+                $this->defaultLangPathRelative = '';
                 if (isset($xml->files)) {
                     // add languages folder
-                    $this->defaultLangPath = $this->prjDefaultPath . '/language';
+                    $this->defaultLangPathRelative = $this->prjDefaultPathRelative . '/language';
                 }
 
-                //--- adminLangPath -------------------------------
+                //--- adminLangPathRelative -------------------------------
 
-                $this->adminLangPath = '';
+                $this->adminLangPathRelative = '';
                 if (isset($xml->administration->files)) {
                     // add languages folder
-                    $this->adminLangPath = $this->prjAdminPath . '/language';
+                    $this->adminLangPathRelative = $this->prjAdminPathRelative . '/language';
                 }
 
                 //--- install script file -----------------------------------
@@ -449,11 +452,11 @@ class manifestData
             $lines[] = '( Manifest on development path ) ';
         }
 
-        $lines[] = 'default (site) path: ' . $this->prjDefaultPath;
-        $lines[] = 'admin path: ' . $this->prjAdminPath;
+        $lines[] = 'default (site) path: ' . $this->prjDefaultPathRelative;
+        $lines[] = 'admin path: ' . $this->prjAdminPathRelative;
 
-        $lines[] = 'defaultLangPath (site): ' . $this->defaultLangPath;
-        $lines[] = 'adminLangPath: ' . $this->adminLangPath;
+        $lines[] = 'defaultLangPathRelative (site): ' . $this->defaultLangPathRelative;
+        $lines[] = 'adminLangPathRelative: ' . $this->adminLangPathRelative;
 
         $lines[] = '';
 

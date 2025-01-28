@@ -861,8 +861,8 @@ class langSubProject extends langFiles
             $this->prjAdminPath   = $manifestLang->prjXmlFilePath;
         } else {
             // default/admin given by manifest file or auto paths
-            $this->prjDefaultPath = $this->oBasePrjPath->prjRootPath . '/' . $manifestLang->prjDefaultPath;
-            $this->prjAdminPath   = $this->oBasePrjPath->prjRootPath . '/' . $manifestLang->prjAdminPath;
+            $this->prjDefaultPath = $this->oBasePrjPath->prjRootPath . '/' . $manifestLang->prjDefaultPathRelative;
+            $this->prjAdminPath   = $this->oBasePrjPath->prjRootPath . '/' . $manifestLang->prjAdminPathRelative;
         }
     }
 
@@ -885,8 +885,8 @@ class langSubProject extends langFiles
         $lines [] = '$prjXmlFilePath = "' . $this->oBasePrjPath->prjXmlFilePath . '"';
         $lines [] = '$langIdPrefix = "' . $this->langIdPrefix . '"';
 
-        $lines [] = '$prjDefaultPath = "' . $this->prjDefaultPath . '"';
-        $lines [] = '$prjAdminPath = "' . $this->prjAdminPath . '"';
+        $lines [] = '$prjDefaultPathRelative = "' . $this->prjDefaultPath . '"';
+        $lines [] = '$prjAdminPathRelative = "' . $this->prjAdminPath . '"';
 
         $lines [] = '$prjXmlPathFilename = "' . $this->oBasePrjPath->prjXmlPathFilename . '"';
         $lines [] = '$installPathFilename = "' . $this->installPathFilename . '"';
@@ -943,7 +943,7 @@ class langSubProject extends langFiles
 
             //--- base paths to default and admin ---------------------------------------------
 
-            // prjDefaultPath, prjAdminPath
+            // prjDefaultPathRelative, prjAdminPathRelative
             $this->DefaultAndAdminPath($oManifestLangFiles);
 
             /*----------------------------------------------------------
@@ -1002,9 +1002,9 @@ class langSubProject extends langFiles
                     //--- lang files in new standard component folder ------------------------------------------
 
                     //--- Lang path by manifest definition ---------------------------------------
-                    $startPath = $this->oBasePrjPath->prjRootPath . "/" . $oManifestLangFiles->defaultLangPath;
+                    $startPath = $this->oBasePrjPath->prjRootPath . "/" . $oManifestLangFiles->defaultLangPathRelative;
                     if ($this->prjType == eSubProjectType::PRJ_TYPE_COMP_BACK || $this->prjType == eSubProjectType::PRJ_TYPE_COMP_BACK_SYS) {
-                        $startPath = $this->oBasePrjPath->prjRootPath . "/" . $oManifestLangFiles->adminLangPath;
+                        $startPath = $this->oBasePrjPath->prjRootPath . "/" . $oManifestLangFiles->adminLangPathRelative;
                     }
 
                     // project only used when project path exist
