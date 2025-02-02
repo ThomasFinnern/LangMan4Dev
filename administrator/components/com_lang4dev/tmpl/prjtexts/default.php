@@ -98,7 +98,7 @@ echo Route::_('index.php?option=com_lang4dev&view=prjtexts'); ?>"
 		<?php
 		if ($this->isDebugBackend)
 		{
-			renderDebug($this->projectTexts);
+			renderDebug($this->langProject);
 		}
 		?>
 
@@ -149,8 +149,8 @@ function renderHeaderPrjIdType(
 
 			<div class="prj_id_type_header_filenames fs-4">
 	            <?php
-	            foreach ($fileNames as $fileName) {
-	                echo '&nbsp;' . $fileName . '<br>';
+	            foreach ($fileNames as $idx => $fileName) {
+	                echo '&nbsp;' . ($idx+1) . ': ' . $fileName . '<br>';
 	            }
 	            ?>
 			</div>

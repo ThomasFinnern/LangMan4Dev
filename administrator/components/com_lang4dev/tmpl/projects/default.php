@@ -220,10 +220,12 @@ echo Route::_('index.php?option=com_lang4dev&view=projects'); ?>"
 
 					<td class="small d-none d-md-table-cell">
                         <?php
-                        echo $i . ': ' . $item->name; ?>
+                        //echo $i . ': ' . $item->name;
+                        echo $item->name;
+						?>
 					</td>
 
-					<th scope="row">
+					<td scope="row">
                         <?php
                         if ($item->checked_out) : ?>
                             <?php
@@ -277,7 +279,12 @@ echo Route::_('index.php?option=com_lang4dev&view=projects'); ?>"
                                             <?php
                                             endif; ?>
 										</span>
-					</th>
+					</td>
+
+					<td class="small d-none d-md-table-cell">
+                        <?php
+                        echo $item->root_path; ?>
+					</td>
 
 
 				</tr>

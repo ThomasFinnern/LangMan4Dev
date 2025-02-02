@@ -249,10 +249,11 @@ class searchTransIdLocations
             //$regEx = '\.xml$|\.html$';
             $regEx = '\.php|\.xml$';
             $files = Folder::files($folder, $regEx);
+
         } catch (RuntimeException $e) {
             $OutTxt = '';
             $OutTxt .= 'Error executing filesInDir: "' . '<br>';
-            $OutTxt .= 'Error: "' . $e->getMessaxge() . '"' . '<br>';
+            $OutTxt .= 'Error: "' . $e->getMessage() . '"' . '<br>';
 
             $app = Factory::getApplication();
             $app->enqueueMessage($OutTxt, 'error');
@@ -463,44 +464,68 @@ class searchTransIdLocations
         $isInComment = false;
 
         try {
-            $lineNr = 0;
 
-            // Read all lines
-            $filePath = $path . DIRECTORY_SEPARATOR . $fileName;
+            if ($fileName == '' || $path == '') {
+                $OutTxt = '';
+                $OutTxt .= 'Error in searchTransIds_in_XML_file: ' . '<br>';
+                $OutTxt .= 'Empty filename: "' . $fileName
+                    . '" or path: "' . $path . '"' . '<br>';
 
-            $lines = file($filePath);
+                $app = Factory::getApplication();
+                $app->enqueueMessage($OutTxt, 'error');
 
-            // content found
-            foreach ($lines as $line) {
-                $lineNr = $lineNr + 1;
+            } else {
+                $lineNr = 0;
 
-                //--- remove comments --------------
+                // Read all lines
+                $filePath = $path . DIRECTORY_SEPARATOR . $fileName;
 
-                $bareLine = $this->removeCommentXML($line, $isInComment);
+                if (is_file($filePath)) {
+                    $lines = file($filePath);
 
-                //--- find items --------------
+                    // content found
+                    foreach ($lines as $line) {
+                        $lineNr = $lineNr + 1;
 
-                if (strlen($bareLine) > 0) {
-                    $items = $this->searchLangIdsInLineXML($bareLine);
+                        //--- remove comments --------------
 
-                    //--- add items
-                    foreach ($items as $item) {
-                        $item->file   = $fileName;
-                        $item->path   = $path;
-                        $item->lineNr = $lineNr;
+                        $bareLine = $this->removeCommentXML($line, $isInComment);
 
-                        $this->transIdLocations->addItem($item);
+                        //--- find items --------------
+
+                        if (strlen($bareLine) > 0) {
+                            $items = $this->searchLangIdsInLineXML($bareLine);
+
+                            //--- add items
+                            foreach ($items as $item) {
+                                $item->file   = $fileName;
+                                $item->path   = $path;
+                                $item->lineNr = $lineNr;
+
+                                $this->transIdLocations->addItem($item);
+                            }
+                        }
                     }
+                } else {
+                    $OutTxt = '';
+                    $OutTxt .= 'Error in searchTransIds_in_XML_file: ' . '<br>';
+                    $OutTxt .= 'Expected manifet filename: "' . $filePath . '" does not exist.'
+                        . '<br>';
+
+                    $app = Factory::getApplication();
+                    $app->enqueueMessage($OutTxt, 'error');
                 }
             }
-        } catch (RuntimeException $e) {
-            $OutTxt = '';
-            $OutTxt .= 'Error executing searchTransIdsIn_XML_file: "' . '<br>';
-            $OutTxt .= 'Error: "' . $e->getMessage() . '"' . '<br>';
-
-            $app = Factory::getApplication();
-            $app->enqueueMessage($OutTxt, 'error');
         }
+        catch
+            (RuntimeException $e) {
+                $OutTxt = '';
+                $OutTxt .= 'Error executing searchTransIds_in_XML_file: "' . '<br>';
+                $OutTxt .= 'Error: "' . $e->getMessage() . '"' . '<br>';
+
+                $app = Factory::getApplication();
+                $app->enqueueMessage($OutTxt, 'error');
+            }
 //		return $this->transIdLocations;
     }
 

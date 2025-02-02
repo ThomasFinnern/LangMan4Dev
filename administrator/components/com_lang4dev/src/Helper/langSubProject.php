@@ -1032,8 +1032,8 @@ class langSubProject extends langFiles
                     if (is_dir(dirname($this->langBasePath))) {
 
                         // subproject valid ? project only used when lang path exist
-                        $this->isLangPathDefined = $this->collectManifestLangFiles_OnDevelop($oManifestLangFiles,
-                            $this->prjType, $this->langBasePath);
+                        $this->isLangPathDefined = $this->collectManifestLangFiles_OnDevelop(
+                            $oManifestLangFiles, $this->prjType, $this->langBasePath);
 
                         if ($this->isLangPathDefined) {
                             // ToDo: old style: check for additional files not mentioned ==> has to be tested
