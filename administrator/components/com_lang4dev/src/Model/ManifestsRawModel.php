@@ -24,11 +24,11 @@ use function defined;
 // associations: use Finnern\Component\Lang4def\Administrator\Helper\Lang4devHelper;
 
 /**
- * Lang4dev Component Project Model
+ * Lang4dev Component Manifests raw Model
  *
  * @since __BUMP_VERSION__
  */
-class ProjectsRawModel extends AdminModel
+class ManifestsRawModel extends AdminModel
 {
     /**
      * The prefix to use with controller messages.
@@ -44,7 +44,7 @@ class ProjectsRawModel extends AdminModel
      * @var      string
      * @since __BUMP_VERSION__
      */
-    public $typeAlias = 'com_lang4dev.projectsraw';
+    public $typeAlias = 'com_lang4dev.manifestsraw';
 
     /**
      * Method to get the row form.
@@ -59,8 +59,8 @@ class ProjectsRawModel extends AdminModel
     public function getForm($data = array(), $loadData = true)
     {
         $form = $this->loadForm(
-            'com_lang4dev.projectsraw',
-            'projectsraw',
+            'com_lang4dev.manifestsraw',
+            'manifestsraw',
             array('control' => 'jform', 'load_data' => $loadData)
         );
 
@@ -89,11 +89,11 @@ class ProjectsRawModel extends AdminModel
 
         //--- add all sub ids ----------------------------------------------
 
-        $dbSubProjects = $this->subPrjsDbData($prjDbId);
+        $dbSubmanifests = $this->subPrjsDbData($prjDbId);
 
-        //--- add subprojects ------------------------------------
+        //--- add submanifests ------------------------------------
 
-        foreach ($dbSubProjects as $dbSub) {
+        foreach ($dbSubmanifests as $dbSub) {
             //--- regard user selection ----------------------------------------
 
             // restrict not selected
@@ -131,7 +131,7 @@ class ProjectsRawModel extends AdminModel
      */
     private function subPrjsDbData($parent_id)
     {
-        $dbSubProjects = [];
+        $dbSubmanifests = [];
 
         try {
             //--- collect data from manifest -----------------
@@ -147,11 +147,11 @@ class ProjectsRawModel extends AdminModel
                 ->select($db->quoteName('prjXmlPathFilename'))
                 ->select($db->quoteName('installPathFilename'))
                 ->where($db->quoteName('parent_id') . ' = ' . (int)$parent_id)
-                ->from($db->quoteName('#__lang4dev_subprojects'))
+                ->from($db->quoteName('#__lang4dev_submanifests'))
                 ->order($db->quoteName('subPrjType') . ' ASC');
 
             // Get the options.
-            $dbSubProjects = $db->setQuery($query)->loadObjectList();
+            $dbSubmanifests = $db->setQuery($query)->loadObjectList();
         } catch (RuntimeException $e) {
             $OutTxt = '';
             $OutTxt .= 'Error executing collectSubProjectIds: ' . '<br>';
@@ -161,7 +161,7 @@ class ProjectsRawModel extends AdminModel
             $app->enqueueMessage($OutTxt, 'error');
         }
 
-        return $dbSubProjects;
+        return $dbSubmanifests;
     }
 
     /**
@@ -185,7 +185,7 @@ class ProjectsRawModel extends AdminModel
                 ->select($db->quoteName('title'))
                 ->select($db->quoteName('root_path'))
                 ->where($db->quoteName('id') . ' = ' . (int)$prjId)
-                ->from($db->quoteName('#__lang4dev_projects'))//				->order($db->quoteName('subPrjType') . ' ASC')
+                ->from($db->quoteName('#__lang4dev_manifests'))//				->order($db->quoteName('subPrjType') . ' ASC')
             ;
 
             // Get the options.

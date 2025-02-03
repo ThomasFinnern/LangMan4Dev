@@ -43,7 +43,7 @@ use function defined;
 // associations: use Finnern\Component\Lang4def\Administrator\Helper\Lang4devHelper;
 
 /**
- * Lang4dev Component Project Model
+ * Lang4dev Component Translate Model
  *
  * @since __BUMP_VERSION__
  */

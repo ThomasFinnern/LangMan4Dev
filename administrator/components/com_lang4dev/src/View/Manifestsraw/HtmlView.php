@@ -11,7 +11,7 @@ namespace Finnern\Component\Lang4dev\Administrator\View\ProjectsRaw;
 
 defined('_JEXEC') or die;
 
-require_once(__DIR__ . '/../../Helper/selectProject.php');
+// require_once(__DIR__ . '/../../Helper/selectProject.php');
 
 use Finnern\Component\Lang4dev\Administrator\Helper\manifestLangFiles;
 use Finnern\Component\Lang4dev\Administrator\Helper\sessionProjectId;
