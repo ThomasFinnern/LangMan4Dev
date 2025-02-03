@@ -55,6 +55,18 @@ class zoneButtons
 
 }
 
+//$rawDatabase_ZoneButtons[] = new zoneButtons(
+//    '',
+//    Route::_('index.php?option=com_rsgallery2&view=maintenance&layout=checkimageexif'),
+//    Text::_('COM_RSGALLERY2_CHECK_IMAGE_EXIF'),
+//    Text::_('COM_RSGALLERY2_CHECK_IMAGE_EXIF_DESC'),
+//    // array('icon-images', 'icon-crop', 'fas fa-archive'),
+//    ['icon-images', 'fas fa-camera-retro'],
+//    'viewGalleriesRaw',
+//);
+//
+
+
 
 //--- Raw database zone -----------------------------
 
@@ -94,6 +106,16 @@ $developer_ZoneButtons[] =  new zoneButtons(
 	Route::_('index.php?option=com_lang4dev&view=projectsraw'),
 	Text::_('COM_LANG4DEV_PROJECTS_JSONIFY'),
 	Text::_('COM_LANG4DEV_VIEW_ALL_PROJECTS_AS_JSON_ENCODED_OBJECTS'),
+	array('icon-eye-open', 'icon-expand'),
+	'view___'
+);
+/**/
+
+/**/
+$developer_ZoneButtons[] =  new zoneButtons(
+    Route::_('index.php?option=com_lang4dev&view=manifestsRaw'),
+    Text::_('COM_LANG4DEV_MANIFEST_RAW'),
+    Text::_('COM_LANG4DEV_VIEW_ALL_MANIFEST_LANGUAGE_DATA'),
 	array('icon-eye-open', 'icon-expand'),
 	'view___'
 );
