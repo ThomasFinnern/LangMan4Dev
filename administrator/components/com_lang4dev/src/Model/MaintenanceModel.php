@@ -21,7 +21,7 @@ use function defined;
 //use Joomla\CMS\MVC\Model\ListModel;
 
 /**
- * Item Model for a Configuration items (options).
+ * Item Model for a Maintenance actions.
  *
  * @since __BUMP_VERSION__
  */

@@ -40,7 +40,7 @@ use RuntimeException;
 
 use function defined;
 
-// associations: use Finnern\Component\Lang4def\Administrator\Helper\Lang4devHelper;
+// associations: use Finnern\Component\Lang4dev\Administrator\Helper\Lang4devHelper;
 
 /**
  * Lang4dev Component Translate Model
@@ -98,12 +98,13 @@ class TranslateModel extends AdminModel
      *
      * @since version
      */
-    public function getProject($prjDbId, $subPrjActive)
+    public function getProject($prjDbId, $subPrjActive) : langProject
     {
         $project = new langProject ();
 
         //--- get parent project ----------------------------------
 
+        // retrieve project variables "'name', 'title', 'root_path'"
         $this->addPrjDbData($project, $prjDbId);
 
         //--- all sub ids ----------------------------------------------
@@ -184,6 +185,7 @@ class TranslateModel extends AdminModel
     }
 
     /**
+     * retrieve project variables "'name', 'title', 'root_path'"
      * @param   langProject  $project
      * @param                $prjId
      *

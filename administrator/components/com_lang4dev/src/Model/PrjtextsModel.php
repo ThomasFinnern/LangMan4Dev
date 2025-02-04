@@ -183,6 +183,7 @@ class PrjTextsModel extends AdminModel
     }
 
     /**
+     * retrieve project variables "'name', 'title', 'root_path'"
      * @param   langProject  $project
      * @param                $prjId
      *

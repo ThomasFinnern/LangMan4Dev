@@ -25,7 +25,7 @@ use JTableCategory;
 
 use function defined;
 
-// associations: use Finnern\Component\Lang4def\Administrator\Helper\Lang4devHelper;
+// associations: use Finnern\Component\Lang4dev\Administrator\Helper\Lang4devHelper;
 
 /**
  * Lang4dev Component Project Model

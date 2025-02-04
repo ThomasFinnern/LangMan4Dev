@@ -21,7 +21,7 @@ use RuntimeException;
 
 use function defined;
 
-// associations: use Finnern\Component\Lang4def\Administrator\Helper\Lang4devHelper;
+// associations: use Finnern\Component\Lang4dev\Administrator\Helper\Lang4devHelper;
 
 /**
  * Lang4dev Component Manifests raw Model
@@ -79,21 +79,24 @@ class ManifestsRawModel extends AdminModel
      *
      * @since version
      */
-    public function getProject($prjDbId, $subPrjActive)
+    public function getProject($prjDbId, $subPrjActive) : langProject
     {
         $project = new langProject ();
 
         //--- get parent project ----------------------------------
 
+        // retrieve project variables "'name', 'title', 'root_path'"
         $this->addPrjDbData($project, $prjDbId);
 
         //--- add all sub ids ----------------------------------------------
 
-        $dbSubmanifests = $this->subPrjsDbData($prjDbId);
+        // retrieve subproject variables of project
+        $dbSubProjects = $this->subPrjsDbData($prjDbId);
 
-        //--- add submanifests ------------------------------------
+        //--- add subprojects db data ------------------------------------
 
-        foreach ($dbSubmanifests as $dbSub) {
+        foreach ($dbSubProjects as $dbSub) {
+
             //--- regard user selection ----------------------------------------
 
             // restrict not selected
@@ -122,6 +125,8 @@ class ManifestsRawModel extends AdminModel
     }
 
     /**
+     * DB: retrieve subproject variables of project
+     *
      * @param $parent_id
      *
      * @return array|mixed
@@ -165,6 +170,7 @@ class ManifestsRawModel extends AdminModel
     }
 
     /**
+     * DB: retrieve project variables "'name', 'title', 'root_path'"
      * @param   langProject  $project
      * @param                $prjId
      *

@@ -12,6 +12,8 @@ namespace Finnern\Component\Lang4dev\Administrator\Model;
 defined('_JEXEC') or die;
 
 use DatabaseQuery;
+use Finnern\Component\Lang4dev\Administrator\Helper\langProject;
+
 use JLoader;
 use Joomla\CMS\Association\AssociationServiceInterface;
 use Joomla\CMS\Categories\CategoryServiceInterface;
@@ -24,7 +26,7 @@ use stdClass;
 use function defined;
 
 /**
- * Lang4dev Component Projects Model
+ * Lang4dev Component Projects raw model
  *
  * @since __BUMP_VERSION__
  */
