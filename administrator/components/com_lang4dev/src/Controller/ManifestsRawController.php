@@ -32,7 +32,7 @@ use function defined;
  *
  * @since __BUMP_VERSION__
  */
-class ManifestsRawController extends AdminController
+class ManifestsrawController extends AdminController
 {
     /**
      * Constructor.

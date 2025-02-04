@@ -28,7 +28,7 @@ use function defined;
  *
  * @since __BUMP_VERSION__
  */
-class ManifestsRawModel extends AdminModel
+class ManifestsrawModel extends AdminModel
 {
     /**
      * The prefix to use with controller messages.

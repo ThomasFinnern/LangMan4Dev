@@ -7,7 +7,7 @@
  * @license         GNU General Public License version 2 or later; see LICENSE.txt
  */
 
-namespace Finnern\Component\Lang4dev\Administrator\View\ProjectsRaw;
+namespace Finnern\Component\Lang4dev\Administrator\View\ManifestsRaw;
 
 defined('_JEXEC') or die;
 
