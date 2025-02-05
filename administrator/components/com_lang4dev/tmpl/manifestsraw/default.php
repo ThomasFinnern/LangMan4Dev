@@ -25,9 +25,9 @@ function renderPrjHeader($dbProjectData)
 
 	echo '=============================================' . '<br>';
 
-    echo 'Title: ' . $dbProjectData->title . '<br>';
-    echo 'Name: ' . $dbProjectData->name . '<br>';
-    echo 'Id: ' . $dbProjectData->id . '<br>';
+    echo 'Title: '     . $dbProjectData->title . '<br>';
+    echo 'Name: '      . $dbProjectData->name . '<br>';
+    echo 'Id: '        . $dbProjectData->id . '<br>';
     echo 'root_path: ' . $dbProjectData->root_path . '<br>';
 
     echo '=============================================' . '<br>';

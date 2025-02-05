@@ -102,9 +102,15 @@ class ManifestsrawModel extends AdminModel
 
             foreach ($projects as $project) {
 
+                // debug: restrict to one Id
+                if ($project->id != 4) {
+
+                    continue;
+                }
+
                 //--- xml path ----------------------------------------
 
-                $oBasePrjPath = new basePrjPathFinder($project->name, $project->root_path);
+                $oBasePrjPath = new basePrjPathFinder($project->name, trim($project->root_path));
                 $prjXmlPathFilename = $oBasePrjPath->prjXmlPathFilename; // . '/lang4dev.xml';
 
                 //---  ----------------------------------------
