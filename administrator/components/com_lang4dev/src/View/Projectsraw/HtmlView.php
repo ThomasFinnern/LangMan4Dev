@@ -188,7 +188,7 @@ class HtmlView extends BaseHtmlView
              * break;
              * /**/
             default:
-                ToolBarHelper::cancel('lang4dev.cancel', 'JTOOLBAR_CLOSE');
+                ToolBarHelper::cancel('maintenance.cancel', 'JTOOLBAR_CLOSE');
 
 
                 break;

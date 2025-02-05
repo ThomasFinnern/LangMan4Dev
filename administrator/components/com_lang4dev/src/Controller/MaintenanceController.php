@@ -82,4 +82,28 @@ class maintenanceController extends FormController
         return parent::getModel($name, $prefix, $config);
     }
 
+    /**
+     * maintenance cancel (leads to maintenance)
+     *
+     * @param   null  $key
+     *
+     * @return bool
+     *
+     * @since __BUMP_VERSION__
+     */
+    public function cancel($key = null)
+    {
+        Session::checkToken() or die(Text::_('JINVALID_TOKEN'));
+
+        $link = 'index.php?option=com_lang4dev&view=maintenance';
+        // Route::_('index.php?option=com_lang4dev&view=maintenance')
+        $this->setRedirect($link);
+
+        return true;
+    }
+
+
+
+
+
 }

@@ -233,7 +233,7 @@ class HtmlView extends BaseHtmlView
 
 //icon-ellipsis-h
 
-                ToolBarHelper::cancel('lang4dev.cancel', 'JTOOLBAR_CLOSE');
+                ToolBarHelper::cancel('maintenance.cancel', 'JTOOLBAR_CLOSE');
 
                 // Options button.
                 if (Factory::getApplication()->getIdentity()->authorise('core.admin', 'com_lang4dev')) {

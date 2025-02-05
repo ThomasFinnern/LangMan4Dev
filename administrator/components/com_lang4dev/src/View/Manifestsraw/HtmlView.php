@@ -55,10 +55,7 @@ class HtmlView extends BaseHtmlView
 
     protected $isDebugBackend;
     protected $isDevelop;
-    protected $mainLangId;
-    protected $transLangId;
-    protected $isShowTranslationOfAllIds;
-    protected $isEditAndSaveMainTranslationFile;
+    protected $PrjManifestsData;
 
     /**
      * Method to display the view.
@@ -77,64 +74,11 @@ class HtmlView extends BaseHtmlView
         $this->isDebugBackend = $l4dConfig->get('isDebugBackend');
         $this->isDevelop      = $l4dConfig->get('isDevelop');
 
-        $this->isShowTranslationOfAllIds        = $l4dConfig->get('isShowTranslationOfAllIds');
-        $this->isEditAndSaveMainTranslationFile = $l4dConfig->get('isEditAndSaveMainTranslationFile');
-
-        //--- session (config) ----------------------------------------------------------
-
-        // main / translation language id
-        $sessionTransLangIds = new sessionTransLangIds ();
-        [$mainLangId, $transLangId] = $sessionTransLangIds->getIds();
-        $this->mainLangId  = $mainLangId;
-        $this->transLangId = $transLangId;
-
-        // selection of project and subproject
-        $sessionProjectId = new sessionProjectId();
-        [$prjId, $subPrjActive] = $sessionProjectId->getIds();
-
-        //--- Form ----------------------------------------------------------------------
-
-        $this->form = $this->get('Form');
-
-        $errors = $this->get('Errors');
-
-//        // Check for errors.
-//        if (count($errors = $this->get('Errors')))
-//        {
-//            throw new GenericDataException(implode("\n", $errors), 500);
-//        }
-
-        $this->form->setValue('selectSourceLangId', null, $mainLangId);
-        $this->form->setValue('selectTargetLangId', null, $transLangId);
-
-        //--- define project -------------------------------------------------------------------
+        //--- Collect manifests -------------------------------------------------------------------
 
         /** @var ProjectsRawModel $model */
         $model         = $this->getModel();
-        $this->project = $model->getProject($prjId, $subPrjActive);
-        $project       = $this->project;
-
-        //--- collect content ---------------------------------------------------
-
-        // read translations
-        // $project->readLangFiles($this->mainLangId);
-        $project->readAllLangFiles();
-
-        $project->alignTranslationsByMain($this->mainLangId);
-
-        //--- found lang files list -----------------------------------------
-
-	    $this->langFileSetsPrjs = $project->LangFileNamesCollection();
-
-	    //--- manifest file content ----------------------------------------
-
-	    if ( ! empty ($project->subProjects[0]))
-	    {
-		    $prjXmlPathFilename = $project->subProjects[0]->oBasePrjPath->prjXmlPathFilename; // . '/lang4dev.xml';
-
-		    $this->manifestLang = new manifestLangFiles ($prjXmlPathFilename);
-	    }
-
+        $this->PrjManifestsData = $model->getManifests();
 
         $Layout = Factory::getApplication()->input->get('layout');
         //echo '$Layout: ' . $Layout . '<br>';
@@ -188,7 +132,7 @@ class HtmlView extends BaseHtmlView
              * break;
              * /**/
             default:
-                ToolBarHelper::cancel('lang4dev.cancel', 'JTOOLBAR_CLOSE');
+                ToolBarHelper::cancel('maintenance.cancel', 'JTOOLBAR_CLOSE');
 
 
                 break;
