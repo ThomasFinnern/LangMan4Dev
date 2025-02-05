@@ -893,7 +893,7 @@ class ProjectModel extends AdminModel
                 $isChanged = true;
 
                 //$input->set('jform['root_path']', $prjRootPath);
-                $data ['root_path'] = $prjRootPath;
+                $data ['root_path'] = trim($prjRootPath);
             }
         }
 

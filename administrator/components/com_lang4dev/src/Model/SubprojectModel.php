@@ -1215,7 +1215,7 @@ class SubprojectModel extends AdminModel
 
         $data ['prjId']               = $subProject->prjId;
         $data ['subPrjType']          = projectType::prjType2int($subProject->prjType);
-        $data ['root_path']           = $subProject->oBasePrjPath->prjRootPath;
+        $data ['root_path']           = trim($subProject->oBasePrjPath->prjRootPath);
         $data ['langIdPrefix']        = $subProject->langIdPrefix;
         $data ['notes']               = $subProject->notes;
         $data ['isLangAtStdJoomla']   = $subProject->isLangAtStdJoomla ? 1 : 0;
