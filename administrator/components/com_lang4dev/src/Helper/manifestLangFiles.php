@@ -148,12 +148,14 @@ class manifestLangFiles extends manifestData
 
                 // extract path and names from text in XML
                 $administration = $this->getByXml('administration', []);
-                $stdLanguagesXml   = $administration->languages;
-
                 if (!empty($stdLanguagesXml)) {
-                    // add items to
-                    [$this->adminLangFilePaths, $this->adminLangFiles] =
-                        $this->extractLangPathsByXML($stdLanguagesXml);
+                    $stdLanguagesXml   = $administration->languages;
+
+                    if (!empty($stdLanguagesXml)) {
+                        // add items to
+                        [$this->adminLangFilePaths, $this->adminLangFiles] =
+                            $this->extractLangPathsByXML($stdLanguagesXml);
+                    }
                 }
 
                 //---------------------------------------------------------------

@@ -12,7 +12,9 @@ namespace Finnern\Component\Lang4dev\Administrator\Model;
 defined('_JEXEC') or die;
 
 use Exception;
+use Finnern\Component\Lang4dev\Administrator\Helper\basePrjPathFinder;
 use Finnern\Component\Lang4dev\Administrator\Helper\langProject;
+use Finnern\Component\Lang4dev\Administrator\Helper\manifestLangFiles;
 use Finnern\Component\Lang4dev\Administrator\Helper\projectType;
 use Finnern\Component\Lang4dev\Administrator\Helper\sessionProjectId;
 use JForm;
@@ -126,11 +128,16 @@ class TranslateModel extends AdminModel
 
             //--- create subproject with DB data ------------------------
 
+            $oBasePrjPath = new basePrjPathFinder (
+                $dbSub->prjId,
+                dirname($dbSub->prjXmlPathFilename));
+            $oManifestLangFiles = new manifestLangFiles ($dbSub->prjXmlPathFilename);
+
             $subPrj = $project->addSubProject(
                 $dbSub->prjId,
                 projectType::int2prjType( $dbSub->subPrjType),
-                $dbSub->root_path,
-                $dbSub->prjXmlPathFilename
+                $oBasePrjPath,
+                $oManifestLangFiles
             );
 
             $subPrj->installPathFilename = $dbSub->installPathFilename;

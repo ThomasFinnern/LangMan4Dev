@@ -126,6 +126,8 @@ class HtmlView extends BaseHtmlView
 
 	    $this->langFileSetsPrjs = $project->LangFileNamesCollection();
 
+        // $project->
+
 	    //--- manifest file content ----------------------------------------
 
 	    if ( ! empty ($project->subProjects[0]))
