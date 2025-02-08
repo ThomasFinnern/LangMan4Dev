@@ -122,7 +122,9 @@ class PrjTextsModel extends AdminModel
             $prjXmlPathFilename = $dbSub->prjXmlPathFilename;
             $oManifestLangFiles = new manifestLangFiles ($prjXmlPathFilename);
 
-            $oBasePrjPath = new basePrjPathFinder ($prjDbId, dirname($prjXmlPathFilename));
+            $oBasePrjPath = new basePrjPathFinder (
+                $dbSub->prjId,
+                dirname($prjXmlPathFilename));
 
             $subPrj = $langProject->addSubProject(
                 $dbSub->prjId,

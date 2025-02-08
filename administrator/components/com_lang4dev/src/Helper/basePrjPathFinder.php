@@ -276,7 +276,7 @@ class basePrjPathFinder
 
 //                    //  example project file already/still in subfolder prjRootPath/administrator/component/project/
 //
-//                    foreach (Folder::folders($rootPath) as $folderName) {
+                    foreach (Folder::folders($rootPath) as $folderName) {
 //                        $subFolder = $rootPath . "/" . $folderName;
 //
 //                        [$isManifestFileFound, $prjXmlPathFilename]
@@ -285,7 +285,7 @@ class basePrjPathFinder
 //                        if ($isManifestFileFound) {
 //                            break;
 //                        }
-//                    }
+                    }
                 }
             }
 

@@ -878,22 +878,22 @@ class langSubProject extends langFiles
         $lines[] = '<h5>--- langSubProject ---------------------------</h5>';
 
         $lines [] = $this->getPrjIdAndTypeText();
-        $lines [] = '$prjId = "' . $this->prjId . '"';
-        $lines [] = '$prjType = "' . projectType::prjType2string($this->prjType) . '"';
+        $lines [] = '\$prjId = "' . $this->prjId . '"';
+        $lines [] = '\$prjType = "' . projectType::prjType2string($this->prjType) . '"';
 
-        $lines [] = '$prjRootPath = "' . $this->oBasePrjPath->prjRootPath . '"';
-        $lines [] = '$prjXmlFilePath = "' . $this->oBasePrjPath->prjXmlFilePath . '"';
-        $lines [] = '$langIdPrefix = "' . $this->langIdPrefix . '"';
+        $lines [] = '\$prjRootPath = "' . $this->oBasePrjPath->prjRootPath . '"';
+        $lines [] = '\$prjXmlFilePath = "' . $this->oBasePrjPath->prjXmlFilePath . '"';
+        $lines [] = '\$langIdPrefix = "' . $this->langIdPrefix . '"';
 
-        $lines [] = '$prjDefaultPathRelative = "' . $this->prjDefaultPath . '"';
-        $lines [] = '$prjAdminPathRelative = "' . $this->prjAdminPath . '"';
+        $lines [] = '\$prjDefaultPathRelative = "' . $this->prjDefaultPath . '"';
+        $lines [] = '\$prjAdminPathRelative = "' . $this->prjAdminPath . '"';
 
-        $lines [] = '$prjXmlPathFilename = "' . $this->oBasePrjPath->prjXmlPathFilename . '"';
-        $lines [] = '$installPathFilename = "' . $this->installPathFilename . '"';
-        $lines [] = '$configPathFilename = "' . $this->configPathFilename . '"';
+        $lines [] = '\$prjXmlPathFilename = "' . $this->oBasePrjPath->prjXmlPathFilename . '"';
+        $lines [] = '\$installPathFilename = "' . $this->installPathFilename . '"';
+        $lines [] = '\$configPathFilename = "' . $this->configPathFilename . '"';
 
-        $lines [] = '$useLangSysIni = "' . ($this->useLangSysIni ? 'true' : 'false') . '"';
-        $lines [] = '$isLangAtStdJoomla = "' . ($this->isLangAtStdJoomla ? 'true' : 'false') . '"';
+        $lines [] = '\$useLangSysIni = "' . ($this->useLangSysIni ? 'true' : 'false') . '"';
+        $lines [] = '\$isLangAtStdJoomla = "' . ($this->isLangAtStdJoomla ? 'true' : 'false') . '"';
 
         $parentLines = parent::__toText();
         array_push($lines, ...$parentLines);
