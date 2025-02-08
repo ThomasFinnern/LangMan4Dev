@@ -220,7 +220,11 @@ class manifestLangFiles extends manifestData
 
                         //--- language folder path ------------------------------------------------
 
-                        $langFolder =  (string) $manifestXml->xpath("/extension/administration/files/folder[contains(text(),'language')]");
+                        $langFolder = '';
+                        $langFolderXml =  $manifestXml->xpath("/extension/administration/files/folder[contains(text(),'language')]");
+                        if ( ! empty($langFolderXml)) {
+                            $langFolder = (string)$langFolderXml[0];
+                        }
 //                        // lang folder given
 //                        if (!empty($langFolder)) {
 //                            // attribute folder for not installed components
