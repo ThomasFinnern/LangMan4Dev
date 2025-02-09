@@ -701,11 +701,11 @@ class SubprojectModel extends AdminModel
 //            {
 //                if (Factory::getApplication()->get('unicodeslugs') == 1)
 //                {
-//                    $data['alias'] = \JFilterOutput::stringURLUnicodeSlug($data['title']);
+//                    $data['alias'] = JFilterOutput::stringURLUnicodeSlug($data['title']);
 //                }
 //                else
 //                {
-//                    $data['alias'] = \JFilterOutput::stringURLSafe($data['title']);
+//                    $data['alias'] = JFilterOutput::stringURLSafe($data['title']);
 //                }
 //
 //                $table = Table::getInstance('Content', 'JTable');

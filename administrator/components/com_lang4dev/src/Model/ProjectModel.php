@@ -15,11 +15,13 @@ use Exception;
 use Finnern\Component\Lang4dev\Administrator\Helper\basePrjPathFinder;
 use Joomla\CMS\Component\ComponentHelper;
 use Joomla\CMS\Factory;
+use Joomla\CMS\Filter\OutputFilter;
 use Joomla\CMS\Language\Associations;
 use Joomla\CMS\Language\Text;
 use Joomla\CMS\MVC\Factory\MVCFactoryInterface;
 use Joomla\CMS\MVC\Model\AdminModel;
 use Joomla\CMS\Plugin\PluginHelper;
+use Joomla\CMS\Table\Category;
 use Joomla\CMS\Table\Table;
 use JTableCategory;
 
@@ -364,7 +366,7 @@ class ProjectModel extends AdminModel
      * A protected method to get the where clause for the reorder
      * This ensures that the row will be moved relative to a row with the same extension
      *
-     * @param   JTableCategory  $table  Current table instance
+     * @param   Category  $table  Current table instance
      *
      * @return  array  An array of conditions to add to ordering queries.
      *
@@ -707,11 +709,11 @@ class ProjectModel extends AdminModel
             {
                 if (Factory::getApplication()->get('unicodeslugs') == 1)
                 {
-                    $data['alias'] = \JFilterOutput::stringURLUnicodeSlug($data['title']);
+                    $data['alias'] = OutputFilter::stringURLUnicodeSlug($data['title']);
                 }
                 else
                 {
-                    $data['alias'] = \JFilterOutput::stringURLSafe($data['title']);
+                    $data['alias'] = OutputFilter::stringURLSafe($data['title']);
                 }
 
                 $table = Table::getInstance('Content', 'JTable');
