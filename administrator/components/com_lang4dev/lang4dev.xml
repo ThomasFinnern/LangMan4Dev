@@ -102,7 +102,9 @@
 
 	<api>
 		<files folder="plugins/webservices/com_lang4dev">
-			<folder>src</folder>
+		    <folder plugin="lang4dev">services</folder>
+		    <folder>src</folder>
+		    <folder>language</folder>
 		</files>
 	</api>
 

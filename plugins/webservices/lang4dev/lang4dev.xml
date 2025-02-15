@@ -1,30 +1,23 @@
-<?xml version="1.0" encoding="utf-8"?>
-<extension type="plugin"
-           group="webservices"
-           version="5.0"
-           method="upgrade">
-    <name>plg_webservices_lang4dev</name>
-    <author>Thomas Finnern</author>
+<?xml version="1.0" encoding="UTF-8"?>
+<extension type="plugin" 
+group="webservices" method="upgrade">
+	<name>plg_webservices_lang4dev</name>
     <creationDate>2025.02.09</creationDate>
-    <copyright>(c) 2022-2025 Thomas Finnern</copyright>
-    <license>GNU General Public License version 2 or later; see LICENSE.txt</license>
+    <author>Thomas Finnern</author>
     <authorEmail>lang4dev@tomfinnern.de</authorEmail>
     <authorUrl>https://github.com/ThomasFinnern</authorUrl>
-	<version>0.01.0</version>
-    <description>PLG_WEBSERTVICES_LANG4DEV_XML_DESCRIPTION</description>
-
-    <files>
-        <!-- <folder>services</folder> -->
-        <!-- <folder>language</folder> -->
-        <!-- <folder plugin="com_lang4dev.php">src</folder> -->
-        <folder plugin="lang4dev.php">lang4dev.php</folder>
-    </files>
-
-    <!-- <languages> -->
-        <!-- <language tag="en-GB">language/en-GB/plg_content_rsg2_galleries.ini</language> -->
-        <!-- <language tag="en-GB">language/en-GB/plg_content_rsg2_galleries.sys.ini</language> -->
-    <!-- </languages> -->
-
+    <copyright>(c) 2022-2025 Lang4dev Team</copyright>
+    <license>GNU General Public License version 2 or later;</license>
+	<version>0.1.0</version>
+	<description>PLG_WEBSERVICES_LANG4DEV_XML_DESCRIPTION</description>
+	<namespace path="src">Joomla\Plugin\WebServices\Lang4dev</namespace>
+	<files>
+		<folder plugin="lang4dev">services</folder>
+		<folder>src</folder>
+		<folder>language</folder>
+	</files>
+	<languages>
+		<language tag="en-GB">language/en-GB/plg_webservices_media.ini</language>
+		<language tag="en-GB">language/en-GB/plg_webservices_media.sys.ini</language>
+	</languages>
 </extension>
-	
-	
