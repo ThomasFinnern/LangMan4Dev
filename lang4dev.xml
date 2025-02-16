@@ -102,7 +102,9 @@
 
 	<api>
 		<files folder="plugins/webservices/com_lang4dev">
-			##API_COMPONENT_FILES##
+		    <folder plugin="lang4dev">services</folder>
+		    <folder>src</folder>
+		    <folder>language</folder>
 		</files>
 	</api>
 
@@ -116,5 +118,5 @@
 
 	<dlid prefix="dlid="
 	      suffix=""/>
-		  
+
 </extension>
