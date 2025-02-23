@@ -126,9 +126,9 @@ final class Lang4dev extends CMSPlugin implements SubscriberInterface
         $getDefaults = array_merge(['public' => false], $defaults);
 
         $routes = [
-            new Route(['GET'], 'v1/lang4dev/lang4dev/:id/contenthistory', 'history.displayList', ['id' => '(\d+)'], $getDefaults),
-            new Route(['PATCH'], 'v1/lang4dev/lang4dev/:id/contenthistory/keep', 'history.keep', ['id' => '(\d+)'], $defaults),
-            new Route(['DELETE'], 'v1/lang4dev/lang4dev/:id/contenthistory', 'history.delete', ['id' => '(\d+)'], $defaults),
+            new Route(['GET'], 'v1/lang4dev/:id/contenthistory', 'history.displayList', ['id' => '(\d+)'], $getDefaults),
+            new Route(['PATCH'], 'v1/lang4dev/:id/contenthistory/keep', 'history.keep', ['id' => '(\d+)'], $defaults),
+            new Route(['DELETE'], 'v1/lang4dev/:id/contenthistory', 'history.delete', ['id' => '(\d+)'], $defaults),
         ];
 
         $router->addRoutes($routes);
