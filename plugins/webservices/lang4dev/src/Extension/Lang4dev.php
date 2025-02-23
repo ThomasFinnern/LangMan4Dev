@@ -8,7 +8,7 @@
  * @license         GNU General Public License version 2 or later; see LICENSE.txt
  */
 
-namespace Joomla\Plugin\WebServices\Content\Extension;
+namespace Joomla\Plugin\WebServices\Lang4dev\Extension;
 
 use Joomla\CMS\Event\Application\BeforeApiRouteEvent;
 use Joomla\CMS\Plugin\CMSPlugin;
@@ -21,11 +21,11 @@ use Joomla\Router\Route;
 // phpcs:enable PSR1.Files.SideEffects
 
 /**
- * Web Services adapter for com_content.
+ * Web Services adapter for com_lang4dev.
  *
  * @since  4.0.0
  */
-final class Content extends CMSPlugin implements SubscriberInterface
+final class Lang4dev extends CMSPlugin implements SubscriberInterface
 {
     /**
      * Returns an array of events this subscriber will listen to.
@@ -42,7 +42,7 @@ final class Content extends CMSPlugin implements SubscriberInterface
     }
 
     /**
-     * Registers com_content's API's routes in the application
+     * Registers com_lang4dev's API's routes in the application
      *
      * @param   BeforeApiRouteEvent  $event  The event object
      *
@@ -120,15 +120,15 @@ final class Content extends CMSPlugin implements SubscriberInterface
     {
         $defaults    = [
             'component'  => 'com_contenthistory',
-            'type_alias' => 'com_content.article',
+            'type_alias' => 'com_lang4dev.lang4dev',
             'type_id'    => 1,
         ];
         $getDefaults = array_merge(['public' => false], $defaults);
 
         $routes = [
-            new Route(['GET'], 'v1/content/articles/:id/contenthistory', 'history.displayList', ['id' => '(\d+)'], $getDefaults),
-            new Route(['PATCH'], 'v1/content/articles/:id/contenthistory/keep', 'history.keep', ['id' => '(\d+)'], $defaults),
-            new Route(['DELETE'], 'v1/content/articles/:id/contenthistory', 'history.delete', ['id' => '(\d+)'], $defaults),
+            new Route(['GET'], 'v1/lang4dev/lang4dev/:id/contenthistory', 'history.displayList', ['id' => '(\d+)'], $getDefaults),
+            new Route(['PATCH'], 'v1/lang4dev/lang4dev/:id/contenthistory/keep', 'history.keep', ['id' => '(\d+)'], $defaults),
+            new Route(['DELETE'], 'v1/lang4dev/lang4dev/:id/contenthistory', 'history.delete', ['id' => '(\d+)'], $defaults),
         ];
 
         $router->addRoutes($routes);
