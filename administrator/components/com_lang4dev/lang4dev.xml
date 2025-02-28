@@ -99,12 +99,12 @@
 		<folder>images</folder>
 		<folder>js</folder>
 	</media>
-	
+
 	<api>
 		<files folder="api/components/com_lang4dev">
 			<folder>src</folder>
 		</files>
-  </api>
+	</api>
 	
 	<plugins folder="plugins/webservices/lang4dev"
 		     destination="lang4dev">
