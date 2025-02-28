@@ -7,7 +7,7 @@
  * @license    
  */
 
-namespace Joomla\Component\Lang4dev\Api\Serializer;
+namespace Finnern\Component\Lang4dev\Api\Serializer;
 
 use Joomla\CMS\Router\Route;
 use Joomla\CMS\Serializer\JoomlaSerializer;

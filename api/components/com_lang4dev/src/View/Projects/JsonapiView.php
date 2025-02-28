@@ -8,7 +8,7 @@
  * @license     
  */
 
-namespace Joomla\Component\Lang4dev\Api\View\Projects;
+namespace Finnern\Component\Lang4dev\Api\View\Projects;
 
 use Joomla\CMS\Factory;
 use Joomla\CMS\Helper\TagsHelper;

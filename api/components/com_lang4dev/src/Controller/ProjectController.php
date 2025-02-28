@@ -1,5 +1,5 @@
 <?php
-namespace YourNamespace\Component\YourComponent\Api\Controller;
+namespace Finnern\Component\Lang4dev\Api\Controller;
 
 use Joomla\CMS\Filter\InputFilter;
 use Joomla\CMS\Helper\TagsHelper;
