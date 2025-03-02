@@ -15,6 +15,12 @@
 	<files>
 		<folder plugin="lang4dev">services</folder>
 		<folder>src</folder>
+		<folder>services</folder>
 		<folder>language</folder>
+		<file>lang4dev.xml</file>
 	</files>
+	<!-- <languages> -->
+		<!-- <language tag="en-GB">language/en-GB/plg_webservices_lang4dev.ini</language> -->
+		<!-- <language tag="en-GB">language/en-GB/plg_webservices_lang4dev.sys.ini</language> -->
+	<!-- </languages> -->
 </extension>
