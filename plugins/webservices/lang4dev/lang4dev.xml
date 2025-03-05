@@ -1,8 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<extension type="plugin"
-           group="webservices"
-           version="5.0"
-           method="upgrade">
+<extension type="plugin" group="webservices" version="5.0" method="upgrade">
     <name>plg_webservices_lang4dev</name>
     <creationDate>2025.02.09</creationDate>
     <author>Thomas Finnern</author>
