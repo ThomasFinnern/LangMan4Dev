@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <extension type="plugin"
-		group="webservices"
-		method="upgrade">
-	<name>plg_webservices_lang4dev</name>
+           group="webservices"
+           version="5.0"
+           method="upgrade">
+    <name>plg_webservices_lang4dev</name>
     <creationDate>2025.02.09</creationDate>
     <author>Thomas Finnern</author>
     <authorEmail>lang4dev@tomfinnern.de</authorEmail>
@@ -12,6 +13,7 @@
 	<version>0.1.0</version>
 	<description>PLG_WEBSERVICES_LANG4DEV_XML_DESCRIPTION</description>
 	<namespace path="src">Joomla\Plugin\WebServices\Lang4dev</namespace>
+	
 	<files>
 		<folder plugin="lang4dev">services</folder>
 		<folder>src</folder>
