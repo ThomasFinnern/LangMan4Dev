@@ -10,13 +10,14 @@
 
 namespace Finnern\Component\Lang4dev\Api\View\Projects;
 
+use Finnern\Component\Lang4dev\Api\Helper\Lang4devHelper;
+use Finnern\Component\Lang4dev\Api\Serializer\Lang4devSerializer;
+
 use Joomla\CMS\Factory;
 use Joomla\CMS\Helper\TagsHelper;
 use Joomla\CMS\Language\Multilanguage;
 use Joomla\CMS\MVC\View\JsonApiView as BaseApiView;
 use Joomla\CMS\Plugin\PluginHelper;
-use Joomla\Component\Lang4dev\Api\Helper\Lang4devHelper;
-use Joomla\Component\Lang4dev\Api\Serializer\Lang4devSerializer;
 use Joomla\Component\Fields\Administrator\Helper\FieldsHelper;
 use Joomla\Registry\Registry;
 
