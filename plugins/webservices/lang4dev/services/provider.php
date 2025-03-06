@@ -16,7 +16,7 @@ use Joomla\CMS\Plugin\PluginHelper;
 use Joomla\DI\Container;
 use Joomla\DI\ServiceProviderInterface;
 use Joomla\Event\DispatcherInterface;
-use Joomla\Plugin\WebServices\Lang4dev\Extension\Lang4dev;
+use Finnern\Plugin\WebServices\Lang4dev\Extension\Lang4dev;
 
 return new class () implements ServiceProviderInterface {
     /**

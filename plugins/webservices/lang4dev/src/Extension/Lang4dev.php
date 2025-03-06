@@ -8,7 +8,7 @@
  * @license         GNU General Public License version 2 or later; see LICENSE.txt
  */
 
-namespace Joomla\Plugin\WebServices\Lang4dev\Extension;
+namespace Finnern\Plugin\WebServices\Lang4dev\Extension;
 
 use Joomla\CMS\Event\Application\BeforeApiRouteEvent;
 use Joomla\CMS\Plugin\CMSPlugin;
@@ -57,13 +57,15 @@ final class Lang4dev extends CMSPlugin implements SubscriberInterface
         $router->createCRUDRoutes(
 			'v1/lang4dev', 
 			'lang4dev', 
-			['component' => 'com_lang4dev']
+			['component' => 'com_lang4dev'],
+	        true // ToDo: Remove when tests finished
 		);
 
         $router->createCRUDRoutes(
 			'v1/lang4dev/projects', 
 			'lang4dev', 
-			['component' => 'com_lang4dev']
+			['component' => 'com_lang4dev'],
+	        true // ToDo: Remove when tests finished
 		);
 	
         $this->createFieldsRoutes($router);

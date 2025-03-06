@@ -107,17 +107,17 @@ class JsonapiView extends BaseApiView
 //        'featured_down',
     ];
 
-    /**
-     * The relationships the item has
-     *
-     * @var    array
-     * @since  4.0.0
-     */
-    protected $relationship = [
-        'category',
-        'created_by',
-        'tags',
-    ];
+//    /**
+//     * The relationships the item has
+//     *
+//     * @var    array
+//     * @since  4.0.0
+//     */
+//    protected $relationship = [
+//        'category',
+//        'created_by',
+//        'tags',
+//    ];
 
     /**
      * Constructor.
@@ -248,4 +248,8 @@ class JsonapiView extends BaseApiView
 
         return parent::prepareItem($item);
     }
+
+// ToDo: Later The hidden gem of the API view is another string array property, $relationship. In that view you list all the field names returned by your model which refer to related data.
+
+
 }
