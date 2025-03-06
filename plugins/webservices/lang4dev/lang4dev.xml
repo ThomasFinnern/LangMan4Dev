@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <extension type="plugin" group="webservices" version="5.0" method="upgrade">
     <name>plg_webservices_lang4dev</name>
-    <creationDate>2025.03.05</creationDate>
+    <creationDate>2025.03.06</creationDate>
     <author>Thomas Finnern</author>
     <authorEmail>lang4dev@tomfinnern.de</authorEmail>
     <authorUrl>https://github.com/ThomasFinnern</authorUrl>
