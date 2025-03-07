@@ -42,32 +42,31 @@ class JsonapiView extends BaseApiView
 	    'id',
 	    'title',
 	    'name',
+
 	    'alias',
 	    'notes',
 	    'root_path',
 	    'prjType',
-//        'state',
-//        'category',
-//        'images',
-//        'metakey',
-//        'metadesc',
-//        'metadata',
-//        'access',
-//        'featured',
-//        'alias',
-//        'note',
-//        'publish_up',
-//        'publish_down',
-//        'urls',
-//        'created',
-//        'created_by',
-//        'created_by_alias',
-//        'modified',
-//        'modified_by',
-//        'hits',
-//        'version',
-//        'featured_up',
-//        'featured_down',
+
+	    'params',
+
+	    'checked_out',
+	    'checked_out_time',
+	    'created',
+	    'created_by',
+	    'created_by_alias',
+	    'modified',
+	    'modified_by',
+
+	    'twin_id',
+
+	    'approved',
+	    'asset_id',
+	    'access',
+
+	    'version',
+
+	    'ordering',
     ];
 
     /**
@@ -80,32 +79,31 @@ class JsonapiView extends BaseApiView
         'id',
         'title',
         'name',
+
         'alias',
         'notes',
         'root_path',
         'prjType',
 
-//        'state',
-//        'category',
-//        'images',
-//        'metakey',
-//        'metadesc',
-//        'metadata',
-//        'access',
-//        'featured',
-//        'alias',
-//        'note',
-//        'publish_up',
-//        'publish_down',
-//        'urls',
-//        'created',
-//        'created_by',
-//        'created_by_alias',
-//        'modified',
-//        'hits',
-//        'version',
-//        'featured_up',
-//        'featured_down',
+	    'params',
+
+	    'checked_out',
+	    'checked_out_time',
+	    'created',
+	    'created_by',
+	    'created_by_alias',
+	    'modified',
+	    'modified_by',
+
+	    'twin_id',
+
+	    'approved',
+	    'asset_id',
+	    'access',
+
+	    'version',
+
+	    'ordering',
     ];
 
 //    /**

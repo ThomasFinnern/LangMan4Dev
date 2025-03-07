@@ -41,7 +41,7 @@ class JsonapiView extends BaseApiView
 	 *
 	 * @since   4.0.0
 	 */
-	public function display($tpl = null)
+	public function displayItem($tpl = null)
 	{
 		$testLang4devText = "testLang4devText";
 
@@ -51,6 +51,24 @@ class JsonapiView extends BaseApiView
 
 		// Pushing output to the document
 		$this->getDocument()->setBuffer($result);
+
+		return $this->getDocument()->render();
+	}
+
+	public function display($tpl = null)
+	{
+		$testLang4devText = "testLang4devText";
+
+		zzzz();
+
+		// Serializing the output
+		//$result = json_encode($this->_output);
+		$result = json_encode($testLang4devText);
+
+		// Pushing output to the document
+		$this->getDocument()->setBuffer($result);
+
+		return $this->getDocument()->render();
 	}
 
 // ToDo: Later The hidden gem of the API view is another string array property, $relationship. In that view you list all the field names returned by your model which refer to related data.
