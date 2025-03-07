@@ -71,8 +71,22 @@ final class Lang4dev extends CMSPlugin implements SubscriberInterface
 	    ]);
 
         $router->createCRUDRoutes(
+			'v1/lang4dev/project',
+			'project',
+			['component' => 'com_lang4dev'],
+	        true // ToDo: Remove when tests finished
+		);
+	
+        $router->createCRUDRoutes(
 			'v1/lang4dev/projects',
 			'projects',
+			['component' => 'com_lang4dev'],
+	        true // ToDo: Remove when tests finished
+		);
+	
+        $router->createCRUDRoutes(
+			'v1/lang4dev/subprojects',
+			'subprojects',
 			['component' => 'com_lang4dev'],
 	        true // ToDo: Remove when tests finished
 		);
