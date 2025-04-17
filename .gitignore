@@ -2,3 +2,7 @@
 #changelog.xml
 
 
+# org and temp files
+**/*.org.*
+**/*.tmp
+
