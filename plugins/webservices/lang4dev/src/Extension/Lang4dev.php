@@ -58,14 +58,7 @@ final class Lang4dev extends CMSPlugin implements SubscriberInterface
 	    // $getDefaults = array_merge(['public' => false], $defaults);
 	    $getDefaults = array_merge(['public' => false], $defaults); // ToDo: Remove when tests finished, enabless acces without token
 
-//        $router->createCRUDRoutes(
-//			'v1/lang4dev',
-//			'lang4dev',
-//			['component' => 'com_lang4dev'],
-//	        true // ToDo: Remove when tests finished
-//		);
-
-//		    new Route(['GET'], 'v1/example/items/:slug', 'item.displayItem',
+//	      new Route(['GET'], 'v1/example/items/:slug', 'item.displayItem',
 //			    ['slug' => '(.*)'], ['option' => 'com_example']),
 
 	    $router->addRoutes([

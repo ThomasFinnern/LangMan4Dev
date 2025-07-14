@@ -1,10 +1,10 @@
 <?php
-
 /**
- * 
- *
- * @copyright  
- * @license    
+ * @package         LangMan4Dev
+ * @subpackage      plg_webservices_lang4dev
+ * @author          Thomas Finnern <InsideTheMachine.de>
+ * @copyright  (c)  2022-2025 Lang4dev Team
+ * @license         GNU General Public License version 2 or later; see LICENSE.txt
  */
 
 namespace Finnern\Component\Lang4dev\Api\Serializer;

@@ -11,7 +11,7 @@ use Joomla\Component\Fields\Administrator\Helper\FieldsHelper;
 // phpcs:enable PSR1.Files.SideEffects
 
 /**
- * The projects controller
+ * The subprojects controller
  *
  * @since  4.0.0
  */
@@ -23,7 +23,6 @@ class SubprojectsController extends ApiController
      * @var    string
      * @since  4.0.0
      */
-//    protected $contentType = 'lang4dev.projects';
     protected $contentType = 'subprojects';
 
     /**

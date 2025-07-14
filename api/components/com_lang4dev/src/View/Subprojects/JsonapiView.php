@@ -42,9 +42,6 @@ class JsonapiView extends BaseApiView
 	    'id',
 	    'title',
 	    'alias',
-	    'id',
-	    'title',
-	    'alias',
 	    'prjId',
 
 	    'subPrjType',
