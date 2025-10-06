@@ -36,8 +36,7 @@ echo Route::_('index.php?option=com_lang4dev&view=prjtexts'); ?>"
 	<div class="project_selection_container">
 
 	    <?php renderProjectSelection($this->form); ?>
-
-        // ToDo: tell main lang and info
+    	<?php renderLangIdTexts($this->form); ?>
 
 	</div>
 
@@ -121,6 +120,23 @@ function renderProjectSelection($form)
 		</div>
 		<div class="project_selection_setting">
             <?php echo $form->renderField('selectSubproject'); ?>
+		</div>
+	</div>
+    <?php
+
+    return;
+}
+
+function renderLangIdTexts($form)
+{
+    // mx-2 py-0, mx-2 py-0 px-2
+    ?>
+	<div class='project_selection'>
+		<div class='project_selection_setting'>
+            <?php echo $form->renderField('selectSourceLangId'); ?>
+		</div>
+		<div class='project_selection_setting'>
+            <?php echo $form->renderField('selectTargetLangId'); ?>
 		</div>
 	</div>
     <?php

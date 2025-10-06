@@ -162,18 +162,12 @@
 					useglobal="true"
 			/>
 
-			<field
+			<!--field
 					name="test02"
 					type="media"
 					label="COM_LANG4DEV_FIELD_IMAGE_LABEL"
-			/>
+			/-->
 
-			<field
-					name="test02"
-					type="text"
-					label="COM_LANG4DEV_FIELD_IMAGE_ALT_LABEL"
-					size="20"
-			/>
 		</fieldset>
 	</fields>
 

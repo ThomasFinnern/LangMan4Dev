@@ -246,7 +246,7 @@ class langSubProject extends langFiles
     {
         if ($isEmpty) {
 
-            $OutTxt = Text::_('COM_LANG4DEV_LANG_SUBPROJECT_HAS_EMPTY_VARIABLE_ON_SAVE' . $sourceName
+            $OutTxt = Text::_('COM_LANG4DEV_LANG_SUBPROJECT_HAS_EMPTY_VARIABLE_ON_SAVE' . ':' . $sourceName
                 . '::' . $itemName);
             $app    = Factory::getApplication();
             $app->enqueueMessage($OutTxt, 'warning');

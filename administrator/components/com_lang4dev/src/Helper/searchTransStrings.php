@@ -210,6 +210,8 @@ class searchTransStrings
         $isInComment = false;
 
         try {
+          if ( !empty($fileName))
+          {
             $lineNr = 0;
 
             // Read all lines
@@ -254,6 +256,7 @@ class searchTransStrings
                      * /**/
                 }
             }
+          }
         } catch (RuntimeException $e) {
             $OutTxt = 'Error executing searchTransIdsIn_PHP_file: "' . '<br>';
             $OutTxt .= 'Error: "' . $e->getMessage() . '"' . '<br>';

@@ -28,7 +28,7 @@
 			type="text"
 			label="COM_LANG4DEV_TRANS_SOURCE_LANG_ID"
 			description="COM_LANG4DEV_TRANS_SOURCE_LANG_ID_DESC"
-			default="Xen-GB"
+			default="en-GB"
 			onchange="Joomla.submitform('lang4dev.selectLangIds', this.form)"
 			class="d-flex justify-content-start"
 	/>
@@ -38,7 +38,7 @@
 			type="text"
 			label="COM_LANG4DEV_TRANS_TARGET_LANG_ID"
 			description="COM_LANG4DEV_TRANS_TARGET_LANG_ID_DESC"
-			default="Xde-DE"
+			default="de-DE"
 			onchange="Joomla.submitform('lang4dev.selectLangIds', this.form)"
 			class="d-flex justify-content-start"
 	/>

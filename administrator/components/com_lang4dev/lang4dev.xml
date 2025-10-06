@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <extension type="component" method="upgrade">
   <name>COM_LANG4DEV</name>
-  <creationDate>2025.06.11</creationDate>
+  <creationDate>2025.10.06</creationDate>
   <author>Thomas Finnern</author>
   <authorEmail>lang4dev@tomfinnern.de</authorEmail>
   <authorUrl>https://github.com/ThomasFinnern</authorUrl>

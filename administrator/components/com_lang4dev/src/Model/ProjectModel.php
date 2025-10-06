@@ -901,7 +901,7 @@ class ProjectModel extends AdminModel
 
         // write back into input
         if ($isChanged) {
-            $this->input->post->set('jform', $data);
+            $input->post->set('jform', $data);
         }
 
         // On first write of this project fetch saved project id

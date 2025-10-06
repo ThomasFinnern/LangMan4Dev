@@ -121,13 +121,12 @@ $cmdButtons[] = new cmdButton(
 
 	<div class="project_selection_container">
 
-	    <?php renderProjectSelection($this->form); ?>
+	  <?php renderProjectSelection($this->form); ?>
 		<?php renderLangIdTexts($this->form); ?>
 	</div>
 
 	<input type="hidden" name="task" value=""/>
-    <?php
-    echo HTMLHelper::_('form.token'); ?>
+  <?php echo HTMLHelper::_('form.token'); ?>
 
 </form>
 

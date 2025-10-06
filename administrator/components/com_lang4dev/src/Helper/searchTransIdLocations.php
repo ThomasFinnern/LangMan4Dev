@@ -13,6 +13,7 @@ use Exception;
 use Joomla\CMS\Factory;
 use Joomla\Filesystem\Folder;
 
+use Joomla\CMS\Language\Text;
 use Finnern\Component\Lang4dev\Administrator\Helper\transIdLocations;
 use RuntimeException;
 
@@ -113,7 +114,7 @@ class searchTransIdLocations
             if (strlen($this->langIdPrefix) < 5) {
                 $hasErr = true;
 
-                $OutTxt = 'findAllTranslationIds: langIdPrefix is not set or too small: "' . $this->langIdPrefix . '"';
+                $OutTxt = Text::_('findAllTranslationIds: langIdPrefix is not set or too small: "') . $this->langIdPrefix . '"';
 
                 $app = Factory::getApplication();
                 $app->enqueueMessage($OutTxt, 'error');
@@ -278,37 +279,44 @@ class searchTransIdLocations
         $lines       = [];
 
         try {
+
+          if ( !empty($fileName))
+          {
             $lineNr = 0;
 
             // Read all lines
-            $filePath = $path . DIRECTORY_SEPARATOR . $fileName;
+            $filePath = $path.DIRECTORY_SEPARATOR.$fileName;
 
             $lines = file($filePath);
 
             // content found
             // ToDo: 		foreach ($lines as $lineNr => $line)
-            foreach ($lines as $line) {
-                $lineNr = $lineNr + 1;
+            foreach($lines as $line)
+            {
+              $lineNr = $lineNr + 1;
 
-                //--- remove comments --------------
+              //--- remove comments --------------
 
-                $bareLine = $this->removeCommentPHP($line, $isInComment);
+              $bareLine = $this->removeCommentPHP($line, $isInComment);
 
-                //--- find items --------------
+              //--- find items --------------
 
-                if (strlen($bareLine) > 0) {
-                    $items = $this->searchLangIdsInLinePHP($bareLine);
+              if(strlen($bareLine) > 0)
+              {
+                $items = $this->searchLangIdsInLinePHP($bareLine);
 
-                    //--- add items
-                    foreach ($items as $item) {
-                        $item->file   = $fileName;
-                        $item->path   = $path;
-                        $item->lineNr = $lineNr;
+                //--- add items
+                foreach($items as $item)
+                {
+                  $item->file   = $fileName;
+                  $item->path   = $path;
+                  $item->lineNr = $lineNr;
 
-                        $this->transIdLocations->addItem($item);
-                    }
+                  $this->transIdLocations->addItem($item);
                 }
+              }
             }
+          }
         } catch (RuntimeException $e) {
             $OutTxt = 'Error executing searchTransIdsIn_PHP_file: "' . '<br>';
             $OutTxt .= 'Error: "' . $e->getMessage() . '"' . '<br>';
