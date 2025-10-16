@@ -341,7 +341,7 @@ class searchTransIdLocations
         $bareLine = $line;
 
         try {
-            // No inside a '/*' comment
+            // Not inside a '/*' comment
             if (!$isInComment) {
                 //--- check for comments ---------------------------------------
 
@@ -352,11 +352,11 @@ class searchTransIdLocations
                 $slashAsteriskIdx = strpos($line, $slashAsterisk);
 
                 // comment exists, keep start of string
-                if ($doubleSlashIdx != false || $slashAsteriskIdx != false) {
-                    if ($doubleSlashIdx != false && $slashAsteriskIdx == false) {
+                if ($doubleSlashIdx !== false || $slashAsteriskIdx !== false) {
+                    if ($doubleSlashIdx !== false && $slashAsteriskIdx === false) {
                         $bareLine = strstr($line, $doubleSlash, true);
                     } else {
-                        if ($doubleSlashIdx == false && $slashAsteriskIdx != false) {
+                        if ($doubleSlashIdx === false && $slashAsteriskIdx !== false) {
                             $bareLine    = strstr($line, $slashAsterisk, true);
                             $isInComment = true;
                         } else {
@@ -382,7 +382,7 @@ class searchTransIdLocations
                 $asteriskSlashIdx = strpos($line, $asteriskSlash);
 
                 // end found ?
-                if ($asteriskSlashIdx != false) {
+                if ($asteriskSlashIdx !== false) {
                     // Keep end of string
                     $bareLine = strstr($line, $asteriskSlash);
 

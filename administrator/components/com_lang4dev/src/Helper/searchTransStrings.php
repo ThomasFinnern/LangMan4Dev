@@ -276,12 +276,14 @@ class searchTransStrings
      * @throws Exception
      * @since version
      */
+
+    // ToDo: make trait out of it => two occurences
     public function removeCommentPHP($line, &$isInComment)
     {
         $bareLine = $line;
 
         try {
-            // No inside a '/*' comment
+            // Not inside a '/*' comment
             if (!$isInComment) {
                 //--- check for comments ---------------------------------------
 
@@ -292,11 +294,11 @@ class searchTransStrings
                 $slashAsteriskIdx = strpos($line, $slashAsterisk);
 
                 // comment exists, keep start of string
-                if ($doubleSlashIdx != false || $slashAsteriskIdx != false) {
-                    if ($doubleSlashIdx != false && $slashAsteriskIdx == false) {
+                if ($doubleSlashIdx !== false || $slashAsteriskIdx !== false) {
+                    if ($doubleSlashIdx !== false && $slashAsteriskIdx === false) {
                         $bareLine = strstr($line, $doubleSlash, true);
                     } else {
-                        if ($doubleSlashIdx == false && $slashAsteriskIdx != false) {
+                        if ($doubleSlashIdx === false && $slashAsteriskIdx !== false) {
                             $bareLine    = strstr($line, $slashAsterisk, true);
                             $isInComment = true;
                         } else {
@@ -322,7 +324,7 @@ class searchTransStrings
                 $asteriskSlashIdx = strpos($line, $asteriskSlash);
 
                 // end found ?
-                if ($asteriskSlashIdx != false) {
+                if ($asteriskSlashIdx !== false) {
                     // Keep end of string
                     $bareLine = strstr($line, $asteriskSlash);
 
