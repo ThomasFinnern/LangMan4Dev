@@ -328,14 +328,24 @@ class searchTransIdLocations
     }
 
     /**
+     * Removes comment part of the line
+     * a) Only '//...' then delete the rest of the line
+     *    This will only be checked if not inside lines comment '/* ...'
+     * b) On '/*' check the rest of the line
+     *    => recursive call with the following characters
+     *    => add call result to start of line
+     * c) On '...* /' (end of lines comment) check the rest of the line
+     *    => recursive call with the following characters
+     *    => add call result to start of line
+     *
      * @param $line
      * @param $isInComment
      *
      * @return false|mixed|string
      *
-     * @throws Exception
      * @since version
      */
+    // ToDo: &$isInComment => use local class variable
     public function removeCommentPHP($line, &$isInComment)
     {
         $bareLine = $line;
@@ -343,61 +353,67 @@ class searchTransIdLocations
         try {
             // Not inside a '/*' comment
             if (!$isInComment) {
-                //--- check for comments ---------------------------------------
 
-                $doubleSlash   = '//';
-                $slashAsterisk = '/*';
+                //--- check for comment positions ---------------------------------------
 
-                $doubleSlashIdx   = strpos($line, $doubleSlash);
-                $slashAsteriskIdx = strpos($line, $slashAsterisk);
+                $doubleSlashIdx = strpos($line, '//');
+                $slashAsteriskIdx = strpos($line, '/*');
 
-                // comment exists, keep start of string
+                // One or both comment types are present
                 if ($doubleSlashIdx !== false || $slashAsteriskIdx !== false) {
-                    if ($doubleSlashIdx !== false && $slashAsteriskIdx === false) {
-                        $bareLine = strstr($line, $doubleSlash, true);
-                    } else {
-                        if ($doubleSlashIdx === false && $slashAsteriskIdx !== false) {
-                            $bareLine    = strstr($line, $slashAsterisk, true);
-                            $isInComment = true;
-                        } else {
-                            //--- both found ---------------------------------
 
-                            // which one is first
-                            if ($doubleSlashIdx < $slashAsteriskIdx) {
-                                $bareLine = strstr($line, $doubleSlash, true);
-                            } else {
-                                $bareLine    = strstr($line, $slashAsterisk, true);
-                                $isInComment = true;
-                            }
+                    // both in one line => set later one to false
+                    if ($doubleSlashIdx !== false && $slashAsteriskIdx !== false) {
+
+                        if ($doubleSlashIdx < $slashAsteriskIdx) {
+                            // open first
+                            $slashAsteriskIdx = false;
+                        } else {
+                            // close first
+                            $doubleSlashIdx = false;
                         }
                     }
-                } // No comment indicator
+
+                    // double slash '//'
+                    if ($doubleSlashIdx !== false) {
+                        $bareLine = substr($line, 0, $doubleSlashIdx);
+                    } else {
+                        // lines comment found '/*'
+                        if ($doubleSlashIdx === false && $slashAsteriskIdx !== false) {
+
+                            $isInComment = true;
+
+                            $bareLine = substr($line, 0, $slashAsteriskIdx);
+                            $behindLine = substr($line, $slashAsteriskIdx + 2);
+                            $bareLine .= $this->removeCommentPHP($behindLine, $isInComment);
+                        }
+                    }
+                }
 
             } else {
                 //--- Inside a '/*' comment
 
                 $bareLine = '';
 
-                $asteriskSlash    = '*/';
+                $asteriskSlash = '*/';
                 $asteriskSlashIdx = strpos($line, $asteriskSlash);
 
                 // end found ?
                 if ($asteriskSlashIdx !== false) {
-                    // Keep end of string
-                    $bareLine = strstr($line, $asteriskSlash);
 
-                    // handle rest of string
                     $isInComment = false;
-                    $bareLine    = $this->removeCommentPHP($bareLine, $isInComment);
+
+                    // Keep end of string for further checks
+                    $behindLine = substr($line, $asteriskSlashIdx + 2);
+                    $bareLine    .= $this->removeCommentPHP($behindLine, $isInComment);
                 }
             }
-        } catch (RuntimeException $e) {
+        } catch (\RuntimeException $e) {
             $OutTxt = '';
             $OutTxt .= 'Error executing removeCommentPHP: "' . '<br>';
             $OutTxt .= 'Error: "' . $e->getMessage() . '"' . '<br>';
 
-            $app = Factory::getApplication();
-            $app->enqueueMessage($OutTxt, 'error');
+            print ($OutTxt);
         }
 
         return $bareLine;
