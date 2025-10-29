@@ -177,7 +177,7 @@ class ProjectsModel extends ListModel
     {
         // Create a new query object.
         $db    = $this->getDbo();
-        $query = $db->getQuery(true);
+        $query = $db->createQuery();
 
         $app  = Factory::getApplication();
         $user = $app->getIdentity();
@@ -384,7 +384,7 @@ class ProjectsModel extends ListModel
             // Set ordering to the last item if not set
             if (empty($table->ordering)) {
                 $db    = $this->getDbo();
-                $query = $db->getQuery(true)
+                $query = $db->createQuery()
                     ->select('MAX(ordering)')
                     ->from('#__banners');
 

@@ -579,7 +579,7 @@ class SubprojectModel extends AdminModel
             // Set ordering to the last item if not set
             if (empty($table->ordering)) {
                 $db    = $this->getDbo();
-                $query = $db->getQuery(true)
+                $query = $db->createQuery()
                     ->select('MAX(ordering)')
                     ->from($db->quoteName('#__lang4dev_subprojects'));
                 $db->setQuery($query);
@@ -795,7 +795,7 @@ class SubprojectModel extends AdminModel
              *
              * // Get associationskey for edited item
              * $db    = $this->getDbo();
-             * $query = $db->getQuery(true)
+             * $query = $db->createQuery()
              * ->select($db->quoteName('key'))
              * ->from($db->quoteName('#__associations'))
              * ->where($db->quoteName('context') . ' = ' . $db->quote($this->associationsContext))
@@ -804,7 +804,7 @@ class SubprojectModel extends AdminModel
              * $oldKey = $db->loadResult();
              *
              * // Deleting old associations for the associated items
-             * $query = $db->getQuery(true)
+             * $query = $db->createQuery()
              * ->delete($db->quoteName('#__associations'))
              * ->where($db->quoteName('context') . ' = ' . $db->quote($this->associationsContext));
              *
@@ -1083,7 +1083,7 @@ class SubprojectModel extends AdminModel
         $prjType = projectType::prjType2int($subProject->prjType);
 
         $db    = Factory::getDbo();
-        $query = $db->getQuery(true)
+        $query = $db->createQuery()
             ->select('id')
             ->from($db->quoteName('#__lang4dev_subprojects'))
             ->where($db->quoteName('prjId') . ' = ' . $db->quote($prjId))

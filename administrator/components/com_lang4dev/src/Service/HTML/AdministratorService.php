@@ -48,7 +48,7 @@ class AdministratorService
          *
          * // Get the associated foo items
          * $db = Factory::getDbo();
-         * $query = $db->getQuery(true)
+         * $query = $db->createQuery()
          * ->select('c.id, c.name as title')
          * ->select('l.sef as lang_sef, lang_code')
          * ->from('#__foos_details as c')

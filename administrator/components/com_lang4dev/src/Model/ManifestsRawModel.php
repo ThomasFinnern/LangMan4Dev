@@ -56,7 +56,7 @@ class ManifestsrawModel extends AdminModel
             //--- collect data from manifest -----------------
             $db = Factory::getDbo();
 
-            $query = $db->getQuery(true)
+            $query = $db->createQuery()
                 ->select($db->quoteName('id'))
                 ->select($db->quoteName('title'))
                 ->select($db->quoteName('name'))

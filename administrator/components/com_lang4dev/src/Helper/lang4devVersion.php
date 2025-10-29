@@ -41,7 +41,7 @@ class lang4devVersion
     {
         //--- collect data from manifest -----------------
         $db    = Factory::getDbo();
-        $query = $db->getQuery(true)
+        $query = $db->createQuery()
             ->select($db->quoteName('manifest_cache'))
             ->from($db->quoteName('#__extensions'))
             ->where($db->quoteName('element') . ' = ' . $db->quote('com_lang4dev'));

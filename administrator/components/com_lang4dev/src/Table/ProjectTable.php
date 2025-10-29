@@ -191,7 +191,7 @@ class ProjectTable extends Table
 //        // Nested does not allow parent_id = 0, override this.
 //        if ($this->twin_id > 0) {
 //            // Get the DatabaseQuery object
-//            $query = $this->_db->getQuery(true)
+//            $query = $this->_db->createQuery()
 //                ->select('1')
 //                ->from($this->_db->quoteName($this->_tbl))
 //                ->where($this->_db->quoteName('id') . ' = ' . $this->twin_id);

@@ -129,7 +129,7 @@ class sessionProjectId
         $max = 0; // indicates nothing found in DB
 
         $db    = Factory::getDbo();
-        $query = $db->getQuery(true)
+        $query = $db->createQuery()
             ->select('MAX(id)')
             ->from($db->quoteName('#__lang4dev_projects'));
         $db->setQuery($query);

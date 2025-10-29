@@ -157,7 +157,7 @@ class PrjTextsModel extends AdminModel
             //--- collect data from manifest -----------------
             $db = Factory::getDbo();
 
-            $query = $db->getQuery(true)
+            $query = $db->createQuery()
                 ->select($db->quoteName('id'))
                 ->select($db->quoteName('prjId'))
                 ->select($db->quoteName('subPrjType'))
@@ -201,7 +201,7 @@ class PrjTextsModel extends AdminModel
             //--- collect data from manifest -----------------
             $db = Factory::getDbo();
 
-            $query = $db->getQuery(true)
+            $query = $db->createQuery()
                 ->select($db->quoteName('name'))
                 ->select($db->quoteName('title'))
                 ->select($db->quoteName('root_path'))

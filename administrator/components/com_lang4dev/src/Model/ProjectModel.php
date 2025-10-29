@@ -585,7 +585,7 @@ class ProjectModel extends AdminModel
             // Set ordering to the last item if not set
             if (empty($table->ordering)) {
                 $db    = $this->getDbo();
-                $query = $db->getQuery(true)
+                $query = $db->createQuery()
                     ->select('MAX(ordering)')
                     ->from($db->quoteName('#__lang4dev_projects'));
                 $db->setQuery($query);
@@ -763,7 +763,7 @@ class ProjectModel extends AdminModel
              *
              * // Get associationskey for edited item
              * $db    = $this->getDbo();
-             * $query = $db->getQuery(true)
+             * $query = $db->createQuery()
              * ->select($db->quoteName('key'))
              * ->from($db->quoteName('#__associations'))
              * ->where($db->quoteName('context') . ' = ' . $db->quote($this->associationsContext))
@@ -772,7 +772,7 @@ class ProjectModel extends AdminModel
              * $oldKey = $db->loadResult();
              *
              * // Deleting old associations for the associated items
-             * $query = $db->getQuery(true)
+             * $query = $db->createQuery()
              * ->delete($db->quoteName('#__associations'))
              * ->where($db->quoteName('context') . ' = ' . $db->quote($this->associationsContext));
              *
@@ -954,7 +954,7 @@ class ProjectModel extends AdminModel
         $max = 0; // indicates nothing found in DB
 
         $db    = Factory::getDbo();
-        $query = $db->getQuery(true)
+        $query = $db->createQuery()
             ->select('MAX(id)')
             ->from($db->quoteName('#__lang4dev_projects'));
         $db->setQuery($query);
@@ -994,7 +994,7 @@ class ProjectModel extends AdminModel
         if ($return) {
             // delete subproject by parent id
             $db    = $this->getDbo();
-            $query = $db->getQuery(true)
+            $query = $db->createQuery()
                 ->delete($db->quoteName('#__lang4dev_subprojects'))
                 ->whereIn($db->quoteName('parent_id'), $pks);
             $db->setQuery($query);
@@ -1023,7 +1023,7 @@ class ProjectModel extends AdminModel
             //--- collect data from manifest -----------------
             $db = Factory::getDbo();
 
-            $query = $db->getQuery(true)
+            $query = $db->createQuery()
                 ->select($db->quoteName('id'))
                 ->select($db->quoteName('prjId'))
                 ->select($db->quoteName('subPrjType'))

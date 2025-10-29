@@ -112,7 +112,7 @@ class SubprojectSelectField extends ListField
             // $user = Factory::getApplication()->getIdentity(); // ToDo: Restrict to accessible subprojects
             $db = Factory::getDbo();
 
-            $query = $db->getQuery(true)
+            $query = $db->createQuery()
                 ->select($db->quoteName('id', 'value'))
                 ->select($db->quoteName('title', 'text'))
                 ->where($db->quoteName('parent_id') . ' = ' . (int)$prjId)
