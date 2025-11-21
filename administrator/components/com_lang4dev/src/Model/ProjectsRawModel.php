@@ -16,7 +16,7 @@ use Finnern\Component\Lang4dev\Administrator\Helper\basePrjPathFinder;
 use Finnern\Component\Lang4dev\Administrator\Helper\langProject;
 use Finnern\Component\Lang4dev\Administrator\Helper\manifestLangFiles;
 use Finnern\Component\Lang4dev\Administrator\Helper\projectType;
-use JForm;
+use Form;
 use Joomla\CMS\Factory;
 use Joomla\CMS\MVC\Model\AdminModel;
 use RuntimeException;
@@ -54,7 +54,7 @@ class ProjectsRawModel extends AdminModel
      * @param   array    $data      Data for the form.
      * @param   boolean  $loadData  True if the form is to load its own data (default case), false if not.
      *
-     * @return  JForm|boolean  A JForm object on success, false on failure
+     * @return  Form|boolean  A Form object on success, false on failure
      *
      * @since __BUMP_VERSION__
      */

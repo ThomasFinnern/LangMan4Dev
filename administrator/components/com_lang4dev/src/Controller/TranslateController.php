@@ -14,7 +14,7 @@ defined('_JEXEC') or die;
 use Exception;
 use Finnern\Component\Lang4dev\Administrator\Helper\sessionProjectId;
 use Finnern\Component\Lang4dev\Administrator\Helper\sessionTransLangIds;
-use JInput;
+use Input;
 use Joomla\CMS\Application\CMSApplication;
 use Joomla\CMS\Factory;
 use Joomla\Filesystem\File;
@@ -45,7 +45,7 @@ class TranslateController extends AdminController
      *                                         'view_path' (this list is not meant to be comprehensive).
      * @param   MVCFactoryInterface  $factory  The factory.
      * @param   CMSApplication       $app      The JApplication for the dispatcher
-     * @param   JInput               $input    Input
+     * @param   Input               $input    Input
      *
      * @since __BUMP_VERSION__
      */

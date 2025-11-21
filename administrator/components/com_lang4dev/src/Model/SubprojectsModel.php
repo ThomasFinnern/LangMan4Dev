@@ -12,7 +12,7 @@ namespace Finnern\Component\Lang4dev\Administrator\Model;
 defined('_JEXEC') or die;
 
 use DatabaseQuery;
-use JLoader;
+use Loader;
 use Joomla\CMS\Association\AssociationServiceInterface;
 use Joomla\CMS\Categories\CategoryServiceInterface;
 use Joomla\CMS\Factory;
@@ -461,10 +461,10 @@ class SubprojectsModel extends ListModel
             return $assoc;
         }
 
-        $hname = $cname . 'HelperAssociation';
-        JLoader::register($hname, JPATH_SITE . '/components/' . $component . '/helpers/association.php');
-
-        $assoc = class_exists($hname) && !empty($hname::$category_association);
+//        $hname = $cname . 'HelperAssociation';
+//        Loader::register($hname, JPATH_SITE . '/components/' . $component . '/helpers/association.php');
+//
+//        $assoc = class_exists($hname) && !empty($hname::$category_association);
 
         return $assoc;
     }

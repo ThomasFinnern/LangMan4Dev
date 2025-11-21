@@ -17,7 +17,7 @@ use Finnern\Component\Lang4dev\Administrator\Helper\eSubProjectType;
 use Finnern\Component\Lang4dev\Administrator\Helper\langSubProject;
 use Finnern\Component\Lang4dev\Administrator\Helper\manifestLangFiles;
 use Finnern\Component\Lang4dev\Administrator\Helper\projectType;
-use JForm;
+use Form;
 use Joomla\CMS\Component\ComponentHelper;
 use Joomla\CMS\Factory;
 use Joomla\CMS\Language\Associations;
@@ -139,7 +139,7 @@ class SubprojectModel extends AdminModel
      * @param   string  $prefix  The class prefix. Optional.
      * @param   array   $config  Configuration array for model. Optional.
      *
-     * @return  Table  A JTable object
+     * @return  Table  A Table object
      *
      * @since __BUMP_VERSION__
      */
@@ -303,7 +303,7 @@ class SubprojectModel extends AdminModel
      * @param   array    $data      Data for the form.
      * @param   boolean  $loadData  True if the form is to load its own data (default case), false if not.
      *
-     * @return  JForm|boolean  A JForm object on success, false on failure
+     * @return  Form|boolean  A Form object on success, false on failure
      *
      * @since __BUMP_VERSION__
      */
@@ -311,7 +311,7 @@ class SubprojectModel extends AdminModel
     {
         /**
          * $extension = $this->getState('category.extension');
-         * $jinput = Factory::getApplication()->input;
+         * $Input = Factory::getApplication()->input;
          *
          * // A workaround to get the extension into the model for save requests.
          * if (empty($extension) && isset($data['extension']))
@@ -343,7 +343,7 @@ class SubprojectModel extends AdminModel
          * $data['extension'] = $extension;
          * }
          *
-         * $categoryId = $jinput->get('id');
+         * $categoryId = $Input->get('id');
          * $parts      = explode('.', $extension);
          * $assetKey   = $categoryId ? $extension . '.category.' . $categoryId : $parts[0];
          *
@@ -366,7 +366,7 @@ class SubprojectModel extends AdminModel
 //     * A protected method to get the where clause for the reorder
 //     * This ensures that the row will be moved relative to a row with the same extension
 //     *
-//     * @param   JTableCategory  $table  Current table instance
+//     * @param   TableCategory  $table  Current table instance
 //     *
 //     * @return  array  An array of conditions to add to ordering queries.
 //     *
@@ -428,7 +428,7 @@ class SubprojectModel extends AdminModel
     /**
      * Method to preprocess the form.
      *
-     * @param   JForm   $form   A JForm object.
+     * @param   Form   $form   A Form object.
      * @param   mixed   $data   The data expected for the form.
      * @param   string  $group  The name of the plugin group to import.
      *
@@ -436,7 +436,7 @@ class SubprojectModel extends AdminModel
      *
      * @throws  Exception if there is an error in the form event.
      *
-     * protected function preprocessForm(\JForm $form, $data, $group = 'content')
+     * protected function preprocessForm(\Form $form, $data, $group = 'content')
      * {
      * $lang = Factory::getLanguage();
      * $component = $this->getState('category.component');
@@ -488,7 +488,7 @@ class SubprojectModel extends AdminModel
      * {
      * $cName = ucfirst($eName) . ucfirst($section) . 'HelperCategory';
      *
-     * \JLoader::register($cName, $path);
+     * \Loader::register($cName, $path);
      *
      * if (class_exists($cName) && is_callable(array($cName, 'onPrepareForm')))
      * {
@@ -549,7 +549,7 @@ class SubprojectModel extends AdminModel
      * parent::preprocessForm($form, $data, $group);
      * }
      * /**@since __BUMP_VERSION__
-     * @see     \JFormField
+     * @see     \FormField
      */
 
     /**
@@ -707,7 +707,7 @@ class SubprojectModel extends AdminModel
 //                    $data['alias'] = JFilterOutput::stringURLSafe($data['title']);
 //                }
 //
-//                $table = Table::getInstance('Content', 'JTable');
+//                $table = Table::getInstance('Content', 'Table');
 //
 //                if ($table->load(array('alias' => $data['alias'], 'catid' => $data['catid'])))
 //                {
@@ -1097,11 +1097,11 @@ class SubprojectModel extends AdminModel
         return (int)$existingId > 0;
     }
 
-    
-    
-    
-    
-    
+
+
+
+
+
     /**
      *
      *

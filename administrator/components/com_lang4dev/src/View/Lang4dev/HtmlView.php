@@ -12,7 +12,7 @@ namespace Finnern\Component\Lang4dev\Administrator\View\Lang4Dev;
 defined('_JEXEC') or die;
 
 use Finnern\Component\Lang4dev\Administrator\Helper\sessionTransLangIds;
-use JForm;
+use Form;
 use JObject;
 use Joomla\CMS\Component\ComponentHelper;
 use Joomla\CMS\Form\Form;
@@ -67,7 +67,7 @@ class HtmlView extends BaseHtmlView
     /**
      * Form object for search filters
      *
-     * @var  JForm
+     * @var  Form
      */
     public $filterForm;
 

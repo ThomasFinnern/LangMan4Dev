@@ -23,7 +23,7 @@ use Joomla\CMS\MVC\Model\AdminModel;
 use Joomla\CMS\Plugin\PluginHelper;
 use Joomla\CMS\Table\Category;
 use Joomla\CMS\Table\Table;
-use JTableCategory;
+use TableCategory;
 
 use function defined;
 
@@ -138,7 +138,7 @@ class ProjectModel extends AdminModel
      * @param   string  $prefix  The class prefix. Optional.
      * @param   array   $config  Configuration array for model. Optional.
      *
-     * @return  Table  A JTable object
+     * @return  Table  A Table object
      *
      * @since __BUMP_VERSION__
      */
@@ -306,7 +306,7 @@ class ProjectModel extends AdminModel
      * @param   array    $data      Data for the form.
      * @param   boolean  $loadData  True if the form is to load its own data (default case), false if not.
      *
-     * @return  JForm|boolean  A JForm object on success, false on failure
+     * @return  Form|boolean  A Form object on success, false on failure
      *
      * @since __BUMP_VERSION__
      */
@@ -314,7 +314,7 @@ class ProjectModel extends AdminModel
     {
         /**
          * $extension = $this->getState('category.extension');
-         * $jinput = Factory::getApplication()->input;
+         * $Input = Factory::getApplication()->input;
          *
          * // A workaround to get the extension into the model for save requests.
          * if (empty($extension) && isset($data['extension']))
@@ -343,7 +343,7 @@ class ProjectModel extends AdminModel
          * $data['extension'] = $extension;
          * }
          *
-         * $categoryId = $jinput->get('id');
+         * $categoryId = $Input->get('id');
          * $parts      = explode('.', $extension);
          * $assetKey   = $categoryId ? $extension . '.category.' . $categoryId : $parts[0];
          *
@@ -434,7 +434,7 @@ class ProjectModel extends AdminModel
     /**
      * Method to preprocess the form.
      *
-     * @param   JForm   $form   A JForm object.
+     * @param   Form   $form   A Form object.
      * @param   mixed   $data   The data expected for the form.
      * @param   string  $group  The name of the plugin group to import.
      *
@@ -442,7 +442,7 @@ class ProjectModel extends AdminModel
      *
      * @throws  Exception if there is an error in the form event.
      *
-     * protected function preprocessForm(\JForm $form, $data, $group = 'content')
+     * protected function preprocessForm(\Form $form, $data, $group = 'content')
      * {
      * $lang = Factory::getLanguage();
      * $component = $this->getState('category.component');
@@ -494,7 +494,7 @@ class ProjectModel extends AdminModel
      * {
      * $cName = ucfirst($eName) . ucfirst($section) . 'HelperCategory';
      *
-     * \JLoader::register($cName, $path);
+     * \Loader::register($cName, $path);
      *
      * if (class_exists($cName) && is_callable(array($cName, 'onPrepareForm')))
      * {
@@ -555,7 +555,7 @@ class ProjectModel extends AdminModel
      * parent::preprocessForm($form, $data, $group);
      * }
      * /**@since __BUMP_VERSION__
-     * @see     \JFormField
+     * @see     \FormField
      */
 
     /**
@@ -716,7 +716,7 @@ class ProjectModel extends AdminModel
                     $data['alias'] = OutputFilter::stringURLSafe($data['title']);
                 }
 
-                $table = Table::getInstance('Content', 'JTable');
+                $table = Table::getInstance('Content', 'Table');
 
                 if ($table->load(array('alias' => $data['alias'], 'catid' => $data['catid'])))
                 {

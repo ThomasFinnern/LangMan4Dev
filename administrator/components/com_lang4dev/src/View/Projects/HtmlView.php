@@ -11,7 +11,7 @@ namespace Finnern\Component\Lang4dev\Administrator\View\Projects;
 
 defined('_JEXEC') or die;
 
-use JForm;
+use Form;
 use JObject;
 use Joomla\CMS\Component\ComponentHelper;
 use Joomla\CMS\Helper\ContentHelper;
@@ -60,7 +60,7 @@ class HtmlView extends BaseHtmlView
     /**
      * Form object for search filters
      *
-     * @var  JForm
+     * @var  Form
      */
     public $filterForm;
 

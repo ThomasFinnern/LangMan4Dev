@@ -57,7 +57,7 @@ class SubprojectTable extends Table
      *
      * @return  mixed  Null if operation was satisfactory, otherwise returns an error string
      *
-     * @see     \JTable::bind
+     * @see     \Table::bind
      * @since   __BUMP_VERSION__
      */
     public function bind($array, $ignore = '')
